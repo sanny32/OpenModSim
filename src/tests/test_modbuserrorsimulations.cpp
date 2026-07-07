@@ -24,6 +24,9 @@ private slots:
     void settingsRoundTrip();
     void xmlRoundTrip();
     void xmlRejectsNegativeDelays();
+    void xmlReadsEveryBooleanAttribute();
+    void xmlIgnoresWrongRootElement();
+    void xmlRejectsNonNumericDelays();
 };
 
 void TestModbusErrorSimulations::defaultsAreInactive()
@@ -118,6 +121,65 @@ void TestModbusErrorSimulations::xmlRoundTrip()
 void TestModbusErrorSimulations::xmlRejectsNegativeDelays()
 {
     const QByteArray xml = R"(<ModbusErrorSimulations ResponseDelayTime="-5" ResponseRandomDelayUpToTime="-9"/>)";
+
+    ModbusErrorSimulations restored;
+    restored.setResponseDelayTime(10);
+    restored.setResponseRandomDelayUpToTime(20);
+
+    QXmlStreamReader reader(xml);
+    reader.readNextStartElement();
+    reader >> restored;
+
+    QCOMPARE(restored.responseDelayTime(), 10);
+    QCOMPARE(restored.responseRandomDelayUpToTime(), 20);
+}
+
+void TestModbusErrorSimulations::xmlReadsEveryBooleanAttribute()
+{
+    const QByteArray xml = R"(<ModbusErrorSimulations
+        NoResponse="yes"
+        ResponseIncorrectId="1"
+        ResponseIllegalFunction="on"
+        ResponseDeviceBusy="true"
+        ResponseIncorrectCrc="false"
+        ResponseDelay="0"
+        ResponseRandomDelay="anything"
+        ResponseDelayTime="12"
+        ResponseRandomDelayUpToTime="34"/>)";
+
+    ModbusErrorSimulations restored;
+    QXmlStreamReader reader(xml);
+    reader.readNextStartElement();
+    reader >> restored;
+
+    QVERIFY(restored.noResponse());
+    QVERIFY(restored.responseIncorrectId());
+    QVERIFY(restored.responseIllegalFunction());
+    QVERIFY(restored.responseDeviceBusy());
+    QVERIFY(!restored.responseIncorrectCrc());
+    QVERIFY(!restored.responseDelay());
+    QVERIFY(!restored.responseRandomDelay());
+    QCOMPARE(restored.responseDelayTime(), 12);
+    QCOMPARE(restored.responseRandomDelayUpToTime(), 34);
+}
+
+void TestModbusErrorSimulations::xmlIgnoresWrongRootElement()
+{
+    ModbusErrorSimulations restored;
+    restored.setNoResponse(true);
+    restored.setResponseDelayTime(55);
+
+    QXmlStreamReader reader(QByteArrayLiteral("<NotModbusErrorSimulations NoResponse=\"false\" ResponseDelayTime=\"0\"/>"));
+    reader.readNextStartElement();
+    reader >> restored;
+
+    QVERIFY(restored.noResponse());
+    QCOMPARE(restored.responseDelayTime(), 55);
+}
+
+void TestModbusErrorSimulations::xmlRejectsNonNumericDelays()
+{
+    const QByteArray xml = R"(<ModbusErrorSimulations ResponseDelayTime="bad" ResponseRandomDelayUpToTime="also-bad"/>)";
 
     ModbusErrorSimulations restored;
     restored.setResponseDelayTime(10);

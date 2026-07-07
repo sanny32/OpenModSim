@@ -20,6 +20,8 @@ private slots:
     void fromStringNumericFallback();
     void fromStringUnknownReturnsDefault();
     void roundTrip();
+    void allEnumMappingsRoundTrip();
+    void unknownEnumValuesUseNumericText();
     void registersCountPerType();
     void multiRegisterClassification();
     void boolConversions();
@@ -55,6 +57,49 @@ void TestEnums::roundTrip()
 {
     for (const DataType t : {DataType::Binary, DataType::UInt16, DataType::Float64, DataType::Ansi})
         QCOMPARE(enumFromString<DataType>(enumToString(t)), t);
+}
+
+void TestEnums::allEnumMappingsRoundTrip()
+{
+    for(const auto value : {AddressBase::Base0, AddressBase::Base1})
+        QCOMPARE(enumFromString<AddressBase>(enumToString(value)), value);
+
+    for(const auto value : {AddressSpace::Addr6Digits, AddressSpace::Addr5Digits})
+        QCOMPARE(enumFromString<AddressSpace>(enumToString(value)), value);
+
+    for(const auto value : {DataType::Binary, DataType::UInt16, DataType::Int16, DataType::Hex, DataType::Float32,
+                            DataType::Float64, DataType::Int32, DataType::UInt32, DataType::Int64, DataType::UInt64,
+                            DataType::Ansi})
+        QCOMPARE(enumFromString<DataType>(enumToString(value)), value);
+
+    for(const auto value : {RegisterOrder::MSRF, RegisterOrder::LSRF})
+        QCOMPARE(enumFromString<RegisterOrder>(enumToString(value)), value);
+
+    for(const auto value : {ByteOrder::Direct, ByteOrder::Swapped})
+        QCOMPARE(enumFromString<ByteOrder>(enumToString(value)), value);
+
+    for(const auto value : {ConnectionType::Tcp, ConnectionType::Serial, ConnectionType::RtuTcp})
+        QCOMPARE(enumFromString<ConnectionType>(enumToString(value)), value);
+
+    for(const auto value : {TransmissionMode::ASCII, TransmissionMode::RTU})
+        QCOMPARE(enumFromString<TransmissionMode>(enumToString(value)), value);
+
+    for(const auto value : {SimulationMode::Disabled, SimulationMode::Off, SimulationMode::Random,
+                            SimulationMode::Increment, SimulationMode::Decrement, SimulationMode::Toggle})
+        QCOMPARE(enumFromString<SimulationMode>(enumToString(value)), value);
+
+    for(const auto value : {RunMode::Once, RunMode::Periodically})
+        QCOMPARE(enumFromString<RunMode>(enumToString(value)), value);
+
+    for(const auto value : {LogViewState::Unknown, LogViewState::Running, LogViewState::Paused})
+        QCOMPARE(enumFromString<LogViewState>(enumToString(value)), value);
+}
+
+void TestEnums::unknownEnumValuesUseNumericText()
+{
+    QCOMPARE(enumToString(static_cast<DataType>(123)), QStringLiteral("123"));
+    QCOMPARE(enumToString(static_cast<SimulationMode>(77)), QStringLiteral("77"));
+    QCOMPARE(enumFromString<DataType>(QStringLiteral("123")), static_cast<DataType>(123));
 }
 
 void TestEnums::registersCountPerType()

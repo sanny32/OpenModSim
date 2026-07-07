@@ -27,6 +27,8 @@ private slots:
     void makeValueMultiRegister();
     void makeValueRejectsShortInput();
     void makeValueRegisterOrder();
+    void makeValueCoversAllMultiRegisterTypes_data();
+    void makeValueCoversAllMultiRegisterTypes();
 };
 
 void TestNumericUtils::uint16ByteLayout()
@@ -137,6 +139,99 @@ void TestNumericUtils::makeValueRegisterOrder()
     const QVector<quint16> msrf{r[3], r[2], r[1], r[0]};
     QCOMPARE(makeValue(lsrf, DataType::Int64, RegisterOrder::LSRF, ByteOrder::Direct),
              makeValue(msrf, DataType::Int64, RegisterOrder::MSRF, ByteOrder::Direct));
+}
+
+void TestNumericUtils::makeValueCoversAllMultiRegisterTypes_data()
+{
+    QTest::addColumn<int>("type");
+    QTest::addColumn<int>("regOrder");
+    QTest::addColumn<int>("byteOrder");
+
+    for(const auto type : {DataType::Float32, DataType::Int32, DataType::UInt32, DataType::Float64,
+                           DataType::Int64, DataType::UInt64})
+        for(const auto regOrder : {RegisterOrder::MSRF, RegisterOrder::LSRF})
+            for(const auto byteOrder : {ByteOrder::Direct, ByteOrder::Swapped})
+                QTest::addRow("%s-%s-%s", qPrintable(enumToString(type)), qPrintable(enumToString(regOrder)),
+                              qPrintable(enumToString(byteOrder)))
+                    << int(type) << int(regOrder) << int(byteOrder);
+}
+
+void TestNumericUtils::makeValueCoversAllMultiRegisterTypes()
+{
+    QFETCH(int, type);
+    QFETCH(int, regOrder);
+    QFETCH(int, byteOrder);
+
+    const auto dataType = static_cast<DataType>(type);
+    const auto order = static_cast<RegisterOrder>(regOrder);
+    const auto bo = static_cast<ByteOrder>(byteOrder);
+
+    QVector<quint16> regs;
+    switch(dataType)
+    {
+        case DataType::Float32:
+        {
+            quint16 lo = 0, hi = 0;
+            breakFloat(12.5f, lo, hi, bo);
+            regs = order == RegisterOrder::LSRF ? QVector<quint16>{lo, hi} : QVector<quint16>{hi, lo};
+            QCOMPARE(makeValue(regs, dataType, order, bo).toFloat(), 12.5f);
+            break;
+        }
+
+        case DataType::Int32:
+        {
+            quint16 lo = 0, hi = 0;
+            breakInt32(-123456, lo, hi, bo);
+            regs = order == RegisterOrder::LSRF ? QVector<quint16>{lo, hi} : QVector<quint16>{hi, lo};
+            QCOMPARE(makeValue(regs, dataType, order, bo).toInt(), -123456);
+            break;
+        }
+
+        case DataType::UInt32:
+        {
+            quint16 lo = 0, hi = 0;
+            breakUInt32(0x89ABCDEFu, lo, hi, bo);
+            regs = order == RegisterOrder::LSRF ? QVector<quint16>{lo, hi} : QVector<quint16>{hi, lo};
+            QCOMPARE(makeValue(regs, dataType, order, bo).toUInt(), 0x89ABCDEFu);
+            break;
+        }
+
+        case DataType::Float64:
+        {
+            quint16 r[4] = {0, 0, 0, 0};
+            breakDouble(6.25, r[0], r[1], r[2], r[3], bo);
+            regs = order == RegisterOrder::LSRF
+                ? QVector<quint16>{r[0], r[1], r[2], r[3]}
+                : QVector<quint16>{r[3], r[2], r[1], r[0]};
+            QCOMPARE(makeValue(regs, dataType, order, bo).toDouble(), 6.25);
+            break;
+        }
+
+        case DataType::Int64:
+        {
+            quint16 r[4] = {0, 0, 0, 0};
+            breakInt64(Q_INT64_C(-1234567890123), r[0], r[1], r[2], r[3], bo);
+            regs = order == RegisterOrder::LSRF
+                ? QVector<quint16>{r[0], r[1], r[2], r[3]}
+                : QVector<quint16>{r[3], r[2], r[1], r[0]};
+            QCOMPARE(makeValue(regs, dataType, order, bo).toLongLong(), Q_INT64_C(-1234567890123));
+            break;
+        }
+
+        case DataType::UInt64:
+        {
+            quint16 r[4] = {0, 0, 0, 0};
+            breakUInt64(Q_UINT64_C(0xFEDCBA9876543210), r[0], r[1], r[2], r[3], bo);
+            regs = order == RegisterOrder::LSRF
+                ? QVector<quint16>{r[0], r[1], r[2], r[3]}
+                : QVector<quint16>{r[3], r[2], r[1], r[0]};
+            QCOMPARE(makeValue(regs, dataType, order, bo).toULongLong(), Q_UINT64_C(0xFEDCBA9876543210));
+            break;
+        }
+
+        default:
+            QFAIL("Unexpected data type in test table.");
+    }
 }
 
 QTEST_GUILESS_MAIN(TestNumericUtils)

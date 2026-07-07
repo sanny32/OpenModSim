@@ -6,6 +6,8 @@
 /// \brief Unit tests for XML serialization of ModbusSimulationParams.
 ///
 
+#include <limits>
+
 #include <QTest>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
@@ -40,6 +42,12 @@ private slots:
     void incrementRoundTripWithRegisterOrder();
     void decrementRoundTrip();
     void rangeRoundTrip();
+    void defaultsSurviveWrongXmlElements();
+    void invalidAttributesKeepDefaults();
+    void mismatchedChildParamsAreSkipped();
+    void invalidRangeFallsBackToDefaultRange();
+    void rangeContainsBoundaries();
+    void rangeIgnoresWrongReaderState();
 };
 
 void TestSimulationParams::randomRoundTrip()
@@ -103,6 +111,114 @@ void TestSimulationParams::rangeRoundTrip()
     reader >> restored;
     QCOMPARE(restored.from(), 1.5);
     QCOMPARE(restored.to(), 9.5);
+}
+
+void TestSimulationParams::defaultsSurviveWrongXmlElements()
+{
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Toggle;
+    params.Interval = 42;
+
+    QXmlStreamReader reader(QByteArrayLiteral("<NotSimulationParams Mode=\"Random\" Interval=\"100\"/>"));
+    reader.readNextStartElement();
+    reader >> params;
+
+    QCOMPARE(params.Mode, SimulationMode::Toggle);
+    QCOMPARE(params.Interval, 42u);
+
+    IncrementSimulationParams increment;
+    increment.Step = 7.;
+    QXmlStreamReader incrementReader(QByteArrayLiteral("<NotIncrementSimulationParams Step=\"9\"/>"));
+    incrementReader.readNextStartElement();
+    incrementReader >> increment;
+    QCOMPARE(increment.Step, 7.);
+}
+
+void TestSimulationParams::invalidAttributesKeepDefaults()
+{
+    ModbusSimulationParams params;
+    params.Interval = 123;
+
+    QXmlStreamReader reader(QByteArrayLiteral(
+        "<ModbusSimulationParams Mode=\"not-a-mode\" Interval=\"not-a-number\" DataType=\"not-a-type\" "
+        "RegisterOrder=\"not-an-order\"/>"));
+    reader.readNextStartElement();
+    reader >> params;
+
+    QCOMPARE(params.Mode, SimulationMode::Off);
+    QCOMPARE(params.Interval, 123u);
+    QCOMPARE(params.DataMode, DataType::Hex);
+    QCOMPARE(params.RegOrder, RegisterOrder::MSRF);
+
+    IncrementSimulationParams increment;
+    increment.Step = 5.;
+    QXmlStreamReader incrementReader(QByteArrayLiteral("<IncrementSimulationParams Step=\"not-a-number\"/>"));
+    incrementReader.readNextStartElement();
+    incrementReader >> increment;
+    QCOMPARE(increment.Step, 5.);
+
+    DecrementSimulationParams decrement;
+    decrement.Step = 6.;
+    QXmlStreamReader decrementReader(QByteArrayLiteral("<DecrementSimulationParams Step=\"not-a-number\"/>"));
+    decrementReader.readNextStartElement();
+    decrementReader >> decrement;
+    QCOMPARE(decrement.Step, 6.);
+}
+
+void TestSimulationParams::mismatchedChildParamsAreSkipped()
+{
+    QXmlStreamReader reader(QByteArrayLiteral(
+        "<ModbusSimulationParams Mode=\"Random\">"
+        "<IncrementSimulationParams Step=\"9\"><Range From=\"1\" To=\"2\"/></IncrementSimulationParams>"
+        "<UnknownChild/>"
+        "</ModbusSimulationParams>"));
+    reader.readNextStartElement();
+
+    ModbusSimulationParams params;
+    reader >> params;
+
+    QCOMPARE(params.Mode, SimulationMode::Random);
+    QCOMPARE(params.IncrementParams.Step, 1.);
+    QCOMPARE(params.RandomParams.Range.from(), 0.);
+    QCOMPARE(params.RandomParams.Range.to(), 65535.);
+}
+
+void TestSimulationParams::invalidRangeFallsBackToDefaultRange()
+{
+    QRange<double> range(1., 2.);
+    QXmlStreamReader reader(QByteArrayLiteral("<Range From=\"bad\" To=\"9\"/>"));
+    reader.readNextStartElement();
+    reader >> range;
+
+    QCOMPARE(range.from(), std::numeric_limits<double>::min());
+    QCOMPARE(range.to(), std::numeric_limits<double>::max());
+}
+
+void TestSimulationParams::rangeContainsBoundaries()
+{
+    const QRange<int> range(10, 20);
+
+    QVERIFY(!range.contains(9));
+    QVERIFY(range.contains(10));
+    QVERIFY(range.contains(15));
+    QVERIFY(range.contains(20));
+    QVERIFY(!range.contains(21));
+}
+
+void TestSimulationParams::rangeIgnoresWrongReaderState()
+{
+    QRange<double> range(1., 2.);
+    QXmlStreamReader textReader(QByteArrayLiteral("<Range From=\"3\" To=\"4\"/>"));
+    textReader.readNext();
+    textReader >> range;
+    QCOMPARE(range.from(), 1.);
+    QCOMPARE(range.to(), 2.);
+
+    QXmlStreamReader wrongElementReader(QByteArrayLiteral("<NotRange From=\"3\" To=\"4\"/>"));
+    wrongElementReader.readNextStartElement();
+    wrongElementReader >> range;
+    QCOMPARE(range.from(), 1.);
+    QCOMPARE(range.to(), 2.);
 }
 
 QTEST_GUILESS_MAIN(TestSimulationParams)

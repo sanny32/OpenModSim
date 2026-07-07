@@ -9,6 +9,7 @@
 #include <QTest>
 
 #include "modbusfunction.h"
+#include "modbuslimits.h"
 
 class TestModbusFunction : public QObject
 {
@@ -24,6 +25,9 @@ private slots:
     void allFunctionNames_data();
     void allFunctionNames();
     void unknownFunctionHasEmptyName();
+    void limitsAddressRanges_data();
+    void limitsAddressRanges();
+    void limitsLengthRangeAtAddressSpaceEdges();
 };
 
 void TestModbusFunction::validCodesAreRecognised()
@@ -101,6 +105,50 @@ void TestModbusFunction::unknownFunctionHasEmptyName()
 {
     QCOMPARE(QString(ModbusFunction(static_cast<QModbusPdu::FunctionCode>(0x00))), QString());
     QCOMPARE(QString(ModbusFunction(static_cast<QModbusPdu::FunctionCode>(0x65))), QString());
+}
+
+void TestModbusFunction::limitsAddressRanges_data()
+{
+    QTest::addColumn<int>("space");
+    QTest::addColumn<bool>("zeroBased");
+    QTest::addColumn<int>("from");
+    QTest::addColumn<int>("to");
+    QTest::addColumn<int>("size");
+
+    QTest::newRow("5-digits-one-based") << int(AddressSpace::Addr5Digits) << false << 1 << 9999 << 9999;
+    QTest::newRow("5-digits-zero-based") << int(AddressSpace::Addr5Digits) << true << 0 << 9998 << 9999;
+    QTest::newRow("6-digits-one-based") << int(AddressSpace::Addr6Digits) << false << 1 << 65536 << 65536;
+    QTest::newRow("6-digits-zero-based") << int(AddressSpace::Addr6Digits) << true << 0 << 65535 << 65536;
+}
+
+void TestModbusFunction::limitsAddressRanges()
+{
+    QFETCH(int, space);
+    QFETCH(bool, zeroBased);
+    QFETCH(int, from);
+    QFETCH(int, to);
+    QFETCH(int, size);
+
+    const auto addressSpace = static_cast<AddressSpace>(space);
+    const auto range = ModbusLimits::addressRange(addressSpace, zeroBased);
+
+    QCOMPARE(range.from(), from);
+    QCOMPARE(range.to(), to);
+    QCOMPARE(ModbusLimits::addressSpaceSize(addressSpace), size);
+}
+
+void TestModbusFunction::limitsLengthRangeAtAddressSpaceEdges()
+{
+    QCOMPARE(ModbusLimits::lengthRange().from(), 1);
+    QCOMPARE(ModbusLimits::lengthRange().to(), 200);
+    QCOMPARE(ModbusLimits::slaveRange().from(), 0);
+    QCOMPARE(ModbusLimits::slaveRange().to(), 255);
+
+    QCOMPARE(ModbusLimits::lengthRange(1, false, AddressSpace::Addr5Digits).to(), 200);
+    QCOMPARE(ModbusLimits::lengthRange(9900, false, AddressSpace::Addr5Digits).to(), 100);
+    QCOMPARE(ModbusLimits::lengthRange(9999, false, AddressSpace::Addr5Digits).to(), 1);
+    QCOMPARE(ModbusLimits::lengthRange(9999, true, AddressSpace::Addr5Digits).to(), 1);
+    QCOMPARE(ModbusLimits::lengthRange(65536, false, AddressSpace::Addr6Digits).to(), 1);
 }
 
 QTEST_GUILESS_MAIN(TestModbusFunction)

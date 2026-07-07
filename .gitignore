@@ -69,6 +69,7 @@ __pycache__
 *.idx
 *.rc
 *.qtds
+*.log
 *.ts text eol=lf
 src/res/license.txt
 /docs/PROJECT_SUMMARY.md

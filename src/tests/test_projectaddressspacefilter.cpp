@@ -22,6 +22,8 @@ private slots:
     void filtersSimulationsByOverlap();
     void buildsRangesForModifiedRuntimeData();
     void emptyProjectRangesDropRuntimeState();
+    void zeroLengthAndMismatchedRangesDoNotMatch();
+    void modifiedRangesIgnoreInactiveSimulations();
 };
 
 ///
@@ -173,6 +175,54 @@ void TestProjectAddressSpaceFilter::emptyProjectRangesDropRuntimeState()
     QVERIFY(filterProjectAddressDescriptions(descriptions, ranges).isEmpty());
     QVERIFY(filterProjectAddressTimestamps(timestamps, ranges).isEmpty());
     QVERIFY(filterProjectAddressSimulations(simulations, ranges).isEmpty());
+}
+
+///
+/// \brief TestProjectAddressSpaceFilter::zeroLengthAndMismatchedRangesDoNotMatch
+///
+void TestProjectAddressSpaceFilter::zeroLengthAndMismatchedRangesDoNotMatch()
+{
+    const ProjectAddressSpaceRanges ranges = {
+        { 1, QModbusDataUnit::Coils, 10, 0 },
+        { 2, QModbusDataUnit::Coils, 20, 2 },
+        { 1, QModbusDataUnit::HoldingRegisters, 20, 2 }
+    };
+
+    QVERIFY(!projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::Coils, 10 }));
+    QVERIFY(!projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::Coils, 20 }));
+    QVERIFY(!projectAddressSpaceContains(ranges, { 2, QModbusDataUnit::HoldingRegisters, 20 }));
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::Coils, 10, 0 }));
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::Coils, 20, 1 }));
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 2, QModbusDataUnit::HoldingRegisters, 20, 1 }));
+}
+
+///
+/// \brief TestProjectAddressSpaceFilter::modifiedRangesIgnoreInactiveSimulations
+///
+void TestProjectAddressSpaceFilter::modifiedRangesIgnoreInactiveSimulations()
+{
+    ModbusSimulationParams disabled;
+    disabled.Mode = SimulationMode::Disabled;
+    disabled.DataMode = DataType::Int32;
+
+    ModbusSimulationParams off;
+    off.Mode = SimulationMode::Off;
+    off.DataMode = DataType::Int64;
+
+    ModbusSimulationParams active;
+    active.Mode = SimulationMode::Toggle;
+    active.DataMode = DataType::UInt16;
+
+    ModbusSimulationMap2 simulations;
+    simulations.insert({ 1, QModbusDataUnit::Coils, 1 }, disabled);
+    simulations.insert({ 1, QModbusDataUnit::Coils, 2 }, off);
+    simulations.insert({ 1, QModbusDataUnit::Coils, 3 }, active);
+
+    const auto ranges = projectAddressSpaceModifiedRanges({}, {}, simulations);
+
+    QCOMPARE(ranges.size(), 1);
+    QCOMPARE(ranges.first().StartAddress, quint16(3));
+    QCOMPARE(ranges.first().Length, quint16(1));
 }
 
 QTEST_APPLESS_MAIN(TestProjectAddressSpaceFilter)

@@ -25,6 +25,9 @@ private slots:
     void multiRegisterFormatters();
     void formatterCoilAndDiscreteInputBranches();
     void formatterDeferredRegisterBranches();
+    void formatterDefaultRegisterTypeBranches();
+    void scalarAndArrayFormatterBranches();
+    void addressFormatterCoversAllRegisterTypes();
     void ansiFormatter();
     void coilPassthrough();
 };
@@ -175,6 +178,73 @@ void TestFormatUtils::formatterDeferredRegisterBranches()
 
     QVERIFY(formatUInt64Value(QModbusDataUnit::InputRegisters, 1, 2, 3, 4, ByteOrder::Direct, true, true, out).isEmpty());
     QCOMPARE(out.toInt(), 42);
+}
+
+void TestFormatUtils::formatterDefaultRegisterTypeBranches()
+{
+    const auto invalidType = static_cast<QModbusDataUnit::RegisterType>(999);
+    QVariant out = 123;
+
+    QVERIFY(formatBinaryValue(invalidType, 1, ByteOrder::Direct, out).isEmpty());
+    QCOMPARE(out.toUInt(), 1u);
+
+    QVERIFY(formatUInt16Value(invalidType, 2, ByteOrder::Direct, true, out).isEmpty());
+    QCOMPARE(out.toUInt(), 2u);
+
+    QVERIFY(formatInt16Value(invalidType, -3, ByteOrder::Direct, out).isEmpty());
+    QCOMPARE(out.toInt(), -3);
+
+    QVERIFY(formatHexValue(invalidType, 4, ByteOrder::Direct, out).isEmpty());
+    QCOMPARE(out.toUInt(), 4u);
+
+    QVERIFY(formatAnsiValue(invalidType, 5, ByteOrder::Direct, QStringLiteral("UTF-8"), out).isEmpty());
+    QCOMPARE(out.toUInt(), 5u);
+
+    out = 123;
+    QVERIFY(formatFloatValue(invalidType, 6, 0, ByteOrder::Direct, false, out).isEmpty());
+    QCOMPARE(out.toInt(), 123);
+
+    QVERIFY(formatInt32Value(invalidType, 7, 0, ByteOrder::Direct, false, out).isEmpty());
+    QCOMPARE(out.toInt(), 123);
+
+    QVERIFY(formatUInt32Value(invalidType, 8, 0, ByteOrder::Direct, true, false, out).isEmpty());
+    QCOMPARE(out.toInt(), 123);
+
+    QVERIFY(formatDoubleValue(invalidType, 9, 0, 0, 0, ByteOrder::Direct, false, out).isEmpty());
+    QCOMPARE(out.toInt(), 123);
+
+    QVERIFY(formatInt64Value(invalidType, 10, 0, 0, 0, ByteOrder::Direct, false, out).isEmpty());
+    QCOMPARE(out.toInt(), 123);
+
+    QVERIFY(formatUInt64Value(invalidType, 11, 0, 0, 0, ByteOrder::Direct, true, false, out).isEmpty());
+    QCOMPARE(out.toInt(), 123);
+}
+
+void TestFormatUtils::scalarAndArrayFormatterBranches()
+{
+    const QByteArray bytes = QByteArray::fromHex("01AB");
+
+    QCOMPARE(formatUInt8Value(DataType::Int16, true, 5), QStringLiteral("005"));
+    QCOMPARE(formatUInt8Value(DataType::Ansi, false, 0x0C), QStringLiteral("0x0C"));
+
+    QCOMPARE(formatUInt8Array(DataType::Int16, false, bytes), QStringLiteral("  1 171"));
+    QCOMPARE(formatUInt8Array(DataType::Ansi, false, bytes), QStringLiteral("01 AB"));
+
+    QCOMPARE(formatUInt16Array(DataType::Int16, false, bytes, ByteOrder::Direct), QStringLiteral("  427"));
+    QCOMPARE(formatUInt16Array(DataType::Hex, true, bytes, ByteOrder::Swapped), QStringLiteral("0xAB01"));
+
+    QCOMPARE(formatUInt16Value(DataType::Int16, false, 12), QStringLiteral("   12"));
+    QCOMPARE(formatUInt16Value(DataType::Binary, false, 0x00EF), QStringLiteral("0x00EF"));
+}
+
+void TestFormatUtils::addressFormatterCoversAllRegisterTypes()
+{
+    QCOMPARE(formatAddress(QModbusDataUnit::DiscreteInputs, 5, AddressSpace::Addr5Digits, false), QStringLiteral("10005"));
+    QCOMPARE(formatAddress(QModbusDataUnit::InputRegisters, 5, AddressSpace::Addr5Digits, false), QStringLiteral("30005"));
+    QCOMPARE(formatAddress(static_cast<QModbusDataUnit::RegisterType>(999), 5, AddressSpace::Addr5Digits, false),
+             QStringLiteral(" 0005"));
+    QCOMPARE(formatAddress(QModbusDataUnit::Coils, 5, AddressSpace::Addr5Digits, true, AddressBase::Base1),
+             QStringLiteral("0x0005"));
 }
 
 void TestFormatUtils::ansiFormatter()

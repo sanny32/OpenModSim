@@ -69,10 +69,16 @@ void TestModbusMessages::readCoils()
     ReadCoilsRequest bad(request(QModbusPdu::ReadCoils, be16(0) + be16(0)), kProto, 1, 0, kTs);
     QVERIFY(!bad.isValid());
 
+    ReadCoilsRequest tooLong(request(QModbusPdu::ReadCoils, be16(0) + be16(0x07D1)), kProto, 1, 0, kTs);
+    QVERIFY(!tooLong.isValid());
+
     ReadCoilsResponse resp(response(QModbusPdu::ReadCoils, QByteArray::fromHex("02FF01")), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.byteCount(), quint8(2));
     QCOMPARE(resp.coilStatus(), QByteArray::fromHex("FF01"));
+
+    ReadCoilsResponse zeroBytes(response(QModbusPdu::ReadCoils, QByteArray::fromHex("00")), kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
 
     ReadCoilsResponse badResp(response(QModbusPdu::ReadCoils, QByteArray::fromHex("05FF")), kProto, 1, 0, kTs);
     QVERIFY(!badResp.isValid());
@@ -85,10 +91,22 @@ void TestModbusMessages::readDiscreteInputs()
     QCOMPARE(req.startAddress(), quint16(7));
     QCOMPARE(req.length(), quint16(3));
 
+    ReadDiscreteInputsRequest zero(request(QModbusPdu::ReadDiscreteInputs, be16(7) + be16(0)), kProto, 1, 0, kTs);
+    QVERIFY(!zero.isValid());
+
+    ReadDiscreteInputsRequest tooLong(request(QModbusPdu::ReadDiscreteInputs, be16(7) + be16(0x07D1)), kProto, 1, 0, kTs);
+    QVERIFY(!tooLong.isValid());
+
     ReadDiscreteInputsResponse resp(response(QModbusPdu::ReadDiscreteInputs, QByteArray::fromHex("0105")), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.byteCount(), quint8(1));
     QCOMPARE(resp.inputStatus(), QByteArray::fromHex("05"));
+
+    ReadDiscreteInputsResponse zeroBytes(response(QModbusPdu::ReadDiscreteInputs, QByteArray::fromHex("00")), kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
+
+    ReadDiscreteInputsResponse badResp(response(QModbusPdu::ReadDiscreteInputs, QByteArray::fromHex("03FF")), kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
 }
 
 void TestModbusMessages::readHoldingRegisters()
@@ -101,10 +119,20 @@ void TestModbusMessages::readHoldingRegisters()
     ReadHoldingRegistersRequest bad(request(QModbusPdu::ReadHoldingRegisters, be16(0) + be16(0x7E)), kProto, 1, 0, kTs);
     QVERIFY(!bad.isValid());
 
+    ReadHoldingRegistersRequest zero(request(QModbusPdu::ReadHoldingRegisters, be16(0) + be16(0)), kProto, 1, 0, kTs);
+    QVERIFY(!zero.isValid());
+
     ReadHoldingRegistersResponse ok(response(QModbusPdu::ReadHoldingRegisters, QByteArray::fromHex("0400010002")), kProto, 1, 0, kTs);
     QVERIFY(ok.isValid());
     QCOMPARE(ok.byteCount(), quint8(4));
     QCOMPARE(ok.registerValue(), QByteArray::fromHex("00010002"));
+
+    ReadHoldingRegistersResponse zeroBytes(response(QModbusPdu::ReadHoldingRegisters, QByteArray::fromHex("00")), kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
+
+    ReadHoldingRegistersResponse mismatch(response(QModbusPdu::ReadHoldingRegisters, QByteArray::fromHex("040001")),
+                                          kProto, 1, 0, kTs);
+    QVERIFY(!mismatch.isValid());
 }
 
 void TestModbusMessages::readInputRegisters()
@@ -113,10 +141,22 @@ void TestModbusMessages::readInputRegisters()
     QVERIFY(req.isValid());
     QCOMPARE(req.length(), quint16(1));
 
+    ReadInputRegistersRequest zero(request(QModbusPdu::ReadInputRegisters, be16(0) + be16(0)), kProto, 1, 0, kTs);
+    QVERIFY(!zero.isValid());
+
+    ReadInputRegistersRequest tooLong(request(QModbusPdu::ReadInputRegisters, be16(0) + be16(0x007E)), kProto, 1, 0, kTs);
+    QVERIFY(!tooLong.isValid());
+
     ReadInputRegistersResponse resp(response(QModbusPdu::ReadInputRegisters, QByteArray::fromHex("020ABC")), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.byteCount(), quint8(2));
     QCOMPARE(resp.registerValue(), QByteArray::fromHex("0ABC"));
+
+    ReadInputRegistersResponse zeroBytes(response(QModbusPdu::ReadInputRegisters, QByteArray::fromHex("00")), kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
+
+    ReadInputRegistersResponse badResp(response(QModbusPdu::ReadInputRegisters, QByteArray::fromHex("040ABC")), kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
 }
 
 void TestModbusMessages::writeSingleCoil()
@@ -132,6 +172,9 @@ void TestModbusMessages::writeSingleCoil()
     WriteSingleCoilResponse resp(response(QModbusPdu::WriteSingleCoil, be16(3) + be16(0)), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.value(), quint16(0));
+
+    WriteSingleCoilResponse badResp(response(QModbusPdu::WriteSingleCoil, be16(3) + be16(0x1234)), kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
 }
 
 void TestModbusMessages::writeSingleRegister()
@@ -144,6 +187,12 @@ void TestModbusMessages::writeSingleRegister()
     WriteSingleRegisterResponse resp(response(QModbusPdu::WriteSingleRegister, be16(7) + be16(0xABCD)), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.address(), quint16(7));
+
+    WriteSingleRegisterRequest badReq(request(QModbusPdu::WriteSingleRegister, be16(7)), kProto, 1, 0, kTs);
+    QVERIFY(!badReq.isValid());
+
+    WriteSingleRegisterResponse badResp(response(QModbusPdu::WriteSingleRegister, be16(7)), kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
 }
 
 void TestModbusMessages::writeMultipleCoils()
@@ -156,9 +205,27 @@ void TestModbusMessages::writeMultipleCoils()
     QCOMPARE(req.byteCount(), quint8(2));
     QCOMPARE(req.values(), QByteArray::fromHex("CD01"));
 
+    WriteMultipleCoilsRequest zeroBytes(request(QModbusPdu::WriteMultipleCoils,
+                                                be16(0x0013) + be16(10) + QByteArray::fromHex("00")),
+                                        kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
+
+    WriteMultipleCoilsRequest mismatch(request(QModbusPdu::WriteMultipleCoils,
+                                               be16(0x0013) + be16(10) + QByteArray::fromHex("03CD01")),
+                                       kProto, 1, 0, kTs);
+    QVERIFY(!mismatch.isValid());
+
     WriteMultipleCoilsResponse resp(response(QModbusPdu::WriteMultipleCoils, be16(0x0013) + be16(10)), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.quantity(), quint16(10));
+
+    WriteMultipleCoilsResponse badResp(response(QModbusPdu::WriteMultipleCoils, be16(0x0013)), kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
+
+    QModbusExceptionResponse exception(QModbusPdu::WriteMultipleCoils,
+                                       QModbusExceptionResponse::IllegalDataAddress);
+    WriteMultipleCoilsResponse exceptionResp(exception, kProto, 1, 0, kTs);
+    QVERIFY(exceptionResp.isValid());
 }
 
 void TestModbusMessages::writeMultipleRegisters()
@@ -171,10 +238,23 @@ void TestModbusMessages::writeMultipleRegisters()
     QCOMPARE(req.byteCount(), quint8(4));
     QCOMPARE(req.values(), QByteArray::fromHex("00010002"));
 
+    WriteMultipleRegistersRequest zeroBytes(request(QModbusPdu::WriteMultipleRegisters,
+                                                    be16(0x0001) + be16(2) + QByteArray::fromHex("00")),
+                                            kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
+
+    WriteMultipleRegistersRequest mismatch(request(QModbusPdu::WriteMultipleRegisters,
+                                                   be16(0x0001) + be16(2) + QByteArray::fromHex("0600010002")),
+                                           kProto, 1, 0, kTs);
+    QVERIFY(!mismatch.isValid());
+
     WriteMultipleRegistersResponse resp(response(QModbusPdu::WriteMultipleRegisters, be16(0x0001) + be16(2)), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.startAddress(), quint16(0x0001));
     QCOMPARE(resp.quantity(), quint16(2));
+
+    WriteMultipleRegistersResponse badResp(response(QModbusPdu::WriteMultipleRegisters, be16(0x0001)), kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
 }
 
 void TestModbusMessages::readExceptionStatus()
@@ -221,6 +301,13 @@ void TestModbusMessages::getCommEventLog()
     QCOMPARE(resp.eventCount(), quint16(0x0108));
     QCOMPARE(resp.messageCount(), quint16(0x0121));
     QCOMPARE(resp.events(), events);
+
+    GetCommEventLogResponse zeroBytes(response(QModbusPdu::GetCommEventLog, QByteArray::fromHex("00")), kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
+
+    GetCommEventLogResponse mismatch(response(QModbusPdu::GetCommEventLog, QByteArray::fromHex("03000001080121")),
+                                     kProto, 1, 0, kTs);
+    QVERIFY(!mismatch.isValid());
 }
 
 void TestModbusMessages::reportServerId()
@@ -229,6 +316,9 @@ void TestModbusMessages::reportServerId()
     QVERIFY(resp.isValid());
     QCOMPARE(resp.byteCount(), quint8(2));
     QCOMPARE(resp.data(), QByteArray::fromHex("FF01"));
+
+    ReportServerIdResponse bad(response(QModbusPdu::ReportServerId, QByteArray::fromHex("02")), kProto, 1, 0, kTs);
+    QVERIFY(!bad.isValid());
 }
 
 void TestModbusMessages::readFileRecord()
@@ -286,9 +376,32 @@ void TestModbusMessages::readWriteMultipleRegisters()
     QCOMPARE(req.writeByteCount(), quint8(4));
     QCOMPARE(req.writeValues(), writeValues);
 
+    ReadWriteMultipleRegistersRequest zeroRead(request(QModbusPdu::ReadWriteMultipleRegisters,
+                                                       be16(0) + be16(0) + be16(0) + be16(1) + QByteArray::fromHex("020001")),
+                                               kProto, 1, 0, kTs);
+    QVERIFY(!zeroRead.isValid());
+
+    ReadWriteMultipleRegistersRequest tooMuchWrite(request(QModbusPdu::ReadWriteMultipleRegisters,
+                                                           be16(0) + be16(1) + be16(0) + be16(0x7A) + QByteArray::fromHex("020001")),
+                                                   kProto, 1, 0, kTs);
+    QVERIFY(!tooMuchWrite.isValid());
+
+    ReadWriteMultipleRegistersRequest mismatch(request(QModbusPdu::ReadWriteMultipleRegisters,
+                                                       be16(0) + be16(1) + be16(0) + be16(1) + QByteArray::fromHex("040001")),
+                                               kProto, 1, 0, kTs);
+    QVERIFY(!mismatch.isValid());
+
     ReadWriteMultipleRegistersResponse resp(response(QModbusPdu::ReadWriteMultipleRegisters, QByteArray::fromHex("0400FF00FF")), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.byteCount(), quint8(4));
+
+    ReadWriteMultipleRegistersResponse zeroBytes(response(QModbusPdu::ReadWriteMultipleRegisters, QByteArray::fromHex("00")),
+                                                 kProto, 1, 0, kTs);
+    QVERIFY(!zeroBytes.isValid());
+
+    ReadWriteMultipleRegistersResponse badResp(response(QModbusPdu::ReadWriteMultipleRegisters, QByteArray::fromHex("0400FF")),
+                                               kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
 }
 
 void TestModbusMessages::readFifoQueue()
@@ -297,12 +410,22 @@ void TestModbusMessages::readFifoQueue()
     QVERIFY(req.isValid());
     QCOMPARE(req.fifoAddress(), quint16(0x04DE));
 
+    ReadFifoQueueRequest bad(request(QModbusPdu::ReadFifoQueue, be16(0x04DE) + QByteArray(1, '\0')), kProto, 1, 0, kTs);
+    QVERIFY(!bad.isValid());
+
     const QByteArray fifo = QByteArray::fromHex("01020304");
     const QByteArray payload = be16(0x0006) + be16(fifo.size()) + fifo;
     ReadFifoQueueResponse resp(response(QModbusPdu::ReadFifoQueue, payload), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.fifoCount(), quint16(4));
     QCOMPARE(resp.fifoValue(), fifo);
+
+    ReadFifoQueueResponse tooLong(response(QModbusPdu::ReadFifoQueue, be16(0x0024) + be16(32) + QByteArray(32, '\1')),
+                                  kProto, 1, 0, kTs);
+    QVERIFY(!tooLong.isValid());
+
+    ReadFifoQueueResponse mismatch(response(QModbusPdu::ReadFifoQueue, be16(0x0006) + be16(6) + fifo), kProto, 1, 0, kTs);
+    QVERIFY(!mismatch.isValid());
 }
 
 QTEST_GUILESS_MAIN(TestModbusMessages)

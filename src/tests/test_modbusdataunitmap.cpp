@@ -20,6 +20,7 @@ private slots:
     void addUnitMapReportsChange();
     void removeUnitMap();
     void containsRangeBounds();
+    void globalContainsRangeAndAddressSpaceNoop();
     void setAndGetDataRoundTrip();
     void timestampStorage();
     void descriptionStorage();
@@ -30,6 +31,11 @@ private slots:
     void filteredDescriptionMap();
     void updateDataUnitMapMergesRangesAndKeepsValues();
     void globalMapIterationAndAccess();
+    void localMapIterationAndAccess();
+    void emptyLocalMapAccessors();
+    void timestampFallbackForLocalUnitMap();
+    void ensureRangeMergesWithExistingRange();
+    void setDataTimestampUpdateModes();
 };
 
 void TestModbusDataUnitMap::addUnitMapBuildsLocalRange()
@@ -78,6 +84,20 @@ void TestModbusDataUnitMap::containsRangeBounds()
     QVERIFY(!map.containsRange(QModbusDataUnit::InputRegisters, 99, 2));
     QVERIFY(!map.containsRange(QModbusDataUnit::InputRegisters, 100, 0));
     QVERIFY(!map.containsRange(QModbusDataUnit::Coils, 100, 1));
+}
+
+void TestModbusDataUnitMap::globalContainsRangeAndAddressSpaceNoop()
+{
+    ModbusDataUnitMap map;
+    map.setGlobalMap(true);
+
+    QVERIFY(map.contains(QModbusDataUnit::Coils));
+    QVERIFY(map.containsRange(QModbusDataUnit::Coils, 0, 1));
+    QVERIFY(map.containsRange(QModbusDataUnit::Coils, 65534, 1));
+    QVERIFY(!map.containsRange(QModbusDataUnit::Coils, 65535, 1));
+
+    map.setAddressSpace(AddressSpace::Addr6Digits);
+    QCOMPARE(int(map.value(QModbusDataUnit::Coils).valueCount()), 65535);
 }
 
 void TestModbusDataUnitMap::setAndGetDataRoundTrip()
@@ -232,6 +252,81 @@ void TestModbusDataUnitMap::globalMapIterationAndAccess()
 
     map[QModbusDataUnit::Coils].setValue(0, 1);
     QCOMPARE(map.getData(QModbusDataUnit::Coils, 0, 1).value(0), quint16(1));
+}
+
+void TestModbusDataUnitMap::localMapIterationAndAccess()
+{
+    ModbusDataUnitMap map;
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::Coils, 1, 2);
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 10, 1);
+
+    int unitCount = 0;
+    for(auto it = map.begin(); it != map.end(); ++it)
+        ++unitCount;
+
+    QCOMPARE(unitCount, 2);
+    QVERIFY(map.end() != map.begin());
+
+    map[QModbusDataUnit::Coils].setValue(0, 1);
+    QCOMPARE(map.value(QModbusDataUnit::Coils).value(0), quint16(1));
+}
+
+void TestModbusDataUnitMap::emptyLocalMapAccessors()
+{
+    ModbusDataUnitMap map;
+
+    QCOMPARE(map.isGlobalMap(), false);
+    QVERIFY(map.begin() == map.end());
+    QVERIFY(!map.contains(QModbusDataUnit::Coils));
+    QVERIFY(!map.value(QModbusDataUnit::Coils).isValid());
+}
+
+void TestModbusDataUnitMap::timestampFallbackForLocalUnitMap()
+{
+    ModbusDataUnitMap map;
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::Coils, 10, 2);
+
+    QVERIFY(map.timestamp(QModbusDataUnit::Coils, 10).isValid());
+    QVERIFY(map.timestamp(QModbusDataUnit::Coils, 11).isValid());
+    QCOMPARE(map.timestamp(QModbusDataUnit::Coils, 9), QDateTime());
+    QCOMPARE(map.timestamp(QModbusDataUnit::Coils, 12), QDateTime());
+    QCOMPARE(map.timestamp(QModbusDataUnit::HoldingRegisters, 10), QDateTime());
+}
+
+void TestModbusDataUnitMap::ensureRangeMergesWithExistingRange()
+{
+    ModbusDataUnitMap map;
+    map.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 3, {30, 40, 50, 60}));
+
+    QVERIFY(map.ensureRange(QModbusDataUnit::HoldingRegisters, 5, 2));
+    QVERIFY(map.ensureRange(QModbusDataUnit::HoldingRegisters, 3, 2));
+
+    const auto unit = map.value(QModbusDataUnit::HoldingRegisters);
+    QCOMPARE(unit.startAddress(), 3);
+    QCOMPARE(int(unit.valueCount()), 4);
+    QCOMPARE(unit.value(0), quint16(30));
+    QCOMPARE(unit.value(2), quint16(50));
+
+    map.setGlobalMap(true);
+    QVERIFY(!map.ensureRange(QModbusDataUnit::HoldingRegisters, 0, 1));
+}
+
+void TestModbusDataUnitMap::setDataTimestampUpdateModes()
+{
+    ModbusDataUnitMap map;
+    QModbusDataUnit first(QModbusDataUnit::HoldingRegisters, 0, 1);
+    first.setValue(0, 1);
+
+    map.setData(first);
+    const auto original = map.timestamp(QModbusDataUnit::HoldingRegisters, 0);
+    QVERIFY(original.isValid());
+
+    map.setTimestamp(QModbusDataUnit::HoldingRegisters, 0, QDateTime());
+    map.setData(first, false);
+    QCOMPARE(map.timestamp(QModbusDataUnit::HoldingRegisters, 0), QDateTime());
+
+    map.setData(first, true);
+    QVERIFY(map.timestamp(QModbusDataUnit::HoldingRegisters, 0).isValid());
 }
 
 QTEST_GUILESS_MAIN(TestModbusDataUnitMap)
