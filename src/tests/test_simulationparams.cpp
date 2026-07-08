@@ -9,6 +9,7 @@
 #include <limits>
 
 #include <QTest>
+#include <QVector>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
@@ -59,6 +60,9 @@ private slots:
     void childParamsKeepExistingValuesWhenChildRangeIsMissing();
     void numericAttributesAreAccepted();
     void negativeIntervalIsIgnored();
+    void directChildParamWritersSerializeExpectedElements();
+    void childParamsAcceptMissingAndInvalidSteps();
+    void mismatchedChildrenAreSkippedForEveryMode();
 };
 
 void TestSimulationParams::randomRoundTrip()
@@ -509,6 +513,134 @@ void TestSimulationParams::negativeIntervalIsIgnored()
     reader >> params;
 
     QCOMPARE(params.Interval, 44u);
+}
+
+void TestSimulationParams::directChildParamWritersSerializeExpectedElements()
+{
+    RandomSimulationParams random;
+    random.Range = QRange<double>(2., 3.);
+
+    IncrementSimulationParams increment;
+    increment.Step = 4.25;
+    increment.Range = QRange<double>(5., 6.);
+
+    DecrementSimulationParams decrement;
+    decrement.Step = 7.5;
+    decrement.Range = QRange<double>(8., 9.);
+
+    QByteArray buffer;
+    {
+        QXmlStreamWriter writer(&buffer);
+        writer << random;
+        writer << increment;
+        writer << decrement;
+    }
+
+    QVERIFY(buffer.contains("RandomSimulationParams"));
+    QVERIFY(buffer.contains("IncrementSimulationParams"));
+    QVERIFY(buffer.contains("DecrementSimulationParams"));
+    QVERIFY(buffer.contains("Step=\"4.25\""));
+    QVERIFY(buffer.contains("Step=\"7.5\""));
+    QVERIFY(buffer.contains("From=\"2\""));
+    QVERIFY(buffer.contains("To=\"9\""));
+}
+
+void TestSimulationParams::childParamsAcceptMissingAndInvalidSteps()
+{
+    IncrementSimulationParams increment;
+    increment.Step = 12.;
+    increment.Range = QRange<double>(1., 2.);
+
+    QXmlStreamReader incrementMissingStep(QByteArrayLiteral(
+        "<IncrementSimulationParams><Range From=\"3\" To=\"4\"/></IncrementSimulationParams>"));
+    incrementMissingStep.readNextStartElement();
+    incrementMissingStep >> increment;
+    QCOMPARE(increment.Step, 12.);
+    QCOMPARE(increment.Range.from(), 3.);
+    QCOMPARE(increment.Range.to(), 4.);
+
+    QXmlStreamReader incrementInvalidStep(QByteArrayLiteral(
+        "<IncrementSimulationParams Step=\"bad\"><Range From=\"5\" To=\"6\"/></IncrementSimulationParams>"));
+    incrementInvalidStep.readNextStartElement();
+    incrementInvalidStep >> increment;
+    QCOMPARE(increment.Step, 12.);
+    QCOMPARE(increment.Range.from(), 5.);
+    QCOMPARE(increment.Range.to(), 6.);
+
+    DecrementSimulationParams decrement;
+    decrement.Step = 22.;
+    decrement.Range = QRange<double>(7., 8.);
+
+    QXmlStreamReader decrementMissingStep(QByteArrayLiteral(
+        "<DecrementSimulationParams><Range From=\"9\" To=\"10\"/></DecrementSimulationParams>"));
+    decrementMissingStep.readNextStartElement();
+    decrementMissingStep >> decrement;
+    QCOMPARE(decrement.Step, 22.);
+    QCOMPARE(decrement.Range.from(), 9.);
+    QCOMPARE(decrement.Range.to(), 10.);
+
+    QXmlStreamReader decrementInvalidStep(QByteArrayLiteral(
+        "<DecrementSimulationParams Step=\"bad\"><Range From=\"11\" To=\"12\"/></DecrementSimulationParams>"));
+    decrementInvalidStep.readNextStartElement();
+    decrementInvalidStep >> decrement;
+    QCOMPARE(decrement.Step, 22.);
+    QCOMPARE(decrement.Range.from(), 11.);
+    QCOMPARE(decrement.Range.to(), 12.);
+}
+
+void TestSimulationParams::mismatchedChildrenAreSkippedForEveryMode()
+{
+    const QVector<SimulationMode> modes = {
+        SimulationMode::Disabled,
+        SimulationMode::Off,
+        SimulationMode::Random,
+        SimulationMode::Increment,
+        SimulationMode::Decrement,
+        SimulationMode::Toggle
+    };
+
+    for (const SimulationMode mode : modes) {
+        QXmlStreamReader reader(QStringLiteral(
+            "<ModbusSimulationParams Mode=\"%1\" Interval=\"77\" DataType=\"Float64\" RegisterOrder=\"LSRF\">"
+            "<RandomSimulationParams><Range From=\"1\" To=\"2\"/></RandomSimulationParams>"
+            "<IncrementSimulationParams Step=\"3\"><Range From=\"4\" To=\"5\"/></IncrementSimulationParams>"
+            "<DecrementSimulationParams Step=\"6\"><Range From=\"7\" To=\"8\"/></DecrementSimulationParams>"
+            "<UnknownChild><Nested/></UnknownChild>"
+            "</ModbusSimulationParams>").arg(enumToString(mode)));
+        reader.readNextStartElement();
+
+        ModbusSimulationParams params;
+        reader >> params;
+
+        QCOMPARE(params.Mode, mode);
+        QCOMPARE(params.Interval, 77u);
+        QCOMPARE(params.DataMode, DataType::Float64);
+        QCOMPARE(params.RegOrder, RegisterOrder::LSRF);
+
+        if (mode == SimulationMode::Random) {
+            QCOMPARE(params.RandomParams.Range.from(), 1.);
+            QCOMPARE(params.RandomParams.Range.to(), 2.);
+        } else {
+            QCOMPARE(params.RandomParams.Range.from(), 0.);
+            QCOMPARE(params.RandomParams.Range.to(), 65535.);
+        }
+
+        if (mode == SimulationMode::Increment) {
+            QCOMPARE(params.IncrementParams.Step, 3.);
+            QCOMPARE(params.IncrementParams.Range.from(), 4.);
+        } else {
+            QCOMPARE(params.IncrementParams.Step, 1.);
+            QCOMPARE(params.IncrementParams.Range.from(), 0.);
+        }
+
+        if (mode == SimulationMode::Decrement) {
+            QCOMPARE(params.DecrementParams.Step, 6.);
+            QCOMPARE(params.DecrementParams.Range.from(), 7.);
+        } else {
+            QCOMPARE(params.DecrementParams.Step, 1.);
+            QCOMPARE(params.DecrementParams.Range.from(), 0.);
+        }
+    }
 }
 
 QTEST_GUILESS_MAIN(TestSimulationParams)

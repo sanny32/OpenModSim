@@ -33,6 +33,9 @@ private slots:
     void settersClampNegativeDelayValues();
     void settingsReadStringBooleansAndClampNegativeDelays();
     void xmlWriterSerializesEveryAttribute();
+    void settingsWriterSerializesFalseAndTrueValues();
+    void xmlDelayBoundsAcceptZeroAndPositiveValues();
+    void xmlBooleanAttributesAcceptEveryTrueToken();
 };
 
 void TestModbusErrorSimulations::defaultsAreInactive()
@@ -329,6 +332,115 @@ void TestModbusErrorSimulations::xmlWriterSerializesEveryAttribute()
     QVERIFY(buffer.contains("ResponseRandomDelay=\"true\""));
     QVERIFY(buffer.contains("ResponseDelayTime=\"15\""));
     QVERIFY(buffer.contains("ResponseRandomDelayUpToTime=\"25\""));
+}
+
+void TestModbusErrorSimulations::settingsWriterSerializesFalseAndTrueValues()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+
+    const QString path = dir.filePath(QStringLiteral("all-values.ini"));
+    {
+        ModbusErrorSimulations source;
+        QSettings settings(path, QSettings::IniFormat);
+        settings << source;
+        settings.sync();
+    }
+
+    {
+        QSettings settings(path, QSettings::IniFormat);
+        settings.beginGroup(QStringLiteral("ModbusErrorSimulations"));
+        QCOMPARE(settings.value(QStringLiteral("NoResponse")).toBool(), false);
+        QCOMPARE(settings.value(QStringLiteral("ResponseIncorrectId")).toBool(), false);
+        QCOMPARE(settings.value(QStringLiteral("ResponseIllegalFunction")).toBool(), false);
+        QCOMPARE(settings.value(QStringLiteral("ResponseDeviceBusy")).toBool(), false);
+        QCOMPARE(settings.value(QStringLiteral("ResponseIncorrectCrc")).toBool(), false);
+        QCOMPARE(settings.value(QStringLiteral("ResponseDelay")).toBool(), false);
+        QCOMPARE(settings.value(QStringLiteral("ResponseDelayTime")).toInt(), 0);
+        QCOMPARE(settings.value(QStringLiteral("ResponseRandomDelay")).toBool(), false);
+        QCOMPARE(settings.value(QStringLiteral("ResponseRandomDelayUpToTime")).toInt(), 1000);
+        settings.endGroup();
+    }
+
+    {
+        ModbusErrorSimulations source;
+        source.setNoResponse(true);
+        source.setResponseIncorrectId(true);
+        source.setResponseIllegalFunction(true);
+        source.setResponseDeviceBusy(true);
+        source.setResponseIncorrectCrc(true);
+        source.setResponseDelay(true);
+        source.setResponseDelayTime(35);
+        source.setResponseRandomDelay(true);
+        source.setResponseRandomDelayUpToTime(45);
+
+        QSettings settings(path, QSettings::IniFormat);
+        settings << source;
+        settings.sync();
+    }
+
+    ModbusErrorSimulations restored;
+    QSettings settings(path, QSettings::IniFormat);
+    settings >> restored;
+
+    QVERIFY(restored.noResponse());
+    QVERIFY(restored.responseIncorrectId());
+    QVERIFY(restored.responseIllegalFunction());
+    QVERIFY(restored.responseDeviceBusy());
+    QVERIFY(restored.responseIncorrectCrc());
+    QVERIFY(restored.responseDelay());
+    QCOMPARE(restored.responseDelayTime(), 35);
+    QVERIFY(restored.responseRandomDelay());
+    QCOMPARE(restored.responseRandomDelayUpToTime(), 45);
+}
+
+void TestModbusErrorSimulations::xmlDelayBoundsAcceptZeroAndPositiveValues()
+{
+    for (const QByteArray xml : {
+             QByteArrayLiteral("<ModbusErrorSimulations ResponseDelayTime=\"0\" ResponseRandomDelayUpToTime=\"0\"/>"),
+             QByteArrayLiteral("<ModbusErrorSimulations ResponseDelayTime=\"1\" ResponseRandomDelayUpToTime=\"2\"/>")
+         }) {
+        ModbusErrorSimulations restored;
+        restored.setResponseDelayTime(10);
+        restored.setResponseRandomDelayUpToTime(20);
+
+        QXmlStreamReader reader(xml);
+        reader.readNextStartElement();
+        reader >> restored;
+
+        QVERIFY(restored.responseDelayTime() >= 0);
+        QVERIFY(restored.responseRandomDelayUpToTime() >= 0);
+    }
+}
+
+void TestModbusErrorSimulations::xmlBooleanAttributesAcceptEveryTrueToken()
+{
+    for (const QByteArray token : {QByteArrayLiteral("true"), QByteArrayLiteral("1"),
+                                   QByteArrayLiteral("yes"), QByteArrayLiteral("on"),
+                                   QByteArrayLiteral("TRUE"), QByteArrayLiteral("On")}) {
+        const QByteArray xml = QByteArrayLiteral("<ModbusErrorSimulations ")
+            + QByteArrayLiteral("NoResponse=\"") + token
+            + QByteArrayLiteral("\" ResponseIncorrectId=\"") + token
+            + QByteArrayLiteral("\" ResponseIllegalFunction=\"") + token
+            + QByteArrayLiteral("\" ResponseDeviceBusy=\"") + token
+            + QByteArrayLiteral("\" ResponseIncorrectCrc=\"") + token
+            + QByteArrayLiteral("\" ResponseDelay=\"") + token
+            + QByteArrayLiteral("\" ResponseRandomDelay=\"") + token
+            + QByteArrayLiteral("\"/>");
+
+        ModbusErrorSimulations restored;
+        QXmlStreamReader reader(xml);
+        reader.readNextStartElement();
+        reader >> restored;
+
+        QVERIFY(restored.noResponse());
+        QVERIFY(restored.responseIncorrectId());
+        QVERIFY(restored.responseIllegalFunction());
+        QVERIFY(restored.responseDeviceBusy());
+        QVERIFY(restored.responseIncorrectCrc());
+        QVERIFY(restored.responseDelay());
+        QVERIFY(restored.responseRandomDelay());
+    }
 }
 
 QTEST_GUILESS_MAIN(TestModbusErrorSimulations)

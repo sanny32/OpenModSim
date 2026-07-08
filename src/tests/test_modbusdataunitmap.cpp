@@ -8,6 +8,7 @@
 
 #include <QTest>
 #include <QUuid>
+#include <QVector>
 
 #include "modbusdataunitmap.h"
 
@@ -49,6 +50,10 @@ private slots:
     void replacingUnitMapCanMoveRegisterType();
     void setDataPartiallyOverlappingLocalRange();
     void timestampOverrideFallsBackToLocalRangeTimestamp();
+    void removingZeroLengthUnitMapDoesNotReportShapeChange();
+    void globalContainsRangeCoversEveryRegisterTypeBoundary();
+    void unchangedDataDoesNotRefreshTimestampUnlessRequested();
+    void localUnknownRegisterTypeAccessorsStayEmpty();
 };
 
 void TestModbusDataUnitMap::addUnitMapBuildsLocalRange()
@@ -542,6 +547,75 @@ void TestModbusDataUnitMap::timestampOverrideFallsBackToLocalRangeTimestamp()
 
     map.setTimestamp(QModbusDataUnit::Coils, 10, QDateTime());
     QCOMPARE(map.timestamp(QModbusDataUnit::Coils, 10), fallback);
+}
+
+void TestModbusDataUnitMap::removingZeroLengthUnitMapDoesNotReportShapeChange()
+{
+    ModbusDataUnitMap map;
+    const QUuid id = QUuid::createUuid();
+
+    QVERIFY(!map.addUnitMap(id, QModbusDataUnit::Coils, 50, 0));
+    QVERIFY(!map.contains(QModbusDataUnit::Coils));
+    QVERIFY(!map.removeUnitMap(id));
+}
+
+void TestModbusDataUnitMap::globalContainsRangeCoversEveryRegisterTypeBoundary()
+{
+    ModbusDataUnitMap map;
+    map.setGlobalMap(true);
+
+    const QVector<QModbusDataUnit::RegisterType> types = {
+        QModbusDataUnit::Coils,
+        QModbusDataUnit::DiscreteInputs,
+        QModbusDataUnit::InputRegisters,
+        QModbusDataUnit::HoldingRegisters
+    };
+
+    for (const auto type : types) {
+        QVERIFY(map.contains(type));
+        QVERIFY(map.containsRange(type, 0, 1));
+        QVERIFY(map.containsRange(type, 65533, 2));
+        QVERIFY(!map.containsRange(type, 65534, 2));
+        QCOMPARE(map.getData(type, 65534, 2).value(0), quint16(0));
+        QCOMPARE(map.getData(type, 65534, 2).value(1), quint16(0));
+    }
+}
+
+void TestModbusDataUnitMap::unchangedDataDoesNotRefreshTimestampUnlessRequested()
+{
+    ModbusDataUnitMap map;
+    const QModbusDataUnit data(QModbusDataUnit::HoldingRegisters, 7, QVector<quint16>({55}));
+
+    map.setData(data);
+    QVERIFY(map.timestamp(QModbusDataUnit::HoldingRegisters, 7).isValid());
+
+    map.setTimestamp(QModbusDataUnit::HoldingRegisters, 7, QDateTime());
+    QCOMPARE(map.timestamp(QModbusDataUnit::HoldingRegisters, 7), QDateTime());
+
+    map.setData(data, false);
+    QCOMPARE(map.timestamp(QModbusDataUnit::HoldingRegisters, 7), QDateTime());
+
+    map.setData(data, true);
+    QVERIFY(map.timestamp(QModbusDataUnit::HoldingRegisters, 7).isValid());
+}
+
+void TestModbusDataUnitMap::localUnknownRegisterTypeAccessorsStayEmpty()
+{
+    ModbusDataUnitMap map;
+    const auto unknownType = static_cast<QModbusDataUnit::RegisterType>(1234);
+
+    QVERIFY(!map.contains(unknownType));
+    QVERIFY(!map.containsRange(unknownType, 0, 1));
+    QVERIFY(!map.value(unknownType).isValid());
+    QCOMPARE(map.getData(unknownType, 0, 2).value(0), quint16(0));
+    QCOMPARE(map.getData(unknownType, 0, 2).value(1), quint16(0));
+
+    map[unknownType].setRegisterType(unknownType);
+    map[unknownType].setStartAddress(3);
+    map[unknownType].setValueCount(2);
+
+    QVERIFY(map.contains(unknownType));
+    QVERIFY(map.containsRange(unknownType, 3, 2));
 }
 
 QTEST_GUILESS_MAIN(TestModbusDataUnitMap)
