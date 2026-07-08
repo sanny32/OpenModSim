@@ -58,6 +58,7 @@ private slots:
     void readWriteMultipleRegisters();
     void readFifoQueue();
     void exceptionPdusBypassPayloadValidation();
+    void wrongFunctionCodesInvalidateConcreteMessages();
 };
 
 void TestModbusMessages::readCoils()
@@ -668,6 +669,29 @@ void TestModbusMessages::exceptionPdusBypassPayloadValidation()
     const QModbusExceptionResponse readWriteMultipleRegistersException(QModbusPdu::ReadWriteMultipleRegisters,
                                                                       QModbusExceptionResponse::IllegalDataAddress);
     QVERIFY(ReadWriteMultipleRegistersResponse(readWriteMultipleRegistersException, kProto, 1, 0, kTs).isValid());
+}
+
+void TestModbusMessages::wrongFunctionCodesInvalidateConcreteMessages()
+{
+    const QModbusPdu::FunctionCode wrongCode = QModbusPdu::Invalid;
+    const QByteArray fourBytes = be16(1) + be16(1);
+
+    QVERIFY(!ReadCoilsRequest(request(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadDiscreteInputsRequest(request(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadHoldingRegistersRequest(request(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadInputRegistersRequest(request(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!WriteSingleCoilRequest(request(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!WriteSingleRegisterRequest(request(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!MaskWriteRegisterRequest(request(wrongCode, fourBytes + be16(1)), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadFifoQueueRequest(request(wrongCode, be16(1)), kProto, 1, 0, kTs).isValid());
+
+    QVERIFY(!ReadCoilsResponse(response(wrongCode, QByteArray::fromHex("01FF")), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadDiscreteInputsResponse(response(wrongCode, QByteArray::fromHex("01FF")), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadHoldingRegistersResponse(response(wrongCode, QByteArray::fromHex("020001")), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadInputRegistersResponse(response(wrongCode, QByteArray::fromHex("020001")), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!WriteMultipleCoilsResponse(response(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!WriteMultipleRegistersResponse(response(wrongCode, fourBytes), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!ReadWriteMultipleRegistersResponse(response(wrongCode, QByteArray::fromHex("020001")), kProto, 1, 0, kTs).isValid());
 }
 
 QTEST_GUILESS_MAIN(TestModbusMessages)

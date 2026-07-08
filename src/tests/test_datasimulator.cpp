@@ -55,6 +55,8 @@ private slots:
     void nonSteppingModesDoNotEmitInitialValue();
     void disabledSecondaryAddressIsReportedInSimulationMap();
     void randomUnknownRegisterTypeDoesNotEmitValue();
+    void incrementWrapsEveryDataTypeToRangeStart();
+    void decrementWrapsEveryDataTypeToRangeEnd();
 };
 
 void TestDataSimulator::initTestCase()
@@ -686,6 +688,50 @@ void TestDataSimulator::randomUnknownRegisterTypeDoesNotEmitValue()
 
     QTest::qWait(80);
     QCOMPARE(simulated.count(), 0);
+}
+
+void TestDataSimulator::incrementWrapsEveryDataTypeToRangeStart()
+{
+    DataSimulator simulator;
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+
+    quint16 address = 0;
+    for (const auto type : {DataType::Binary, DataType::UInt16, DataType::Int16, DataType::Hex, DataType::Ansi,
+                            DataType::Int32, DataType::UInt32, DataType::Float32, DataType::Float64, DataType::Int64,
+                            DataType::UInt64}) {
+        ModbusSimulationParams params;
+        params.Mode = SimulationMode::Increment;
+        params.DataMode = type;
+        params.Interval = 20;
+        params.IncrementParams.Step = 1.;
+        params.IncrementParams.Range = QRange<double>(0., 0.);
+        simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, address, params);
+        address = static_cast<quint16>(address + registersCount(type) + 1);
+    }
+
+    QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 22, 2000);
+}
+
+void TestDataSimulator::decrementWrapsEveryDataTypeToRangeEnd()
+{
+    DataSimulator simulator;
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+
+    quint16 address = 0;
+    for (const auto type : {DataType::Binary, DataType::UInt16, DataType::Int16, DataType::Hex, DataType::Ansi,
+                            DataType::Int32, DataType::UInt32, DataType::Float32, DataType::Float64, DataType::Int64,
+                            DataType::UInt64}) {
+        ModbusSimulationParams params;
+        params.Mode = SimulationMode::Decrement;
+        params.DataMode = type;
+        params.Interval = 20;
+        params.DecrementParams.Step = 1.;
+        params.DecrementParams.Range = QRange<double>(0., 0.);
+        simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, address, params);
+        address = static_cast<quint16>(address + registersCount(type) + 1);
+    }
+
+    QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 22, 2000);
 }
 
 QTEST_GUILESS_MAIN(TestDataSimulator)
