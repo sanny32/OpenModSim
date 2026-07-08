@@ -57,6 +57,7 @@ private slots:
     void maskWriteRegister();
     void readWriteMultipleRegisters();
     void readFifoQueue();
+    void exceptionPdusBypassPayloadValidation();
 };
 
 void TestModbusMessages::readCoils()
@@ -639,6 +640,34 @@ void TestModbusMessages::readFifoQueue()
                                        QModbusExceptionResponse::IllegalDataAddress);
     ReadFifoQueueResponse exceptionResp(exception, kProto, 1, 0, kTs);
     QVERIFY(exceptionResp.isValid());
+}
+
+void TestModbusMessages::exceptionPdusBypassPayloadValidation()
+{
+    const QModbusExceptionResponse readCoilsException(QModbusPdu::ReadCoils,
+                                                     QModbusExceptionResponse::IllegalDataAddress);
+    QVERIFY(ReadCoilsRequest(readCoilsException, kProto, 1, 0, kTs).isValid());
+
+    const QModbusExceptionResponse readDiscreteInputsException(QModbusPdu::ReadDiscreteInputs,
+                                                              QModbusExceptionResponse::IllegalDataValue);
+    QVERIFY(ReadDiscreteInputsRequest(readDiscreteInputsException, kProto, 1, 0, kTs).isValid());
+
+    const QModbusExceptionResponse writeSingleCoilException(QModbusPdu::WriteSingleCoil,
+                                                           QModbusExceptionResponse::IllegalDataValue);
+    QVERIFY(WriteSingleCoilRequest(writeSingleCoilException, kProto, 1, 0, kTs).isValid());
+    QVERIFY(WriteSingleCoilResponse(writeSingleCoilException, kProto, 1, 0, kTs).isValid());
+
+    const QModbusExceptionResponse writeSingleRegisterException(QModbusPdu::WriteSingleRegister,
+                                                               QModbusExceptionResponse::IllegalDataAddress);
+    QVERIFY(WriteSingleRegisterRequest(writeSingleRegisterException, kProto, 1, 0, kTs).isValid());
+
+    const QModbusExceptionResponse reportServerIdException(QModbusPdu::ReportServerId,
+                                                          QModbusExceptionResponse::ServerDeviceFailure);
+    QVERIFY(ReportServerIdResponse(reportServerIdException, kProto, 1, 0, kTs).isValid());
+
+    const QModbusExceptionResponse readWriteMultipleRegistersException(QModbusPdu::ReadWriteMultipleRegisters,
+                                                                      QModbusExceptionResponse::IllegalDataAddress);
+    QVERIFY(ReadWriteMultipleRegistersResponse(readWriteMultipleRegistersException, kProto, 1, 0, kTs).isValid());
 }
 
 QTEST_GUILESS_MAIN(TestModbusMessages)

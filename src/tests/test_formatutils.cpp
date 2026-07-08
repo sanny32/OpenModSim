@@ -36,6 +36,8 @@ private slots:
     void bracketedRegisterFormatters();
     void holdingRegisterDeferredBranches();
     void remainingCoilAndDiscreteMultiRegisterBranches();
+    void scalarRegisterFormatterMatrix();
+    void multiRegisterFormatterMatrix();
 };
 
 void TestFormatUtils::uint8ValueDecimalAndHex()
@@ -402,6 +404,126 @@ void TestFormatUtils::remainingCoilAndDiscreteMultiRegisterBranches()
     QCOMPARE(formatUInt64Value(QModbusDataUnit::DiscreteInputs, 18, 0, 0, 0, ByteOrder::Direct, false, false, out, false),
              QStringLiteral("18"));
     QCOMPARE(out.toUInt(), 18u);
+}
+
+void TestFormatUtils::scalarRegisterFormatterMatrix()
+{
+    const QVector<QModbusDataUnit::RegisterType> registerTypes = {
+        QModbusDataUnit::Coils,
+        QModbusDataUnit::DiscreteInputs,
+        QModbusDataUnit::HoldingRegisters,
+        QModbusDataUnit::InputRegisters,
+        static_cast<QModbusDataUnit::RegisterType>(999)
+    };
+    const QVector<ByteOrder> byteOrders = {
+        ByteOrder::Direct,
+        ByteOrder::Swapped,
+        static_cast<ByteOrder>(99)
+    };
+
+    for (const auto registerType : registerTypes) {
+        for (const auto byteOrder : byteOrders) {
+            for (const bool brackets : {true, false}) {
+                QVariant out;
+
+                const QString binary = formatBinaryValue(registerType, 0x00F0, byteOrder, out, brackets);
+                if (registerType == QModbusDataUnit::Coils || registerType == QModbusDataUnit::DiscreteInputs) {
+                    QCOMPARE(binary, brackets ? QStringLiteral("<240>") : QStringLiteral("240"));
+                    QCOMPARE(out.toUInt(), 0x00F0u);
+                } else if (registerType == QModbusDataUnit::HoldingRegisters
+                           || registerType == QModbusDataUnit::InputRegisters) {
+                    QVERIFY(!binary.isEmpty());
+                    QVERIFY(binary.contains(QStringLiteral("1111")));
+                    QVERIFY(out.isValid());
+                } else {
+                    QVERIFY(binary.isEmpty());
+                    QCOMPARE(out.toUInt(), 0x00F0u);
+                }
+
+                const QString hex = formatHexValue(registerType, 0x00AB, byteOrder, out, brackets);
+                if (registerType == QModbusDataUnit::Coils || registerType == QModbusDataUnit::DiscreteInputs) {
+                    QCOMPARE(hex, brackets ? QStringLiteral("<171>") : QStringLiteral("171"));
+                } else if (registerType == QModbusDataUnit::HoldingRegisters
+                           || registerType == QModbusDataUnit::InputRegisters) {
+                    QVERIFY(hex.contains(QStringLiteral("0x")));
+                    QVERIFY(hex.startsWith(brackets ? QStringLiteral("<") : QString()));
+                } else {
+                    QVERIFY(hex.isEmpty());
+                }
+
+                const QString uintText = formatUInt16Value(registerType, 12, byteOrder, false, out, brackets);
+                if (registerType == QModbusDataUnit::Coils || registerType == QModbusDataUnit::DiscreteInputs) {
+                    QCOMPARE(uintText, brackets ? QStringLiteral("<12>") : QStringLiteral("12"));
+                } else if (registerType == QModbusDataUnit::HoldingRegisters
+                           || registerType == QModbusDataUnit::InputRegisters) {
+                    QVERIFY(uintText.contains(QStringLiteral("12")) || uintText.contains(QStringLiteral("3072")));
+                } else {
+                    QVERIFY(uintText.isEmpty());
+                }
+
+                const QString ansi = formatAnsiValue(registerType, 0x4142, byteOrder, QStringLiteral("UTF-8"), out, brackets);
+                if (registerType == QModbusDataUnit::Coils || registerType == QModbusDataUnit::DiscreteInputs) {
+                    QCOMPARE(ansi, brackets ? QStringLiteral("<16706>") : QStringLiteral("16706"));
+                } else if (registerType == QModbusDataUnit::HoldingRegisters
+                           || registerType == QModbusDataUnit::InputRegisters) {
+                    QVERIFY(!ansi.isEmpty());
+                } else {
+                    QVERIFY(ansi.isEmpty());
+                }
+            }
+        }
+    }
+}
+
+void TestFormatUtils::multiRegisterFormatterMatrix()
+{
+    const QVector<QModbusDataUnit::RegisterType> registerTypes = {
+        QModbusDataUnit::Coils,
+        QModbusDataUnit::DiscreteInputs,
+        QModbusDataUnit::HoldingRegisters,
+        QModbusDataUnit::InputRegisters,
+        static_cast<QModbusDataUnit::RegisterType>(999)
+    };
+    const QVector<ByteOrder> byteOrders = {
+        ByteOrder::Direct,
+        ByteOrder::Swapped,
+        static_cast<ByteOrder>(99)
+    };
+
+    for (const auto registerType : registerTypes) {
+        for (const auto byteOrder : byteOrders) {
+            for (const bool brackets : {true, false}) {
+                QVariant out = 123;
+
+                const QString int32Text = formatInt32Value(registerType, 0x0001, 0x0002, byteOrder, false, out, brackets);
+                if (registerType == QModbusDataUnit::Coils || registerType == QModbusDataUnit::DiscreteInputs) {
+                    QCOMPARE(int32Text, brackets ? QStringLiteral("<1>") : QStringLiteral("1"));
+                    QCOMPARE(out.toUInt(), 1u);
+                } else if (registerType == QModbusDataUnit::HoldingRegisters
+                           || registerType == QModbusDataUnit::InputRegisters) {
+                    QVERIFY(!int32Text.isEmpty());
+                    QVERIFY(out.isValid());
+                } else {
+                    QVERIFY(int32Text.isEmpty());
+                    QCOMPARE(out.toInt(), 123);
+                }
+
+                out = 123;
+                const QString uint64Text = formatUInt64Value(registerType, 1, 2, 3, 4, byteOrder, true, false, out, brackets);
+                if (registerType == QModbusDataUnit::Coils || registerType == QModbusDataUnit::DiscreteInputs) {
+                    QCOMPARE(uint64Text, brackets ? QStringLiteral("<1>") : QStringLiteral("1"));
+                    QCOMPARE(out.toUInt(), 1u);
+                } else if (registerType == QModbusDataUnit::HoldingRegisters
+                           || registerType == QModbusDataUnit::InputRegisters) {
+                    QVERIFY(!uint64Text.isEmpty());
+                    QVERIFY(out.isValid());
+                } else {
+                    QVERIFY(uint64Text.isEmpty());
+                    QCOMPARE(out.toInt(), 123);
+                }
+            }
+        }
+    }
 }
 
 QTEST_GUILESS_MAIN(TestFormatUtils)

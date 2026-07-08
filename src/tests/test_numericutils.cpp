@@ -24,6 +24,7 @@ private slots:
     void floatRoundTrip();
     void int64RoundTrip();
     void doubleRoundTrip();
+    void unknownByteOrderRoundTrip();
     void makeValueScalars();
     void makeValueMultiRegister();
     void makeValueRejectsShortInput();
@@ -125,6 +126,16 @@ void TestNumericUtils::doubleRoundTrip()
         breakDouble(2.718281828459045, r[0], r[1], r[2], r[3], bo);
         QCOMPARE(makeDouble(r[0], r[1], r[2], r[3], bo), 2.718281828459045);
     }
+}
+
+void TestNumericUtils::unknownByteOrderRoundTrip()
+{
+    const auto unknownOrder = static_cast<ByteOrder>(99);
+
+    QCOMPARE(toByteOrderValue<quint16>(0x1234, unknownOrder), quint16(0x1234));
+    QCOMPARE(toByteOrderValue<quint32>(0x12345678u, unknownOrder), quint32(0x12345678u));
+    QCOMPARE(toByteOrderValue<quint64>(Q_UINT64_C(0x123456789ABCDEF0), unknownOrder),
+             Q_UINT64_C(0x123456789ABCDEF0));
 }
 
 void TestNumericUtils::makeValueScalars()

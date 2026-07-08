@@ -12,6 +12,31 @@
 
 #include "modbusmessage.h"
 
+namespace {
+
+class InspectableModbusMessage : public ModbusMessage
+{
+public:
+    using ModbusMessage::ModbusMessage;
+
+    int exposedDataSize() const
+    {
+        return dataSize();
+    }
+
+    quint8 exposedAt(int idx) const
+    {
+        return at(idx);
+    }
+
+    QByteArray exposedData(int idx, int len = -1) const
+    {
+        return data(idx, len);
+    }
+};
+
+}
+
 class TestModbusMessage : public QObject
 {
     Q_OBJECT
@@ -25,8 +50,12 @@ private slots:
     void accessorsExposeRawAduAndException();
     void rtuAduRejectsShortAndBadChecksum();
     void tcpAduRejectsShortAndLengthMismatch();
+    void directRawConstructorsKeepProtocolAndPayload();
+    void protectedPayloadHelpersExposePduData();
     void createDispatchesFunctionCodes_data();
     void createDispatchesFunctionCodes();
+    void createDispatchesExceptionFunctionCodes_data();
+    void createDispatchesExceptionFunctionCodes();
     void createFallsBackForUnknownFunctionCode();
 };
 
@@ -161,6 +190,45 @@ void TestModbusMessage::tcpAduRejectsShortAndLengthMismatch()
     QVERIFY(!mismatch.isValid());
 }
 
+void TestModbusMessage::directRawConstructorsKeepProtocolAndPayload()
+{
+    const QDateTime timestamp = QDateTime::fromString(QStringLiteral("2026-07-08T09:00:00.000"), Qt::ISODateWithMs);
+    const QModbusRequest request(QModbusPdu::ReadCoils, quint16(0x0010), quint16(8));
+
+    const InspectableModbusMessage tcpSource(request, ModbusMessage::Tcp, 17, 0x1234, timestamp, true);
+    const InspectableModbusMessage tcpParsed(tcpSource.rawData(), ModbusMessage::Tcp, timestamp, false);
+    QVERIFY(tcpParsed.isValid());
+    QCOMPARE(tcpParsed.protocolType(), ModbusMessage::Tcp);
+    QCOMPARE(tcpParsed.deviceId(), 17);
+    QCOMPARE(tcpParsed.functionCode(), QModbusPdu::ReadCoils);
+    QVERIFY(!tcpParsed.isRequest());
+
+    const InspectableModbusMessage rtuSource(request, ModbusMessage::Rtu, 9, 0, timestamp, true);
+    const InspectableModbusMessage rtuParsed(rtuSource.rawData(), ModbusMessage::Rtu, timestamp, true);
+    QVERIFY(rtuParsed.isValid());
+    QCOMPARE(rtuParsed.protocolType(), ModbusMessage::Rtu);
+    QCOMPARE(rtuParsed.deviceId(), 9);
+    QCOMPARE(rtuParsed.functionCode(), QModbusPdu::ReadCoils);
+    QVERIFY(rtuParsed.isRequest());
+}
+
+void TestModbusMessage::protectedPayloadHelpersExposePduData()
+{
+    const QDateTime timestamp = QDateTime::fromString(QStringLiteral("2026-07-08T09:30:00.000"), Qt::ISODateWithMs);
+    const QModbusRequest request(QModbusPdu::WriteSingleRegister, quint16(0x1234), quint16(0xABCD));
+    const InspectableModbusMessage message(request, ModbusMessage::Tcp, 4, 0x2211, timestamp, true);
+
+    QVERIFY(message.isValid());
+    QCOMPARE(message.exposedDataSize(), 4);
+    QCOMPARE(message.exposedAt(0), quint8(0x12));
+    QCOMPARE(message.exposedAt(1), quint8(0x34));
+    QCOMPARE(message.exposedAt(2), quint8(0xAB));
+    QCOMPARE(message.exposedAt(3), quint8(0xCD));
+    QCOMPARE(message.exposedAt(4), quint8(0));
+    QCOMPARE(message.exposedData(1, 2), QByteArray::fromHex("34AB"));
+    QCOMPARE(message.exposedData(2), QByteArray::fromHex("ABCD"));
+}
+
 void TestModbusMessage::createDispatchesFunctionCodes_data()
 {
     QTest::addColumn<int>("code");
@@ -204,6 +272,49 @@ void TestModbusMessage::createDispatchesFunctionCodes()
     const auto parsed = ModbusMessage::create(message->rawData(), proto, QDateTime::currentDateTime(), request);
     QCOMPARE(parsed->functionCode(), fc);
     QCOMPARE(parsed->isRequest(), request);
+}
+
+void TestModbusMessage::createDispatchesExceptionFunctionCodes_data()
+{
+    QTest::addColumn<int>("code");
+    QTest::addColumn<int>("protocol");
+
+    const QVector<QModbusPdu::FunctionCode> codes = {
+        QModbusPdu::ReadCoils, QModbusPdu::ReadDiscreteInputs, QModbusPdu::ReadHoldingRegisters,
+        QModbusPdu::ReadInputRegisters, QModbusPdu::WriteSingleCoil, QModbusPdu::WriteSingleRegister,
+        QModbusPdu::ReadExceptionStatus, QModbusPdu::Diagnostics, QModbusPdu::GetCommEventCounter,
+        QModbusPdu::GetCommEventLog, QModbusPdu::WriteMultipleCoils, QModbusPdu::WriteMultipleRegisters,
+        QModbusPdu::ReportServerId, QModbusPdu::ReadFileRecord, QModbusPdu::WriteFileRecord,
+        QModbusPdu::MaskWriteRegister, QModbusPdu::ReadWriteMultipleRegisters, QModbusPdu::ReadFifoQueue
+    };
+
+    for (const auto code : codes) {
+        for (const auto protocol : {ModbusMessage::Rtu, ModbusMessage::Tcp}) {
+            QTest::addRow("fc%02X-%s-exception", int(code), protocol == ModbusMessage::Rtu ? "rtu" : "tcp")
+                << int(code) << int(protocol);
+        }
+    }
+}
+
+void TestModbusMessage::createDispatchesExceptionFunctionCodes()
+{
+    QFETCH(int, code);
+    QFETCH(int, protocol);
+    const auto fc = static_cast<QModbusPdu::FunctionCode>(code);
+    const auto proto = static_cast<ModbusMessage::ProtocolType>(protocol);
+    const QModbusExceptionResponse exception(fc, QModbusExceptionResponse::IllegalDataValue);
+
+    const auto message = ModbusMessage::create(exception, proto, 1, 0, QDateTime::currentDateTime(), false);
+
+    QCOMPARE(message->functionCode(), fc);
+    QCOMPARE(message->protocolType(), proto);
+    QVERIFY(message->isException());
+    QVERIFY(!message->isRequest());
+
+    const auto parsed = ModbusMessage::create(message->rawData(), proto, QDateTime::currentDateTime(), false);
+    QCOMPARE(parsed->functionCode(), fc);
+    QVERIFY(parsed->isException());
+    QVERIFY(!parsed->isRequest());
 }
 
 void TestModbusMessage::createFallsBackForUnknownFunctionCode()
