@@ -38,6 +38,7 @@ private slots:
     void remainingCoilAndDiscreteMultiRegisterBranches();
     void scalarRegisterFormatterMatrix();
     void multiRegisterFormatterMatrix();
+    void floatingAndWideRegisterFormatterMatrix();
 };
 
 void TestFormatUtils::uint8ValueDecimalAndHex()
@@ -521,6 +522,64 @@ void TestFormatUtils::multiRegisterFormatterMatrix()
                     QVERIFY(uint64Text.isEmpty());
                     QCOMPARE(out.toInt(), 123);
                 }
+            }
+        }
+    }
+}
+
+void TestFormatUtils::floatingAndWideRegisterFormatterMatrix()
+{
+    const QVector<QModbusDataUnit::RegisterType> registerTypes = {
+        QModbusDataUnit::HoldingRegisters,
+        QModbusDataUnit::InputRegisters
+    };
+    const QVector<ByteOrder> byteOrders = {
+        ByteOrder::Direct,
+        ByteOrder::Swapped,
+        static_cast<ByteOrder>(99)
+    };
+
+    for (const auto registerType : registerTypes) {
+        for (const auto byteOrder : byteOrders) {
+            for (const bool leadingZeros : {true, false}) {
+                QVariant out;
+
+                quint16 fl = 0;
+                quint16 fh = 0;
+                breakFloat(12.25f, fl, fh, ByteOrder::Direct);
+                const QString floatText = formatFloatValue(registerType, fl, fh, byteOrder, false, out, false);
+                QVERIFY(!floatText.trimmed().isEmpty());
+                QVERIFY(out.isValid());
+
+                quint16 d[4] = {0, 0, 0, 0};
+                breakDouble(24.5, d[0], d[1], d[2], d[3], ByteOrder::Direct);
+                const QString doubleText = formatDoubleValue(registerType, d[0], d[1], d[2], d[3], byteOrder, false, out, true);
+                QVERIFY(!doubleText.trimmed().isEmpty());
+                QVERIFY(out.isValid());
+
+                quint16 i64[4] = {0, 0, 0, 0};
+                breakInt64(Q_INT64_C(-1234567890123), i64[0], i64[1], i64[2], i64[3], ByteOrder::Direct);
+                const QString int64Text = formatInt64Value(registerType, i64[0], i64[1], i64[2], i64[3],
+                                                           byteOrder, false, out, true);
+                QVERIFY(int64Text.startsWith('<'));
+                QVERIFY(int64Text.endsWith('>'));
+                QVERIFY(out.isValid());
+
+                quint16 u32l = 0;
+                quint16 u32h = 0;
+                breakUInt32(123456789u, u32l, u32h, ByteOrder::Direct);
+                const QString uint32Text = formatUInt32Value(registerType, u32l, u32h, byteOrder, leadingZeros,
+                                                             false, out, false);
+                QVERIFY(!uint32Text.trimmed().isEmpty());
+                QVERIFY(out.isValid());
+
+                quint16 u64[4] = {0, 0, 0, 0};
+                breakUInt64(Q_UINT64_C(1234567890123456789), u64[0], u64[1], u64[2], u64[3], ByteOrder::Direct);
+                const QString uint64Text = formatUInt64Value(registerType, u64[0], u64[1], u64[2], u64[3],
+                                                             byteOrder, leadingZeros, false, out, true);
+                QVERIFY(uint64Text.startsWith('<'));
+                QVERIFY(uint64Text.endsWith('>'));
+                QVERIFY(out.isValid());
             }
         }
     }

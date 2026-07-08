@@ -26,6 +26,9 @@ private slots:
     void rangeBoundaryOverlapCases();
     void filtersMixedMapsWithOnlyOutsideItems();
     void modifiedRangesIgnoreInactiveSimulations();
+    void containsAndOverlapRejectEveryMismatchReason();
+    void simulationFilteringCoversEveryDataTypeWidth();
+    void modifiedRangesUseRegisterWidthForEveryActiveDataType();
 };
 
 ///
@@ -284,6 +287,114 @@ void TestProjectAddressSpaceFilter::modifiedRangesIgnoreInactiveSimulations()
     QCOMPARE(ranges.size(), 1);
     QCOMPARE(ranges.first().StartAddress, quint16(3));
     QCOMPARE(ranges.first().Length, quint16(1));
+}
+
+///
+/// \brief TestProjectAddressSpaceFilter::containsAndOverlapRejectEveryMismatchReason
+///
+void TestProjectAddressSpaceFilter::containsAndOverlapRejectEveryMismatchReason()
+{
+    const ProjectAddressSpaceRanges ranges = {
+        { 1, QModbusDataUnit::HoldingRegisters, 100, 0 },
+        { 2, QModbusDataUnit::HoldingRegisters, 100, 10 },
+        { 1, QModbusDataUnit::InputRegisters, 100, 10 },
+        { 1, QModbusDataUnit::HoldingRegisters, 100, 10 }
+    };
+
+    QVERIFY(!projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::HoldingRegisters, 99 }));
+    QVERIFY(projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::HoldingRegisters, 100 }));
+    QVERIFY(projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::HoldingRegisters, 109 }));
+    QVERIFY(!projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::HoldingRegisters, 110 }));
+    QVERIFY(!projectAddressSpaceContains(ranges, { 2, QModbusDataUnit::InputRegisters, 100 }));
+
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 90, 10 }));
+    QVERIFY(projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 90, 11 }));
+    QVERIFY(projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 109, 1 }));
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 110, 1 }));
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 2, QModbusDataUnit::InputRegisters, 100, 1 }));
+}
+
+///
+/// \brief TestProjectAddressSpaceFilter::simulationFilteringCoversEveryDataTypeWidth
+///
+void TestProjectAddressSpaceFilter::simulationFilteringCoversEveryDataTypeWidth()
+{
+    const ProjectAddressSpaceRanges ranges = {
+        { 1, QModbusDataUnit::HoldingRegisters, 10, 5 },
+        { 1, QModbusDataUnit::HoldingRegisters, 30, 6 },
+        { 1, QModbusDataUnit::HoldingRegisters, 50, 9 }
+    };
+    const QVector<QPair<DataType, quint16>> cases = {
+        { DataType::Binary, 10 },
+        { DataType::UInt16, 11 },
+        { DataType::Int16, 12 },
+        { DataType::Hex, 13 },
+        { DataType::Ansi, 14 },
+        { DataType::Float32, 29 },
+        { DataType::Int32, 31 },
+        { DataType::UInt32, 35 },
+        { DataType::Float64, 47 },
+        { DataType::Int64, 52 },
+        { DataType::UInt64, 58 }
+    };
+
+    ModbusSimulationMap2 simulations;
+    for (const auto& item : cases) {
+        ModbusSimulationParams params;
+        params.Mode = SimulationMode::Increment;
+        params.DataMode = item.first;
+        simulations.insert({ 1, QModbusDataUnit::HoldingRegisters, item.second }, params);
+    }
+    ModbusSimulationParams outside;
+    outside.Mode = SimulationMode::Increment;
+    outside.DataMode = DataType::UInt16;
+    simulations.insert({ 1, QModbusDataUnit::HoldingRegisters, 80 }, outside);
+
+    const auto result = filterProjectAddressSimulations(simulations, ranges);
+
+    QCOMPARE(result.size(), cases.size());
+    for (const auto& item : cases)
+        QVERIFY(result.contains({ 1, QModbusDataUnit::HoldingRegisters, item.second }));
+    QVERIFY(!result.contains({ 1, QModbusDataUnit::HoldingRegisters, 80 }));
+}
+
+///
+/// \brief TestProjectAddressSpaceFilter::modifiedRangesUseRegisterWidthForEveryActiveDataType
+///
+void TestProjectAddressSpaceFilter::modifiedRangesUseRegisterWidthForEveryActiveDataType()
+{
+    const QVector<QPair<DataType, quint16>> cases = {
+        { DataType::Binary, 1 },
+        { DataType::UInt16, 1 },
+        { DataType::Int16, 1 },
+        { DataType::Hex, 1 },
+        { DataType::Ansi, 1 },
+        { DataType::Float32, 2 },
+        { DataType::Int32, 2 },
+        { DataType::UInt32, 2 },
+        { DataType::Float64, 4 },
+        { DataType::Int64, 4 },
+        { DataType::UInt64, 4 }
+    };
+
+    ModbusSimulationMap2 simulations;
+    quint16 address = 10;
+    for (const auto& item : cases) {
+        ModbusSimulationParams params;
+        params.Mode = SimulationMode::Random;
+        params.DataMode = item.first;
+        simulations.insert({ 1, QModbusDataUnit::InputRegisters, address }, params);
+        ++address;
+    }
+
+    const auto ranges = projectAddressSpaceModifiedRanges({}, {}, simulations);
+
+    QCOMPARE(ranges.size(), cases.size());
+    for (int i = 0; i < ranges.size(); ++i) {
+        QCOMPARE(ranges.at(i).DeviceId, quint8(1));
+        QCOMPARE(ranges.at(i).Type, QModbusDataUnit::InputRegisters);
+        QCOMPARE(ranges.at(i).Length, cases.at(i).second);
+    }
 }
 
 QTEST_APPLESS_MAIN(TestProjectAddressSpaceFilter)

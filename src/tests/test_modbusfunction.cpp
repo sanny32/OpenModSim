@@ -25,6 +25,8 @@ private slots:
     void intConversion();
     void allFunctionNames_data();
     void allFunctionNames();
+    void allExceptionFunctionNames_data();
+    void allExceptionFunctionNames();
     void unknownFunctionHasEmptyName();
     void limitsAddressRanges_data();
     void limitsAddressRanges();
@@ -117,6 +119,24 @@ void TestModbusFunction::allFunctionNames()
     QFETCH(int, code);
     QFETCH(QString, name);
     QCOMPARE(QString(ModbusFunction(static_cast<QModbusPdu::FunctionCode>(code))), name);
+}
+
+void TestModbusFunction::allExceptionFunctionNames_data()
+{
+    allFunctionNames_data();
+}
+
+void TestModbusFunction::allExceptionFunctionNames()
+{
+    QFETCH(int, code);
+    QFETCH(QString, name);
+
+    const auto raised = static_cast<QModbusPdu::FunctionCode>(code | QModbusPdu::ExceptionByte);
+    const ModbusFunction function(raised);
+
+    QVERIFY(function.isException());
+    QVERIFY(!function.isValid());
+    QCOMPARE(QString(function), name);
 }
 
 void TestModbusFunction::unknownFunctionHasEmptyName()
