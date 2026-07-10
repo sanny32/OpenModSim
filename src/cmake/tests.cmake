@@ -11,6 +11,7 @@ function(omodsim_configure_tests)
         modbuserrorsimulations.cpp
         modbusdataunitmap.cpp
         datasimulator.cpp
+        legacyprojectparser.cpp
         projectaddressspacefilter.cpp
         qhexvalidator.cpp
         qintvalidatorex.cpp
@@ -77,5 +78,6 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_serialportutils      test_serialportutils.cpp)
     omodsim_add_test(omodsim_tests_simulationparams     test_simulationparams.cpp)
     omodsim_add_test(omodsim_tests_storage              test_storage.cpp)
+    omodsim_add_test(omodsim_tests_legacyprojectparser  test_legacyprojectparser.cpp)
     omodsim_add_test(omodsim_tests_projectaddressspacefilter test_projectaddressspacefilter.cpp)
 endfunction()

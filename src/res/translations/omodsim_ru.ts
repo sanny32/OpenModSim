@@ -2639,7 +2639,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1925"/>
+        <location filename="../../mainwindow.cpp" line="1926"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2819,7 +2819,7 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="932"/>
+        <location filename="../../mainwindow.cpp" line="933"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -2831,7 +2831,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2061"/>
+        <location filename="../../mainwindow.cpp" line="2062"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2847,20 +2847,25 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="931"/>
-        <location filename="../../mainwindow.cpp" line="1955"/>
+        <location filename="../../mainwindow.cpp" line="1956"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1579"/>
-        <location filename="../../mainwindow.cpp" line="1983"/>
+        <location filename="../../mainwindow.cpp" line="932"/>
+        <source>Project 1.x files (*.xml)</source>
+        <translation>Файлы проектов 1.x (*.xml)</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="1580"/>
+        <location filename="../../mainwindow.cpp" line="1984"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
         <location filename="../../mainwindow.cpp" line="682"/>
-        <location filename="../../mainwindow.cpp" line="1764"/>
+        <location filename="../../mainwindow.cpp" line="1765"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3165,7 +3170,7 @@ Open the download page?</source>
         <translation>Форма переименована: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1318"/>
+        <location filename="../../mainwindow.cpp" line="1319"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3187,12 +3192,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1926"/>
+        <location filename="../../mainwindow.cpp" line="1927"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2049"/>
+        <location filename="../../mainwindow.cpp" line="2050"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3202,7 +3207,7 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1276"/>
+        <location filename="../../mainwindow.cpp" line="1277"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3956,7 +3961,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="2283"/>
+        <location filename="../../appproject.cpp" line="2327"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>

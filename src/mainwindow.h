@@ -60,7 +60,6 @@ public:
 
     void loadProject(const QString& filename);
     bool saveProject(const QString& filename);
-    inline AppProject* project() const noexcept { return _project; }
 
     void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void showOutputConsole();

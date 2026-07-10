@@ -163,15 +163,6 @@ FormDataView::~FormDataView()
 }
 
 ///
-/// \brief FormDataView::project
-/// \return
-///
-AppProject* FormDataView::project() const noexcept
-{
-    return _parent->project();
-}
-
-///
 /// \brief FormDataView::saveSettings
 /// \param out
 ///
@@ -1403,29 +1394,18 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
 {
     if (!frm) return xml;
 
-    if (xml.isStartElement() && (xml.name() == QLatin1String("FormDataView") ||
-        // Version 1.x data view
-        xml.name() == QLatin1String("FormModSim"))) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("FormDataView")) {
         DataType dataType = DataType::UInt16;
         RegisterOrder regOrder = RegisterOrder::MSRF;
         DataViewDefinitions dd;
         QHash<quint16, quint16> data;
         QHash<quint16, ModbusSimulationParams> simulations;
 
-        // Version 1.x script view
-        FormScriptView * script = nullptr;
-        ScriptViewDefinitions script_dd;
-
         const QXmlStreamAttributes attributes = xml.attributes();
         const QString formTitle = attributes.value("Title").toString();
 
         if (attributes.hasAttribute("DataType")) {
             dataType = enumFromString<DataType>(attributes.value("DataType").toString(), DataType::UInt16);
-        }
-
-        // Version 1.x data type
-        if (attributes.hasAttribute("DataDisplayMode")) {
-            dataType = enumFromString<DataType>(attributes.value("DataDisplayMode").toString(), DataType::UInt16);
         }
 
         if (attributes.hasAttribute("RegisterOrder")) {
@@ -1487,27 +1467,6 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                     dd.FormName = formTitle;
                 frm->setDisplayDefinition(dd);
             }
-            // Version 1.x definitions
-            else if (xml.name() == QLatin1String("DisplayDefinition")) {
-                const auto attributes = xml.attributes();
-                xml >> dd;
-                xml.skipCurrentElement();
-
-                // Reload PointAddress since it may be wrongly normalized from 0 to 1
-                if (attributes.hasAttribute("PointAddress")) {
-                    dd.PointAddress = attributes.value("PointAddress").toUShort();
-                }
-                if (attributes.hasAttribute("ZeroBasedAddress")) {
-                    if (stringToBool(attributes.value("ZeroBasedAddress").toString())) {
-                        frm->setAddressBase(AddressBase::Base0);
-                    } else {
-                        frm->setAddressBase(AddressBase::Base1);
-                    }
-                }
-
-                frm->setDisplayDefinition(dd);
-            }
-            // Version 1.x simulation map
             else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
                 while (xml.readNextStartElement()) {
                     if (xml.name() == QLatin1String("Simulation")) {
@@ -1531,17 +1490,8 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                     }
                 }
             }
-            // Version 1.x script control
             else if (xml.name() == QLatin1String("JScriptControl")) {
-                if (script = static_cast<FormScriptView*>(frm->project()->createMdiChild(ProjectFormKind::Script))) {
-                    xml >> script->scriptControl();
-                } else {
-                    xml.skipCurrentElement();
-                }
-            }
-            // Version 1.x script settings
-            else if (xml.name() == QLatin1String("ScriptSettings")) {
-                xml >> script_dd.ScriptCfg;
+                xml.skipCurrentElement();
             }
             else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
                 AddressDescriptionMap map;
@@ -1563,7 +1513,6 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                     frm->setColor(device_id ? device_id : dd.DeviceId, type ? type : dd.PointType, it.key().Address, it.value());
                 }
             }
-            // Version 1.x data units
             else if (xml.name() == QLatin1String("ModbusDataUnit")) {
                 while (xml.readNextStartElement()) {
                     if (xml.name() == QLatin1String("Value")) {
@@ -1589,16 +1538,15 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
             frm->setDataType(dataType);
             frm->setRegisterOrder(regOrder);
 
-            // Version 1.x simulation map
             if(!simulations.isEmpty()) {
                 QHashIterator it(simulations);
                 while(it.hasNext()) {
                     const auto item = it.next();
-					const auto index = item.key() - (frm->zeroBasedAddress() ? 0 : 1);
- 					if (index < 0) {
-						// Malformed file
-						break;
-					}
+                    const auto index = item.key() - (frm->zeroBasedAddress() ? 0 : 1);
+                    if (index < 0) {
+                        continue;
+                    }
+
                     switch(dd.PointType) {
                         case QModbusDataUnit::Coils:
                         case QModbusDataUnit::DiscreteInputs:
@@ -1615,7 +1563,6 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                 }
             }
 
-            // Version 1.x data units
             if (!data.isEmpty()) {
                 QVector<quint16> values(dd.Length);
 
@@ -1623,10 +1570,10 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                 while(it.hasNext()) {
                     const auto item = it.next();
                     const auto index = item.key() - dd.PointAddress;
-					if (index < 0 || index >= dd.Length) {
-						// Malformed file
-						break;
-					}
+                    if (index < 0 || index >= dd.Length) {
+                        continue;
+                    }
+
                     switch(dd.PointType) {
                         case QModbusDataUnit::Coils:
                         case QModbusDataUnit::DiscreteInputs:
@@ -1641,20 +1588,6 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                 }
 
                 frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, qMax(dd.PointAddress - (frm->zeroBasedAddress() ? 0 : 1), 0), values);
-            }
-        }
-
-        // Version 1.x script
-        if (script) {
-            script_dd.FormName = frm->windowTitle(); // the same title as data view
-            script_dd.normalize();
-            script->setDefinitions(script_dd);
-            script->setFont(AppPreferences::instance().scriptFont());
-
-            frm->project()->closeMdiChild(script); // script view hidden by default
-
-            if (script_dd.ScriptCfg.RunOnStartup) {
-                script->runScript();
             }
         }
     }

@@ -2619,7 +2619,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1925"/>
+        <location filename="../../mainwindow.cpp" line="1926"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2819,7 +2819,7 @@ Open the download page?</source>
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="932"/>
+        <location filename="../../mainwindow.cpp" line="933"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
@@ -2831,7 +2831,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2061"/>
+        <location filename="../../mainwindow.cpp" line="2062"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -2847,20 +2847,25 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="931"/>
-        <location filename="../../mainwindow.cpp" line="1955"/>
+        <location filename="../../mainwindow.cpp" line="1956"/>
         <source>Project files (*.omsim)</source>
         <translation>專案檔案 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1579"/>
-        <location filename="../../mainwindow.cpp" line="1983"/>
+        <location filename="../../mainwindow.cpp" line="932"/>
+        <source>Project 1.x files (*.xml)</source>
+        <translation>專案 1.x 檔案 (*.xml)</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="1580"/>
+        <location filename="../../mainwindow.cpp" line="1984"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
         <location filename="../../mainwindow.cpp" line="682"/>
-        <location filename="../../mainwindow.cpp" line="1764"/>
+        <location filename="../../mainwindow.cpp" line="1765"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3165,7 +3170,7 @@ Open the download page?</source>
         <translation>表單已重命名：&apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1318"/>
+        <location filename="../../mainwindow.cpp" line="1319"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3187,12 +3192,12 @@ Open the download page?</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1926"/>
+        <location filename="../../mainwindow.cpp" line="1927"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2049"/>
+        <location filename="../../mainwindow.cpp" line="2050"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3202,7 +3207,7 @@ Open the download page?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1276"/>
+        <location filename="../../mainwindow.cpp" line="1277"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>
@@ -3956,7 +3961,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="2283"/>
+        <location filename="../../appproject.cpp" line="2327"/>
         <source>Failed to write project XML.</source>
         <translation>專案 XML 寫入失敗。</translation>
     </message>

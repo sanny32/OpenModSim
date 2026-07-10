@@ -27,7 +27,6 @@
 ///
 class MainWindow;
 class FindReplaceBar;
-class AppProject;
 
 namespace Ui {
 class FormDataView;
@@ -49,8 +48,6 @@ class FormDataView : public QWidget
 public:
     explicit FormDataView(ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormDataView();
-
-    AppProject* project() const noexcept;
 
     QVector<quint16> data() const;
 

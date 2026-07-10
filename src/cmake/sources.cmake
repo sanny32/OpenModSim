@@ -81,6 +81,8 @@ set(SOURCES
     htmldelegate.cpp
     jscompleter.cpp
     jshighlighter.cpp
+    legacyprojectloader.cpp
+    legacyprojectparser.cpp
     main.cpp
     mainwindow.cpp
     menuconnect.cpp
@@ -215,6 +217,8 @@ set(HEADERS
     htmldelegate.h
     jscompleter.h
     jshighlighter.h
+    legacyprojectloader.h
+    legacyprojectparser.h
 
     jsobjects/console.h
     jsobjects/script.h

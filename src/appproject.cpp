@@ -17,6 +17,7 @@
 
 #include "apppreferences.h"
 #include "appproject.h"
+#include "legacyprojectloader.h"
 #include "mainwindow.h"
 #include "controls/mdiareaex.h"
 #include "controls/mditabbar.h"
@@ -330,26 +331,59 @@ void saveXmlOfForm(QWidget* widget, QXmlStreamWriter& w)
 }
 
 ///
-/// \brief loadXmlOfForm
+/// \brief applyDataFormPreferences applies global display preferences after XML loading.
+/// \param form
+///
+void applyDataFormPreferences(FormDataView* form)
+{
+    if (!form)
+        return;
+
+    const AppPreferences& prefs = AppPreferences::instance();
+    form->setFont(prefs.font());
+    form->setZoomPercent(prefs.fontZoom());
+    form->setForegroundColor(prefs.foregroundColor());
+    form->setBackgroundColor(prefs.backgroundColor());
+    form->setAddressColor(prefs.addressColor());
+    form->setCommentColor(prefs.commentColor());
+}
+
+///
+/// \brief loadCurrentXmlOfForm
 /// \param widget
 /// \param r
 ///
-void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
+void loadCurrentXmlOfForm(QWidget* widget, QXmlStreamReader& r)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) {
         frm->loadXml(r);
-        const AppPreferences& prefs = AppPreferences::instance();
-        frm->setFont(prefs.font());
-        frm->setZoomPercent(prefs.fontZoom());
-        frm->setForegroundColor(prefs.foregroundColor());
-        frm->setBackgroundColor(prefs.backgroundColor());
-        frm->setAddressColor(prefs.addressColor());
-        frm->setCommentColor(prefs.commentColor());
+        applyDataFormPreferences(frm);
     }
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->loadXml(r);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->loadXml(r);
     else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->loadXml(r);
     else r.skipCurrentElement();
+}
+
+///
+/// \brief loadXmlOfForm
+/// \param project
+/// \param widget
+/// \param r
+///
+void loadXmlOfForm(AppProject& project, QWidget* widget, QXmlStreamReader& r)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) {
+        if (LegacyProjectLoader::isDataViewElement(r.name().toString())) {
+            LegacyProjectLoader::loadDataView(r, *frm, project);
+            applyDataFormPreferences(frm);
+        } else {
+            loadCurrentXmlOfForm(widget, r);
+        }
+        return;
+    }
+
+    loadCurrentXmlOfForm(widget, r);
 }
 
 ///
@@ -1358,7 +1392,7 @@ bool AppProject::cloneMdiChildState(QWidget* source, QWidget* target) const
     if(!reader.readNextStartElement())
         return false;
 
-    loadXmlOfForm(target, reader);
+    loadCurrentXmlOfForm(target, reader);
     if(reader.hasError())
         return false;
 
@@ -1792,8 +1826,7 @@ void AppProject::loadProject(const QString& filename)
                         bool isForm = true;
                         if (xml.name() == QLatin1String("FormDataView")) {
                             kind = ProjectFormKind::Data;
-                        // Version 1.x multi-view project
-                        } else if (xml.name() == QLatin1String("FormModSim")) {
+                        } else if (LegacyProjectLoader::isDataViewElement(xml.name().toString())) {
                             kind = ProjectFormKind::Data;
                             _mainWindow->setViewMode(viewMode = QMdiArea::SubWindowView);
                         } else if (xml.name() == QLatin1String("FormTrafficView")) {
@@ -1845,7 +1878,7 @@ void AppProject::loadProject(const QString& filename)
                                 frm = createMdiChildOnArea(kind, targetArea, !isAutoClone);
 
                             if (frm) {
-                                loadXmlOfForm(frm, xml);
+                                loadXmlOfForm(*this, frm, xml);
                                 if (isClosed) {
                                     // Park closed forms directly without emitting close/activation churn.
                                     auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
@@ -1947,11 +1980,10 @@ void AppProject::loadProject(const QString& filename)
                 }
             }
         }
-        // Version 1.x single view project
-        else if (xml.name() == QLatin1String("FormModSim")) {
+        else if (LegacyProjectLoader::isDataViewElement(xml.name().toString())) {
             _mainWindow->setViewMode(viewMode = QMdiArea::SubWindowView);
             if (const auto frm = createMdiChild(ProjectFormKind::Data)) {
-                loadXmlOfForm(frm, xml);
+                loadXmlOfForm(*this, frm, xml);
                 frm->show();
             }
         }
