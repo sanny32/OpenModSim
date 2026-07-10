@@ -929,6 +929,7 @@ void MainWindow::on_actionOpenProject_triggered()
 {
     QStringList filters;
     filters << tr("Project files (*.omsim)");
+    filters << tr("Project 1.x files (*.xml)");
     filters << tr("All files (*)");
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));

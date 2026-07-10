@@ -1792,6 +1792,10 @@ void AppProject::loadProject(const QString& filename)
                         bool isForm = true;
                         if (xml.name() == QLatin1String("FormDataView")) {
                             kind = ProjectFormKind::Data;
+                        // Version 1.x multi-view project
+                        } else if (xml.name() == QLatin1String("FormModSim")) {
+                            kind = ProjectFormKind::Data;
+                            _mainWindow->setViewMode(viewMode = QMdiArea::SubWindowView);
                         } else if (xml.name() == QLatin1String("FormTrafficView")) {
                             kind = ProjectFormKind::Traffic;
                         } else if (xml.name() == QLatin1String("FormScriptView")) {
@@ -1941,6 +1945,14 @@ void AppProject::loadProject(const QString& filename)
                 else {
                     xml.skipCurrentElement();
                 }
+            }
+        }
+        // Version 1.x single view project
+        else if (xml.name() == QLatin1String("FormModSim")) {
+            _mainWindow->setViewMode(viewMode = QMdiArea::SubWindowView);
+            if (const auto frm = createMdiChild(ProjectFormKind::Data)) {
+                loadXmlOfForm(frm, xml);
+                frm->show();
             }
         }
         else {

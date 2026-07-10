@@ -483,7 +483,7 @@ void FormScriptView::linkRunStopTo(FormScriptView* master)
 /// \brief FormScriptView::scriptControl
 /// \return
 ///
-JScriptControl* FormScriptView::scriptControl()
+JScriptControl* FormScriptView::scriptControl() const noexcept
 {
     return ui->scriptControl;
 }

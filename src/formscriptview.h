@@ -65,6 +65,7 @@ public:
     void setScript(const QString& text);
     QTextDocument* scriptDocument() const;
     void setScriptDocument(QTextDocument* document);
+    JScriptControl* scriptControl() const noexcept;
 
     int scriptCursorPosition() const;
     void setScriptCursorPosition(int pos);
@@ -131,8 +132,6 @@ signals:
     void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
 
 private:
-    JScriptControl* scriptControl();
-
     void setupScriptBar();
     void updateScriptBar();
     void updateScriptBarToolTips();
