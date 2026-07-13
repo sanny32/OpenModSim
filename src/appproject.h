@@ -97,6 +97,7 @@ public:
     void loadProject(const QString& filename);
     bool saveProject(const QString& filename);
     void restoreActiveWindows();
+    const QString & filePath() const noexcept { return _projectFilename; }
 
     // Called from MainWindow::~MainWindow() before delete ui.
     // Closes MDI windows and deletes forms/scripts without touching the project tree UI

@@ -58,8 +58,9 @@ public:
     void applyGlobalAddressBase(AddressBase base, bool persist = true);
     void applyGlobalHexView(bool enabled, bool persist = true);
 
-    void loadProject(const QString& filename);
+    bool loadProject(const QString& filename, bool replace = true);
     bool saveProject(const QString& filename);
+    bool closeProject();
 
     void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void showOutputConsole();
@@ -79,6 +80,8 @@ protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject * obj, QEvent * e) override;
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
 
 public slots:
     void windowActivate(QMdiSubWindow* wnd);
@@ -188,6 +191,7 @@ private:
     void syncGlobalViewControls();
     void applyGlobalViewStateToForm(QWidget* frm);
     void updateMainToolbarState();
+    static QStringList acceptedProjects(QDropEvent* event);
 
 private:
     Ui::MainWindow *ui;
@@ -206,7 +210,6 @@ private:
     QSharedPointer<QPrinter> _selectedPrinter;
     DataSimulator* _dataSimulator = nullptr;
     QString _profile;
-    QString _projectFilePath;
     ProjectFormKind _newFormKind = ProjectFormKind::Data;
     QStringList _recentProjects;
     QString _lastProjectPath;
