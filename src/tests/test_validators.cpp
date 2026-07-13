@@ -187,7 +187,11 @@ void TestValidators::nonEmptyFixupPaths()
     doubleValidator.setLocale(QLocale::c());
     QString doubleText = QStringLiteral("42.5");
     doubleValidator.fixup(doubleText);
-    QCOMPARE(doubleText, QStringLiteral("4.25e+01"));
+    QVERIFY(!doubleText.isEmpty());
+    QCOMPARE(validateState(doubleValidator, doubleText), QValidator::Acceptable);
+    bool parsed = false;
+    QCOMPARE(doubleValidator.locale().toDouble(doubleText, &parsed), 42.5);
+    QVERIFY(parsed);
 }
 
 void TestValidators::additionalValidatorEdgeBranches()

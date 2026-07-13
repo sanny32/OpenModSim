@@ -6,10 +6,32 @@
 /// \brief Unit tests for DataSimulator registration, lookup and emitted updates.
 ///
 
+#include <initializer_list>
+
 #include <QSignalSpy>
 #include <QTest>
 
 #include "datasimulator.h"
+
+namespace {
+
+///
+/// \brief compareAddresses
+/// \param actual
+/// \param expected
+///
+void compareAddresses(const QVector<quint16>& actual, std::initializer_list<quint16> expected)
+{
+    QCOMPARE(actual.size(), int(expected.size()));
+
+    int index = 0;
+    for (const quint16 address : expected) {
+        QCOMPARE(actual.at(index), address);
+        ++index;
+    }
+}
+
+}
 
 class TestDataSimulator : public QObject
 {
@@ -127,7 +149,7 @@ void TestDataSimulator::stopMultiRegisterSimulationRemovesAllAddresses()
 
     QCOMPARE(stopped.count(), 1);
     const auto addresses = stopped.takeFirst().at(4).value<QVector<quint16>>();
-    QCOMPARE(addresses, QVector<quint16>({20, 21, 22, 23}));
+    compareAddresses(addresses, {20, 21, 22, 23});
     QVERIFY(simulator.simulationMap().isEmpty());
 }
 
@@ -234,7 +256,7 @@ void TestDataSimulator::startAndStopSignalsCarryExpectedPayload()
     QCOMPARE(started.first().at(1).value<RegisterOrder>(), RegisterOrder::LSRF);
     QCOMPARE(started.first().at(2).toUInt(), 7u);
     QCOMPARE(started.first().at(3).value<QModbusDataUnit::RegisterType>(), QModbusDataUnit::InputRegisters);
-    QCOMPARE(started.first().at(4).value<QVector<quint16>>(), QVector<quint16>({30, 31, 32, 33}));
+    compareAddresses(started.first().at(4).value<QVector<quint16>>(), {30, 31, 32, 33});
 
     simulator.stopSimulation(7, QModbusDataUnit::InputRegisters, 30);
 
@@ -243,7 +265,7 @@ void TestDataSimulator::startAndStopSignalsCarryExpectedPayload()
     QCOMPARE(stopped.first().at(1).value<RegisterOrder>(), RegisterOrder::LSRF);
     QCOMPARE(stopped.first().at(2).toUInt(), 7u);
     QCOMPARE(stopped.first().at(3).value<QModbusDataUnit::RegisterType>(), QModbusDataUnit::InputRegisters);
-    QCOMPARE(stopped.first().at(4).value<QVector<quint16>>(), QVector<quint16>({30, 31, 32, 33}));
+    compareAddresses(stopped.first().at(4).value<QVector<quint16>>(), {30, 31, 32, 33});
 }
 
 void TestDataSimulator::incrementEmitsInitialValue()
