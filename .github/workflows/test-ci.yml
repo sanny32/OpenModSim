@@ -45,9 +45,11 @@ jobs:
             cmake-options: ''
           - os: ubuntu-latest
             qt-version: '5.15.2'
+            qt-modules: ''
             cmake-options: '-DUSE_QT5=ON'
           - os: windows-latest
             qt-version: '5.15.2'
+            qt-modules: ''
             cmake-options: '-DUSE_QT5=ON'
 
     env:
@@ -79,19 +81,11 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Install Qt 6
-        if: startsWith(matrix.qt-version, '6.')
+      - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ matrix.qt-version }}
           modules: ${{ matrix.qt-modules }}
-          cache: true
-
-      - name: Install Qt 5
-        if: startsWith(matrix.qt-version, '5.')
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: ${{ matrix.qt-version }}
           cache: true
 
       - name: Configure
