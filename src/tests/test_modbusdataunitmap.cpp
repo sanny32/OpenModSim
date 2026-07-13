@@ -6,11 +6,37 @@
 /// \brief Unit tests for ModbusDataUnitMap address mapping and data storage.
 ///
 
+#include <initializer_list>
+
 #include <QTest>
 #include <QUuid>
 #include <QVector>
 
 #include "modbusdataunitmap.h"
+
+namespace {
+
+///
+/// \brief makeUnit
+/// \param type
+/// \param startAddress
+/// \param values
+/// \return
+///
+QModbusDataUnit makeUnit(QModbusDataUnit::RegisterType type, quint16 startAddress, std::initializer_list<quint16> values)
+{
+    QModbusDataUnit unit(type, startAddress, static_cast<quint16>(values.size()));
+
+    int index = 0;
+    for (const auto value : values) {
+        unit.setValue(index, value);
+        ++index;
+    }
+
+    return unit;
+}
+
+}
 
 class TestModbusDataUnitMap : public QObject
 {
@@ -135,7 +161,7 @@ void TestModbusDataUnitMap::globalContainsRangeAndAddressSpaceNoop()
 void TestModbusDataUnitMap::setAndGetDataRoundTrip()
 {
     ModbusDataUnitMap map;
-    QModbusDataUnit source(QModbusDataUnit::HoldingRegisters, 0, {10, 20, 30});
+    const QModbusDataUnit source = makeUnit(QModbusDataUnit::HoldingRegisters, 0, {10, 20, 30});
     map.setData(source);
 
     const QModbusDataUnit read = map.getData(QModbusDataUnit::HoldingRegisters, 0, 3);
@@ -149,7 +175,7 @@ void TestModbusDataUnitMap::setDataUpdatesGlobalEvenOutsideLocalMap()
     ModbusDataUnitMap map;
     map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 10, 1);
 
-    map.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 20, QVector<quint16>({77})));
+    map.setData(makeUnit(QModbusDataUnit::HoldingRegisters, 20, {77}));
 
     QCOMPARE(map.getData(QModbusDataUnit::HoldingRegisters, 20, 1).value(0), quint16(77));
     QCOMPARE(map.value(QModbusDataUnit::HoldingRegisters).value(0), quint16(0));
@@ -241,7 +267,7 @@ void TestModbusDataUnitMap::missingUnitAndOutOfRangeData()
 
     QVERIFY(!map.unitMap(QUuid::createUuid(), unit));
 
-    QModbusDataUnit source(QModbusDataUnit::HoldingRegisters, 10, {11, 22});
+    const QModbusDataUnit source = makeUnit(QModbusDataUnit::HoldingRegisters, 10, {11, 22});
     map.setData(source);
 
     QCOMPARE(map.getData(QModbusDataUnit::InputRegisters, 10, 1).value(0), quint16(0));
@@ -293,7 +319,7 @@ void TestModbusDataUnitMap::updateDataUnitMapMergesRangesAndKeepsValues()
     const QUuid first = QUuid::createUuid();
     const QUuid second = QUuid::createUuid();
 
-    map.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 10, {100, 101, 102, 103}));
+    map.setData(makeUnit(QModbusDataUnit::HoldingRegisters, 10, {100, 101, 102, 103}));
     QVERIFY(map.addUnitMap(first, QModbusDataUnit::HoldingRegisters, 12, 2));
     QVERIFY(map.addUnitMap(second, QModbusDataUnit::HoldingRegisters, 10, 1));
 
@@ -395,7 +421,7 @@ void TestModbusDataUnitMap::timestampFallbackForLocalUnitMap()
 void TestModbusDataUnitMap::ensureRangeMergesWithExistingRange()
 {
     ModbusDataUnitMap map;
-    map.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 3, {30, 40, 50, 60}));
+    map.setData(makeUnit(QModbusDataUnit::HoldingRegisters, 3, {30, 40, 50, 60}));
 
     QVERIFY(map.ensureRange(QModbusDataUnit::HoldingRegisters, 5, 2));
     QVERIFY(map.ensureRange(QModbusDataUnit::HoldingRegisters, 3, 2));
@@ -449,7 +475,7 @@ void TestModbusDataUnitMap::setDataUpdatesLocalRangeWhenAddressIsMapped()
     ModbusDataUnitMap map;
     map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 10, 3);
 
-    map.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 11, QVector<quint16>({77})));
+    map.setData(makeUnit(QModbusDataUnit::HoldingRegisters, 11, {77}));
 
     const auto local = map.value(QModbusDataUnit::HoldingRegisters);
     QCOMPARE(local.startAddress(), 10);
@@ -522,7 +548,7 @@ void TestModbusDataUnitMap::setDataPartiallyOverlappingLocalRange()
     ModbusDataUnitMap map;
     map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 10, 3);
 
-    map.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 9, QVector<quint16>({9, 10, 11, 12, 13})));
+    map.setData(makeUnit(QModbusDataUnit::HoldingRegisters, 9, {9, 10, 11, 12, 13}));
 
     const auto local = map.value(QModbusDataUnit::HoldingRegisters);
     QCOMPARE(local.startAddress(), 10);
@@ -584,7 +610,7 @@ void TestModbusDataUnitMap::globalContainsRangeCoversEveryRegisterTypeBoundary()
 void TestModbusDataUnitMap::unchangedDataDoesNotRefreshTimestampUnlessRequested()
 {
     ModbusDataUnitMap map;
-    const QModbusDataUnit data(QModbusDataUnit::HoldingRegisters, 7, QVector<quint16>({55}));
+    const QModbusDataUnit data = makeUnit(QModbusDataUnit::HoldingRegisters, 7, {55});
 
     map.setData(data);
     QVERIFY(map.timestamp(QModbusDataUnit::HoldingRegisters, 7).isValid());

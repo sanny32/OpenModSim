@@ -20,9 +20,6 @@ concurrency:
   group: test-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  QT6_VERSION: '6.9.3'
-
 jobs:
   tests:
     name: Tests (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
@@ -102,8 +99,16 @@ jobs:
         run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
 
   coverage:
-    name: Coverage (ubuntu-latest)
-    runs-on: ubuntu-latest
+    name: Coverage (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
 
     env:
       QT_QPA_PLATFORM: offscreen
@@ -124,12 +129,12 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: ${{ env.QT6_VERSION }}
-          modules: 'qtserialbus qtserialport qt5compat'
+          version: ${{ matrix.qt-version }}
+          modules: ${{ matrix.qt-modules }}
           cache: true
 
       - name: Run coverage
-        run: python3 tools/coverage.py --strict -- -G Ninja
+        run: python3 tools/coverage.py --strict -- -G Ninja ${{ matrix.cmake-options }}
 
       - name: Upload coverage report
         if: always()
