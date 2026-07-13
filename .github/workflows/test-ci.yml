@@ -2,7 +2,7 @@ name: Test CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev]
     paths:
       - '.github/workflows/test-ci.yml'
       - 'src/**'
@@ -21,17 +21,36 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  QT_VERSION: '6.9.3'
-  QT_MODULES: 'qtserialbus qtserialport qt5compat'
+  QT6_VERSION: '6.9.3'
 
 jobs:
   tests:
-    name: Tests (${{ matrix.os }})
+    name: Tests (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-26]
+        include:
+          - os: ubuntu-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+          - os: windows-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+          - os: macos-26
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+          - os: ubuntu-latest
+            qt-version: '5.15.2'
+            qt-modules: 'qtserialbus qtserialport'
+            cmake-options: '-DUSE_QT5=ON'
+          - os: windows-latest
+            qt-version: '5.15.2'
+            qt-modules: 'qtserialbus qtserialport'
+            cmake-options: '-DUSE_QT5=ON'
 
     env:
       # Run Qt GUI/Test binaries without a real display.
@@ -65,8 +84,8 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: ${{ env.QT_VERSION }}
-          modules: ${{ env.QT_MODULES }}
+          version: ${{ matrix.qt-version }}
+          modules: ${{ matrix.qt-modules }}
           cache: true
 
       - name: Configure
@@ -74,6 +93,7 @@ jobs:
           cmake -S src -B build -G Ninja
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
+          ${{ matrix.cmake-options }}
 
       - name: Build tests
         run: cmake --build build --config Release --parallel --target omodsim_tests
@@ -104,8 +124,8 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: ${{ env.QT_VERSION }}
-          modules: ${{ env.QT_MODULES }}
+          version: ${{ env.QT6_VERSION }}
+          modules: 'qtserialbus qtserialport qt5compat'
           cache: true
 
       - name: Run coverage

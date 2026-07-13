@@ -129,7 +129,7 @@ void TestModbusMessage::accessorsExposeRawAduAndException()
 
     QVERIFY(message->isValid());
     QCOMPARE(message->timestamp(), timestamp);
-    QCOMPARE(message->exception(), ModbusException(QModbusExceptionResponse::IllegalDataValue));
+    QCOMPARE(static_cast<int>(message->exception()), int(QModbusExceptionResponse::IllegalDataValue));
     QVERIFY(message->adu() != nullptr);
     QCOMPARE(QByteArray(*message), message->rawData());
     QCOMPARE(message->toString(DataType::UInt16, false), formatUInt8Array(DataType::UInt16, false, message->rawData()));
