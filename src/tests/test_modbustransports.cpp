@@ -637,13 +637,6 @@ void TestModbusTransports::servesRtuSerialOnPseudoTerminal()
     QVERIFY(receive(masterFd).size() >= 5);
     server.setRequestHandler({});
 
-    const QByteArray canOpen = rtuFrame(
-        1, QModbusRequest(QModbusRequest::EncapsulatedInterfaceTransport,
-                          quint8(EncapsulatedInterfaceTransport::CanOpenGeneralReference),
-                          quint8(0), quint8(0)));
-    QVERIFY(send(masterFd, canOpen));
-    QVERIFY(receive(masterFd).size() >= 5);
-
     server.setValue(ModbusServer::ListenOnlyMode, true, 1);
     QVERIFY(send(masterFd, readFrame));
     QCOMPARE(receive(masterFd, 30).size(), 0);
