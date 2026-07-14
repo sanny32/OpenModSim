@@ -8,6 +8,8 @@
 
 #include <QDateTime>
 #include <QSignalSpy>
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QTest>
 
 #include <initializer_list>
@@ -43,6 +45,31 @@ QModbusDataUnit unit(QModbusDataUnit::RegisterType type, quint16 address,
     return result;
 }
 
+///
+/// \brief Reserves and releases an available local TCP port.
+/// \return The selected port, or zero when no port is available.
+///
+quint16 availablePort()
+{
+    QTcpServer probe;
+    return probe.listen(QHostAddress::LocalHost, 0) ? probe.serverPort() : 0;
+}
+
+///
+/// \brief Creates a Modbus TCP application data unit.
+/// \param transactionId Transaction identifier.
+/// \param address Modbus unit identifier.
+/// \param request Request PDU.
+/// \return The serialized TCP frame.
+///
+QByteArray tcpFrame(quint16 transactionId, quint8 address, const QModbusRequest& request)
+{
+    QByteArray result;
+    QDataStream stream(&result, QIODevice::WriteOnly);
+    stream << transactionId << quint16(0) << quint16(request.size() + 1) << address << request;
+    return result;
+}
+
 }
 
 class TestModbusMultiServer : public QObject
@@ -65,6 +92,7 @@ private slots:
     void roundTripsNumericTypes();
     void writesRegisterVariants();
     void reportsDisconnectedState();
+    void connectsTransportBackends();
 };
 
 void TestModbusMultiServer::mergesDescriptionMaps()
@@ -393,6 +421,101 @@ void TestModbusMultiServer::reportsDisconnectedState()
     QCOMPARE(server.connectedClientCount(), 0);
     server.disconnectDevice(ConnectionType::Tcp, QStringLiteral("127.0.0.1:502"));
     server.closeConnections();
+}
+
+void TestModbusMultiServer::connectsTransportBackends()
+{
+    ModbusMultiServer server;
+    server.addDeviceId(1);
+    server.addUnitMap(QUuid::createUuid(), 1,
+                      QModbusDataUnit::HoldingRegisters, 0, 16);
+    server.setData(1, unit(QModbusDataUnit::HoldingRegisters, 0, {1, 2, 3}));
+
+    bool handlerInvoked = false;
+    server.setRequestHandler(RequestHandlerPtr::create(
+        [&handlerInvoked](const QModbusPdu&, int, QModbusResponse&) {
+            handlerInvoked = true;
+            return false;
+        }));
+
+    QSignalSpy connectedSpy(&server, &ModbusMultiServer::connected);
+    QSignalSpy disconnectedSpy(&server, &ModbusMultiServer::disconnected);
+    QSignalSpy clientConnectedSpy(&server, &ModbusMultiServer::clientConnected);
+    QSignalSpy clientDisconnectedSpy(&server, &ModbusMultiServer::clientDisconnected);
+    QSignalSpy requestSpy(&server, &ModbusMultiServer::request);
+    QSignalSpy responseSpy(&server, &ModbusMultiServer::response);
+    QSignalSpy receivedSpy(&server, &ModbusMultiServer::rawDataReceived);
+    QSignalSpy sentSpy(&server, &ModbusMultiServer::rawDataSended);
+    QSignalSpy changedSpy(&server, &ModbusMultiServer::dataChanged);
+
+    ConnectionDetails tcp;
+    tcp.Type = ConnectionType::Tcp;
+    tcp.TcpParams.IPAddress = QStringLiteral("127.0.0.1");
+    tcp.TcpParams.ServicePort = availablePort();
+    QVERIFY(tcp.TcpParams.ServicePort != 0);
+    server.connectDevice(tcp);
+    QTRY_VERIFY(server.isConnected(ConnectionType::Tcp,
+                                   QStringLiteral("127.0.0.1:%1")
+                                       .arg(tcp.TcpParams.ServicePort)));
+    QVERIFY(server.isConnected());
+    QCOMPARE(server.connections().size(), 1);
+    QCOMPARE(connectedSpy.count(), 1);
+
+    QTcpSocket socket;
+    socket.connectToHost(QHostAddress::LocalHost, tcp.TcpParams.ServicePort);
+    QVERIFY(socket.waitForConnected(1000));
+    QTRY_COMPARE(server.connectedClientCount(), 1);
+    QTRY_COMPARE(clientConnectedSpy.count(), 1);
+
+    const QByteArray request = tcpFrame(
+        1, 1, QModbusRequest(QModbusRequest::WriteSingleRegister,
+                             quint16(2), quint16(0x4567)));
+    QCOMPARE(socket.write(request), qint64(request.size()));
+    QVERIFY(socket.waitForBytesWritten(1000));
+    QVERIFY(socket.waitForReadyRead(1000));
+    QVERIFY(!socket.readAll().isEmpty());
+    QTRY_VERIFY(handlerInvoked);
+    QTRY_COMPARE(requestSpy.count(), 1);
+    QTRY_COMPARE(responseSpy.count(), 1);
+    QTRY_VERIFY(receivedSpy.count() >= 1);
+    QTRY_COMPARE(sentSpy.count(), 1);
+    QTRY_VERIFY(changedSpy.count() >= 1);
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 2, 1).value(0),
+             quint16(0x4567));
+
+    socket.disconnectFromHost();
+    if (socket.state() != QAbstractSocket::UnconnectedState)
+        QVERIFY(socket.waitForDisconnected(1000));
+    QTRY_COMPARE(server.connectedClientCount(), 0);
+    QTRY_COMPARE(clientDisconnectedSpy.count(), 1);
+
+    server.disconnectDevice(ConnectionType::Tcp,
+                            QStringLiteral("127.0.0.1:%1")
+                                .arg(tcp.TcpParams.ServicePort));
+    QTRY_VERIFY(!server.isConnected());
+    QTRY_COMPARE(disconnectedSpy.count(), 1);
+
+    ConnectionDetails rtuTcp;
+    rtuTcp.Type = ConnectionType::RtuTcp;
+    rtuTcp.TcpParams.IPAddress = QStringLiteral("127.0.0.1");
+    rtuTcp.TcpParams.ServicePort = availablePort();
+    QVERIFY(rtuTcp.TcpParams.ServicePort != 0);
+    server.connectDevice(rtuTcp);
+    QTRY_VERIFY(server.isConnected(ConnectionType::RtuTcp,
+                                   QStringLiteral("127.0.0.1:%1")
+                                       .arg(rtuTcp.TcpParams.ServicePort)));
+    server.closeConnections();
+    QTRY_VERIFY(!server.isConnected());
+    server.disconnectDevice(ConnectionType::RtuTcp,
+                            QStringLiteral("127.0.0.1:%1")
+                                .arg(rtuTcp.TcpParams.ServicePort));
+
+    ConnectionDetails serial;
+    serial.Type = ConnectionType::Serial;
+    serial.SerialParams.PortName = QStringLiteral("nonexistent-openmodsim-port");
+    server.connectDevice(serial);
+    QVERIFY(!server.isConnected(ConnectionType::Serial, serial.SerialParams.PortName));
+    server.disconnectDevice(ConnectionType::Serial, serial.SerialParams.PortName);
 }
 
 QTEST_GUILESS_MAIN(TestModbusMultiServer)

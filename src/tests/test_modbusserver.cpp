@@ -7,6 +7,7 @@
 ///
 
 #include <QBuffer>
+#include <QMetaEnum>
 #include <QModbusDeviceIdentification>
 #include <QSignalSpy>
 #include <QTest>
@@ -96,6 +97,7 @@ private slots:
     void rejectsInvalidRequests();
     void autoAddsRequestedRanges();
     void invokesCustomHandler();
+    void exercisesHeaderUtilities();
 };
 
 void TestModbusServer::managesAddressesStateAndErrors()
@@ -422,6 +424,32 @@ void TestModbusServer::invokesCustomHandler()
     QVERIFY(invoked);
     QVERIFY(!isException(response));
     QCOMPARE(response.data(), QByteArray("custom"));
+}
+
+void TestModbusServer::exercisesHeaderUtilities()
+{
+    TestableModbusServer server;
+    QVERIFY(!server.processesBroadcast());
+    QVERIFY(server.metaObject()->indexOfEnumerator("Option") >= 0);
+    QVERIFY(QMetaEnum::fromType<ModbusServer::Option>().isValid());
+
+    QModbusCommEvent event = QModbusCommEvent::ReceiveEvent;
+    event |= QModbusCommEvent::ReceiveFlag::BroadcastReceived;
+    QCOMPARE(quint8(event), quint8(0xc0));
+    QCOMPARE(static_cast<QModbusCommEvent::EventByte>(event),
+             QModbusCommEvent::EventByte(0xc0));
+
+    event = QModbusCommEvent::SentEvent;
+    event |= QModbusCommEvent::SendFlag::ServerBusyExceptionSent;
+    QCOMPARE(quint8(event), quint8(0x44));
+    QCOMPARE(quint8(QModbusCommEvent::ReceiveEvent
+                    | QModbusCommEvent::ReceiveFlag::CommunicationError), quint8(0x82));
+    QCOMPARE(quint8(QModbusCommEvent::ReceiveFlag::CharacterOverrun
+                    | QModbusCommEvent::ReceiveEvent), quint8(0x90));
+    QCOMPARE(quint8(QModbusCommEvent::SentEvent
+                    | QModbusCommEvent::SendFlag::ReadExceptionSent), quint8(0x41));
+    QCOMPARE(quint8(QModbusCommEvent::SendFlag::ServerAbortExceptionSent
+                    | QModbusCommEvent::SentEvent), quint8(0x42));
 }
 
 QTEST_MAIN(TestModbusServer)

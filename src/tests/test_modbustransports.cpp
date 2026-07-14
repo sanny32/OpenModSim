@@ -10,6 +10,12 @@
 #include <QTcpSocket>
 #include <QTest>
 
+#ifdef Q_OS_LINUX
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#endif
+
 #include "modbusrtuserialserver.h"
 #include "modbusrtutcpserver.h"
 #include "modbustcpserver.h"
@@ -50,6 +56,15 @@ QByteArray rtuFrame(quint8 address, const QModbusRequest& request)
     return result;
 }
 
+QByteArray words(std::initializer_list<quint16> values)
+{
+    QByteArray result;
+    QDataStream stream(&result, QIODevice::WriteOnly);
+    for (quint16 value : values)
+        stream << value;
+    return result;
+}
+
 QByteArray receive(QTcpSocket& socket)
 {
     QElapsedTimer timer;
@@ -69,6 +84,43 @@ QByteArray receive(QTcpSocket& socket)
     }
     return result;
 }
+
+#ifdef Q_OS_LINUX
+QString openPseudoTerminal(int& masterFd)
+{
+    masterFd = ::posix_openpt(O_RDWR | O_NOCTTY | O_NONBLOCK);
+    if (masterFd < 0 || ::grantpt(masterFd) != 0 || ::unlockpt(masterFd) != 0)
+        return {};
+    const char* name = ::ptsname(masterFd);
+    return name ? QString::fromLocal8Bit(name) : QString();
+}
+
+QByteArray receive(int fd, int timeoutMs = 1000)
+{
+    QByteArray result;
+    QElapsedTimer timer;
+    timer.start();
+    qint64 lastRead = -1;
+    while (timer.elapsed() < timeoutMs) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+        char buffer[512];
+        const ssize_t size = ::read(fd, buffer, sizeof(buffer));
+        if (size > 0) {
+            result.append(buffer, int(size));
+            lastRead = timer.elapsed();
+        } else if (lastRead >= 0 && timer.elapsed() - lastRead >= 10) {
+            break;
+        }
+        QTest::qWait(1);
+    }
+    return result;
+}
+
+bool send(int fd, const QByteArray& data)
+{
+    return ::write(fd, data.constData(), size_t(data.size())) == data.size();
+}
+#endif
 
 template <typename Server>
 quint16 startServer(Server& server)
@@ -99,7 +151,10 @@ private slots:
     void servesRtuOverTcpRequests();
     void recoversRtuStreamAndProcessesBroadcast();
     void simulatesRtuOverTcpErrors();
+    void parsesRtuFrameShapes();
     void configuresSerialTransport();
+    void mapsSerialPortErrors();
+    void servesRtuSerialOnPseudoTerminal();
 };
 
 void TestModbusTransports::servesModbusTcpRequests()
@@ -111,6 +166,8 @@ void TestModbusTransports::servesModbusTcpRequests()
     QCOMPARE(server.connectionParameter(QModbusDevice::NetworkAddressParameter).toString(),
              QStringLiteral("127.0.0.1"));
     QVERIFY(!server.connectionParameter(QModbusDevice::SerialPortNameParameter).isValid());
+    QCOMPARE(server.device(), nullptr);
+    QVERIFY(server.metaObject() != nullptr);
 
     QSignalSpy connectedSpy(&server, &ModbusTcpServer::modbusClientConnected);
     QSignalSpy disconnectedSpy(&server, &ModbusTcpServer::modbusClientDisconnected);
@@ -128,10 +185,10 @@ void TestModbusTransports::servesModbusTcpRequests()
     const QByteArray frame = tcpFrame(
         0x1234, 1,
         QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(0), quint16(2)));
-    QCOMPARE(socket.write(frame.left(4)), qint64(4));
+    QCOMPARE(socket.write(frame.left(8)), qint64(8));
     QVERIFY(socket.waitForBytesWritten(1000));
     QTest::qWait(5);
-    QCOMPARE(socket.write(frame.mid(4)), qint64(frame.size() - 4));
+    QCOMPARE(socket.write(frame.mid(8)), qint64(frame.size() - 8));
     const QByteArray response = receive(socket);
     QVERIFY(response.size() >= 13);
     QCOMPARE(quint8(response.at(6)), quint8(1));
@@ -244,6 +301,8 @@ void TestModbusTransports::servesRtuOverTcpRequests()
     QVERIFY(port != 0);
     QCOMPARE(server.connectionParameter(QModbusDevice::NetworkPortParameter).toUInt(), uint(port));
     QVERIFY(!server.connectionParameter(QModbusDevice::SerialPortNameParameter).isValid());
+    QCOMPARE(server.device(), nullptr);
+    QVERIFY(server.metaObject() != nullptr);
 
     QSignalSpy connectedSpy(&server, &ModbusRtuTcpServer::modbusClientConnected);
     QSignalSpy requestSpy(&server, &ModbusServer::modbusRequest);
@@ -354,10 +413,66 @@ void TestModbusTransports::simulatesRtuOverTcpErrors()
     QCOMPARE(socket.bytesAvailable(), qint64(0));
 }
 
+void TestModbusTransports::parsesRtuFrameShapes()
+{
+    ModbusRtuTcpServer server;
+    const quint16 port = startServer(server);
+    QVERIFY(port != 0);
+    QSignalSpy requestSpy(&server, &ModbusServer::modbusRequest);
+    QTcpSocket socket;
+    socket.connectToHost(QHostAddress::LocalHost, port);
+    QVERIFY(socket.waitForConnected(1000));
+
+    QByteArray multipleCoils = words({0, 1});
+    multipleCoils.append(char(1));
+    multipleCoils.append(char(1));
+
+    QByteArray readWrite = words({0, 1, 2, 1});
+    readWrite.append(char(2));
+    readWrite.append(words({0x1234}));
+
+    QByteArray fileRecord;
+    fileRecord.append(char(7));
+    fileRecord.append(char(6));
+    fileRecord.append(words({1, 0, 0, 1}));
+
+    const QList<QModbusRequest> requests = {
+        QModbusRequest(QModbusRequest::ReadExceptionStatus),
+        QModbusRequest(QModbusRequest::WriteMultipleCoils, multipleCoils),
+        QModbusRequest(QModbusRequest::ReadFileRecord, fileRecord),
+        QModbusRequest(QModbusRequest::MaskWriteRegister,
+                       quint16(0), quint16(0xffff), quint16(0)),
+        QModbusRequest(QModbusRequest::ReadWriteMultipleRegisters, readWrite),
+        QModbusRequest(QModbusRequest::ReadFifoQueue, quint16(0)),
+        QModbusRequest(QModbusRequest::EncapsulatedInterfaceTransport,
+                       quint8(EncapsulatedInterfaceTransport::CanOpenGeneralReference),
+                       quint8(0), quint8(0)),
+        QModbusRequest(static_cast<QModbusPdu::FunctionCode>(0x41), quint8(1))
+    };
+
+    QByteArray frames;
+    for (const QModbusRequest& request : requests)
+        frames.append(rtuFrame(1, request));
+
+    const QByteArray dynamicFrame = rtuFrame(1, requests.at(1));
+    QCOMPARE(socket.write(dynamicFrame.left(4)), qint64(4));
+    QVERIFY(socket.waitForBytesWritten(1000));
+    QTest::qWait(5);
+    QCOMPARE(socket.write(dynamicFrame.mid(4)), qint64(dynamicFrame.size() - 4));
+    QVERIFY(!receive(socket).isEmpty());
+
+    QCOMPARE(socket.write(frames), qint64(frames.size()));
+    QVERIFY(!receive(socket).isEmpty());
+    QVERIFY2(requestSpy.count() >= 4,
+             qPrintable(QStringLiteral("processed requests: %1").arg(requestSpy.count())));
+}
+
 void TestModbusTransports::configuresSerialTransport()
 {
     ModbusRtuSerialServer server;
     QVERIFY(!server.processesBroadcast());
+    QVERIFY(server.device() != nullptr);
+    QVERIFY(server.metaObject() != nullptr);
     QCOMPARE(server.interFrameDelay(), 2000);
     server.setInterFrameDelay(10001);
     QCOMPARE(server.interFrameDelay(), 11000);
@@ -382,6 +497,165 @@ void TestModbusTransports::configuresSerialTransport()
     QCOMPARE(server.state(), QModbusDevice::UnconnectedState);
     QCOMPARE(server.error(0), QModbusDevice::ConnectionError);
     QVERIFY(server.interFrameDelay() >= 11000);
+}
+
+void TestModbusTransports::mapsSerialPortErrors()
+{
+    ModbusRtuSerialServer server;
+    const QList<QSerialPort::SerialPortError> errors = {
+        QSerialPort::NoError,
+        QSerialPort::DeviceNotFoundError,
+        QSerialPort::PermissionError,
+        QSerialPort::OpenError,
+        QSerialPort::NotOpenError,
+        QSerialPort::WriteError,
+        QSerialPort::ReadError,
+        QSerialPort::ResourceError,
+        QSerialPort::UnsupportedOperationError,
+        QSerialPort::TimeoutError,
+        QSerialPort::UnknownError,
+        static_cast<QSerialPort::SerialPortError>(999)
+    };
+    for (QSerialPort::SerialPortError error : errors) {
+        QVERIFY(QMetaObject::invokeMethod(
+            &server, "on_errorOccurred", Qt::DirectConnection,
+            Q_ARG(QSerialPort::SerialPortError, error)));
+    }
+    QCOMPARE(server.error(0), QModbusDevice::UnknownError);
+    QVERIFY(QMetaObject::invokeMethod(&server, "on_aboutToClose", Qt::DirectConnection));
+    QVERIFY(QMetaObject::invokeMethod(
+        &server, "on_rawDataReceived", Qt::DirectConnection,
+        Q_ARG(QDateTime, QDateTime::currentDateTime()),
+        Q_ARG(QByteArray, QByteArray("data"))));
+}
+
+void TestModbusTransports::servesRtuSerialOnPseudoTerminal()
+{
+#ifndef Q_OS_LINUX
+    QSKIP("A POSIX pseudo-terminal is required.");
+#else
+    int masterFd = -1;
+    const QString portName = openPseudoTerminal(masterFd);
+    QVERIFY2(masterFd >= 0 && !portName.isEmpty(), "Could not create a pseudo-terminal.");
+
+    ModbusRtuSerialServer server;
+    server.setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
+    server.setConnectionParameter(QModbusDevice::SerialBaudRateParameter,
+                                  QSerialPort::Baud19200);
+    server.addServerAddress(1);
+    server.setMap(holdingMap(), 1);
+    server.setMap(holdingMap(), 0);
+    QVERIFY(server.connectDevice());
+    QCOMPARE(server.state(), QModbusDevice::ConnectedState);
+
+    QSignalSpy requestSpy(&server, &ModbusServer::modbusRequest);
+    QSignalSpy responseSpy(&server, &ModbusServer::modbusResponse);
+    QSignalSpy receivedSpy(&server, &ModbusServer::rawDataReceived);
+    QSignalSpy sentSpy(&server, &ModbusServer::rawDataSended);
+
+    const QModbusRequest readRequest(QModbusRequest::ReadHoldingRegisters,
+                                     quint16(0), quint16(2));
+    const QByteArray readFrame = rtuFrame(1, readRequest);
+    QVERIFY(send(masterFd, readFrame.left(2)));
+    QTest::qWait(server.interFrameDelay() / 1000 + 2);
+    QVERIFY(send(masterFd, readFrame));
+    QByteArray response = receive(masterFd);
+    QVERIFY(response.size() >= 7);
+    QVERIFY(QModbusAduRtu(response).matchingChecksum());
+
+    QByteArray badCrc = readFrame;
+    badCrc[badCrc.size() - 1] = char(quint8(badCrc.at(badCrc.size() - 1)) ^ 0xff);
+    QVERIFY(send(masterFd, badCrc));
+    QCOMPARE(receive(masterFd, 30).size(), 0);
+
+    QModbusRequest oversized(QModbusRequest::ReadHoldingRegisters,
+                             readRequest.data() + QByteArray(1, '\0'));
+    QVERIFY(send(masterFd, rtuFrame(1, oversized)));
+    QCOMPARE(receive(masterFd, 30).size(), 0);
+
+    QVERIFY(send(masterFd, rtuFrame(9, readRequest)));
+    QCOMPARE(receive(masterFd, 30).size(), 0);
+
+    ModbusDefinitions definitions;
+    definitions.ErrorSimulations.setResponseIllegalFunction(true);
+    server.setDefinitions(definitions);
+    QVERIFY(send(masterFd, readFrame));
+    response = receive(masterFd);
+    QVERIFY(response.size() >= 5);
+    QVERIFY(quint8(response.at(1)) & QModbusPdu::ExceptionByte);
+
+    definitions.ErrorSimulations.setResponseIllegalFunction(false);
+    definitions.ErrorSimulations.setResponseDeviceBusy(true);
+    server.setDefinitions(definitions);
+    QVERIFY(send(masterFd, readFrame));
+    response = receive(masterFd);
+    QVERIFY(response.size() >= 5);
+    QCOMPARE(quint8(response.at(2)), quint8(QModbusExceptionResponse::ServerDeviceBusy));
+
+    definitions.ErrorSimulations.setResponseDeviceBusy(false);
+    definitions.ErrorSimulations.setResponseIncorrectId(true);
+    definitions.ErrorSimulations.setResponseIncorrectCrc(true);
+    definitions.ErrorSimulations.setResponseDelay(true);
+    definitions.ErrorSimulations.setResponseDelayTime(5);
+    server.setDefinitions(definitions);
+    QVERIFY(send(masterFd, readFrame));
+    response = receive(masterFd);
+    QVERIFY(response.size() >= 7);
+    QCOMPARE(quint8(response.at(0)), quint8(2));
+    QVERIFY(!QModbusAduRtu(response).matchingChecksum());
+
+    definitions.ErrorSimulations.setResponseIncorrectId(false);
+    definitions.ErrorSimulations.setResponseIncorrectCrc(false);
+    definitions.ErrorSimulations.setResponseDelay(false);
+    definitions.ErrorSimulations.setNoResponse(true);
+    server.setDefinitions(definitions);
+    QVERIFY(send(masterFd, readFrame));
+    QCOMPARE(receive(masterFd, 30).size(), 0);
+
+    definitions.ErrorSimulations.setNoResponse(false);
+    server.setDefinitions(definitions);
+    const QByteArray broadcast = rtuFrame(
+        0, QModbusRequest(QModbusRequest::WriteSingleRegister,
+                          quint16(3), quint16(0x7788)));
+    QVERIFY(send(masterFd, broadcast));
+    QCOMPARE(receive(masterFd, 30).size(), 0);
+    QTRY_VERIFY(server.processesBroadcast());
+    quint16 value = 0;
+    QVERIFY(server.data(QModbusDataUnit::HoldingRegisters, 3, &value, 0));
+    QCOMPARE(value, quint16(0x7788));
+
+    QModbusPdu::ExceptionCode customException = QModbusExceptionResponse::ServerDeviceFailure;
+    server.setRequestHandler(RequestHandlerPtr::create(
+        [&customException](const QModbusPdu& request, int, QModbusResponse& customResponse) {
+            customResponse = QModbusExceptionResponse(request.functionCode(), customException);
+            return true;
+        }));
+    QVERIFY(send(masterFd, readFrame));
+    QVERIFY(receive(masterFd).size() >= 5);
+    customException = QModbusExceptionResponse::NegativeAcknowledge;
+    QVERIFY(send(masterFd, readFrame));
+    QVERIFY(receive(masterFd).size() >= 5);
+    server.setRequestHandler({});
+
+    const QByteArray canOpen = rtuFrame(
+        1, QModbusRequest(QModbusRequest::EncapsulatedInterfaceTransport,
+                          quint8(EncapsulatedInterfaceTransport::CanOpenGeneralReference),
+                          quint8(0), quint8(0)));
+    QVERIFY(send(masterFd, canOpen));
+    QVERIFY(receive(masterFd).size() >= 5);
+
+    server.setValue(ModbusServer::ListenOnlyMode, true, 1);
+    QVERIFY(send(masterFd, readFrame));
+    QCOMPARE(receive(masterFd, 30).size(), 0);
+    QVERIFY(requestSpy.count() >= 6);
+    QVERIFY(responseSpy.count() >= 3);
+    QVERIFY(receivedSpy.count() >= 8);
+    QVERIFY(sentSpy.count() >= 3);
+
+    server.disconnectDevice();
+    QCOMPARE(server.state(), QModbusDevice::UnconnectedState);
+    ::close(masterFd);
+#endif
 }
 
 QTEST_MAIN(TestModbusTransports)
