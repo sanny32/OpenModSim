@@ -1088,7 +1088,7 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
         for(int i = 0; i < vv.size(); i++)
             vv[i] = toByteOrderValue(values[i], order);
 
-        data.setValues(values);
+        data.setValues(vv);
     }
 
     return data;
@@ -1249,7 +1249,8 @@ void ModbusMultiServer::writeValue(quint8 deviceId, QModbusDataUnit::RegisterTyp
 qint32 ModbusMultiServer::readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(deviceId, pointType, pointAddress, 2);
-    return swapped ?  makeInt32(data.value(1), data.value(0), order): makeInt32(data.value(0), data.value(1), order);
+    return swapped ? makeInt32(data.value(0), data.value(1), order)
+                   : makeInt32(data.value(1), data.value(0), order);
 }
 
 ///
@@ -1314,8 +1315,8 @@ void ModbusMultiServer::writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterTy
 qint64 ModbusMultiServer::readInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(deviceId, pointType, pointAddress, 4);
-    return swapped ?  makeInt64(data.value(3), data.value(2), data.value(1), data.value(0), order):
-               makeInt64(data.value(0), data.value(1), data.value(2), data.value(3), order);
+    return swapped ? makeInt64(data.value(0), data.value(1), data.value(2), data.value(3), order)
+                   : makeInt64(data.value(3), data.value(2), data.value(1), data.value(0), order);
 }
 
 ///
@@ -1380,7 +1381,8 @@ void ModbusMultiServer::writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterTy
 float ModbusMultiServer::readFloat(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(deviceId, pointType, pointAddress, 2);
-    return swapped ?  makeFloat(data.value(1), data.value(0), order): makeFloat(data.value(0), data.value(1), order);
+    return swapped ? makeFloat(data.value(0), data.value(1), order)
+                   : makeFloat(data.value(1), data.value(0), order);
 }
 
 ///
@@ -1405,8 +1407,8 @@ void ModbusMultiServer::writeFloat(quint8 deviceId, QModbusDataUnit::RegisterTyp
 double ModbusMultiServer::readDouble(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(deviceId, pointType, pointAddress, 4);
-    return swapped ?  makeDouble(data.value(3), data.value(2), data.value(1), data.value(0), order):
-                      makeDouble(data.value(0), data.value(1), data.value(2), data.value(3), order);
+    return swapped ? makeDouble(data.value(0), data.value(1), data.value(2), data.value(3), order)
+                   : makeDouble(data.value(3), data.value(2), data.value(1), data.value(0), order);
 }
 
 ///
