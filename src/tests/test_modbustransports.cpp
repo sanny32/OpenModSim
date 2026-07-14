@@ -185,7 +185,10 @@ void TestModbusTransports::servesModbusTcpRequests()
     const QByteArray frame = tcpFrame(
         0x1234, 1,
         QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(0), quint16(2)));
-    QCOMPARE(socket.write(frame.left(8)), qint64(8));
+    QCOMPARE(socket.write(frame.left(1)), qint64(1));
+    QVERIFY(socket.waitForBytesWritten(1000));
+    QTest::qWait(5);
+    QCOMPARE(socket.write(frame.mid(1, 7)), qint64(7));
     QVERIFY(socket.waitForBytesWritten(1000));
     QTest::qWait(5);
     QCOMPARE(socket.write(frame.mid(8)), qint64(frame.size() - 8));
