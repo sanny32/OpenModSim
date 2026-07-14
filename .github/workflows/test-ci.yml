@@ -44,7 +44,7 @@ jobs:
             qt-version: '5.15.2'
             qt-modules: ''
             cmake-options: '-DUSE_QT5=ON'
-          - os: windows-latest
+          - os: windows-2022
             qt-version: '5.15.2'
             qt-modules: ''
             cmake-options: '-DUSE_QT5=ON'
@@ -69,10 +69,6 @@ jobs:
       - name: Install Ninja (macOS)
         if: runner.os == 'macOS'
         run: brew install ninja
-
-      - name: Install Ninja (Windows)
-        if: runner.os == 'Windows'
-        run: choco install ninja -y
 
       - name: Set up MSVC environment (Windows)
         if: runner.os == 'Windows'

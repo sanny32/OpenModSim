@@ -496,6 +496,7 @@ $cmakeArgs = @(
     "-G", $CMakeGenerator,
     "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
     "-DCMAKE_INSTALL_PREFIX=`"$InstallPrefix`"",
+    "-DOMODSIM_BUILD_TESTS=OFF",
     "-DUSE_QLEMENTINE_APP_STYLE=$(if ($qlementine) { 'ON' } else { 'OFF' })"
 )
 
@@ -522,7 +523,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Building project..."
-& $cmakePath --build . --config $BuildType
+& $cmakePath --build . --config $BuildType --parallel
 if ($LASTEXITCODE -ne 0) {
     Set-Location ..
     Write-Error "Build failed"
