@@ -37,53 +37,14 @@ jobs:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Determine ref_type and ref_name
-        run: |
-          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
-            REF_TYPE="tags"
-            if [ -n "${{ github.event.inputs.tag }}" ]; then
-              REF_NAME="${{ github.event.inputs.tag }}"
-            else
-              REF_NAME="${{ github.ref_name }}"
-            fi
-          else
-            REF_TYPE="heads"
-            REF_NAME="${{ github.ref_name }}"
-          fi
-          echo "REF_TYPE=$REF_TYPE" >> $GITHUB_ENV
-          echo "REF_NAME=$REF_NAME" >> $GITHUB_ENV
+        uses: ./.github/actions/detect-ref
 
       - name: Extract version from CMakeLists.txt
-        run: |
-          FULL_VERSION=$(grep -oE '^\s*VERSION\s+[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-          APP_MAJOR_VERSION=$(echo "$FULL_VERSION" | cut -d. -f1)
-
-          PRERELEASE_ENABLED=false
-          PRERELEASE_SUFFIX=""
-          TAG_NAME="${{ github.event.inputs.tag }}"
-          if [ -z "$TAG_NAME" ] && [ "${{ github.ref_type }}" = "tag" ]; then
-            TAG_NAME="${{ github.ref_name }}"
-          fi
-          PRERELEASE_SUFFIX=$(printf '%s\n' "$TAG_NAME" | grep -Eo '(beta[0-9]+|b[0-9]+|rc[0-9]+)$' || true)
-          if [ -n "$PRERELEASE_SUFFIX" ]; then
-            PRERELEASE_ENABLED=true
-          fi
-
-          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
-            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
-            APP_VERSION="${MAJOR_MINOR}~dev"
-          else
-            APP_VERSION="$FULL_VERSION"
-            if [ "$PRERELEASE_ENABLED" = "true" ]; then
-              APP_VERSION="${APP_VERSION}-${PRERELEASE_SUFFIX}"
-            fi
-          fi
-
-          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-          echo "PRERELEASE_SUFFIX=$PRERELEASE_SUFFIX" >> $GITHUB_ENV
-          echo "APP_MAJOR_VERSION=$APP_MAJOR_VERSION" >> $GITHUB_ENV
-          echo "PRERELEASE_ENABLED=$PRERELEASE_ENABLED" >> $GITHUB_ENV
-
-          echo "Extracted version: $APP_VERSION"
+        uses: ./.github/actions/extract-version
+        with:
+          dev-suffix-style: tilde
+          prerelease-suffix-style: dash
+          release-branches-are-dev: "false"
 
       - name: Install dependencies
         run: |
@@ -173,14 +134,9 @@ jobs:
           path: ${{ env.DMG_NAME }}
 
       - name: Create or update GitHub Release and upload DMG
-        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v3
+        uses: ./.github/actions/github-release
         with:
-          draft: true
           prerelease: ${{ env.PRERELEASE_ENABLED }}
-          tag_name: ${{ github.ref_name }}
-          name: Open ModSim ${{ env.APP_VERSION }}
+          app-version: ${{ env.APP_VERSION }}
           files: |
             ${{ env.DMG_NAME }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,155 @@
+name: Extract project version
+description: Extract OpenModSim version metadata from src/CMakeLists.txt.
+
+inputs:
+  package-prefix:
+    description: Prefix used to compose the package name from the major version.
+    required: false
+    default: ""
+  package-name-env:
+    description: Environment variable name that receives the composed package name.
+    required: false
+    default: ""
+  dev-suffix-style:
+    description: Version suffix style for development builds. Use tilde or dash.
+    required: true
+  prerelease-suffix-style:
+    description: Version suffix style for prerelease builds. Use same, tilde, or dash.
+    required: false
+    default: same
+  release-branches-are-dev:
+    description: Treat release/* branches as development builds.
+    required: false
+    default: "true"
+
+outputs:
+  app-version:
+    value: ${{ steps.extract.outputs.app-version }}
+  app-major-version:
+    value: ${{ steps.extract.outputs.app-major-version }}
+  cmake-version:
+    value: ${{ steps.extract.outputs.cmake-version }}
+  product-name:
+    value: ${{ steps.extract.outputs.product-name }}
+  prerelease-suffix:
+    value: ${{ steps.extract.outputs.prerelease-suffix }}
+  prerelease-enabled:
+    value: ${{ steps.extract.outputs.prerelease-enabled }}
+  package-name:
+    value: ${{ steps.extract.outputs.package-name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Extract version from CMakeLists.txt
+      id: extract
+      shell: pwsh
+      run: |
+        $cmakeLists = Get-Content -Path src/CMakeLists.txt -Raw
+
+        $cmakeVersionMatch = [regex]::Match($cmakeLists, 'cmake_minimum_required\s*\(\s*VERSION\s+([0-9]+(\.[0-9]+){1,3})')
+        if (-not $cmakeVersionMatch.Success) {
+          Write-Error 'Failed to detect minimum CMake version'
+          exit 1
+        }
+
+        $versionMatch = [regex]::Match($cmakeLists, '(?m)^\s*VERSION\s+([0-9]+\.[0-9]+\.[0-9]+)')
+        if (-not $versionMatch.Success) {
+          Write-Error 'Failed to detect project version'
+          exit 1
+        }
+
+        $productNameMatch = [regex]::Match($cmakeLists, 'set\(PRODUCT_NAME\s+"([^"]+)')
+
+        $cmakeVersion = $cmakeVersionMatch.Groups[1].Value
+        $fullVersion = $versionMatch.Groups[1].Value
+        $versionParts = $fullVersion.Split('.')
+        $majorVersion = $versionParts[0]
+        $productName = $productNameMatch.Groups[1].Value
+        $packageName = ''
+        if ('${{ inputs.package-prefix }}') {
+          $packageName = '${{ inputs.package-prefix }}' + $majorVersion
+        }
+
+        $prereleaseEnabled = 'false'
+        $prereleaseSuffix = ''
+        $tagName = '${{ github.event.inputs.tag }}'
+        if ([string]::IsNullOrEmpty($tagName) -and '${{ github.ref_type }}' -eq 'tag') {
+          $tagName = '${{ github.ref_name }}'
+        }
+
+        $prereleaseMatch = [regex]::Match($tagName, '(beta[0-9]+|b[0-9]+|rc[0-9]+)$')
+        if ($prereleaseMatch.Success) {
+          $prereleaseEnabled = 'true'
+          $prereleaseSuffix = $prereleaseMatch.Groups[1].Value
+        }
+
+        $isDevBuild = $false
+        $eventBranch = '${{ github.event.inputs.branch }}'
+        $refName = $env:GITHUB_REF_NAME
+        if ($refName -eq 'dev' -or $eventBranch -eq 'dev') {
+          $isDevBuild = $true
+        }
+        if ('${{ inputs.release-branches-are-dev }}' -eq 'true') {
+          if ($refName -like 'release/*' -or $eventBranch -like 'release/*') {
+            $isDevBuild = $true
+          }
+        }
+
+        $suffixStyle = '${{ inputs.dev-suffix-style }}'
+        if ($suffixStyle -eq 'tilde') {
+          $devSeparator = '~'
+        } elseif ($suffixStyle -eq 'dash') {
+          $devSeparator = '-'
+        } else {
+          Write-Error "Unsupported dev-suffix-style: $suffixStyle"
+          exit 1
+        }
+
+        $prereleaseSuffixStyle = '${{ inputs.prerelease-suffix-style }}'
+        if ($prereleaseSuffixStyle -eq 'same') {
+          $prereleaseSuffixStyle = $suffixStyle
+        }
+        if ($prereleaseSuffixStyle -eq 'tilde') {
+          $prereleaseSeparator = '~'
+        } elseif ($prereleaseSuffixStyle -eq 'dash') {
+          $prereleaseSeparator = '-'
+        } else {
+          Write-Error "Unsupported prerelease-suffix-style: $prereleaseSuffixStyle"
+          exit 1
+        }
+
+        if ($isDevBuild) {
+          $appVersion = "$($versionParts[0]).$($versionParts[1])${devSeparator}dev"
+        } else {
+          $appVersion = $fullVersion
+          if ($prereleaseEnabled -eq 'true') {
+            $appVersion = "${appVersion}${prereleaseSeparator}${prereleaseSuffix}"
+          }
+        }
+
+        "APP_VERSION=$appVersion" >> $env:GITHUB_ENV
+        "APP_MAJOR_VERSION=$majorVersion" >> $env:GITHUB_ENV
+        "VERSION_MAJOR=$majorVersion" >> $env:GITHUB_ENV
+        "CMAKE_VERSION=$cmakeVersion" >> $env:GITHUB_ENV
+        "PRODUCT_NAME=$productName" >> $env:GITHUB_ENV
+        "PRERELEASE_SUFFIX=$prereleaseSuffix" >> $env:GITHUB_ENV
+        "PRERELEASE_ENABLED=$prereleaseEnabled" >> $env:GITHUB_ENV
+        if ('${{ inputs.package-name-env }}') {
+          "${{ inputs.package-name-env }}=$packageName" >> $env:GITHUB_ENV
+        }
+
+        "app-version=$appVersion" >> $env:GITHUB_OUTPUT
+        "app-major-version=$majorVersion" >> $env:GITHUB_OUTPUT
+        "cmake-version=$cmakeVersion" >> $env:GITHUB_OUTPUT
+        "product-name=$productName" >> $env:GITHUB_OUTPUT
+        "prerelease-suffix=$prereleaseSuffix" >> $env:GITHUB_OUTPUT
+        "prerelease-enabled=$prereleaseEnabled" >> $env:GITHUB_OUTPUT
+        "package-name=$packageName" >> $env:GITHUB_OUTPUT
+
+        Write-Host "Extracted version: $appVersion"
+        Write-Host "Required CMake version: $cmakeVersion"
+        Write-Host "Extracted product name: $productName"
+        if ($packageName) {
+          Write-Host "Package name: $packageName"
+        }
