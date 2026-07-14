@@ -36,6 +36,9 @@ class TestLegacyProjectParser : public QObject
 private slots:
     void recognizesLegacyDataViewElement();
     void readsLegacyFormModSimDataViewState();
+    void readsLegacyDisplayDefinitionDefaultsAndNormalizes();
+    void readsLegacyColorFallbackKeys();
+    void ignoresMalformedLegacySimulationsAndValues();
     void mapsDataUnitValuesWithoutStoppingAfterMalformedAddress();
     void clampsCoilValues();
 };
@@ -109,6 +112,92 @@ void TestLegacyProjectParser::readsLegacyFormModSimDataViewState()
 
     QCOMPARE(state.Data.value(10), quint16(100));
     QCOMPARE(state.Data.value(12), quint16(300));
+}
+
+///
+/// \brief TestLegacyProjectParser::readsLegacyDisplayDefinitionDefaultsAndNormalizes
+///
+void TestLegacyProjectParser::readsLegacyDisplayDefinitionDefaultsAndNormalizes()
+{
+    const QByteArray xml = R"xml(
+<FormModSim Title='Fallback Title'>
+  <DisplayDefinition DeviceId='0' PointType='999' PointAddress='0' Length='0'
+                     DataViewColumnsDistance='100' LeadingZeros='true'/>
+</FormModSim>
+)xml";
+
+    const auto state = readLegacyDataViewState(xml);
+
+    QCOMPARE(state.Definitions.FormName, QStringLiteral("Fallback Title"));
+    QCOMPARE(state.Definitions.DeviceId, quint8(0));
+    QCOMPARE(state.Definitions.PointType, QModbusDataUnit::HoldingRegisters);
+    QCOMPARE(state.Definitions.PointAddress, quint16(1));
+    QCOMPARE(state.Definitions.Length, quint16(1));
+    QCOMPARE(state.Definitions.DataViewColumnsDistance, quint16(32));
+    QCOMPARE(state.Definitions.LeadingZeros, true);
+}
+
+///
+/// \brief TestLegacyProjectParser::readsLegacyColorFallbackKeys
+///
+void TestLegacyProjectParser::readsLegacyColorFallbackKeys()
+{
+    const QByteArray xml = R"xml(
+<AddressColorMap>
+  <Color Address='4' Value='#445566'/>
+  <Color DeviceId='3' Type='4' Address='5' Value='#abcdef'/>
+  <Color DeviceId='3' Type='4' Address='6'/>
+  <Color DeviceId='3' Type='4' Address='bad' Value='#000000'/>
+</AddressColorMap>
+)xml";
+
+    QXmlStreamReader reader(xml);
+    reader.readNextStartElement();
+
+    const auto map = LegacyProjectParser::readAddressColors(reader);
+
+    QCOMPARE(map.size(), 2);
+    const ItemMapKey fallbackKey { 0, QModbusDataUnit::Invalid, 4 };
+    const ItemMapKey fullKey { 3, QModbusDataUnit::HoldingRegisters, 5 };
+    QCOMPARE(map.value(fallbackKey), QColor(QStringLiteral("#445566")));
+    QCOMPARE(map.value(fullKey), QColor(QStringLiteral("#abcdef")));
+}
+
+///
+/// \brief TestLegacyProjectParser::ignoresMalformedLegacySimulationsAndValues
+///
+void TestLegacyProjectParser::ignoresMalformedLegacySimulationsAndValues()
+{
+    const QByteArray xml = R"xml(
+<FormModSim Title='Malformed Entries'>
+  <DisplayDefinition DeviceId='2' PointType='4' PointAddress='10' Length='2'/>
+  <ModbusSimulationMap>
+    <Simulation Address='bad'>
+      <ModbusSimulationParams Mode='Increment' Interval='100'/>
+    </Simulation>
+    <Simulation Address='11'>
+      <ModbusSimulationParams Mode='Decrement' Interval='200'/>
+    </Simulation>
+  </ModbusSimulationMap>
+  <ModbusDataUnit>
+    <Value Address='10'>12</Value>
+    <Value Address='11'>bad</Value>
+    <Value Address='12'>99</Value>
+    <Value Address='bad'>7</Value>
+  </ModbusDataUnit>
+</FormModSim>
+)xml";
+
+    const auto state = readLegacyDataViewState(xml);
+
+    QCOMPARE(state.Simulations.size(), 1);
+    QVERIFY(state.Simulations.contains(11));
+    QCOMPARE(state.Simulations.value(11).Mode, SimulationMode::Decrement);
+    QCOMPARE(state.Simulations.value(11).Interval, 200u);
+
+    QCOMPARE(state.Data.size(), 2);
+    QCOMPARE(state.Data.value(10), quint16(12));
+    QCOMPARE(state.Data.value(12), quint16(99));
 }
 
 ///

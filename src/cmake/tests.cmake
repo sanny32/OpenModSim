@@ -10,6 +10,11 @@ function(omodsim_configure_tests)
     add_library(omodsim_testable STATIC
         modbuserrorsimulations.cpp
         modbusdataunitmap.cpp
+        modbusmultiserver.cpp
+        modbusrtuserialserver.cpp
+        modbusrtutcpserver.cpp
+        modbusserver.cpp
+        modbustcpserver.cpp
         datasimulator.cpp
         legacyprojectparser.cpp
         projectaddressspacefilter.cpp
@@ -32,6 +37,7 @@ function(omodsim_configure_tests)
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        Qt::Network
         Qt::SerialBus
         Qt::SerialPort
         Qt::Qml
@@ -71,6 +77,7 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_errorsimulations     test_modbuserrorsimulations.cpp)
     omodsim_add_test(omodsim_tests_validators           test_validators.cpp)
     omodsim_add_test(omodsim_tests_dataunitmap          test_modbusdataunitmap.cpp)
+    omodsim_add_test(omodsim_tests_multiserver          test_modbusmultiserver.cpp)
     omodsim_add_test(omodsim_tests_datasimulator        test_datasimulator.cpp)
     omodsim_add_test(omodsim_tests_modbusmessage        test_modbusmessage.cpp)
     omodsim_add_test(omodsim_tests_modbusmessages       test_modbusmessages.cpp)
