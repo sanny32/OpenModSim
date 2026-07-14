@@ -219,7 +219,10 @@ void TestModbusMultiServer::readsWritesAndClearsData()
 
     QCOMPARE(dataSpy.count(), 1);
     const auto stored = server.data(1, QModbusDataUnit::HoldingRegisters, 10, 3);
-    QCOMPARE(stored.values(), QVector<quint16>({11, 22, 33}));
+    QCOMPARE(int(stored.valueCount()), 3);
+    QCOMPARE(stored.value(0), quint16(11));
+    QCOMPARE(stored.value(1), quint16(22));
+    QCOMPARE(stored.value(2), quint16(33));
     server.setData(1, values, WriteSource::Simulator);
     QCOMPARE(dataSpy.count(), 1);
 
@@ -350,8 +353,10 @@ void TestModbusMultiServer::writesRegisterVariants()
     params.Order = ByteOrder::Swapped;
     params.Value = QVariant::fromValue(QVector<quint16>({0x1234, 0xABCD}));
     server.writeRegister(QModbusDataUnit::HoldingRegisters, params);
-    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 0, 2).values(),
-             QVector<quint16>({0x3412, 0xCDAB}));
+    const auto written = server.data(1, QModbusDataUnit::HoldingRegisters, 0, 2);
+    QCOMPARE(int(written.valueCount()), 2);
+    QCOMPARE(written.value(0), quint16(0x3412));
+    QCOMPARE(written.value(1), quint16(0xCDAB));
 
     params.Order = ByteOrder::Direct;
     const QList<QPair<DataType, QVariant>> cases = {
