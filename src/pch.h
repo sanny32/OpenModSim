@@ -116,6 +116,7 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QtCore/qmath.h>
+#include <limits>
 #include <QtEndian>
 #include <QtGlobal>
 #include <QtMath>
@@ -123,7 +124,6 @@
 
 #include <array>
 #include <deque>
-#include <limits>
 
 #include <float.h>
 

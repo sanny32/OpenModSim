@@ -9,8 +9,10 @@
 #ifndef NUMERICUTILS_H
 #define NUMERICUTILS_H
 
-#include <QtGlobal>
+#include <limits>
+
 #include <QtEndian>
+#include <QtGlobal>
 #include "byteorderutils.h"
 
 ///

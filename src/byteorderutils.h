@@ -9,6 +9,8 @@
 #ifndef BYTEORDERUTILS_H
 #define BYTEORDERUTILS_H
 
+#include <limits>
+
 #include <QtEndian>
 #include "enums.h"
 
