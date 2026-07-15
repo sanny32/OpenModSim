@@ -2861,7 +2861,10 @@ Open the download page?</source>
 
 The global settings part of the merging file(s) will be ignored.
 Please verify the merge result carefully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хотите объединить файл(ы) с проектом?
+
+Раздел глобальных настроек объединяемого файла(ов) будет проигнорирован.
+Пожалуйста, внимательно проверьте результат объединения.</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="1010"/>

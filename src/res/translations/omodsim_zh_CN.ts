@@ -2861,7 +2861,11 @@ Open the download page?</source>
 
 The global settings part of the merging file(s) will be ignored.
 Please verify the merge result carefully.</source>
-        <translation type="unfinished"></translation>
+        <translation>您是否要将文件合并到项目中？
+
+合并文件中的全局设置部分将被忽略。
+
+请仔细核对合并结果。</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="1010"/>
