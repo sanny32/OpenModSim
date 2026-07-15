@@ -9,6 +9,12 @@
 
 #include "recentprojectsprompt.h"
 
+namespace {
+
+constexpr int DialogInteractionDelayMs = 50;
+
+}
+
 class TestRecentProjectsPrompt : public QObject
 {
     Q_OBJECT
@@ -21,7 +27,7 @@ private slots:
 void TestRecentProjectsPrompt::rejectsClearByDefault()
 {
     bool promptIsSafe = false;
-    QTimer::singleShot(0, this, [&promptIsSafe]() {
+    QTimer::singleShot(DialogInteractionDelayMs, this, [&promptIsSafe]() {
         auto* prompt = qobject_cast<QMessageBox*>(QApplication::activeModalWidget());
         promptIsSafe = prompt
             && prompt->standardButton(prompt->defaultButton()) == QMessageBox::No
@@ -40,7 +46,7 @@ void TestRecentProjectsPrompt::rejectsClearByDefault()
 
 void TestRecentProjectsPrompt::acceptsConfirmedClear()
 {
-    QTimer::singleShot(0, this, []() {
+    QTimer::singleShot(DialogInteractionDelayMs, this, []() {
         auto* prompt = qobject_cast<QMessageBox*>(QApplication::activeModalWidget());
         if(prompt)
             prompt->button(QMessageBox::Yes)->click();

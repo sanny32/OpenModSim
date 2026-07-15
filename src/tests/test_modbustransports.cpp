@@ -369,7 +369,8 @@ void TestModbusTransports::recoversRtuStreamAndProcessesBroadcast()
     QVERIFY(socket.waitForBytesWritten(1000));
     QTest::qWait(30);
     QCOMPARE(socket.bytesAvailable(), qint64(0));
-    QTRY_VERIFY(server.data(QModbusDataUnit::HoldingRegisters, 5, &value, 1));
+    QTRY_VERIFY(server.data(QModbusDataUnit::HoldingRegisters, 5, &value, 1)
+                && value == quint16(0x3344));
     QCOMPARE(value, quint16(0x3344));
 }
 
