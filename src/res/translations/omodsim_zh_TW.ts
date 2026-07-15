@@ -2836,6 +2836,16 @@ Open the download page?</source>
         <translation>清除清單</translation>
     </message>
     <message>
+        <location filename="../../mainwindow.cpp" line="2165"/>
+        <source>Clear Recent Projects</source>
+        <translation>清除最近使用的專案</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="2166"/>
+        <source>Clear the list of recent projects?</source>
+        <translation>要清除最近使用的專案清單嗎？</translation>
+    </message>
+    <message>
         <location filename="../../mainwindow.ui" line="57"/>
         <source>Project</source>
         <translation>專案</translation>

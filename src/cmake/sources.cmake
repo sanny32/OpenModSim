@@ -110,6 +110,7 @@ set(SOURCES
     qintvalidatorex.cpp
     qfixedsizedialog.cpp
     quintvalidator.cpp
+    recentprojectsprompt.cpp
     scriptdocument.cpp
 
     styles/appstyle.cpp
@@ -277,6 +278,7 @@ set(HEADERS
     qmodbuscommevent.h
     qrange.h
     quintvalidator.h
+    recentprojectsprompt.h
     scriptdocument.h
     scriptsettings.h
     serialportutils.h

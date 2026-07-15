@@ -18,6 +18,7 @@
 #include "dialogmsgparser.h"
 #include "dialogpreferences.h"
 #include "dialogprintsettings.h"
+#include "recentprojectsprompt.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
 #include "dialogforcestatusregisters.h"
@@ -2160,6 +2161,11 @@ void MainWindow::rebuildRecentProjectsMenu()
 ///
 void MainWindow::clearRecentProjects()
 {
+    if(!RecentProjectsPrompt::confirmClear(this,
+                                           tr("Clear Recent Projects"),
+                                           tr("Clear the list of recent projects?")))
+        return;
+
     _recentProjects.clear();
     rebuildRecentProjectsMenu();
 }

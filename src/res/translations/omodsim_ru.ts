@@ -2836,6 +2836,16 @@ Open the download page?</source>
         <translation>Очистить список</translation>
     </message>
     <message>
+        <location filename="../../mainwindow.cpp" line="2165"/>
+        <source>Clear Recent Projects</source>
+        <translation>Очистить недавние проекты</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="2166"/>
+        <source>Clear the list of recent projects?</source>
+        <translation>Очистить список недавних проектов?</translation>
+    </message>
+    <message>
         <location filename="../../mainwindow.ui" line="57"/>
         <source>Project</source>
         <translation>Проект</translation>
