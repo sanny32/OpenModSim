@@ -10,6 +10,7 @@ function(omodsim_configure_tests)
     add_library(omodsim_testable STATIC
         modbuserrorsimulations.cpp
         modbusdataunitmap.cpp
+        projectaddressspacexml.cpp
         modbusmultiserver.cpp
         modbusrtuserialserver.cpp
         modbusrtutcpserver.cpp
@@ -76,6 +77,7 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_modbusfunction       test_modbusfunction.cpp)
     omodsim_add_test(omodsim_tests_formatutils          test_formatutils.cpp)
     omodsim_add_test(omodsim_tests_errorsimulations     test_modbuserrorsimulations.cpp)
+    omodsim_add_test(omodsim_tests_forcerangeparams     test_forcerangeparams.cpp)
     omodsim_add_test(omodsim_tests_validators           test_validators.cpp)
     omodsim_add_test(omodsim_tests_dataunitmap          test_modbusdataunitmap.cpp)
     omodsim_add_test(omodsim_tests_multiserver          test_modbusmultiserver.cpp)
@@ -88,6 +90,7 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_storage              test_storage.cpp)
     omodsim_add_test(omodsim_tests_legacyprojectparser  test_legacyprojectparser.cpp)
     omodsim_add_test(omodsim_tests_projectaddressspacefilter test_projectaddressspacefilter.cpp)
+    omodsim_add_test(omodsim_tests_projectaddressspacexml test_projectaddressspacexml.cpp)
     omodsim_add_test(omodsim_tests_connectiondetails     test_connectiondetails.cpp)
     omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)

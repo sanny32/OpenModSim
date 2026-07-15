@@ -122,6 +122,10 @@ signals:
     void formDeleted(QWidget* form);
 
 private:
+    // The serializer is the extracted XML half of this class; it needs the private
+    // form factory and enumeration helpers.
+    friend class ProjectSerializer;
+
     void setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindowList);
     QWidget* createCloneOnArea(QWidget* source, MdiArea* area);
     MdiArea* activeCreateArea() const;

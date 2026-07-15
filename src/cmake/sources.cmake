@@ -102,6 +102,10 @@ set(SOURCES
     modbustcpserver.cpp
 
     projectaddressspacefilter.cpp
+    projectaddressspacexml.cpp
+    projectformxml.cpp
+    projectserializer.cpp
+    registerwritecontroller.cpp
 
     qadjustedsizedialog.cpp
     qdoublevalidatorex.cpp
@@ -207,6 +211,7 @@ set(HEADERS
     displaydefinition.h
     enums.h
     fontutils.h
+    forcerangeparams.h
     formatutils.h
 
     formdatamapview.h
@@ -265,6 +270,10 @@ set(HEADERS
     numericutils.h
     pch.h
     projectaddressspacefilter.h
+    projectaddressspacexml.h
+    projectformxml.h
+    projectserializer.h
+    registerwritecontroller.h
     qadjustedsizedialog.h
     qcountedset.h
     qdoublevalidatorex.h

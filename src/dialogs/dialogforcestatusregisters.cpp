@@ -84,9 +84,6 @@ DialogForceStatusRegisters::~DialogForceStatusRegisters()
 }
 
 ///
-/// rief DialogForceStatusRegisters::changeEvent
-///
-///
 /// \brief DialogForceStatusRegisters::changeEvent
 ///
 void DialogForceStatusRegisters::changeEvent(QEvent* event)

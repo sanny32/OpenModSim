@@ -90,7 +90,10 @@ private slots:
     void managesIndividualMetadata();
     void filtersAndClearsMetadata();
     void roundTripsNumericTypes();
+    void typedRoundTrips_data();
+    void typedRoundTrips();
     void writesRegisterVariants();
+    void writesUnsignedRegisterValues();
     void reportsDisconnectedState();
     void connectsTransportBackends();
 };
@@ -362,6 +365,44 @@ void TestModbusMultiServer::roundTripsNumericTypes()
     QCOMPARE(server.readDouble(1, QModbusDataUnit::HoldingRegisters, 24, ByteOrder::Swapped, false), -9876.5);
 }
 
+void TestModbusMultiServer::typedRoundTrips_data()
+{
+    QTest::addColumn<ByteOrder>("order");
+    QTest::addColumn<bool>("swapped");
+
+    QTest::newRow("direct-msrf") << ByteOrder::Direct << false;
+    QTest::newRow("direct-lsrf") << ByteOrder::Direct << true;
+    QTest::newRow("swapped-msrf") << ByteOrder::Swapped << false;
+    QTest::newRow("swapped-lsrf") << ByteOrder::Swapped << true;
+}
+
+void TestModbusMultiServer::typedRoundTrips()
+{
+    QFETCH(ByteOrder, order);
+    QFETCH(bool, swapped);
+
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 64);
+
+    server.writeInt32(1, QModbusDataUnit::HoldingRegisters, 0, -1234567, order, swapped);
+    QCOMPARE(server.readInt32(1, QModbusDataUnit::HoldingRegisters, 0, order, swapped), qint32(-1234567));
+
+    server.writeUInt32(1, QModbusDataUnit::HoldingRegisters, 4, 0xFEDCBA98u, order, swapped);
+    QCOMPARE(server.readUInt32(1, QModbusDataUnit::HoldingRegisters, 4, order, swapped), quint32(0xFEDCBA98u));
+
+    server.writeInt64(1, QModbusDataUnit::HoldingRegisters, 8, -0x123456789LL, order, swapped);
+    QCOMPARE(server.readInt64(1, QModbusDataUnit::HoldingRegisters, 8, order, swapped), qint64(-0x123456789LL));
+
+    server.writeUInt64(1, QModbusDataUnit::HoldingRegisters, 12, Q_UINT64_C(0xFEDCBA9876543210), order, swapped);
+    QCOMPARE(server.readUInt64(1, QModbusDataUnit::HoldingRegisters, 12, order, swapped), Q_UINT64_C(0xFEDCBA9876543210));
+
+    server.writeFloat(1, QModbusDataUnit::HoldingRegisters, 20, 123.25f, order, swapped);
+    QCOMPARE(server.readFloat(1, QModbusDataUnit::HoldingRegisters, 20, order, swapped), 123.25f);
+
+    server.writeDouble(1, QModbusDataUnit::HoldingRegisters, 24, -9876.5, order, swapped);
+    QCOMPARE(server.readDouble(1, QModbusDataUnit::HoldingRegisters, 24, order, swapped), -9876.5);
+}
+
 void TestModbusMultiServer::writesRegisterVariants()
 {
     ModbusMultiServer server;
@@ -407,6 +448,44 @@ void TestModbusMultiServer::writesRegisterVariants()
 
     params.Value = 1;
     server.writeRegister(QModbusDataUnit::Invalid, params);
+}
+
+void TestModbusMultiServer::writesUnsignedRegisterValues()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 64);
+
+    ModbusWriteParams params{};
+    params.DeviceId = 1;
+    params.ZeroBasedAddress = true;
+    params.Order = ByteOrder::Direct;
+    params.RegOrder = RegisterOrder::LSRF;
+
+    params.Address = 0;
+    params.DataMode = DataType::UInt32;
+    params.Value = QVariant::fromValue(quint32(0xFEDCBA98u)); // above INT32_MAX
+    server.writeRegister(QModbusDataUnit::HoldingRegisters, params);
+    QCOMPARE(server.readUInt32(1, QModbusDataUnit::HoldingRegisters, 0, ByteOrder::Direct, true), quint32(0xFEDCBA98u));
+
+    params.Address = 4;
+    params.DataMode = DataType::UInt64;
+    params.Value = QVariant::fromValue(Q_UINT64_C(0xFEDCBA9876543210)); // above INT64_MAX
+    server.writeRegister(QModbusDataUnit::HoldingRegisters, params);
+    QCOMPARE(server.readUInt64(1, QModbusDataUnit::HoldingRegisters, 4, ByteOrder::Direct, true), Q_UINT64_C(0xFEDCBA9876543210));
+
+    // String-encoded values above the signed maximum: toInt()/toLongLong() fail on
+    // these and return 0, so they regress if the write path goes through signed conversion.
+    params.Address = 10;
+    params.DataMode = DataType::UInt32;
+    params.Value = QStringLiteral("4275878552");
+    server.writeRegister(QModbusDataUnit::HoldingRegisters, params);
+    QCOMPARE(server.readUInt32(1, QModbusDataUnit::HoldingRegisters, 10, ByteOrder::Direct, true), quint32(4275878552u));
+
+    params.Address = 14;
+    params.DataMode = DataType::UInt64;
+    params.Value = QStringLiteral("18364758544493064720");
+    server.writeRegister(QModbusDataUnit::HoldingRegisters, params);
+    QCOMPARE(server.readUInt64(1, QModbusDataUnit::HoldingRegisters, 14, ByteOrder::Direct, true), Q_UINT64_C(18364758544493064720));
 }
 
 void TestModbusMultiServer::reportsDisconnectedState()

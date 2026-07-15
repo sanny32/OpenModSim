@@ -18,6 +18,8 @@
 #include "apppreferences.h"
 #include "appproject.h"
 #include "legacyprojectloader.h"
+#include "projectformxml.h"
+#include "projectserializer.h"
 #include "mainwindow.h"
 #include "controls/mdiareaex.h"
 #include "controls/mditabbar.h"
@@ -26,7 +28,6 @@
 #include "formdataview.h"
 #include "formtrafficview.h"
 #include "formscriptview.h"
-#include "projectaddressspacefilter.h"
 #include "uiutils.h"
 #include "apptrace.h"
 
@@ -94,65 +95,6 @@ QString mdiExState(const MdiAreaEx* mdi)
 }
 
 ///
-/// \brief containsProjectAddressSpaceValue
-/// \param values
-/// \param key
-/// \return
-///
-bool containsProjectAddressSpaceValue(const ProjectAddressSpaceValues& values, const ItemMapKey& key)
-{
-    return std::any_of(values.constBegin(), values.constEnd(), [&key](const ProjectAddressSpaceValue& value) {
-        return value.Key.DeviceId == key.DeviceId &&
-               value.Key.Type == key.Type &&
-               value.Key.Address == key.Address;
-    });
-}
-
-///
-/// \brief appendProjectAddressSpaceValues
-/// \param values
-/// \param mbServer
-/// \param range
-///
-void appendProjectAddressSpaceValues(ProjectAddressSpaceValues& values,
-                                     ModbusMultiServer& mbServer,
-                                     const ProjectAddressSpaceRange& range)
-{
-    if (range.Length == 0)
-        return;
-
-    const auto unit = mbServer.data(range.DeviceId, range.Type, range.StartAddress, range.Length);
-    quint16 address = range.StartAddress;
-    for (const auto value : unit.values()) {
-        const ItemMapKey key = { range.DeviceId, range.Type, address };
-        if (value != 0 && !containsProjectAddressSpaceValue(values, key))
-            values.append({ key, value });
-        address++;
-    }
-}
-
-///
-/// \brief appendProjectAddressSpaceMetadata
-/// \param descriptions
-/// \param timestamps
-/// \param mbServer
-/// \param range
-///
-void appendProjectAddressSpaceMetadata(AddressDescriptionMap& descriptions,
-                                       AddressTimestampMap& timestamps,
-                                       ModbusMultiServer& mbServer,
-                                       const ProjectAddressSpaceRange& range)
-{
-    const auto rangeDescriptions = mbServer.descriptionMap(range.DeviceId, range.Type, range.StartAddress, range.Length);
-    for (auto it = rangeDescriptions.constBegin(); it != rangeDescriptions.constEnd(); ++it)
-        descriptions.insert(it.key(), it.value());
-
-    const auto rangeTimestamps = mbServer.timestampMap(range.DeviceId, range.Type, range.StartAddress, range.Length);
-    for (auto it = rangeTimestamps.constBegin(); it != rangeTimestamps.constEnd(); ++it)
-        timestamps.insert(it.key(), it.value());
-}
-
-///
 /// \brief formTag
 /// \param frm
 /// \return
@@ -200,35 +142,6 @@ ProjectFormType toProjectFormType(ProjectFormKind kind)
         case ProjectFormKind::DataMap: return ProjectFormType::DataMap;
     }
     return ProjectFormType::Data;
-}
-
-///
-/// \brief projectFormKindFromWidget
-/// \param widget
-/// \param ok
-/// \return
-///
-ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
-{
-    if (qobject_cast<FormDataView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Data;
-    }
-    if (qobject_cast<FormTrafficView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Traffic;
-    }
-    if (qobject_cast<FormScriptView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Script;
-    }
-    if (qobject_cast<FormDataMapView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::DataMap;
-    }
-
-    if(ok) *ok = false;
-    return ProjectFormKind::Data;
 }
 
 ///
@@ -315,131 +228,6 @@ bool canStopScriptOnForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->canStopScript();
     return false;
-}
-
-///
-/// \brief saveXmlOfForm
-/// \param widget
-/// \param w
-///
-void saveXmlOfForm(QWidget* widget, QXmlStreamWriter& w)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->saveXml(w);
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->saveXml(w);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->saveXml(w);
-    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->saveXml(w);
-}
-
-///
-/// \brief applyDataFormPreferences applies global display preferences after XML loading.
-/// \param form
-///
-void applyDataFormPreferences(FormDataView* form)
-{
-    if (!form)
-        return;
-
-    const AppPreferences& prefs = AppPreferences::instance();
-    form->setFont(prefs.font());
-    form->setZoomPercent(prefs.fontZoom());
-    form->setForegroundColor(prefs.foregroundColor());
-    form->setBackgroundColor(prefs.backgroundColor());
-    form->setAddressColor(prefs.addressColor());
-    form->setCommentColor(prefs.commentColor());
-}
-
-///
-/// \brief loadCurrentXmlOfForm
-/// \param widget
-/// \param r
-///
-void loadCurrentXmlOfForm(QWidget* widget, QXmlStreamReader& r)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) {
-        frm->loadXml(r);
-        applyDataFormPreferences(frm);
-    }
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->loadXml(r);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->loadXml(r);
-    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->loadXml(r);
-    else r.skipCurrentElement();
-}
-
-///
-/// \brief loadXmlOfForm
-/// \param project
-/// \param widget
-/// \param r
-///
-void loadXmlOfForm(AppProject& project, QWidget* widget, QXmlStreamReader& r)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) {
-        if (LegacyProjectLoader::isDataViewElement(r.name().toString())) {
-            LegacyProjectLoader::loadDataView(r, *frm, project);
-            applyDataFormPreferences(frm);
-        } else {
-            loadCurrentXmlOfForm(widget, r);
-        }
-        return;
-    }
-
-    loadCurrentXmlOfForm(widget, r);
-}
-
-///
-/// \brief tabTitlesForArea
-/// \param area
-/// \return
-///
-QStringList tabTitlesForArea(const MdiArea* area)
-{
-    QStringList titles;
-    if(!area)
-        return titles;
-
-    const auto* tabBar = qobject_cast<const MdiTabBar*>(area->tabBar());
-    if(!tabBar)
-        return titles;
-
-    titles.reserve(tabBar->count());
-    for(int i = 0; i < tabBar->count(); ++i) {
-        const auto* wnd = tabBar->subWindowAt(i);
-        const auto* widget = wnd ? wnd->widget() : nullptr;
-        if(widget)
-            titles << widget->windowTitle();
-    }
-    return titles;
-}
-
-///
-/// \brief applyTabOrderToArea
-/// \param area
-/// \param orderedTitles
-///
-void applyTabOrderToArea(MdiArea* area, const QStringList& orderedTitles)
-{
-    if(!area || orderedTitles.isEmpty())
-        return;
-
-    auto* tabBar = qobject_cast<MdiTabBar*>(area->tabBar());
-    if(!tabBar)
-        return;
-
-    for(int targetIndex = 0; targetIndex < orderedTitles.size(); ++targetIndex) {
-        const QString& wantedTitle = orderedTitles.at(targetIndex);
-        int currentIndex = -1;
-        for(int i = 0; i < tabBar->count(); ++i) {
-            auto* wnd = tabBar->subWindowAt(i);
-            auto* widget = wnd ? wnd->widget() : nullptr;
-            if(widget && widget->windowTitle() == wantedTitle) {
-                currentIndex = i;
-                break;
-            }
-        }
-
-        if(currentIndex >= 0 && currentIndex != targetIndex)
-            tabBar->moveTab(currentIndex, targetIndex);
-    }
 }
 
 }
@@ -1736,303 +1524,32 @@ void AppProject::loadProject(const QString& filename)
         emit projectOpened(_projectFilename);
     }
 
-    ModbusDefinitions defs;
-    QList<ConnectionDetails> conns;
-    QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
-    bool splitView = false;
-    QString activePrimaryWin;
-    QString activeSecWin;
-    QString activePanel;
-    bool hasProjectGlobalZeroBasedAddress = false;
-    bool projectGlobalZeroBasedAddress = false;
-    bool hasProjectGlobalHexView = false;
-    bool projectGlobalHexView = false;
-    bool viewPreparedForForms = !replace;
-    QStringList primaryTabOrder;
-    QStringList secondaryTabOrder;
-
-    AddressDescriptionMap globalDescriptionMap;
-    bool hasGlobalDescriptionMap = false;
-    AddressTimestampMap globalTimestampMap;
-    bool hasGlobalTimestampMap = false;
-    struct PendingValue {
-        quint8 deviceId;
-        QModbusDataUnit::RegisterType type;
-        quint16 address;
-        quint16 value;
-    };
-    struct PendingSimulation {
-        quint8 deviceId;
-        QModbusDataUnit::RegisterType type;
-        quint16 address;
-        ModbusSimulationParams params;
-    };
-    QList<PendingValue> pendingValues;
-    QList<PendingSimulation> pendingSimulations;
-
-    QXmlStreamReader xml(&file);
-    while (xml.readNextStartElement()) {
-        if (xml.name() == QLatin1String("OpenModSim")) {
-            while (xml.readNextStartElement()) {
-                if (xml.name() == QLatin1String("AppPreferences")) {
-                    // Backward compatibility: ignore legacy app-preferences block in project files.
-                    xml.skipCurrentElement();
-                }
-                else if (xml.name() == QLatin1String("ViewSettings")) {
-                    const auto attrs = xml.attributes();
-                    viewMode = (QMdiArea::ViewMode)qBound(0, attrs.value("ViewMode").toInt(), 1);
-                    splitView = attrs.value("SplitView").toInt() != 0;
-                    activePrimaryWin = attrs.value("ActivePrimaryWindow").toString();
-                    activeSecWin = attrs.value("ActiveSecondaryWindow").toString();
-                    activePanel = attrs.value("ActivePanel").toString();
-                    if (attrs.hasAttribute("GlobalZeroBasedAddress")) {
-                        hasProjectGlobalZeroBasedAddress = true;
-                        projectGlobalZeroBasedAddress = attrs.value("GlobalZeroBasedAddress").toInt() != 0;
-                    }
-                    if (attrs.hasAttribute("GlobalHexView")) {
-                        hasProjectGlobalHexView = true;
-                        projectGlobalHexView = attrs.value("GlobalHexView").toInt() != 0;
-                    }
-                    xml.skipCurrentElement();
-                }
-                else if (xml.name() == QLatin1String("ModbusDefinitions")) {
-                    xml >> defs;
-                }
-                else if (xml.name() == QLatin1String("Connections")) {
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("ConnectionDetails")) {
-                            ConnectionDetails cd;
-                            xml >> cd;
-                            conns.append(cd);
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else if (xml.name() == QLatin1String("Forms")) {
-                    if(!viewPreparedForForms) {
-                        _mainWindow->setViewMode(viewMode);
-                        if(_mdiArea->viewMode() == QMdiArea::TabbedView && _mdiArea->isSplitView() != splitView)
-                            _mdiArea->setSplitViewEnabled(splitView);
-                        viewPreparedForForms = true;
-                    }
-                    while (xml.readNextStartElement()) {
-                        ProjectFormKind kind;
-                        bool isForm = true;
-                        if (xml.name() == QLatin1String("FormDataView")) {
-                            kind = ProjectFormKind::Data;
-                        } else if (LegacyProjectLoader::isDataViewElement(xml.name().toString())) {
-                            kind = ProjectFormKind::Data;
-                            _mainWindow->setViewMode(viewMode = QMdiArea::SubWindowView);
-                        } else if (xml.name() == QLatin1String("FormTrafficView")) {
-                            kind = ProjectFormKind::Traffic;
-                        } else if (xml.name() == QLatin1String("FormScriptView")) {
-                            kind = ProjectFormKind::Script;
-                        } else if (xml.name() == QLatin1String("FormDataMapView")) {
-                            kind = ProjectFormKind::DataMap;
-                        } else {
-                            isForm = false;
-                        }
-
-                        if (isForm) {
-                            MdiArea* targetArea = _mdiArea->primaryArea();
-                            const auto attrs = xml.attributes();
-                            const QString panel = attrs.value("Panel").toString();
-                            const QString savedTitle = attrs.value("Title").toString();
-                            const bool isClosed = attrs.value("Closed").toString() == "1";
-                            const bool isAutoClone = attrs.value("AutoClone").toString() == "1";
-                            const bool onRightPanel = splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0;
-                            if(onRightPanel) {
-                                if(auto* secondary = secondaryArea())
-                                    targetArea = secondary;
-                            }
-
-                            QWidget* frm = nullptr;
-                            if(onRightPanel && isAutoClone && targetArea == secondaryArea()) {
-                                QWidget* sourceForm = nullptr;
-                                if(auto* primary = _mdiArea->primaryArea()) {
-                                    for(auto* wnd : primary->localSubWindowList()) {
-                                        auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-                                        bool okCandidate = false;
-                                        if(!candidate || candidate->property(kSplitAutoCloneProperty).toBool())
-                                            continue;
-                                        if(projectFormKindFromWidget(candidate, &okCandidate) == kind &&
-                                           okCandidate &&
-                                           candidate->windowTitle() == savedTitle) {
-                                            sourceForm = candidate;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if(sourceForm)
-                                    frm = createCloneOnArea(sourceForm, targetArea);
-                            }
-
-                            if(!frm)
-                                frm = createMdiChildOnArea(kind, targetArea, !isAutoClone);
-
-                            if (frm) {
-                                loadXmlOfForm(*this, frm, xml);
-                                if (isClosed) {
-                                    // Park closed forms directly without emitting close/activation churn.
-                                    auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
-                                    markFormClosed(frm);
-                                    if (wnd) {
-                                        targetArea->removeSubWindow(wnd);
-                                        wnd->deleteLater();
-                                    }
-                                } else {
-                                    frm->show();
-                                }
-                            } else {
-                                xml.skipCurrentElement();
-                            }
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else if (xml.name() == QLatin1String("TabOrder")) {
-                    const auto attrs = xml.attributes();
-                    const QString panel = attrs.value("Panel").toString();
-                    QStringList* targetOrder = &primaryTabOrder;
-                    if(panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0)
-                        targetOrder = &secondaryTabOrder;
-
-                    while(xml.readNextStartElement()) {
-                        if(xml.name() == QLatin1String("TabRef"))
-                            targetOrder->append(xml.attributes().value("title").toString());
-                        xml.skipCurrentElement();
-                    }
-                }
-                else if (xml.name() == QLatin1String("Scripts")) {
-                    xml.skipCurrentElement();
-                }
-                else if (xml.name() == QLatin1String("AddressSpace")) {
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("AddressDescriptionMap")) {
-                            hasGlobalDescriptionMap = true;
-                            xml >> globalDescriptionMap;
-                        }
-                        else if (xml.name() == QLatin1String("AddressTimestampMap")) {
-                            hasGlobalTimestampMap = true;
-                            xml >> globalTimestampMap;
-                        }
-                        else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("Simulation")) {
-                                    const auto attrs = xml.attributes();
-                                    bool ok;
-                                    const quint8 deviceId = static_cast<quint8>(attrs.value("DeviceId").toUShort(&ok));
-                                    if (ok) {
-                                        const auto type = static_cast<QModbusDataUnit::RegisterType>(attrs.value("Type").toInt(&ok));
-                                        if (ok) {
-                                            const quint16 addr = attrs.value("Address").toUShort(&ok);
-                                            if (ok && xml.readNextStartElement()) {
-                                                ModbusSimulationParams params;
-                                                xml >> params;
-                                                pendingSimulations.append({deviceId, type, addr, params});
-                                            }
-                                        }
-                                    }
-                                    xml.skipCurrentElement();
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
-                            }
-                        }
-                        else if (xml.name() == QLatin1String("ModbusDataValues")) {
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("Value")) {
-                                    const auto attrs = xml.attributes();
-                                    bool ok;
-                                    const quint8 deviceId = static_cast<quint8>(attrs.value("DeviceId").toUShort(&ok));
-                                    if (ok) {
-                                        const auto type = static_cast<QModbusDataUnit::RegisterType>(attrs.value("Type").toInt(&ok));
-                                        if (ok) {
-                                            const quint16 address = attrs.value("Address").toUShort(&ok);
-                                            if (ok) {
-                                                const quint16 value = xml.readElementText().toUShort(&ok);
-                                                if (ok) pendingValues.append({deviceId, type, address, value});
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                    xml.skipCurrentElement();
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
-                            }
-                        }
-                        else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else {
-                    xml.skipCurrentElement();
-                }
-            }
-        }
-        else if (LegacyProjectLoader::isDataViewElement(xml.name().toString())) {
-            _mainWindow->setViewMode(viewMode = QMdiArea::SubWindowView);
-            if (const auto frm = createMdiChild(ProjectFormKind::Data)) {
-                loadXmlOfForm(*this, frm, xml);
-                frm->show();
-            }
-        }
-        else {
-            xml.skipCurrentElement();
-        }
-    }
-
-    if(!viewPreparedForForms) {
-        _mainWindow->setViewMode(viewMode);
-        if(_mdiArea->viewMode() == QMdiArea::TabbedView && _mdiArea->isSplitView() != splitView)
-            _mdiArea->setSplitViewEnabled(splitView);
-    }
-
-    // Apply values from <AddressSpace> (requires forms to exist so _mbServer has unit maps)
-    for (const auto& pv : std::as_const(pendingValues)) {
-        QModbusDataUnit unit(pv.type, pv.address, 1);
-        unit.setValue(0, pv.value);
-        _mbServer.setData(pv.deviceId, unit, WriteSource::ProjectLoad);
-    }
-
-    // Apply simulations after initial values are restored.
-    for (const auto& ps : std::as_const(pendingSimulations))
-        _dataSimulator->startSimulation(ps.deviceId, ps.type, ps.address, ps.params);
-
-    // Prefer global AddressSpace metadata when present; otherwise keep legacy per-form values.
-    if (hasGlobalDescriptionMap)
-        _mbServer.setDescriptionMap(globalDescriptionMap, WriteSource::ProjectLoad, replace);
-    if (hasGlobalTimestampMap)
-        _mbServer.setTimestampMap(globalTimestampMap, replace);
+    ProjectSerializer serializer(*this, _mbServer, _dataSimulator, _mdiArea, _mainWindow);
+    const auto result = serializer.load(file, replace);
 
     if (!replace) {
         // Ignore global settings part of merging project
         return;
     }
 
-    _mainWindow->applyConnections(defs, conns);
+    _mainWindow->applyConnections(result.Definitions, result.Connections);
     syncAutoRequestMap(_mbServer.getModbusDefinitions());
 
     auto& prefs = AppPreferences::instance();
-    if (hasProjectGlobalZeroBasedAddress)
-        prefs.setGlobalAddressBase(projectGlobalZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    if (hasProjectGlobalHexView)
-        prefs.setGlobalHexView(projectGlobalHexView);
+    if (result.HasGlobalZeroBasedAddress)
+        prefs.setGlobalAddressBase(result.GlobalZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    if (result.HasGlobalHexView)
+        prefs.setGlobalHexView(result.GlobalHexView);
 
     if(auto* primary = _mdiArea->primaryArea())
-        applyTabOrderToArea(primary, primaryTabOrder);
-    if(splitView)
+        applyTabOrderToArea(primary, result.PrimaryTabOrder);
+    if(result.SplitView)
         if(auto* secondary = secondaryArea())
-            applyTabOrderToArea(secondary, secondaryTabOrder);
+            applyTabOrderToArea(secondary, result.SecondaryTabOrder);
 
-    _pendingActivePrimaryWin = activePrimaryWin;
-    _pendingActiveSecWin = splitView ? activeSecWin : QString();
-    _pendingActivePanel = activePanel;
+    _pendingActivePrimaryWin = result.ActivePrimaryWindow;
+    _pendingActiveSecWin = result.SplitView ? result.ActiveSecondaryWindow : QString();
+    _pendingActivePanel = result.ActivePanel;
 
     if(_mdiArea->isVisible())
         restoreActiveWindows();
@@ -2151,181 +1668,8 @@ bool AppProject::saveProject(const QString& filename)
     setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _projectFilename = absoluteFilename;
 
-    QXmlStreamWriter w(&file);
-    w.setAutoFormatting(true);
-
-    w.writeStartDocument();
-    w.writeStartElement("OpenModSim");
-    w.writeAttribute("Version", qApp->applicationVersion());
-
-    w << _mbServer.getModbusDefinitions();
-
-    w.writeStartElement("Connections");
-    for(auto&& cd : _mbServer.connections()) {
-        w << cd;
-    }
-    w.writeEndElement(); // Connections
-
-    {
-        ProjectAddressSpaceRanges projectRanges;
-        for (auto* widget : allProjectForms()) {
-            if (!widget || widget->property(kSplitAutoCloneProperty).toBool())
-                continue;
-
-            if (auto* dataView = qobject_cast<FormDataView*>(widget)) {
-                const auto dd = dataView->displayDefinition();
-                const auto startAddress = static_cast<quint16>(dd.PointAddress - (dataView->zeroBasedAddress() ? 0 : 1));
-                projectRanges.append({
-                    dd.DeviceId,
-                    dd.PointType,
-                    startAddress,
-                    dd.Length
-                });
-            } else if (auto* dataMap = qobject_cast<FormDataMapView*>(widget)) {
-                const auto dataMapRanges = dataMap->addressSpaceRanges();
-                for (const auto& range : dataMapRanges)
-                    projectRanges.append(range);
-            }
-        }
-
-        const auto allDescriptionMap = _mbServer.descriptionMap();
-        const auto allTimestampMap = _mbServer.timestampMap();
-        const auto allSimulationMap = _dataSimulator->simulationMap();
-        if (AppPreferences::instance().saveAllModifiedRegisters()) {
-            const auto modifiedRanges = projectAddressSpaceModifiedRanges(allDescriptionMap, allTimestampMap, allSimulationMap);
-            for (const auto& range : modifiedRanges)
-                projectRanges.append(range);
-        }
-
-        AddressDescriptionMap projectDescriptionMap;
-        AddressTimestampMap projectTimestampMap;
-        ProjectAddressSpaceValues projectValues;
-        for (const auto& range : std::as_const(projectRanges)) {
-            appendProjectAddressSpaceMetadata(projectDescriptionMap, projectTimestampMap, _mbServer, range);
-            appendProjectAddressSpaceValues(projectValues, _mbServer, range);
-        }
-
-        const auto projectSimulationMap = filterProjectAddressSimulations(allSimulationMap, projectRanges);
-
-        w.writeStartElement("AddressSpace");
-
-        w << filterProjectAddressDescriptions(projectDescriptionMap, projectRanges);
-        w << filterProjectAddressTimestamps(projectTimestampMap, projectRanges);
-
-        {
-            w.writeStartElement("ModbusSimulationMap");
-            for (auto it = projectSimulationMap.constBegin(); it != projectSimulationMap.constEnd(); ++it) {
-                const auto& key = it.key();
-                const auto& params = it.value();
-                if (params.Mode != SimulationMode::Off && params.Mode != SimulationMode::Disabled) {
-                    w.writeStartElement("Simulation");
-                    w.writeAttribute("DeviceId", QString::number(key.DeviceId));
-                    w.writeAttribute("Type", QString::number(key.Type));
-                    w.writeAttribute("Address", QString::number(key.Address));
-                    w << params;
-                    w.writeEndElement(); // Simulation
-                }
-            }
-            w.writeEndElement(); // ModbusSimulationMap
-        }
-
-        {
-            const auto values = filterProjectAddressValues(projectValues, projectRanges);
-            w.writeStartElement("ModbusDataValues");
-            for (const auto& value : values) {
-                w.writeStartElement("Value");
-                w.writeAttribute("DeviceId", QString::number(value.Key.DeviceId));
-                w.writeAttribute("Type", QString::number(value.Key.Type));
-                w.writeAttribute("Address", QString::number(value.Key.Address));
-                w.writeCharacters(QString::number(value.Value));
-                w.writeEndElement(); // Value
-            }
-            w.writeEndElement(); // ModbusDataValues
-        }
-
-        w.writeEndElement(); // AddressSpace
-    }
-
-    w.writeStartElement("ViewSettings");
-    w.writeAttribute("ViewMode", QString::number(_mdiArea->viewMode()));
-    w.writeAttribute("SplitView", _mdiArea->isSplitView() ? "1" : "0");
-    w.writeAttribute("GlobalZeroBasedAddress", AppPreferences::instance().globalAddressBase() == AddressBase::Base0 ? "1" : "0");
-    w.writeAttribute("GlobalHexView", AppPreferences::instance().globalHexView() ? "1" : "0");
-    if (auto* activePanel = _mdiArea->activePanel()) {
-        if (activePanel == _mdiArea->primaryArea())
-            w.writeAttribute("ActivePanel", kPanelLeft);
-        else if (activePanel == secondaryArea())
-            w.writeAttribute("ActivePanel", kPanelRight);
-    }
-    if(auto primary = _mdiArea->primaryArea())
-        if(auto wnd = primary->activeSubWindow())
-            if(auto frm = wnd->widget())
-                w.writeAttribute("ActivePrimaryWindow", frm->windowTitle());
-    if(isSplitTabbedView())
-        if(auto secondary = secondaryArea())
-            if(auto wnd = secondary->activeSubWindow())
-                if(auto frm = wnd->widget())
-                    w.writeAttribute("ActiveSecondaryWindow", frm->windowTitle());
-    w.writeEndElement(); // ViewSettings
-
-    w.writeStartElement("Forms");
-    auto saveOpenFormsFromArea = [&](MdiArea* area, const char* panel, bool autoClonesOnly) {
-        if(!area)
-            return;
-
-        for(auto* wnd : area->localSubWindowList()) {
-            auto* widget = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-            if(!widget)
-                continue;
-
-            const bool isAutoClone = widget->property(kSplitAutoCloneProperty).toBool();
-            if(isAutoClone != autoClonesOnly)
-                continue;
-
-            widget->setProperty(kFormPanelProperty, QLatin1String(panel));
-            saveXmlOfForm(widget, w);
-            widget->setProperty(kFormPanelProperty, QVariant());
-        }
-    };
-    saveOpenFormsFromArea(_mdiArea->primaryArea(), kPanelLeft, false);
-    if(isSplitTabbedView()) {
-        saveOpenFormsFromArea(secondaryArea(), kPanelRight, false);
-        saveOpenFormsFromArea(secondaryArea(), kPanelRight, true);
-    }
-    // Also save forms that are closed (hidden in project tree)
-    const auto closed = _closedForms;
-    for (auto&& frm : closed) {
-        if (frm) {
-            frm->setProperty(kFormPanelProperty, QLatin1String(kPanelLeft));
-            frm->setProperty(kFormClosedProperty, true);
-            saveXmlOfForm(frm, w);
-            frm->setProperty(kFormPanelProperty, QVariant());
-            frm->setProperty(kFormClosedProperty, QVariant());
-        }
-    }
-    w.writeEndElement(); // Forms
-
-    auto writeTabOrder = [&](MdiArea* area, const char* panel) {
-        const auto order = tabTitlesForArea(area);
-        if(order.isEmpty())
-            return;
-        w.writeStartElement("TabOrder");
-        w.writeAttribute("Panel", panel);
-        for(const auto& title : order) {
-            w.writeStartElement("TabRef");
-            w.writeAttribute("title", title);
-            w.writeEndElement(); // TabRef
-        }
-        w.writeEndElement(); // TabOrder
-    };
-    writeTabOrder(_mdiArea->primaryArea(), kPanelLeft);
-    if(isSplitTabbedView())
-        writeTabOrder(secondaryArea(), kPanelRight);
-
-    w.writeEndElement(); // OpenModSim
-    w.writeEndDocument();
-
-    if (w.hasError()) {
+    ProjectSerializer serializer(*this, _mbServer, _dataSimulator, _mdiArea, _mainWindow);
+    if (!serializer.save(file)) {
         emit projectSaveFailed(_projectFilename, QObject::tr("Failed to write project XML."));
         return false;
     }

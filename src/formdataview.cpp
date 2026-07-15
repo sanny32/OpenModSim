@@ -682,9 +682,6 @@ ModbusSimulationMap2 FormDataView::simulationMap() const
 /// \param length
 /// \return
 ///
-///
-/// \brief FormDataView::serializeModbusDataUnit
-///
 QModbusDataUnit FormDataView::serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
 {
     QModbusDataUnit dataUnit;

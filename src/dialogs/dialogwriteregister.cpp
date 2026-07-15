@@ -189,9 +189,6 @@ DialogWriteRegister::~DialogWriteRegister()
 }
 
 ///
-/// rief DialogWriteRegister::changeEvent
-///
-///
 /// \brief DialogWriteRegister::changeEvent
 ///
 void DialogWriteRegister::changeEvent(QEvent* event)

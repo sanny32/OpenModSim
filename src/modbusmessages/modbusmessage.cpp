@@ -19,9 +19,6 @@
 /// \param request
 /// \return
 ///
-///
-/// \brief ModbusMessage::create
-///
 QSharedPointer<const ModbusMessage> ModbusMessage::create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
 {
     switch(pdu.functionCode())
@@ -110,9 +107,6 @@ QSharedPointer<const ModbusMessage> ModbusMessage::create(const QModbusPdu& pdu,
 /// \param timestamp
 /// \param request
 /// \return
-///
-///
-/// \brief ModbusMessage::create
 ///
 QSharedPointer<const ModbusMessage> ModbusMessage::create(const QByteArray& data, ProtocolType protocol,  const QDateTime& timestamp, bool request)
 {

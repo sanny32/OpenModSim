@@ -48,9 +48,6 @@ DialogPrintSettings::~DialogPrintSettings()
 }
 
 ///
-/// rief DialogPrintSettings::changeEvent
-///
-///
 /// \brief DialogPrintSettings::changeEvent
 ///
 void DialogPrintSettings::changeEvent(QEvent* event)

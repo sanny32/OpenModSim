@@ -117,9 +117,6 @@ DialogPreferences::~DialogPreferences()
 }
 
 ///
-/// rief DialogPreferences::changeEvent
-///
-///
 /// \brief DialogPreferences::changeEvent
 ///
 void DialogPreferences::changeEvent(QEvent* event)

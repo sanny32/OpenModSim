@@ -244,11 +244,6 @@ void FormTrafficView::closeEvent(QCloseEvent* event)
 }
 
 ///
-/// \brief FormTrafficView::mouseDoubleClickEvent
-/// \param event
-/// \return
-///
-///
 /// \brief FormTrafficView::displayDefinition
 /// \return
 ///

@@ -448,11 +448,11 @@
     </message>
     <message>
         <location filename="../../dialogs/dialogabout.ui" line="238"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="501"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="502"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="512"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="514"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="526"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="495"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="496"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="506"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="508"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="520"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
@@ -512,19 +512,19 @@
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="404"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="398"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="425"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="419"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="434"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="428"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
@@ -573,29 +573,29 @@
         <translation>Современная тема значков Qt Widgets.</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="430"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="424"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="458"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="452"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="492"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="486"/>
         <source>Checking...</source>
         <translation>Проверка...</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="502"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="496"/>
         <source>No updates available.</source>
         <translation>Обновлений нет.</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="515"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="509"/>
         <source>Failed to check for updates.
 
 %1</source>
@@ -604,12 +604,12 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="529"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="523"/>
         <source>New version available</source>
         <translation>Доступна новая версия</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="530"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="524"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -772,7 +772,7 @@ Open the download page?</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="336"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="333"/>
         <source>Random</source>
         <translation>Случайное</translation>
     </message>
@@ -797,65 +797,65 @@ Open the download page?</source>
         <translation>Предустановка регистров хранения (4x)</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="292"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="289"/>
         <source>Starting Address: </source>
         <translation>Начальный адрес: </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="292"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="289"/>
         <source>Ending Address: </source>
         <translation>Конечный адрес: </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="335"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="332"/>
         <source>Constant</source>
         <translation>Константа</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="337"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="334"/>
         <source>Increment</source>
         <translation>Инкремент</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="338"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="335"/>
         <source>Zero</source>
         <translation>Ноль</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="868"/>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="949"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="865"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="946"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="875"/>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="960"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="872"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="957"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="916"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="913"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="916"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="913"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="925"/>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="931"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="922"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="928"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="925"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="922"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="931"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="928"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
@@ -928,50 +928,50 @@ Open the download page?</source>
         <translation>Предустановка дискретных входов (1x)</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="181"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="178"/>
         <source>Starting Address: </source>
         <translation>Начальный адрес: </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="181"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="178"/>
         <source>Ending Address: </source>
         <translation>Конечный адрес: </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="267"/>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="341"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="264"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="338"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="274"/>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="352"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="271"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="349"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="308"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="305"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="308"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="305"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="317"/>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="323"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="314"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="320"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="317"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="314"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="323"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="320"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
@@ -1353,87 +1353,87 @@ Open the download page?</source>
         <translation>Альбомная</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="100"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="97"/>
         <source>Ready</source>
         <translation>Готов</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="103"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="100"/>
         <source>Printing</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="106"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="103"/>
         <source>Aborted</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="109"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="106"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="176"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="173"/>
         <source>Only One</source>
         <translation>Одиночная подача</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="180"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="177"/>
         <source>Lower</source>
         <translation>Нижняя</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="184"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="181"/>
         <source>Middle</source>
         <translation>Средняя</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="188"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="185"/>
         <source>Manual</source>
         <translation>Ручная</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="192"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="189"/>
         <source>Envelope</source>
         <translation>Конверт</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="196"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="193"/>
         <source>Envelope Manual</source>
         <translation>Ручная подача конверта</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="200"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="197"/>
         <source>Auto</source>
         <translation>Автоматический выбор</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="204"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="201"/>
         <source>Tractor</source>
         <translation>Трактор</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="208"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="205"/>
         <source>Small Format</source>
         <translation>Малый формат</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="212"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="209"/>
         <source>Large Format</source>
         <translation>Большой формат</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="216"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="213"/>
         <source>Large Capacity</source>
         <translation>Лоток большой ёмкости</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="220"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="217"/>
         <source>Cassette</source>
         <translation>Кассета</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogprintsettings.cpp" line="224"/>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="221"/>
         <source>Custom Source</source>
         <translation>Пользовательский</translation>
     </message>
@@ -1659,7 +1659,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="232"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="229"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: Выкл</translation>
     </message>
@@ -1679,8 +1679,8 @@ Open the download page?</source>
         <translation>Значение, (ANSI): </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="226"/>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="238"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="223"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="235"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: Вкл</translation>
     </message>
@@ -1719,13 +1719,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogwritestatusregister.ui" line="134"/>
-        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="111"/>
+        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="108"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: Выкл</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="105"/>
-        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="117"/>
+        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="102"/>
+        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="114"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: Вкл</translation>
     </message>
@@ -2182,74 +2182,74 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="735"/>
-        <location filename="../../formtrafficview.cpp" line="887"/>
+        <location filename="../../formtrafficview.cpp" line="730"/>
+        <location filename="../../formtrafficview.cpp" line="882"/>
         <source>Exceptions Only</source>
         <translation>Только исключения</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="522"/>
+        <location filename="../../formtrafficview.cpp" line="517"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="524"/>
+        <location filename="../../formtrafficview.cpp" line="519"/>
         <source>Modbus RTU over TCP/IP Srv %1:%2</source>
         <translation>Сервер Modbus RTU через TCP/IP %1:%2</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="527"/>
+        <location filename="../../formtrafficview.cpp" line="522"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="656"/>
+        <location filename="../../formtrafficview.cpp" line="651"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="663"/>
+        <location filename="../../formtrafficview.cpp" line="658"/>
         <source>Log exported successfully to file %1</source>
         <translation>Лог успешно экспортирован в файл %1</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="665"/>
+        <location filename="../../formtrafficview.cpp" line="660"/>
         <source>Export log error!</source>
         <translation>Ошибка экспорта лога!</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="698"/>
-        <location filename="../../formtrafficview.cpp" line="871"/>
+        <location filename="../../formtrafficview.cpp" line="693"/>
+        <location filename="../../formtrafficview.cpp" line="866"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="704"/>
-        <location filename="../../formtrafficview.cpp" line="875"/>
+        <location filename="../../formtrafficview.cpp" line="699"/>
+        <location filename="../../formtrafficview.cpp" line="870"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = все устройства</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="725"/>
-        <location filename="../../formtrafficview.cpp" line="882"/>
+        <location filename="../../formtrafficview.cpp" line="720"/>
+        <location filename="../../formtrafficview.cpp" line="877"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="736"/>
-        <location filename="../../formtrafficview.cpp" line="888"/>
+        <location filename="../../formtrafficview.cpp" line="731"/>
+        <location filename="../../formtrafficview.cpp" line="883"/>
         <source>Show only responses with Modbus exception</source>
         <translation>Показывать только ответы с исключением Modbus</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="743"/>
-        <location filename="../../formtrafficview.cpp" line="892"/>
+        <location filename="../../formtrafficview.cpp" line="738"/>
+        <location filename="../../formtrafficview.cpp" line="887"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="744"/>
-        <location filename="../../formtrafficview.cpp" line="893"/>
+        <location filename="../../formtrafficview.cpp" line="739"/>
+        <location filename="../../formtrafficview.cpp" line="888"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>Автоматически прокручивать к последней записи</translation>
     </message>
@@ -2257,22 +2257,22 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="97"/>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
-        <location filename="../../formtrafficview.cpp" line="546"/>
-        <location filename="../../formtrafficview.cpp" line="703"/>
-        <location filename="../../formtrafficview.cpp" line="728"/>
-        <location filename="../../formtrafficview.cpp" line="874"/>
+        <location filename="../../formtrafficview.cpp" line="541"/>
+        <location filename="../../formtrafficview.cpp" line="698"/>
+        <location filename="../../formtrafficview.cpp" line="723"/>
+        <location filename="../../formtrafficview.cpp" line="869"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="752"/>
-        <location filename="../../formtrafficview.cpp" line="897"/>
+        <location filename="../../formtrafficview.cpp" line="747"/>
+        <location filename="../../formtrafficview.cpp" line="892"/>
         <source>Rows:</source>
         <translation>Строк:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="713"/>
-        <location filename="../../formtrafficview.cpp" line="879"/>
+        <location filename="../../formtrafficview.cpp" line="708"/>
+        <location filename="../../formtrafficview.cpp" line="874"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>
@@ -2639,7 +2639,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="2019"/>
+        <location filename="../../mainwindow.cpp" line="1903"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2819,29 +2819,29 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1012"/>
+        <location filename="../../mainwindow.cpp" line="1013"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="677"/>
+        <location filename="../../mainwindow.cpp" line="301"/>
+        <location filename="../../mainwindow.cpp" line="678"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="303"/>
-        <location filename="../../mainwindow.cpp" line="2153"/>
+        <location filename="../../mainwindow.cpp" line="302"/>
+        <location filename="../../mainwindow.cpp" line="2037"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2165"/>
+        <location filename="../../mainwindow.cpp" line="2048"/>
         <source>Clear Recent Projects</source>
         <translation>Очистить недавние проекты</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2166"/>
+        <location filename="../../mainwindow.cpp" line="2049"/>
         <source>Clear the list of recent projects?</source>
         <translation>Очистить список недавних проектов?</translation>
     </message>
@@ -2856,7 +2856,7 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="803"/>
+        <location filename="../../mainwindow.cpp" line="804"/>
         <source>Would you like to combine the file(s) with the project?
 
 The global settings part of the merging file(s) will be ignored.
@@ -2867,26 +2867,26 @@ Please verify the merge result carefully.</source>
 Пожалуйста, внимательно проверьте результат объединения.</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1010"/>
-        <location filename="../../mainwindow.cpp" line="2048"/>
+        <location filename="../../mainwindow.cpp" line="1011"/>
+        <location filename="../../mainwindow.cpp" line="1932"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1011"/>
+        <location filename="../../mainwindow.cpp" line="1012"/>
         <source>Project 1.x files (*.xml)</source>
         <translation>Файлы проектов 1.x (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1667"/>
-        <location filename="../../mainwindow.cpp" line="2074"/>
+        <location filename="../../mainwindow.cpp" line="1551"/>
+        <location filename="../../mainwindow.cpp" line="1958"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
-        <location filename="../../mainwindow.cpp" line="680"/>
-        <location filename="../../mainwindow.cpp" line="1852"/>
+        <location filename="../../mainwindow.cpp" line="681"/>
+        <location filename="../../mainwindow.cpp" line="1736"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3191,7 +3191,7 @@ Please verify the merge result carefully.</source>
         <translation>Форма переименована: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1389"/>
+        <location filename="../../mainwindow.cpp" line="1390"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3213,12 +3213,12 @@ Please verify the merge result carefully.</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2020"/>
+        <location filename="../../mainwindow.cpp" line="1904"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2141"/>
+        <location filename="../../mainwindow.cpp" line="2025"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3228,7 +3228,7 @@ Please verify the merge result carefully.</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1347"/>
+        <location filename="../../mainwindow.cpp" line="1348"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3613,12 +3613,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="999"/>
+        <location filename="../../modbusmultiserver.cpp" line="1000"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1601"/>
+        <location filename="../../modbusmultiserver.cpp" line="1528"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -3670,67 +3670,67 @@ Please verify the merge result carefully.</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1337"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1332"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1346"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1346"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1349"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1344"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1358"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1353"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1370"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1365"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1371"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1366"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1372"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1367"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1373"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1368"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1374"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1369"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1375"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1370"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1376"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1371"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1452"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1447"/>
         <source>Zoom: %1%</source>
         <translation>Масштаб: %1%</translation>
     </message>
@@ -3982,7 +3982,7 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="2329"/>
+        <location filename="../../appproject.cpp" line="1673"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>

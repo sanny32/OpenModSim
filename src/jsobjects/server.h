@@ -163,6 +163,8 @@ private:
 
     static bool runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, int deviceId, QModbusResponse& response);
 
+    quint16 toServerAddress(quint16 address) const;
+
     Address::Base _addressBase;
     const ByteOrder* _byteOrder;
     ModbusMultiServer* _mbMultiServer;

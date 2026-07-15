@@ -43,9 +43,6 @@ DialogCoilSimulation::~DialogCoilSimulation()
 }
 
 ///
-/// rief DialogCoilSimulation::changeEvent
-///
-///
 /// \brief DialogCoilSimulation::changeEvent
 ///
 void DialogCoilSimulation::changeEvent(QEvent* event)

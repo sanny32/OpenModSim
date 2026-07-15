@@ -21,6 +21,7 @@ private slots:
     void uint16RoundTrip();
     void int32RoundTrip();
     void uint32WrapsInt32();
+    void uint64AboveSignedMaxIsUnsigned();
     void floatRoundTrip();
     void int64RoundTrip();
     void doubleRoundTrip();
@@ -96,6 +97,18 @@ void TestNumericUtils::uint32WrapsInt32()
     quint16 lo = 0, hi = 0;
     breakUInt32(0xFFFFFFFFu, lo, hi, ByteOrder::Direct);
     QCOMPARE(makeUInt32(lo, hi, ByteOrder::Direct), quint32(0xFFFFFFFFu));
+}
+
+void TestNumericUtils::uint64AboveSignedMaxIsUnsigned()
+{
+    quint16 r[4] = {0, 0, 0, 0};
+    breakUInt64(Q_UINT64_C(0xFEDCBA9876543210), r[0], r[1], r[2], r[3], ByteOrder::Direct);
+    QCOMPARE(makeUInt64(r[0], r[1], r[2], r[3], ByteOrder::Direct), Q_UINT64_C(0xFEDCBA9876543210));
+
+    const QVector<quint16> regs{r[0], r[1], r[2], r[3]};
+    const auto v = makeValue(regs, DataType::UInt64, RegisterOrder::LSRF, ByteOrder::Direct);
+    QCOMPARE(v.userType(), qMetaTypeId<quint64>());
+    QCOMPARE(v.toULongLong(), Q_UINT64_C(0xFEDCBA9876543210));
 }
 
 void TestNumericUtils::floatRoundTrip()

@@ -31,6 +31,7 @@ class FormDataView;
 class FormTrafficView;
 class FormScriptView;
 class FormDataMapView;
+class RegisterWriteController;
 class QMenu;
 class QAction;
 class QComboBox;
@@ -157,24 +158,6 @@ private:
     FormScriptView* currentScriptForm() const;
     FormDataMapView* currentDataMapForm() const;
     QWidget* currentDataOrTrafficForm() const;
-    void forceCoils(QModbusDataUnit::RegisterType type);
-    void presetRegs(QModbusDataUnit::RegisterType type);
-    struct ForceRangeParams
-    {
-        quint32 DeviceId = 1;
-        quint16 Address = 1;
-        quint16 Length = 100;
-        bool ZeroBasedAddress = false;
-        AddressSpace AddrSpace = AddressSpace::Addr6Digits;
-        bool LeadingZeros = true;
-    };
-    bool prepareWriteParams(QModbusDataUnit::RegisterType type,
-                            FormDataView*& outFrm,
-                            DataViewDefinitions& outDd,
-                            int& outLength,
-                            ModbusWriteParams& outParams);
-    void rememberForceRangeParams(QModbusDataUnit::RegisterType type, const ModbusWriteParams& params);
-
     bool loadAppSettings(const QString& filename);
     void saveAppSettings();
     bool promptSaveProjectAs(const QString& initialPath = QString());
@@ -220,7 +203,7 @@ private:
     AddressBaseComboBox* _globalAddressBaseCombo = nullptr;
     QWidget*             _globalAddressBaseWidget = nullptr;
     QLabel*              _globalAddressBaseLabel = nullptr;
-    QHash<QModbusDataUnit::RegisterType, ForceRangeParams> _forceRangeParams;
+    RegisterWriteController* _registerWriteController = nullptr;
 
     AppProject* _project = nullptr;
 };
