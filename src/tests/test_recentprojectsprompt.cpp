@@ -3,17 +3,7 @@
 
 #include <QtTest>
 
-#include <QMessageBox>
-#include <QPushButton>
-#include <QTimer>
-
 #include "recentprojectsprompt.h"
-
-namespace {
-
-constexpr int DialogInteractionDelayMs = 50;
-
-}
 
 class TestRecentProjectsPrompt : public QObject
 {
@@ -27,18 +17,21 @@ private slots:
 void TestRecentProjectsPrompt::rejectsClearByDefault()
 {
     bool promptIsSafe = false;
-    QTimer::singleShot(DialogInteractionDelayMs, this, [&promptIsSafe]() {
-        auto* prompt = qobject_cast<QMessageBox*>(QApplication::activeModalWidget());
-        promptIsSafe = prompt
-            && prompt->standardButton(prompt->defaultButton()) == QMessageBox::No
-            && prompt->standardButtons() == (QMessageBox::Yes | QMessageBox::No);
-        if(prompt)
-            prompt->button(QMessageBox::No)->click();
-    });
-
     const bool confirmed = RecentProjectsPrompt::confirmClear(nullptr,
                                                                QStringLiteral("Clear Recent Projects"),
-                                                               QStringLiteral("Clear the list of recent projects?"));
+                                                               QStringLiteral("Clear the list of recent projects?"),
+                                                               [&promptIsSafe](QWidget* parent,
+                                                                               const QString& title,
+                                                                               const QString& text,
+                                                                               QMessageBox::StandardButtons buttons,
+                                                                               QMessageBox::StandardButton defaultButton) {
+        promptIsSafe = !parent
+            && title == QStringLiteral("Clear Recent Projects")
+            && text == QStringLiteral("Clear the list of recent projects?")
+            && buttons == (QMessageBox::Yes | QMessageBox::No)
+            && defaultButton == QMessageBox::No;
+        return QMessageBox::No;
+    });
 
     QVERIFY(promptIsSafe);
     QVERIFY(!confirmed);
@@ -46,17 +39,16 @@ void TestRecentProjectsPrompt::rejectsClearByDefault()
 
 void TestRecentProjectsPrompt::acceptsConfirmedClear()
 {
-    QTimer::singleShot(DialogInteractionDelayMs, this, []() {
-        auto* prompt = qobject_cast<QMessageBox*>(QApplication::activeModalWidget());
-        if(prompt)
-            prompt->button(QMessageBox::Yes)->click();
-    });
-
     QVERIFY(RecentProjectsPrompt::confirmClear(nullptr,
                                                 QStringLiteral("Clear Recent Projects"),
-                                                QStringLiteral("Clear the list of recent projects?")));
+                                                QStringLiteral("Clear the list of recent projects?"),
+                                                [](QWidget*, const QString&, const QString&,
+                                                   QMessageBox::StandardButtons,
+                                                   QMessageBox::StandardButton) {
+        return QMessageBox::Yes;
+    }));
 }
 
-QTEST_MAIN(TestRecentProjectsPrompt)
+QTEST_APPLESS_MAIN(TestRecentProjectsPrompt)
 
 #include "test_recentprojectsprompt.moc"

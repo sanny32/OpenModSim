@@ -22,11 +22,30 @@ namespace RecentProjectsPrompt
 ///
 bool confirmClear(QWidget* parent, const QString& title, const QString& text)
 {
-    const auto answer = QMessageBox::question(parent,
-                                              title,
-                                              text,
-                                              QMessageBox::Yes | QMessageBox::No,
-                                              QMessageBox::No);
+    return confirmClear(parent, title, text,
+                        [](QWidget* promptParent, const QString& promptTitle,
+                           const QString& promptText, QMessageBox::StandardButtons buttons,
+                           QMessageBox::StandardButton defaultButton) {
+        return QMessageBox::question(promptParent, promptTitle, promptText, buttons, defaultButton);
+    });
+}
+
+///
+/// \brief Asks whether the recent-projects list should be cleared using the supplied handler.
+/// \param parent Parent widget for the modal prompt.
+/// \param title Prompt window title.
+/// \param text Prompt message.
+/// \param question Handler used to ask the confirmation question.
+/// \return True only when the handler returns Yes.
+///
+bool confirmClear(QWidget* parent, const QString& title, const QString& text,
+                  const QuestionHandler& question)
+{
+    const auto answer = question(parent,
+                                 title,
+                                 text,
+                                 QMessageBox::Yes | QMessageBox::No,
+                                 QMessageBox::No);
     return answer == QMessageBox::Yes;
 }
 
