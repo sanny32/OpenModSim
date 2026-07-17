@@ -29,6 +29,13 @@ jobs:
       RPM_PACKAGE_PREFIX: "qt6-omodsim"
       APP_INSTALL_PREFIX: "/opt/OpenModSim"
 
+    outputs:
+      package-file: ${{ steps.package.outputs.file }}
+      artifact-name: ${{ steps.package.outputs.artifact }}
+      package-name: ${{ steps.package.outputs.package-name }}
+      app-root: ${{ steps.package.outputs.app-root }}
+      launcher: ${{ steps.package.outputs.launcher }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -44,6 +51,17 @@ jobs:
           package-prefix: ${{ env.RPM_PACKAGE_PREFIX }}
           package-name-env: RPM_PACKAGE_NAME
           dev-suffix-style: tilde
+
+      - name: Export package info
+        id: package
+        run: |
+          {
+            echo "file=${RPM_PACKAGE_NAME}-${APP_VERSION}-1.x86_64.rpm"
+            echo "artifact=${RPM_PACKAGE_NAME}-${APP_VERSION}-1.x86_64"
+            echo "package-name=${RPM_PACKAGE_NAME}"
+            echo "app-root=${APP_INSTALL_PREFIX}${VERSION_MAJOR}"
+            echo "launcher=/usr/bin/omodsim${VERSION_MAJOR}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         run: |
@@ -222,4 +240,37 @@ jobs:
           files: |
             ${{ env.BUILD_RPM_DIR }}/RPMS/x86_64/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-1.x86_64.rpm
             ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
+
+  verify-omodsim:
+    name: Verify rpm package installation
+    runs-on: ubuntu-latest
+    needs: build-omodsim
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Download RPM package
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build-omodsim.outputs.artifact-name }}
+
+      - name: Verify the package installs
+        uses: ./.github/actions/verify-linux-package
+        with:
+          package: ${{ needs.build-omodsim.outputs.package-file }}
+          package-name: ${{ needs.build-omodsim.outputs.package-name }}
+          app-root: ${{ needs.build-omodsim.outputs.app-root }}
+          launcher: ${{ needs.build-omodsim.outputs.launcher }}
+          package-manager: rpm
+          images: >-
+            fedora:43
+            fedora:44
+            rockylinux/rockylinux:10.1
+            registry.red-soft.ru/redos8c/ubi:latest
+            opensuse/leap:15.6
+            alt:p11
       

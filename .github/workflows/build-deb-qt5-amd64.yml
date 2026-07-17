@@ -29,6 +29,13 @@ jobs:
       DEB_PACKAGE_PREFIX: "qt5-omodsim"
       APP_INSTALL_PREFIX: "/opt/OpenModSim"
 
+    outputs:
+      package-file: ${{ steps.package.outputs.file }}
+      artifact-name: ${{ steps.package.outputs.artifact }}
+      package-name: ${{ steps.package.outputs.package-name }}
+      app-root: ${{ steps.package.outputs.app-root }}
+      launcher: ${{ steps.package.outputs.launcher }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -44,6 +51,17 @@ jobs:
           package-prefix: ${{ env.DEB_PACKAGE_PREFIX }}
           package-name-env: DEB_PACKAGE_NAME
           dev-suffix-style: tilde
+
+      - name: Export package info
+        id: package
+        run: |
+          {
+            echo "file=${DEB_PACKAGE_NAME}_${APP_VERSION}-1_amd64.deb"
+            echo "artifact=${DEB_PACKAGE_NAME}_${APP_VERSION}-1_amd64"
+            echo "package-name=${DEB_PACKAGE_NAME}"
+            echo "app-root=${APP_INSTALL_PREFIX}${VERSION_MAJOR}"
+            echo "launcher=/usr/bin/omodsim${VERSION_MAJOR}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         run: |
@@ -216,4 +234,37 @@ jobs:
           app-version: ${{ env.APP_VERSION }}
           files: |
             ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-1_amd64.deb
+
+  verify-omodsim:
+    name: Verify deb package installation
+    runs-on: ubuntu-latest
+    needs: build-omodsim
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Download DEB package
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build-omodsim.outputs.artifact-name }}
+
+      - name: Verify the package installs
+        uses: ./.github/actions/verify-linux-package
+        with:
+          package: ${{ needs.build-omodsim.outputs.package-file }}
+          package-name: ${{ needs.build-omodsim.outputs.package-name }}
+          app-root: ${{ needs.build-omodsim.outputs.app-root }}
+          launcher: ${{ needs.build-omodsim.outputs.launcher }}
+          package-manager: deb
+          images: >-
+            debian:11
+            debian:12
+            ubuntu:22.04
+            ubuntu:24.04
+            registry.astralinux.ru/astra/ubi17:latest
+            registry.astralinux.ru/astra/ubi18:latest
 

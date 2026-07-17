@@ -118,8 +118,16 @@ runs:
             ;;
         esac
 
+        # Name dev snapshots after the commit, e.g. 2.4~dev.g1a2b3c4.
+        # Container jobs check out without git, fall back to the workflow sha.
+        if git rev-parse --short HEAD > /dev/null 2>&1; then
+          sha=$(git rev-parse --short HEAD)
+        else
+          sha=${GITHUB_SHA::7}
+        fi
+
         if [ "$is_dev_build" = true ]; then
-          app_version="${major_version}.${minor_version}${dev_separator}dev"
+          app_version="${major_version}.${minor_version}${dev_separator}dev.g${sha}"
         else
           app_version="$full_version"
           if [ "$prerelease_enabled" = true ]; then
