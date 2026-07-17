@@ -10,7 +10,7 @@
 #define PROJECTFORMXML_H
 
 #include <QStringList>
-#include "appproject.h"
+#include "projectformkind.h"
 
 class QWidget;
 class QXmlStreamReader;

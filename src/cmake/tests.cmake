@@ -95,4 +95,54 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)
     omodsim_add_test(omodsim_tests_modbustransports      test_modbustransports.cpp)
+
+    set(omodsim_app_test_sources ${SOURCES})
+    list(REMOVE_ITEM omodsim_app_test_sources main.cpp)
+    add_executable(omodsim_tests_appproject
+        tests/test_appproject.cpp
+        resources.qrc
+        ${omodsim_app_test_sources}
+        ${HEADERS}
+        ${UI_FILES}
+    )
+    target_include_directories(omodsim_tests_appproject PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/controls
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles
+        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
+        ${CMAKE_CURRENT_SOURCE_DIR}/jsobjects
+        ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
+    )
+    target_precompile_headers(omodsim_tests_appproject PRIVATE pch.h)
+    target_link_libraries(omodsim_tests_appproject PRIVATE
+        Qt::Test
+        Qt::Widgets
+        Qt::Network
+        Qt::Xml
+        Qt::PrintSupport
+        Qt::SerialBus
+        Qt::SerialPort
+        Qt::Qml
+        Qt::Help
+        Qt::Svg
+    )
+    if(Qt6_FOUND)
+        target_link_libraries(omodsim_tests_appproject PRIVATE Qt::Core5Compat)
+    endif()
+    target_compile_definitions(omodsim_tests_appproject PRIVATE
+        APP_NAME="Open ModSim Test"
+        APP_PRODUCT_NAME="Open ModSim"
+        APP_DESCRIPTION="Open ModSim tests"
+        APP_VERSION_MAJOR="2"
+        APP_VERSION_MINOR="0"
+        APP_VERSION_PATCH="0"
+        APP_VERSION="2.0.0-test"
+        BUILD_YEAR="2026"
+    )
+    if(MSVC)
+        target_compile_options(omodsim_tests_appproject PRIVATE /utf-8)
+    endif()
+    set_target_properties(omodsim_tests_appproject PROPERTIES FOLDER "Tests")
+    add_dependencies(omodsim_tests omodsim_tests_appproject)
+    add_test(NAME omodsim_tests_appproject COMMAND omodsim_tests_appproject)
 endfunction()

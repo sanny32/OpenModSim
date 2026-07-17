@@ -31,6 +31,7 @@
 #include "formdatamapview.h"
 #include "applogoutput.h"
 #include "applogger.h"
+#include "projectformmetadata.h"
 #include "mainwindow.h"
 #include "themedicons.h"
 #include "ui_mainwindow.h"
@@ -38,7 +39,6 @@
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
 namespace {
-constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kNewFormKindKey = "NewFormKind";
 constexpr const char* kRecentProjectsKey = "RecentProjects";
 constexpr const char* kLastProjectPathKey = "LastProjectPath";
@@ -328,6 +328,13 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 
     _project = new AppProject(ui->mdiArea, _mbMultiServer, _dataSimulator,
                                _projectTree, this, this);
+    connect(_project, &AppProject::modified, this, &MainWindow::markModified);
+    connect(_project, &AppProject::helpStateUpdateRequested,
+            this, &MainWindow::updateHelpWidgetState);
+    connect(_project, &AppProject::helpRequested, this, &MainWindow::showHelpContext);
+    connect(_project, &AppProject::consoleMessage, this, &MainWindow::appendConsoleMessage);
+    connect(_project, &AppProject::outputConsoleRequested, this, &MainWindow::showOutputConsole);
+    connect(_project, &AppProject::formActivationRequested, this, &MainWindow::windowActivate);
 
     _registerWriteController = new RegisterWriteController(_mbMultiServer, this);
 
@@ -660,7 +667,7 @@ void MainWindow::deleteAllForms(ProjectFormType type)
 {
     const auto forms = _project->forms(static_cast<ProjectFormKind>(type));
     for (auto* form : forms) {
-        if (form && !form->property("DeleteLocked").toBool())
+        if (form && !isFormDeletionLocked(form))
             _project->deleteForm(form);
     }
 }
@@ -705,44 +712,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         event->ignore();
     }
-}
-
-///
-/// \brief MainWindow::eventFilter
-/// \param obj
-/// \param e
-/// \return
-///
-bool MainWindow::eventFilter(QObject* obj, QEvent* e)
-{
-    switch (e->type())
-    {
-        case QEvent::Close:
-            if(auto wnd = qobject_cast<QMdiSubWindow*>(obj))
-            {
-                auto* frm = wnd->widget();
-                if (frm && !frm->property(kSplitAutoCloneProperty).toBool()) {
-                    // Primary form: reparent before subwindow is destroyed so frm survives
-                    _project->markFormClosed(frm);
-                    markModified();
-                }
-            }
-        break;
-        case QEvent::Move:
-            if(auto wnd = qobject_cast<const QMdiSubWindow*>(obj))
-            {
-                auto* widget = wnd->widget();
-                if(!widget || wnd->isMinimized() || wnd->isMaximized())
-                    break;
-
-                if (auto* frm = qobject_cast<FormTrafficView*>(widget))
-                    frm->setProperty("ParentGeometry", wnd->geometry());
-            }
-        break;
-        default:
-            qt_noop();
-    }
-    return QObject::eventFilter(obj, e);
 }
 
 ///
@@ -1484,6 +1453,10 @@ QWidget* MainWindow::currentDataOrTrafficForm() const
 ///
 bool MainWindow::loadProject(const QString& filename, bool replace)
 {
+    const auto validation = _project->validateProject(filename);
+    if (!validation.Success)
+        return false;
+
     if (replace) {
         if (!closeProject()) {
             // User canceled
@@ -1492,7 +1465,9 @@ bool MainWindow::loadProject(const QString& filename, bool replace)
         AppLogger::clear();
     }
 
-    _project->loadProject(filename);
+    const auto loadResult = _project->loadProject(filename);
+    if (!loadResult.Success)
+        return false;
     applyGlobalAddressBase(AppPreferences::instance().globalAddressBase(), false);
     applyGlobalHexView(AppPreferences::instance().globalHexView(), false);
     syncGlobalViewControls();
@@ -1843,7 +1818,7 @@ void MainWindow::applyGlobalAddressBase(AddressBase base, bool persist)
             map->setAddressBase(base);
 
     forEachTypedForm(ui->mdiArea, [base](auto* frm) {
-        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+        if (!frm || !isSplitClone(frm))
             return;
 
         if (auto* data = qobject_cast<FormDataView*>(frm))
@@ -1875,7 +1850,7 @@ void MainWindow::applyGlobalHexView(bool enabled, bool persist)
             map->setHexView(enabled);
 
     forEachTypedForm(ui->mdiArea, [enabled](auto* frm) {
-        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+        if (!frm || !isSplitClone(frm))
             return;
 
         if (auto* traffic = qobject_cast<FormTrafficView*>(frm))

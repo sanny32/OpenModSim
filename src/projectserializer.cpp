@@ -17,17 +17,15 @@
 #include "legacyprojectloader.h"
 #include "mainwindow.h"
 #include "projectaddressspacexml.h"
+#include "projectformmetadata.h"
+#include "projectformmanager.h"
 #include "projectformxml.h"
 #include "projectserializer.h"
+#include "projectsplitcontroller.h"
 
 namespace {
-// Property and panel names shared with AppProject (raw literals are the established
-// pattern for these across the form classes).
-constexpr const char* kFormPanelProperty = "SplitPanel";
-constexpr const char* kFormClosedProperty = "Closed";
 constexpr const char* kPanelLeft = "L";
 constexpr const char* kPanelRight = "R";
-constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 
 ///
 /// \brief loadXmlOfForm dispatches the XML load call, routing legacy data-view
@@ -62,11 +60,15 @@ void loadXmlOfForm(AppProject& project, QWidget* widget, QXmlStreamReader& r)
 /// \param mainWindow The main window used to switch the view mode during load.
 ///
 ProjectSerializer::ProjectSerializer(AppProject& project,
+                                     ProjectFormManager& forms,
+                                     ProjectSplitController& split,
                                      ModbusMultiServer& mbServer,
                                      DataSimulator* dataSimulator,
                                      MdiAreaEx* mdiArea,
                                      MainWindow* mainWindow)
     : _project(project)
+    , _forms(forms)
+    , _split(split)
     , _mbServer(mbServer)
     , _dataSimulator(dataSimulator)
     , _mdiArea(mdiArea)
@@ -85,13 +87,20 @@ ProjectSerializer::ProjectSerializer(AppProject& project,
 ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool replace)
 {
     LoadResult result;
+    const QByteArray documentData = device.readAll();
+    QBuffer validationBuffer;
+    validationBuffer.setData(documentData);
+    validationBuffer.open(QIODevice::ReadOnly);
+    result.Status = validate(validationBuffer);
+    if (!result.Status.Success)
+        return result;
 
     QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
     bool splitView = false;
     bool viewPreparedForForms = !replace;
     ProjectAddressSpacePayload addressSpace;
 
-    QXmlStreamReader xml(&device);
+    QXmlStreamReader xml(documentData);
     while (xml.readNextStartElement()) {
         if (xml.name() == QLatin1String("OpenModSim")) {
             while (xml.readNextStartElement()) {
@@ -164,18 +173,18 @@ ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool re
                             const bool isAutoClone = attrs.value("AutoClone").toString() == "1";
                             const bool onRightPanel = splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0;
                             if(onRightPanel) {
-                                if(auto* secondary = _project.secondaryArea())
+                                if(auto* secondary = _split.secondaryArea())
                                     targetArea = secondary;
                             }
 
                             QWidget* frm = nullptr;
-                            if(onRightPanel && isAutoClone && targetArea == _project.secondaryArea()) {
+                            if(onRightPanel && isAutoClone && targetArea == _split.secondaryArea()) {
                                 QWidget* sourceForm = nullptr;
                                 if(auto* primary = _mdiArea->primaryArea()) {
                                     for(auto* wnd : primary->localSubWindowList()) {
                                         auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
                                         bool okCandidate = false;
-                                        if(!candidate || candidate->property(kSplitAutoCloneProperty).toBool())
+                                        if(!candidate || isSplitClone(candidate))
                                             continue;
                                         if(projectFormKindFromWidget(candidate, &okCandidate) == kind &&
                                            okCandidate &&
@@ -187,18 +196,18 @@ ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool re
                                 }
 
                                 if(sourceForm)
-                                    frm = _project.createCloneOnArea(sourceForm, targetArea);
+                                    frm = _split.createClone(sourceForm, targetArea);
                             }
 
                             if(!frm)
-                                frm = _project.createMdiChildOnArea(kind, targetArea, !isAutoClone);
+                                frm = _forms.create(kind, targetArea, !isAutoClone);
 
                             if (frm) {
                                 loadXmlOfForm(_project, frm, xml);
                                 if (isClosed) {
                                     // Park closed forms directly without emitting close/activation churn.
                                     auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
-                                    _project.markFormClosed(frm);
+                                    _forms.park(frm);
                                     if (wnd) {
                                         targetArea->removeSubWindow(wnd);
                                         wnd->deleteLater();
@@ -240,7 +249,7 @@ ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool re
         }
         else if (LegacyProjectLoader::isDataViewElement(xml.name().toString())) {
             _mainWindow->setViewMode(viewMode = QMdiArea::SubWindowView);
-            if (const auto frm = _project.createMdiChild(ProjectFormKind::Data)) {
+            if (const auto frm = _forms.create(ProjectFormKind::Data, _split.activeCreateArea(), true)) {
                 loadXmlOfForm(_project, frm, xml);
                 frm->show();
             }
@@ -260,6 +269,38 @@ ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool re
     applyProjectAddressSpace(addressSpace, _mbServer, _dataSimulator, replace);
 
     result.SplitView = splitView;
+    return result;
+}
+
+///
+/// \brief Validates a project document without applying it.
+/// \param device Open project input device.
+/// \return Validation status and parse error.
+///
+ProjectLoadResult ProjectSerializer::validate(QIODevice& device)
+{
+    ProjectLoadResult result;
+    QXmlStreamReader xml(device.readAll());
+    if (!xml.readNextStartElement()) {
+        result.Error = QObject::tr("The project document is empty.");
+        return result;
+    }
+
+    const QString rootName = xml.name().toString();
+    if (rootName != QLatin1String("OpenModSim")
+        && !LegacyProjectLoader::isDataViewElement(rootName)) {
+        result.Error = QObject::tr("Unsupported project document root: %1").arg(rootName);
+        return result;
+    }
+
+    while (!xml.atEnd())
+        xml.readNext();
+    if (xml.hasError()) {
+        result.Error = xml.errorString();
+        return result;
+    }
+
+    result.Success = true;
     return result;
 }
 
@@ -288,8 +329,8 @@ bool ProjectSerializer::save(QIODevice& device)
 
     {
         ProjectAddressSpaceRanges projectRanges;
-        for (auto* widget : _project.allProjectForms()) {
-            if (!widget || widget->property(kSplitAutoCloneProperty).toBool())
+        for (auto* widget : _forms.forms()) {
+            if (!widget || isSplitClone(widget))
                 continue;
 
             if (auto* dataView = qobject_cast<FormDataView*>(widget)) {
@@ -328,15 +369,15 @@ bool ProjectSerializer::save(QIODevice& device)
     if (auto* activePanel = _mdiArea->activePanel()) {
         if (activePanel == _mdiArea->primaryArea())
             w.writeAttribute("ActivePanel", kPanelLeft);
-        else if (activePanel == _project.secondaryArea())
+        else if (activePanel == _split.secondaryArea())
             w.writeAttribute("ActivePanel", kPanelRight);
     }
     if(auto primary = _mdiArea->primaryArea())
         if(auto wnd = primary->activeSubWindow())
             if(auto frm = wnd->widget())
                 w.writeAttribute("ActivePrimaryWindow", frm->windowTitle());
-    if(_project.isSplitTabbedView())
-        if(auto secondary = _project.secondaryArea())
+    if(_split.isSplitTabbedView())
+        if(auto secondary = _split.secondaryArea())
             if(auto wnd = secondary->activeSubWindow())
                 if(auto frm = wnd->widget())
                     w.writeAttribute("ActiveSecondaryWindow", frm->windowTitle());
@@ -344,26 +385,26 @@ bool ProjectSerializer::save(QIODevice& device)
 
     w.writeStartElement("Forms");
     saveOpenFormsFromArea(w, _mdiArea->primaryArea(), kPanelLeft, false);
-    if(_project.isSplitTabbedView()) {
-        saveOpenFormsFromArea(w, _project.secondaryArea(), kPanelRight, false);
-        saveOpenFormsFromArea(w, _project.secondaryArea(), kPanelRight, true);
+    if(_split.isSplitTabbedView()) {
+        saveOpenFormsFromArea(w, _split.secondaryArea(), kPanelRight, false);
+        saveOpenFormsFromArea(w, _split.secondaryArea(), kPanelRight, true);
     }
     // Also save forms that are closed (hidden in project tree)
-    const auto closed = _project.closedForms();
+    const auto closed = _forms.closedForms();
     for (auto&& frm : closed) {
         if (frm) {
-            frm->setProperty(kFormPanelProperty, QLatin1String(kPanelLeft));
-            frm->setProperty(kFormClosedProperty, true);
+            frm->setProperty(ProjectFormMetadata::SplitPanel, QLatin1String(kPanelLeft));
+            frm->setProperty(ProjectFormMetadata::Closed, true);
             saveXmlOfForm(frm, w);
-            frm->setProperty(kFormPanelProperty, QVariant());
-            frm->setProperty(kFormClosedProperty, QVariant());
+            frm->setProperty(ProjectFormMetadata::SplitPanel, QVariant());
+            frm->setProperty(ProjectFormMetadata::Closed, QVariant());
         }
     }
     w.writeEndElement(); // Forms
 
     writeTabOrder(w, _mdiArea->primaryArea(), kPanelLeft);
-    if(_project.isSplitTabbedView())
-        writeTabOrder(w, _project.secondaryArea(), kPanelRight);
+    if(_split.isSplitTabbedView())
+        writeTabOrder(w, _split.secondaryArea(), kPanelRight);
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();
@@ -389,13 +430,13 @@ void ProjectSerializer::saveOpenFormsFromArea(QXmlStreamWriter& w, MdiArea* area
         if(!widget)
             continue;
 
-        const bool isAutoClone = widget->property(kSplitAutoCloneProperty).toBool();
+        const bool isAutoClone = isSplitClone(widget);
         if(isAutoClone != autoClonesOnly)
             continue;
 
-        widget->setProperty(kFormPanelProperty, QLatin1String(panel));
+        widget->setProperty(ProjectFormMetadata::SplitPanel, QLatin1String(panel));
         saveXmlOfForm(widget, w);
-        widget->setProperty(kFormPanelProperty, QVariant());
+        widget->setProperty(ProjectFormMetadata::SplitPanel, QVariant());
     }
 }
 

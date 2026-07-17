@@ -24,11 +24,11 @@
 #include "dialogwritestatusregister.h"
 #include "dialogwriteregister.h"
 #include "formdataview.h"
+#include "projectformmetadata.h"
 #include "themedicons.h"
 #include "ui_formdataview.h"
 
 namespace {
-constexpr const char* kFormIdProperty = "FormId";
 constexpr int kBitPointLengthLimit = 2000;
 
 bool isBitPointType(QModbusDataUnit::RegisterType type)
@@ -53,10 +53,7 @@ QRange<int> lengthRangeForPointType(int address,
 
 QUuid dataFormId(const QWidget* widget)
 {
-    if (!widget)
-        return {};
-
-    return widget->property(kFormIdProperty).toUuid();
+    return projectFormId(widget);
 }
 }
 
@@ -1337,13 +1334,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
 
     xml.writeStartElement("FormDataView");
 
-    const auto panel = frm->property("SplitPanel").toString();
+    const auto panel = frm->property(ProjectFormMetadata::SplitPanel).toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
     xml.writeAttribute("Title", frm->windowTitle());
-    if(frm->property("SplitAutoClone").toBool())
+    if(isSplitClone(frm))
         xml.writeAttribute("AutoClone", "1");
-    if(frm->property("Closed").toBool())
+    if(frm->property(ProjectFormMetadata::Closed).toBool())
         xml.writeAttribute("Closed", "1");
     xml.writeAttribute("DataType", enumToString<DataType>(frm->dataType()));
     xml.writeAttribute("RegisterOrder", enumToString<RegisterOrder>(frm->registerOrder()));

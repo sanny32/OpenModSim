@@ -2106,17 +2106,17 @@ Type Filter: %3</source>
         <translation>Перестановка байт (0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="611"/>
+        <location filename="../../formdataview.cpp" line="608"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="611"/>
+        <location filename="../../formdataview.cpp" line="608"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="612"/>
+        <location filename="../../formdataview.cpp" line="609"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2125,7 +2125,7 @@ Length: %3</source>
 Длина: %3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="611"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2639,7 +2639,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1903"/>
+        <location filename="../../mainwindow.cpp" line="1878"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2819,29 +2819,29 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1013"/>
+        <location filename="../../mainwindow.cpp" line="982"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="301"/>
-        <location filename="../../mainwindow.cpp" line="678"/>
+        <location filename="../../mainwindow.cpp" line="685"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2037"/>
+        <location filename="../../mainwindow.cpp" line="2012"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2048"/>
+        <location filename="../../mainwindow.cpp" line="2023"/>
         <source>Clear Recent Projects</source>
         <translation>Очистить недавние проекты</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2049"/>
+        <location filename="../../mainwindow.cpp" line="2024"/>
         <source>Clear the list of recent projects?</source>
         <translation>Очистить список недавних проектов?</translation>
     </message>
@@ -2856,7 +2856,7 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="804"/>
+        <location filename="../../mainwindow.cpp" line="773"/>
         <source>Would you like to combine the file(s) with the project?
 
 The global settings part of the merging file(s) will be ignored.
@@ -2867,26 +2867,26 @@ Please verify the merge result carefully.</source>
 Пожалуйста, внимательно проверьте результат объединения.</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1011"/>
-        <location filename="../../mainwindow.cpp" line="1932"/>
+        <location filename="../../mainwindow.cpp" line="980"/>
+        <location filename="../../mainwindow.cpp" line="1907"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1012"/>
+        <location filename="../../mainwindow.cpp" line="981"/>
         <source>Project 1.x files (*.xml)</source>
         <translation>Файлы проектов 1.x (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1551"/>
-        <location filename="../../mainwindow.cpp" line="1958"/>
+        <location filename="../../mainwindow.cpp" line="1526"/>
+        <location filename="../../mainwindow.cpp" line="1933"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
-        <location filename="../../mainwindow.cpp" line="681"/>
-        <location filename="../../mainwindow.cpp" line="1736"/>
+        <location filename="../../mainwindow.cpp" line="688"/>
+        <location filename="../../mainwindow.cpp" line="1711"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3147,51 +3147,56 @@ Please verify the merge result carefully.</source>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="444"/>
+        <source>Project load failed: %1 (%2)</source>
+        <translation>Не удалось загрузить проект: %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="451"/>
         <source>Form created: %1</source>
         <translation>Форма создана: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="450"/>
+        <location filename="../../applogger.cpp" line="457"/>
         <source>Form opened: %1</source>
         <translation>Форма открыта: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="456"/>
+        <location filename="../../applogger.cpp" line="463"/>
         <source>Form closed: %1</source>
         <translation>Форма закрыта: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="462"/>
+        <location filename="../../applogger.cpp" line="469"/>
         <source>Form deleted: %1</source>
         <translation>Форма удалена: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="481"/>
+        <location filename="../../applogger.cpp" line="488"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>Настройки изменены: %1: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="490"/>
+        <location filename="../../applogger.cpp" line="497"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 изменено: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="508"/>
+        <location filename="../../applogger.cpp" line="515"/>
         <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
         <translation>Скрипт запущен: %1 (режим: %2, интервал: %3 мс)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="513"/>
+        <location filename="../../applogger.cpp" line="520"/>
         <source>Script started: %1 (mode: %2)</source>
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="543"/>
+        <location filename="../../applogger.cpp" line="550"/>
         <source>Form renamed: &apos;%1&apos; -&gt; &apos;%2&apos;</source>
         <translation>Форма переименована: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1390"/>
+        <location filename="../../mainwindow.cpp" line="1359"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3213,12 +3218,12 @@ Please verify the merge result carefully.</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1904"/>
+        <location filename="../../mainwindow.cpp" line="1879"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2025"/>
+        <location filename="../../mainwindow.cpp" line="2000"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3228,12 +3233,12 @@ Please verify the merge result carefully.</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1348"/>
+        <location filename="../../mainwindow.cpp" line="1317"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="527"/>
+        <location filename="../../applogger.cpp" line="534"/>
         <source>Script stopped: %1</source>
         <translation>Скрипт остановлен: %1</translation>
     </message>
@@ -3796,103 +3801,103 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="73"/>
-        <location filename="../../controls/projecttreewidget.cpp" line="356"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="72"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="355"/>
         <source>Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="81"/>
-        <location filename="../../controls/projecttreewidget.cpp" line="357"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="80"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="356"/>
         <source>Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="77"/>
-        <location filename="../../controls/projecttreewidget.cpp" line="359"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="76"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="358"/>
         <source>Maps</source>
         <translation>Карты</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="85"/>
-        <location filename="../../controls/projecttreewidget.cpp" line="358"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="84"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="357"/>
         <source>Scripts</source>
         <translation>Скрипты</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="398"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="397"/>
         <source>New Data View</source>
         <translation>Новый просмотр данных</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="399"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="398"/>
         <source>New Map View</source>
         <translation>Новый просмотр карты</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="400"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="399"/>
         <source>New Traffic View</source>
         <translation>Новый просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="401"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="400"/>
         <source>New Script</source>
         <translation>Новый скрипт</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="423"/>
-        <location filename="../../controls/projecttreewidget.cpp" line="508"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="422"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="507"/>
         <source>Delete All</source>
         <translation>Удалить все</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="444"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="443"/>
         <source>Run All Scripts</source>
         <translation>Запустить все скрипты</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="445"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="444"/>
         <source>Stop All Scripts</source>
         <translation>Остановить все скрипты</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="463"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="462"/>
         <source>Run Script</source>
         <translation>Запустить скрипт</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="464"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="463"/>
         <source>Stop Script</source>
         <translation>Остановить скрипт</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="470"/>
-        <location filename="../../controls/projecttreewidget.cpp" line="535"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="469"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="534"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="473"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="472"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="509"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="508"/>
         <source>Delete all in &quot;%1&quot;?</source>
         <translation>Удалить всё в &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="535"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="534"/>
         <source>New name:</source>
         <translation>Новое имя:</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="543"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="542"/>
         <source>Delete Form</source>
         <translation>Удалить форму</translation>
     </message>
     <message>
-        <location filename="../../controls/projecttreewidget.cpp" line="544"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="543"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>Удалить &quot;%1&quot; из проекта?</translation>
     </message>
@@ -3982,9 +3987,19 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="1673"/>
+        <location filename="../../appproject.cpp" line="653"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
+    </message>
+    <message>
+        <location filename="../../projectserializer.cpp" line="285"/>
+        <source>The project document is empty.</source>
+        <translation>Файл проекта пуст.</translation>
+    </message>
+    <message>
+        <location filename="../../projectserializer.cpp" line="292"/>
+        <source>Unsupported project document root: %1</source>
+        <translation>Неподдерживаемый корневой элемент файла проекта: %1</translation>
     </message>
 </context>
 <context>

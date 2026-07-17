@@ -12,6 +12,7 @@
 #include <QStringList>
 #include "connectiondetails.h"
 #include "modbusdefinitions.h"
+#include "projectloadresult.h"
 
 class QIODevice;
 class QXmlStreamWriter;
@@ -21,6 +22,8 @@ class MainWindow;
 class MdiArea;
 class MdiAreaEx;
 class ModbusMultiServer;
+class ProjectFormManager;
+class ProjectSplitController;
 
 ///
 /// \brief The ProjectSerializer class streams the project XML: it restores forms,
@@ -38,6 +41,7 @@ public:
     ///
     struct LoadResult
     {
+        ProjectLoadResult Status;
         ModbusDefinitions Definitions;
         QList<ConnectionDetails> Connections;
         bool SplitView = false;
@@ -53,12 +57,15 @@ public:
     };
 
     ProjectSerializer(AppProject& project,
+                      ProjectFormManager& forms,
+                      ProjectSplitController& split,
                       ModbusMultiServer& mbServer,
                       DataSimulator* dataSimulator,
                       MdiAreaEx* mdiArea,
                       MainWindow* mainWindow);
 
     LoadResult load(QIODevice& device, bool replace);
+    static ProjectLoadResult validate(QIODevice& device);
     bool save(QIODevice& device);
 
 private:
@@ -67,6 +74,8 @@ private:
 
 private:
     AppProject& _project;
+    ProjectFormManager& _forms;
+    ProjectSplitController& _split;
     ModbusMultiServer& _mbServer;
     DataSimulator* _dataSimulator;
     MdiAreaEx* _mdiArea;

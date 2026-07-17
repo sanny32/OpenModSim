@@ -23,6 +23,7 @@
 #include "displaydefinition.h"
 #include "datamapdatamodel.h"
 #include "projectaddressspacefilter.h"
+#include "projectformmetadata.h"
 
 class MainWindow;
 
@@ -123,13 +124,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
 
     xml.writeStartElement("FormDataMapView");
 
-    const auto panel = frm->property("SplitPanel").toString();
+    const auto panel = frm->property(ProjectFormMetadata::SplitPanel).toString();
     if (!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
     xml.writeAttribute("Title", frm->windowTitle());
-    if (frm->property("SplitAutoClone").toBool())
+    if (isSplitClone(frm))
         xml.writeAttribute("AutoClone", "1");
-    if (frm->property("Closed").toBool())
+    if (frm->property(ProjectFormMetadata::Closed).toBool())
         xml.writeAttribute("Closed", "1");
 
     const auto wnd = frm->parentWidget();

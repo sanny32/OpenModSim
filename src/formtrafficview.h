@@ -20,6 +20,7 @@
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 #include "apppreferences.h"
+#include "projectformmetadata.h"
 #include "controls/funccodefiltercombobox.h"
 #include "controls/numericcombobox.h"
 
@@ -248,13 +249,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
 
     xml.writeStartElement("FormTrafficView");
 
-    const auto panel = frm->property("SplitPanel").toString();
+    const auto panel = frm->property(ProjectFormMetadata::SplitPanel).toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
     xml.writeAttribute("Title", frm->windowTitle());
-    if(frm->property("SplitAutoClone").toBool())
+    if(isSplitClone(frm))
         xml.writeAttribute("AutoClone", "1");
-    if(frm->property("Closed").toBool())
+    if(frm->property(ProjectFormMetadata::Closed).toBool())
         xml.writeAttribute("Closed", "1");
 
     const auto wnd = frm->parentWidget();

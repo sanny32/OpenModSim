@@ -103,8 +103,11 @@ set(SOURCES
 
     projectaddressspacefilter.cpp
     projectaddressspacexml.cpp
+    projectformmetadata.cpp
+    projectformmanager.cpp
     projectformxml.cpp
     projectserializer.cpp
+    projectsplitcontroller.cpp
     registerwritecontroller.cpp
 
     qadjustedsizedialog.cpp
@@ -271,8 +274,13 @@ set(HEADERS
     pch.h
     projectaddressspacefilter.h
     projectaddressspacexml.h
+    projectformmetadata.h
+    projectformmanager.h
+    projectformkind.h
+    projectloadresult.h
     projectformxml.h
     projectserializer.h
+    projectsplitcontroller.h
     registerwritecontroller.h
     qadjustedsizedialog.h
     qcountedset.h
@@ -340,4 +348,3 @@ set(UI_FILES
 
     mainwindow.ui
 )
-
