@@ -37,6 +37,7 @@ private slots:
     void recognizesLegacyDataViewElement();
     void readsLegacyFormModSimDataViewState();
     void readsLegacyDisplayDefinitionDefaultsAndNormalizes();
+    void preservesZeroBasedPointAddress();
     void readsLegacyColorFallbackKeys();
     void ignoresMalformedLegacySimulationsAndValues();
     void mapsDataUnitValuesWithoutStoppingAfterMalformedAddress();
@@ -121,7 +122,7 @@ void TestLegacyProjectParser::readsLegacyDisplayDefinitionDefaultsAndNormalizes(
 {
     const QByteArray xml = R"xml(
 <FormModSim Title='Fallback Title'>
-  <DisplayDefinition DeviceId='0' PointType='999' PointAddress='0' Length='0'
+  <DisplayDefinition DeviceId='0' PointType='999' Length='0'
                      DataViewColumnsDistance='100' LeadingZeros='true'/>
 </FormModSim>
 )xml";
@@ -135,6 +136,27 @@ void TestLegacyProjectParser::readsLegacyDisplayDefinitionDefaultsAndNormalizes(
     QCOMPARE(state.Definitions.Length, quint16(1));
     QCOMPARE(state.Definitions.DataViewColumnsDistance, quint16(32));
     QCOMPARE(state.Definitions.LeadingZeros, true);
+}
+
+///
+/// \brief TestLegacyProjectParser::preservesZeroBasedPointAddress
+///
+/// Regression test for issue #125: a 0-based version 1.x project stores
+/// PointAddress='0', which normalize() would otherwise clamp up to 1.
+///
+void TestLegacyProjectParser::preservesZeroBasedPointAddress()
+{
+    const QByteArray xml = R"xml(
+<FormModSim Title='Zero Based'>
+  <DisplayDefinition DeviceId='1' PointType='4' PointAddress='0' Length='10'
+                     DataViewColumnsDistance='16' LeadingZeros='true' ZeroBasedAddress='true'/>
+</FormModSim>
+)xml";
+
+    const auto state = readLegacyDataViewState(xml);
+
+    QCOMPARE(state.Definitions.PointAddress, quint16(0));
+    QCOMPARE(state.Definitions.Length, quint16(10));
 }
 
 ///
