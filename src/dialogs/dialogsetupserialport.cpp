@@ -40,9 +40,6 @@ DialogSetupSerialPort::~DialogSetupSerialPort()
 }
 
 ///
-/// rief DialogSetupSerialPort::changeEvent
-///
-///
 /// \brief DialogSetupSerialPort::changeEvent
 ///
 void DialogSetupSerialPort::changeEvent(QEvent* event)

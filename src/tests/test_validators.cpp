@@ -40,6 +40,10 @@ private slots:
     void int64ValidatorFixupKeepsEmptyWhenAllowed();
     void intValidatorExFixupKeepsEmptyWhenAllowed();
     void doubleValidatorExFixupKeepsEmptyWhenAllowed();
+    void defaultConstructedIntegerValidators();
+    void uintValidatorRangeEdges();
+    void nonEmptyFixupPaths();
+    void additionalValidatorEdgeBranches();
 };
 
 void TestValidators::hexValidatorAcceptsHexRejectsGarbage()
@@ -140,6 +144,80 @@ void TestValidators::doubleValidatorExFixupKeepsEmptyWhenAllowed()
     QString empty;
     lenient.fixup(empty);
     QVERIFY(empty.isEmpty());
+}
+
+void TestValidators::defaultConstructedIntegerValidators()
+{
+    QInt64Validator signedValidator;
+    QUIntValidator unsignedValidator;
+
+    QCOMPARE(validateState(signedValidator, QString()), QValidator::Intermediate);
+    QCOMPARE(validateState(unsignedValidator, QString()), QValidator::Intermediate);
+    QCOMPARE(validateState(signedValidator, QStringLiteral("0")), QValidator::Acceptable);
+    QCOMPARE(validateState(unsignedValidator, QStringLiteral("0")), QValidator::Acceptable);
+    QCOMPARE(validateState(signedValidator, QStringLiteral("-1")), QValidator::Invalid);
+    QCOMPARE(validateState(unsignedValidator, QStringLiteral("-1")), QValidator::Invalid);
+}
+
+void TestValidators::uintValidatorRangeEdges()
+{
+    QUIntValidator validator(10, 20);
+
+    QCOMPARE(validateState(validator, QString()), QValidator::Intermediate);
+    QCOMPARE(validateState(validator, QStringLiteral("9")), QValidator::Invalid);
+    QCOMPARE(validateState(validator, QStringLiteral("10")), QValidator::Acceptable);
+    QCOMPARE(validateState(validator, QStringLiteral("20")), QValidator::Acceptable);
+    QCOMPARE(validateState(validator, QStringLiteral("21")), QValidator::Invalid);
+    QCOMPARE(validateState(validator, QStringLiteral("not-a-number")), QValidator::Invalid);
+}
+
+void TestValidators::nonEmptyFixupPaths()
+{
+    QInt64Validator int64Validator(0, 100);
+    QString int64Text = QStringLiteral("42");
+    int64Validator.fixup(int64Text);
+    QCOMPARE(int64Text, QStringLiteral("42"));
+
+    QIntValidatorEx intValidator(0, 100, true);
+    QString intText = QStringLiteral("42");
+    intValidator.fixup(intText);
+    QCOMPARE(intText, QStringLiteral("42"));
+
+    QDoubleValidatorEx doubleValidator(0.0, 100.0, 2, true);
+    doubleValidator.setLocale(QLocale::c());
+    QString doubleText = QStringLiteral("42.5");
+    doubleValidator.fixup(doubleText);
+    QVERIFY(!doubleText.isEmpty());
+    QCOMPARE(validateState(doubleValidator, doubleText), QValidator::Acceptable);
+    bool parsed = false;
+    QCOMPARE(doubleValidator.locale().toDouble(doubleText, &parsed), 42.5);
+    QVERIFY(parsed);
+}
+
+void TestValidators::additionalValidatorEdgeBranches()
+{
+    QUIntValidator lenientUInt(10, 20, true, nullptr);
+    QCOMPARE(validateState(lenientUInt, QString()), QValidator::Acceptable);
+
+    QString uintText = QStringLiteral("not-empty");
+    lenientUInt.fixup(uintText);
+    QCOMPARE(uintText, QStringLiteral("not-empty"));
+
+    QInt64Validator signedValidator(-10, 10);
+    QCOMPARE(validateState(signedValidator, QStringLiteral("-10")), QValidator::Acceptable);
+    QCOMPARE(validateState(signedValidator, QStringLiteral("10")), QValidator::Acceptable);
+    QCOMPARE(validateState(signedValidator, QStringLiteral("-11")), QValidator::Invalid);
+
+    QHexValidator rangedHex(0, 0xFF, nullptr, false);
+    QCOMPARE(validateState(rangedHex, QStringLiteral("ff")), QValidator::Acceptable);
+    QCOMPARE(validateState(rangedHex, QStringLiteral("100")), QValidator::Acceptable);
+
+    QDoubleValidatorEx strictDouble(0.0, 10.0, 2, false);
+    strictDouble.setLocale(QLocale::c());
+    QCOMPARE(validateState(strictDouble, QString()), QValidator::Intermediate);
+    QString emptyDouble;
+    strictDouble.fixup(emptyDouble);
+    QVERIFY(emptyDouble.isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TestValidators)

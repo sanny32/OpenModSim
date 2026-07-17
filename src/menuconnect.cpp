@@ -214,9 +214,6 @@ QList<QAction*> MenuConnect::actions(const QMenu* menu) const
 /// \param port
 /// \param id
 ///
-///
-/// \brief MenuConnect::addAction
-///
 void MenuConnect::addAction(QMenu* menu, const QString& text, ConnectionType type, const QString& port, const QString& id)
 {
     auto action = menu->addAction(text);

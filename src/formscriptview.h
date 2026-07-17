@@ -20,6 +20,7 @@
 #include "jscriptcontrol.h"
 #include "consoleoutput.h"
 #include "apppreferences.h"
+#include "projectformmetadata.h"
 
 ///
 /// \brief Forward declaration of the MainWindow
@@ -65,6 +66,7 @@ public:
     void setScript(const QString& text);
     QTextDocument* scriptDocument() const;
     void setScriptDocument(QTextDocument* document);
+    JScriptControl* scriptControl() const noexcept;
 
     int scriptCursorPosition() const;
     void setScriptCursorPosition(int pos);
@@ -131,8 +133,6 @@ signals:
     void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
 
 private:
-    JScriptControl* scriptControl();
-
     void setupScriptBar();
     void updateScriptBar();
     void updateScriptBarToolTips();
@@ -231,13 +231,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormScriptView* frm)
 
     xml.writeStartElement("FormScriptView");
 
-    const auto panel = frm->property("SplitPanel").toString();
+    const auto panel = frm->property(ProjectFormMetadata::SplitPanel).toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
     xml.writeAttribute("Title", frm->windowTitle());
-    if(frm->property("SplitAutoClone").toBool())
+    if(isSplitClone(frm))
         xml.writeAttribute("AutoClone", "1");
-    if(frm->property("Closed").toBool())
+    if(frm->property(ProjectFormMetadata::Closed).toBool())
         xml.writeAttribute("Closed", "1");
 
     const auto wnd = frm->parentWidget();
@@ -272,7 +272,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormScriptView* frm)
     xml.writeEndElement();
 
     const auto dd = frm->definitions();
-    xml << dd;
+    xml.writeStartElement("ScriptViewDefinitions");
+    xml << dd.ScriptCfg;
+    xml.writeEndElement();
 
     xml << frm->scriptControl();
 
@@ -293,6 +295,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
 
     if (xml.isStartElement() && xml.name() == QLatin1String("FormScriptView")) {
         ScriptViewDefinitions dd;
+        const QXmlStreamAttributes attributes = xml.attributes();
+        const QString formTitle = attributes.value("Title").toString();
 
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("Window")) {
@@ -390,6 +394,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
             }
             else if (xml.name() == QLatin1String("ScriptViewDefinitions")) {
                 xml >> dd;
+                if (dd.FormName.isEmpty() && !formTitle.isEmpty())
+                    dd.FormName = formTitle;
                 frm->setDefinitions(dd);
             }
             else if (xml.name() == QLatin1String("JScriptControl")) {

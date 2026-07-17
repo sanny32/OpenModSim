@@ -31,6 +31,7 @@ class FormDataView;
 class FormTrafficView;
 class FormScriptView;
 class FormDataMapView;
+class RegisterWriteController;
 class QMenu;
 class QAction;
 class QComboBox;
@@ -58,8 +59,9 @@ public:
     void applyGlobalAddressBase(AddressBase base, bool persist = true);
     void applyGlobalHexView(bool enabled, bool persist = true);
 
-    void loadProject(const QString& filename);
+    bool loadProject(const QString& filename, bool replace = true);
     bool saveProject(const QString& filename);
+    bool closeProject();
 
     void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void showOutputConsole();
@@ -78,13 +80,14 @@ protected:
     void showEvent(QShowEvent* event) override;
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
-    bool eventFilter(QObject * obj, QEvent * e) override;
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
 
 public slots:
     void windowActivate(QMdiSubWindow* wnd);
     void updateHelpWidgetState();
     void markModified();
-    
+
 private slots:
     void on_awake();
 
@@ -154,24 +157,6 @@ private:
     FormScriptView* currentScriptForm() const;
     FormDataMapView* currentDataMapForm() const;
     QWidget* currentDataOrTrafficForm() const;
-    void forceCoils(QModbusDataUnit::RegisterType type);
-    void presetRegs(QModbusDataUnit::RegisterType type);
-    struct ForceRangeParams
-    {
-        quint32 DeviceId = 1;
-        quint16 Address = 1;
-        quint16 Length = 100;
-        bool ZeroBasedAddress = false;
-        AddressSpace AddrSpace = AddressSpace::Addr6Digits;
-        bool LeadingZeros = true;
-    };
-    bool prepareWriteParams(QModbusDataUnit::RegisterType type,
-                            FormDataView*& outFrm,
-                            DataViewDefinitions& outDd,
-                            int& outLength,
-                            ModbusWriteParams& outParams);
-    void rememberForceRangeParams(QModbusDataUnit::RegisterType type, const ModbusWriteParams& params);
-
     bool loadAppSettings(const QString& filename);
     void saveAppSettings();
     bool promptSaveProjectAs(const QString& initialPath = QString());
@@ -188,6 +173,7 @@ private:
     void syncGlobalViewControls();
     void applyGlobalViewStateToForm(QWidget* frm);
     void updateMainToolbarState();
+    static QStringList acceptedProjects(QDropEvent* event);
 
 private:
     Ui::MainWindow *ui;
@@ -206,7 +192,6 @@ private:
     QSharedPointer<QPrinter> _selectedPrinter;
     DataSimulator* _dataSimulator = nullptr;
     QString _profile;
-    QString _projectFilePath;
     ProjectFormKind _newFormKind = ProjectFormKind::Data;
     QStringList _recentProjects;
     QString _lastProjectPath;
@@ -217,7 +202,7 @@ private:
     AddressBaseComboBox* _globalAddressBaseCombo = nullptr;
     QWidget*             _globalAddressBaseWidget = nullptr;
     QLabel*              _globalAddressBaseLabel = nullptr;
-    QHash<QModbusDataUnit::RegisterType, ForceRangeParams> _forceRangeParams;
+    RegisterWriteController* _registerWriteController = nullptr;
 
     AppProject* _project = nullptr;
 };

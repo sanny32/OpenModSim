@@ -128,9 +128,6 @@ DialogAutoSimulation::~DialogAutoSimulation()
 }
 
 ///
-/// rief DialogAutoSimulation::changeEvent
-///
-///
 /// \brief DialogAutoSimulation::changeEvent
 ///
 void DialogAutoSimulation::changeEvent(QEvent* event)

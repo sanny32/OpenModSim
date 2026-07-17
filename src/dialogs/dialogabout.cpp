@@ -260,9 +260,6 @@ DialogAbout::~DialogAbout()
 }
 
 ///
-/// rief DialogAbout::changeEvent
-///
-///
 /// \brief DialogAbout::changeEvent
 ///
 void DialogAbout::changeEvent(QEvent* event)
@@ -389,9 +386,6 @@ void DialogAbout::loadTranslators()
 /// \param version
 /// \param description
 /// \param url
-///
-///
-/// \brief DialogAbout::addComponent
 ///
 void DialogAbout::addComponent(QLayout* layout, const QString& title, const QString& version, const QString& description, const QString& url)
 {

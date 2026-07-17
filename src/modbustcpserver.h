@@ -23,7 +23,7 @@ class QTimer;
 ///
 class ModbusTcpServer : public ModbusServer
 {
-    Q_OBJECT
+    Q_OBJECT // GCOVR_EXCL_LINE
 
 public:
     explicit ModbusTcpServer(QObject *parent = nullptr);

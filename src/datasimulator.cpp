@@ -39,9 +39,6 @@ DataSimulator::~DataSimulator()
 /// \param addr
 /// \return
 ///
-///
-/// \brief DataSimulator::canStartSimulation
-///
 bool DataSimulator::canStartSimulation(DataType type, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr) const
 {
     const auto count = registersCount(type);
@@ -319,9 +316,6 @@ T generateRandom(const QRange<double>& range)
 /// \param addr
 /// \param params
 ///
-///
-/// \brief DataSimulator::randomSimulation
-///
 void DataSimulator::randomSimulation(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, const RandomSimulationParams& params)
 {
     auto&& value = _simulationMap[{ deviceId, regType, addr}].CurrentValue;
@@ -394,9 +388,6 @@ T incrementValue(T value, T step, const QRange<double>& range)
 /// \param addr
 /// \param params
 ///
-///
-/// \brief DataSimulator::incrementSimulation
-///
 void DataSimulator::incrementSimulation(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, const IncrementSimulationParams& params)
 {
     auto&& value = _simulationMap[{ deviceId, regType, addr}].CurrentValue;
@@ -457,9 +448,6 @@ T decrementValue(T value, T step, const QRange<double>& range)
 /// \param type
 /// \param addr
 /// \param params
-///
-///
-/// \brief DataSimulator::decrementSimailation
 ///
 void DataSimulator::decrementSimailation(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, const DecrementSimulationParams& params)
 {

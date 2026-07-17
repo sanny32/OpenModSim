@@ -17,9 +17,13 @@ class TestAnsiUtils : public QObject
 private slots:
     void roundTrip_data();
     void roundTrip();
+    void roundTripWithUnknownByteOrder();
     void fromAnsiRejectsWrongSize();
     void printableReplacesControlBytes();
+    void printableHandlesBoundaryBytes();
     void printableInsertsSeparator();
+    void printableSkipsNonPrintableSeparator();
+    void printableHandlesEmptyInput();
     void printableFallsBackOnUnknownCodepage();
 };
 
@@ -39,8 +43,18 @@ void TestAnsiUtils::roundTrip()
     QCOMPARE(uint16FromAnsi(ansi, bo), quint16(0x4142));
 }
 
+void TestAnsiUtils::roundTripWithUnknownByteOrder()
+{
+    const auto unknownOrder = static_cast<ByteOrder>(99);
+    const QByteArray ansi = uint16ToAnsi(0x4142, unknownOrder);
+
+    QCOMPARE(ansi.size(), 2);
+    QCOMPARE(uint16FromAnsi(ansi, unknownOrder), quint16(0x4142));
+}
+
 void TestAnsiUtils::fromAnsiRejectsWrongSize()
 {
+    QCOMPARE(uint16FromAnsi(QByteArray(), ByteOrder::Direct), quint16(0));
     QCOMPARE(uint16FromAnsi(QByteArray("A"), ByteOrder::Direct), quint16(0));
     QCOMPARE(uint16FromAnsi(QByteArray("ABC"), ByteOrder::Direct), quint16(0));
 }
@@ -51,10 +65,28 @@ void TestAnsiUtils::printableReplacesControlBytes()
     QCOMPARE(text, QStringLiteral("A?"));
 }
 
+void TestAnsiUtils::printableHandlesBoundaryBytes()
+{
+    const QString text = printableAnsi(QByteArray::fromHex("1F2041"), QStringLiteral("UTF-8"));
+    QCOMPARE(text, QStringLiteral("? A"));
+}
+
 void TestAnsiUtils::printableInsertsSeparator()
 {
     const QString text = printableAnsi(QByteArray("AB"), QStringLiteral("UTF-8"), QChar(' '));
     QCOMPARE(text, QStringLiteral("A B "));
+}
+
+void TestAnsiUtils::printableSkipsNonPrintableSeparator()
+{
+    const QString text = printableAnsi(QByteArray("AB"), QStringLiteral("UTF-8"), QChar('\n'));
+    QCOMPARE(text, QStringLiteral("AB"));
+}
+
+void TestAnsiUtils::printableHandlesEmptyInput()
+{
+    const QString text = printableAnsi(QByteArray(), QStringLiteral("UTF-8"), QChar(' '));
+    QVERIFY(text.isEmpty());
 }
 
 void TestAnsiUtils::printableFallsBackOnUnknownCodepage()

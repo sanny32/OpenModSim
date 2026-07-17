@@ -9,8 +9,10 @@
 #ifndef NUMERICUTILS_H
 #define NUMERICUTILS_H
 
-#include <QtGlobal>
+#include <limits>
+
 #include <QtEndian>
+#include <QtGlobal>
 #include "byteorderutils.h"
 
 ///
@@ -246,7 +248,7 @@ inline qint64 makeInt64(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, 
 /// \param order
 /// \return
 ///
-inline qint64 makeUInt64(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, ByteOrder order)
+inline quint64 makeUInt64(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, ByteOrder order)
 {
     return (quint64)makeInt64(lolo, lohi, hilo, hihi, order);
 }

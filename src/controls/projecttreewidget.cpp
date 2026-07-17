@@ -14,6 +14,7 @@
 #include "application.h"
 #include "../styles/appcolors.h"
 #include "formscriptview.h"
+#include "projectformmetadata.h"
 #include "projecttreewidget.h"
 #include "themedicons.h"
 
@@ -22,8 +23,6 @@ constexpr int ItemTypeRole        = Qt::UserRole + 1;
 constexpr int ItemTypeForm        = 1;
 constexpr int ItemScriptRunning   = Qt::UserRole + 3;
 constexpr int ItemOpenRole        = Qt::UserRole + 4;
-constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
-constexpr const char* kSplitOriginIdProperty  = "SplitOriginId";
 
 QIcon dimmedIcon(const QIcon& icon)
 {
@@ -127,7 +126,7 @@ void ProjectTreeWidget::addForm(ProjectFormType type, QWidget* frm)
             break;
     }
 
-    if (type == ProjectFormType::DataMap && frm->property("DeleteLocked").toBool())
+    if (type == ProjectFormType::DataMap && isFormDeletionLocked(frm))
         baseIcon = _iconDataMapLocked;
 
     auto item = new QTreeWidgetItem(root, QStringList{frm->windowTitle()});
@@ -200,8 +199,8 @@ void ProjectTreeWidget::setFormOpen(QWidget* frm, bool open)
 void ProjectTreeWidget::activateForm(QWidget* frm)
 {
     auto item = itemForForm(frm);
-    if (!item && frm && frm->property(kSplitAutoCloneProperty).toBool()) {
-        const QUuid originId = frm->property(kSplitOriginIdProperty).toUuid();
+    if (!item && frm && isSplitClone(frm)) {
+        const QUuid originId = splitOriginId(frm);
         const QString title = frm->windowTitle();
 
         auto findOriginalInRoot = [&](QTreeWidgetItem* root) -> QTreeWidgetItem* {
@@ -215,7 +214,7 @@ void ProjectTreeWidget::activateForm(QWidget* frm)
                     continue;
 
                 const bool sameOrigin = !originId.isNull()
-                                        && candidateForm->property(kSplitOriginIdProperty).toUuid() == originId;
+                                        && splitOriginId(candidateForm) == originId;
                 const bool sameTitle = candidateForm->windowTitle() == title;
                 if (sameOrigin || sameTitle)
                     return candidateItem;
@@ -246,7 +245,7 @@ void ProjectTreeWidget::refreshFormItem(QTreeWidgetItem* item, QWidget* frm)
     const bool open = item->data(0, ItemOpenRole).toBool();
     const bool running = item->data(0, ItemScriptRunning).toBool();
     const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
-    const bool deleteLocked = frm->property("DeleteLocked").toBool();
+    const bool deleteLocked = isFormDeletionLocked(frm);
 
     item->setIcon(0, iconFor(type, open, running, _iconData, _iconDataClosed, _iconTraffic,
                               _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning,
@@ -327,7 +326,7 @@ void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
 
     auto frm = static_cast<QWidget*>(ptr);
     const QString current = frm->windowTitle();
-    if (frm->property("DeleteLocked").toBool()) {
+    if (isFormDeletionLocked(frm)) {
         if (item->text(0) != current)
             item->setText(0, current);
         return;
@@ -413,7 +412,7 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
         for (int i = 0; i < item->childCount(); ++i) {
             auto* child = item->child(i);
             auto* form = static_cast<QWidget*>(child->data(0, Qt::UserRole).value<void*>());
-            if (form && !form->property("DeleteLocked").toBool()) {
+            if (form && !isFormDeletionLocked(form)) {
                 canDeleteAny = true;
                 break;
             }
@@ -454,7 +453,7 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 
         auto* formWidget = static_cast<QWidget*>(ptr);
         const auto formType = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
-        const bool deleteLocked = formWidget->property("DeleteLocked").toBool();
+        const bool deleteLocked = isFormDeletionLocked(formWidget);
 
         menu.addSeparator();
 

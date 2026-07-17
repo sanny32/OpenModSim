@@ -11,18 +11,17 @@
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
-#include <limits>
 #include "apppreferences.h"
 #include "translationutils.h"
 #include "dialogabout.h"
 #include "dialogmsgparser.h"
 #include "dialogpreferences.h"
 #include "dialogprintsettings.h"
+#include "recentprojectsprompt.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
-#include "dialogforcestatusregisters.h"
-#include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
+#include "registerwritecontroller.h"
 #include "dialogwelcome.h"
 #include "application.h"
 #include "mainstatusbar.h"
@@ -32,6 +31,7 @@
 #include "formdatamapview.h"
 #include "applogoutput.h"
 #include "applogger.h"
+#include "projectformmetadata.h"
 #include "mainwindow.h"
 #include "themedicons.h"
 #include "ui_mainwindow.h"
@@ -39,7 +39,6 @@
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
 namespace {
-constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kNewFormKindKey = "NewFormKind";
 constexpr const char* kRecentProjectsKey = "RecentProjects";
 constexpr const char* kLastProjectPathKey = "LastProjectPath";
@@ -293,6 +292,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     setWindowTitle(APP_PRODUCT_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
+    setAcceptDrops(true);
 
     if (auto* newButton = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionNew))) {
         newButton->setMenu(ui->menuNew);
@@ -328,6 +328,15 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 
     _project = new AppProject(ui->mdiArea, _mbMultiServer, _dataSimulator,
                                _projectTree, this, this);
+    connect(_project, &AppProject::modified, this, &MainWindow::markModified);
+    connect(_project, &AppProject::helpStateUpdateRequested,
+            this, &MainWindow::updateHelpWidgetState);
+    connect(_project, &AppProject::helpRequested, this, &MainWindow::showHelpContext);
+    connect(_project, &AppProject::consoleMessage, this, &MainWindow::appendConsoleMessage);
+    connect(_project, &AppProject::outputConsoleRequested, this, &MainWindow::showOutputConsole);
+    connect(_project, &AppProject::formActivationRequested, this, &MainWindow::windowActivate);
+
+    _registerWriteController = new RegisterWriteController(_mbMultiServer, this);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
@@ -522,9 +531,6 @@ void MainWindow::on_outputDockVisibilityChanged(bool visible)
 ///
 void MainWindow::on_mdiSubWindowActivated(QMdiSubWindow* wnd)
 {
-    if(wnd)
-        markModified();
-
     QMdiSubWindow* stableWnd = ui->mdiArea->activeSubWindow();
     if(!stableWnd)
         stableWnd = ui->mdiArea->currentSubWindow();
@@ -661,7 +667,7 @@ void MainWindow::deleteAllForms(ProjectFormType type)
 {
     const auto forms = _project->forms(static_cast<ProjectFormKind>(type));
     for (auto* form : forms) {
-        if (form && !form->property("DeleteLocked").toBool())
+        if (form && !isFormDeletionLocked(form))
             _project->deleteForm(form);
     }
 }
@@ -693,12 +699,10 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
-    if(shouldAskToSave) {
-        if(!confirmSaveOnClose()) {
-            event->ignore();
-            return;
-        }
+    if (!confirmSaveOnClose()) {
+        // User canceled
+        event->ignore();
+        return;
     }
 
     saveAppSettings();
@@ -711,41 +715,86 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 ///
-/// \brief MainWindow::eventFilter
-/// \param obj
-/// \param e
-/// \return
+/// \brief MainWindow::acceptedProjects
+/// Looks through the list of files and directories dropped onto the window to identify suitable projects.
+/// \param event The QDropEvent or QDragEnterEvent window event.
+/// \return The list of accepted project files.
 ///
-bool MainWindow::eventFilter(QObject* obj, QEvent* e)
+QStringList MainWindow::acceptedProjects(QDropEvent* event)
 {
-    switch (e->type())
-    {
-        case QEvent::Close:
-            if(auto wnd = qobject_cast<QMdiSubWindow*>(obj))
-            {
-                auto* frm = wnd->widget();
-                if (frm && !frm->property(kSplitAutoCloneProperty).toBool()) {
-                    // Primary form: reparent before subwindow is destroyed so frm survives
-                    _project->markFormClosed(frm);
-                    markModified();
+    QStringList projects;
+    static const QStringList filters {"*.omsim", "*.xml"};
+
+    for (const auto& url : event->mimeData()->urls()) {
+        const auto info = QFileInfo(url.toLocalFile());
+        if (info.isFile()) {
+            for (const auto& filter : filters) {
+                if (!info.suffix().compare(filter.mid(2), Qt::CaseInsensitive)) {
+                    projects.append(info.absoluteFilePath());
                 }
             }
-        break;
-        case QEvent::Move:
-            if(auto wnd = qobject_cast<const QMdiSubWindow*>(obj))
-            {
-                auto* widget = wnd->widget();
-                if(!widget || wnd->isMinimized() || wnd->isMaximized())
-                    break;
-
-                if (auto* frm = qobject_cast<FormTrafficView*>(widget))
-                    frm->setProperty("ParentGeometry", wnd->geometry());
+        }
+        else if (info.isDir()) {
+            QDirIterator it(info.absoluteFilePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+            while (it.hasNext() && projects.size() < 100) {
+                it.next();
+                projects.append(it.fileInfo().absoluteFilePath());
             }
-        break;
-        default:
-            qt_noop();
+        }
     }
-    return QObject::eventFilter(obj, e);
+
+    return projects;
+}
+
+///
+/// \brief MainWindow::dragEnterEvent
+/// Allows to start a dragging the project list into the application window.
+/// \param event The drag enter event.
+///
+void MainWindow::dragEnterEvent(QDragEnterEvent* event)
+{
+    if (!acceptedProjects(event).empty()) {
+        event->acceptProposedAction();
+    }
+}
+
+///
+/// \brief MainWindow::dropEvent
+/// Accepts the list of projects dragged into the application window and offers to merge them with the existing one.
+/// \param event The drop event.
+///
+void MainWindow::dropEvent(QDropEvent* event)
+{
+    const auto projects = acceptedProjects(event);
+    if (!projects.empty()) {
+        auto replace = true;
+        if (hasProjectContext()) {
+            switch (QMessageBox::question(this, APP_PRODUCT_NAME,
+                tr("Would you like to combine the file(s) with the project?\n"
+                   "\n"
+                   "The global settings part of the merging file(s) will be ignored.\n"
+                   "Please verify the merge result carefully."),
+                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::No)) {
+            case QMessageBox::Yes:
+                replace = false;
+                break;
+            case QMessageBox::No:
+                replace = true;
+                break;
+            default:
+                // User canceled
+                return;
+            }
+        }
+        for (const auto& project : projects) {
+            if (!loadProject(project, replace)) {
+                // User canceled
+                return;
+            }
+            replace = false;
+        }
+        event->acceptProposedAction();
+    }
 }
 
 ///
@@ -929,13 +978,17 @@ void MainWindow::on_actionOpenProject_triggered()
 {
     QStringList filters;
     filters << tr("Project files (*.omsim)");
+    filters << tr("Project 1.x files (*.xml)");
     filters << tr("All files (*)");
 
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));
-    if(filename.isEmpty()) return;
-
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-    loadProject(filename);
+    const auto filenames = QFileDialog::getOpenFileNames(this, QString(), _project->savePath(), filters.join(";;"));
+    auto replace = true;
+    for (const auto& filename : filenames) {
+        if (!loadProject(filename, replace)) {
+            return;
+        }
+        replace = false;
+    }
 }
 
 ///
@@ -943,13 +996,12 @@ void MainWindow::on_actionOpenProject_triggered()
 ///
 void MainWindow::on_actionSaveProject_triggered()
 {
-    if(_projectFilePath.isEmpty()) {
+    if (_project->filePath().isEmpty()) {
         on_actionSaveProjectAs_triggered();
         return;
     }
 
-    if(saveProject(_projectFilePath)) {
-        addRecentProject(_projectFilePath);
+    if (saveProject(_project->filePath())) {
         return;
     }
 
@@ -969,18 +1021,7 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 ///
 void MainWindow::on_actionCloseProject_triggered()
 {
-    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
-    if(shouldAskToSave) {
-        if(!confirmSaveOnClose())
-            return;
-    }
-
-    _project->closeProject();
-    _projectFilePath.clear();
-    _lastProjectPath.clear();
-    _isModified = false;
-    updateProjectWindowTitle();
-    updateMainToolbarState();
+    closeProject();
 }
 
 ///
@@ -1173,7 +1214,7 @@ void MainWindow::on_actionMbDefinitions_triggered()
 ///
 void MainWindow::on_actionForceCoils_triggered()
 {
-    forceCoils(QModbusDataUnit::Coils);
+    _registerWriteController->forceCoils(QModbusDataUnit::Coils, currentDataForm(), this);
 }
 
 ///
@@ -1181,7 +1222,7 @@ void MainWindow::on_actionForceCoils_triggered()
 ///
 void MainWindow::on_actionForceDiscretes_triggered()
 {
-   forceCoils(QModbusDataUnit::DiscreteInputs);
+   _registerWriteController->forceCoils(QModbusDataUnit::DiscreteInputs, currentDataForm(), this);
 }
 
 ///
@@ -1189,7 +1230,7 @@ void MainWindow::on_actionForceDiscretes_triggered()
 ///
 void MainWindow::on_actionPresetInputRegs_triggered()
 {
-   presetRegs(QModbusDataUnit::InputRegisters);
+   _registerWriteController->presetRegisters(QModbusDataUnit::InputRegisters, currentDataForm(), this);
 }
 
 ///
@@ -1197,7 +1238,7 @@ void MainWindow::on_actionPresetInputRegs_triggered()
 ///
 void MainWindow::on_actionPresetHoldingRegs_triggered()
 {
-    presetRegs(QModbusDataUnit::HoldingRegisters);
+    _registerWriteController->presetRegisters(QModbusDataUnit::HoldingRegisters, currentDataForm(), this);
 }
 
 ///
@@ -1405,148 +1446,37 @@ QWidget* MainWindow::currentDataOrTrafficForm() const
 }
 
 ///
-/// \brief MainWindow::prepareWriteParams
-/// \param type
-/// \param outFrm
-/// \param outDd
-/// \param outLength
-/// \param outParams
-/// \return
-///
-bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
-                                    FormDataView*& outFrm,
-                                    DataViewDefinitions& outDd,
-                                    int& outLength,
-                                    ModbusWriteParams& outParams)
-{
-    outFrm = currentDataForm();
-    outDd = outFrm ? outFrm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
-    const auto& prefs = AppPreferences::instance();
-    const bool zeroBasedAddress = outFrm ? outFrm->zeroBasedAddress() : (prefs.globalAddressBase() == AddressBase::Base0);
-    const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-
-    ForceRangeParams range{
-        outDd.DeviceId,
-        outDd.PointAddress,
-        outFrm && outDd.PointType == type ? outDd.Length : ForceRangeParams{}.Length,
-        zeroBasedAddress,
-        addrSpace,
-        outDd.LeadingZeros
-    };
-    if(!outFrm && _forceRangeParams.contains(type)) {
-        range = _forceRangeParams.value(type);
-        if (range.ZeroBasedAddress != zeroBasedAddress) {
-            int adjustedAddress = static_cast<int>(range.Address);
-            if (zeroBasedAddress) {
-                adjustedAddress = qMax(0, adjustedAddress - 1);
-            } else if (adjustedAddress < std::numeric_limits<quint16>::max()) {
-                adjustedAddress += 1;
-            }
-            range.Address = static_cast<quint16>(adjustedAddress);
-            range.ZeroBasedAddress = zeroBasedAddress;
-        }
-        range.AddrSpace = addrSpace;
-    }
-
-    outLength                  = range.Length;
-    outParams.DeviceId         = range.DeviceId;
-    outParams.Address          = range.Address;
-    outParams.ZeroBasedAddress = range.ZeroBasedAddress;
-    outParams.AddrSpace        = range.AddrSpace;
-    outParams.LeadingZeros     = range.LeadingZeros;
-    outParams.Server           = &_mbMultiServer;
-
-    const auto data = _mbMultiServer.data(static_cast<quint8>(range.DeviceId), type,
-        range.Address - (range.ZeroBasedAddress ? 0 : 1),
-        range.Length);
-    outParams.Value = QVariant::fromValue(data.values());
-
-    return true;
-}
-
-///
-/// \brief MainWindow::rememberForceRangeParams
-/// \param type
-/// \param params
-///
-void MainWindow::rememberForceRangeParams(QModbusDataUnit::RegisterType type, const ModbusWriteParams& params)
-{
-    _forceRangeParams[type] = ForceRangeParams{
-        params.DeviceId,
-        params.Address,
-        static_cast<quint16>(params.Value.value<QVector<quint16>>().size()),
-        params.ZeroBasedAddress,
-        params.AddrSpace,
-        params.LeadingZeros
-    };
-}
-
-///
-/// \brief MainWindow::forceCoils
-/// \param type
-///
-void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
-{
-    FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
-    if(!prepareWriteParams(type, frm, dd, length, params)) return;
-
-    const bool displayHexAddresses = AppPreferences::instance().globalHexView();
-    DialogForceStatusRegisters dlg(params, type, length, displayHexAddresses, this);
-    if(dlg.exec() == QDialog::Accepted) {
-        rememberForceRangeParams(type, params);
-        _mbMultiServer.writeRegister(type, params);
-    }
-}
-
-///
-/// \brief MainWindow::presetRegs
-/// \param type
-///
-void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
-{
-    FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
-    if(!prepareWriteParams(type, frm, dd, length, params)) return;
-
-    const bool useFormDisplay = frm && dd.PointType == type;
-    params.DataMode = useFormDisplay ? frm->dataType()      : DataType::Hex;
-    params.RegOrder = useFormDisplay ? frm->registerOrder() : RegisterOrder::MSRF;
-    params.Order    = useFormDisplay ? frm->byteOrder()     : ByteOrder::Direct;
-    params.Codepage = useFormDisplay ? frm->codepage()      : QString();
-
-    const bool displayHexAddresses = AppPreferences::instance().globalHexView();
-    DialogForceMultipleRegisters dlg(params, type, length, displayHexAddresses, this);
-    if(dlg.exec() == QDialog::Accepted) {
-        rememberForceRangeParams(type, params);
-        _mbMultiServer.writeRegister(type, params);
-    }
-}
-
-///
 /// \brief MainWindow::loadProject
 /// \param filename
+/// \param replace
+/// \return
 ///
-void MainWindow::loadProject(const QString& filename)
+bool MainWindow::loadProject(const QString& filename, bool replace)
 {
-    if (hasProjectContext()) {
-        _project->closeProject();
-        _projectFilePath.clear();
-        _isModified = false;
-        updateProjectWindowTitle();
+    const auto validation = _project->validateProject(filename);
+    if (!validation.Success)
+        return false;
+
+    if (replace) {
+        if (!closeProject()) {
+            // User canceled
+            return false;
+        }
+        AppLogger::clear();
     }
 
-    AppLogger::clear();
-
-    _project->loadProject(filename);
+    const auto loadResult = _project->loadProject(filename);
+    if (!loadResult.Success)
+        return false;
     applyGlobalAddressBase(AppPreferences::instance().globalAddressBase(), false);
     applyGlobalHexView(AppPreferences::instance().globalHexView(), false);
     syncGlobalViewControls();
-    _projectFilePath = QFileInfo(filename).absoluteFilePath();
-    _lastProjectPath = _projectFilePath;
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-    _isModified = false;
+    _isModified = !replace;
     updateProjectWindowTitle();
     updateMainToolbarState();
-    addRecentProject(_projectFilePath);
+    addRecentProject(_project->filePath());
+
+    return true;
 }
 
 ///
@@ -1558,11 +1488,28 @@ bool MainWindow::saveProject(const QString& filename)
     if (!_project->saveProject(filename))
         return false;
 
-    _projectFilePath = QFileInfo(filename).absoluteFilePath();
-    _lastProjectPath = _projectFilePath;
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _isModified = false;
     updateProjectWindowTitle();
+    addRecentProject(_project->filePath());
+    return true;
+}
+
+///
+/// \brief MainWindow::closeProject
+/// \return
+///
+bool MainWindow::closeProject()
+{
+    if (!confirmSaveOnClose()) {
+        // User canceled
+        return false;
+    }
+
+    _project->closeProject();
+    _isModified = false;
+    updateProjectWindowTitle();
+    updateMainToolbarState();
+
     return true;
 }
 
@@ -1572,8 +1519,8 @@ bool MainWindow::saveProject(const QString& filename)
 ///
 QString MainWindow::projectName() const
 {
-    if(!_projectFilePath.isEmpty())
-        return QFileInfo(_projectFilePath).completeBaseName();
+    if (!_project->filePath().isEmpty())
+        return QFileInfo(_project->filePath()).completeBaseName();
 
     if(hasProjectContext())
         return tr("Untitled");
@@ -1592,7 +1539,7 @@ void MainWindow::updateProjectWindowTitle()
     if(name.isEmpty())
         setWindowTitle(modifiedMark + APP_PRODUCT_NAME);
     else
-        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_PRODUCT_NAME, name));
+        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, name, APP_PRODUCT_NAME));
 }
 
 ///
@@ -1750,7 +1697,7 @@ void MainWindow::saveAppSettings()
     m.setValue("SavePath", _project->savePath());
     m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
     m.setValue(kRecentProjectsKey, _recentProjects);
-    m.setValue(kLastProjectPathKey, _lastProjectPath);
+    m.setValue(kLastProjectPathKey, _project->filePath());
 }
 
 ///
@@ -1871,7 +1818,7 @@ void MainWindow::applyGlobalAddressBase(AddressBase base, bool persist)
             map->setAddressBase(base);
 
     forEachTypedForm(ui->mdiArea, [base](auto* frm) {
-        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+        if (!frm || !isSplitClone(frm))
             return;
 
         if (auto* data = qobject_cast<FormDataView*>(frm))
@@ -1903,7 +1850,7 @@ void MainWindow::applyGlobalHexView(bool enabled, bool persist)
             map->setHexView(enabled);
 
     forEachTypedForm(ui->mdiArea, [enabled](auto* frm) {
-        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+        if (!frm || !isSplitClone(frm))
             return;
 
         if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
@@ -1918,9 +1865,15 @@ void MainWindow::applyGlobalHexView(bool enabled, bool persist)
 
 ///
 /// \brief MainWindow::confirmSaveOnClose
+/// \return
 ///
 bool MainWindow::confirmSaveOnClose()
 {
+    const auto shouldAskToSave = hasProjectContext() && (_isModified || _project->filePath().isEmpty());
+    if (!shouldAskToSave) {
+        return true;
+    }
+
     const auto button = QMessageBox::question(this,
                                               tr("Save Project"),
                                               tr("Save project before closing?"),
@@ -1932,9 +1885,8 @@ bool MainWindow::confirmSaveOnClose()
     if(button != QMessageBox::Save)
         return true;
 
-    if(!_projectFilePath.isEmpty()) {
-        if(saveProject(_projectFilePath)) {
-            addRecentProject(_projectFilePath);
+    if (!_project->filePath().isEmpty()) {
+        if (saveProject(_project->filePath())) {
             return true;
         }
 
@@ -1954,9 +1906,9 @@ bool MainWindow::promptSaveProjectAs(const QString& initialPath)
     QStringList filters;
     filters << tr("Project files (*.omsim)");
 
-    const QString defaultPath = _projectFilePath.isEmpty()
+    const QString defaultPath = _project->filePath().isEmpty()
         ? _project->savePath() + "/" + projectName() + ".omsim"
-        : _projectFilePath;
+        : _project->filePath();
     const QString dialogPath = initialPath.isEmpty() ? defaultPath : initialPath;
     auto filename = QFileDialog::getSaveFileName(this, QString(), dialogPath, filters.join(";;"));
 
@@ -1966,11 +1918,9 @@ bool MainWindow::promptSaveProjectAs(const QString& initialPath)
     if(!filename.endsWith(".omsim", Qt::CaseInsensitive))
         filename.append(".omsim");
 
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     if(!saveProject(filename))
         return false;
 
-    addRecentProject(QFileInfo(filename).absoluteFilePath());
     return true;
 }
 
@@ -1994,10 +1944,11 @@ QString MainWindow::projectSavePathInProfileDir() const
 
 ///
 /// \brief MainWindow::hasProjectContext
+/// \return
 ///
 bool MainWindow::hasProjectContext() const
 {
-    return !_projectFilePath.isEmpty()
+    return !_project->filePath().isEmpty()
         || _project->firstMdiChild() != nullptr
         || !_project->closedForms().isEmpty();
 }
@@ -2068,6 +2019,11 @@ void MainWindow::rebuildRecentProjectsMenu()
 ///
 void MainWindow::clearRecentProjects()
 {
+    if(!RecentProjectsPrompt::confirmClear(this,
+                                           tr("Clear Recent Projects"),
+                                           tr("Clear the list of recent projects?")))
+        return;
+
     _recentProjects.clear();
     rebuildRecentProjectsMenu();
 }

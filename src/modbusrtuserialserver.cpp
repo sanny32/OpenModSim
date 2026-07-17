@@ -371,7 +371,7 @@ void ModbusRtuSerialServer::on_readyRead()
     }
 
     QTimer::singleShot(responseDelay, this,
-                       [this, result, &event, req, response, adu, msgReq]()
+                       [this, result, event, req, response, adu, msgReq]() mutable
     {
         qint64 writtenBytes = _serialPort->write(result);
         if ((writtenBytes == -1) || (writtenBytes < result.size())) {

@@ -7,41 +7,22 @@
 ///
 
 #include <QtWidgets>
-#include <QBuffer>
-#include <QUuid>
-#include <QSet>
-#include <QTextDocument>
-#include <algorithm>
+
 #include "apppreferences.h"
 #include "appproject.h"
+#include "projectformxml.h"
+#include "projectformmetadata.h"
+#include "projectformmanager.h"
+#include "projectserializer.h"
+#include "projectsplitcontroller.h"
 #include "mainwindow.h"
 #include "controls/mdiareaex.h"
-#include "controls/mditabbar.h"
 #include "controls/projecttreewidget.h"
 #include "themedicons.h"
 #include "formdataview.h"
-#include "formtrafficview.h"
-#include "formscriptview.h"
-#include "uiutils.h"
 #include "apptrace.h"
 
 namespace {
-constexpr const char* kFormPanelProperty = "SplitPanel";
-constexpr const char* kFormClosedProperty = "Closed";
-constexpr const char* kPanelLeft = "L";
-constexpr const char* kPanelRight = "R";
-constexpr const char* kSplitOriginIdProperty = "SplitOriginId";
-constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
-constexpr const char* kFormIdProperty = "FormId";
-constexpr const char* kDeleteLockedProperty = "DeleteLocked";
-
-///
-/// \brief formIdOf
-/// \param widget
-/// \return
-///
-QUuid formIdOf(QWidget* widget);
-
 ///
 /// \brief dataMapIcon
 /// \param deleteLocked
@@ -88,263 +69,6 @@ QString mdiExState(const MdiAreaEx* mdi)
         .arg(AppTrace::mdiAreaState(mdi->secondaryArea()));
 }
 
-///
-/// \brief formTag
-/// \param frm
-/// \return
-///
-QString formTag(const QWidget* frm)
-{
-    if (!frm)
-        return QStringLiteral("null");
-    return QStringLiteral("%1 id=%2")
-        .arg(AppTrace::widgetTag(frm))
-        .arg(formIdOf(const_cast<QWidget*>(frm)).toString(QUuid::WithoutBraces));
-}
-
-///
-/// \brief traceMdiActivationRequest
-/// \param scope
-/// \param mdi
-/// \param wnd
-/// \param reason
-///
-void traceMdiActivationRequest(const char* scope, const MdiAreaEx* mdi, QMdiSubWindow* wnd, const QString& reason)
-{
-    if (!AppTrace::isEnabled())
-        return;
-
-    AppTrace::log(scope,
-                  QStringLiteral("reason=\"%1\" request=%2 state=%3")
-                      .arg(reason)
-                      .arg(AppTrace::subWindowTag(wnd))
-                      .arg(mdiExState(mdi)));
-}
-
-///
-/// \brief toProjectFormType
-/// \param kind
-/// \return
-///
-ProjectFormType toProjectFormType(ProjectFormKind kind)
-{
-    switch (kind)
-    {
-        case ProjectFormKind::Data:        return ProjectFormType::Data;
-        case ProjectFormKind::Traffic:     return ProjectFormType::Traffic;
-        case ProjectFormKind::Script:      return ProjectFormType::Script;
-        case ProjectFormKind::DataMap: return ProjectFormType::DataMap;
-    }
-    return ProjectFormType::Data;
-}
-
-///
-/// \brief projectFormKindFromWidget
-/// \param widget
-/// \param ok
-/// \return
-///
-ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
-{
-    if (qobject_cast<FormDataView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Data;
-    }
-    if (qobject_cast<FormTrafficView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Traffic;
-    }
-    if (qobject_cast<FormScriptView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Script;
-    }
-    if (qobject_cast<FormDataMapView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::DataMap;
-    }
-
-    if(ok) *ok = false;
-    return ProjectFormKind::Data;
-}
-
-///
-/// \brief formIdOf
-/// \param widget
-/// \return
-///
-QUuid formIdOf(QWidget* widget)
-{
-    if (!widget)
-        return {};
-
-    return widget->property(kFormIdProperty).toUuid();
-}
-
-///
-/// \brief enableAutoCompleteOnForm
-/// \param widget
-/// \param enable
-///
-void enableAutoCompleteOnForm(QWidget* widget, bool enable)
-{
-    if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->enableAutoComplete(enable);
-}
-
-///
-/// \brief connectEditSlotsOnForm
-/// \param widget
-///
-void connectEditSlotsOnForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->connectEditSlots();
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->connectEditSlots();
-}
-
-///
-/// \brief disconnectEditSlotsOnForm
-/// \param widget
-///
-void disconnectEditSlotsOnForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->disconnectEditSlots();
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->disconnectEditSlots();
-}
-
-///
-/// \brief dataTypeOfForm
-/// \param widget
-/// \return
-///
-DataType dataTypeOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataType();
-    return DataType::Hex;
-}
-
-///
-/// \brief setDataTypeOnForm
-/// \param widget
-/// \param type
-///
-void setDataTypeOnForm(QWidget* widget, DataType type)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataType(type);
-}
-
-///
-/// \brief scriptSettingsOfForm
-/// \param widget
-/// \return
-///
-ScriptSettings scriptSettingsOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->scriptSettings();
-    return ScriptSettings();
-}
-
-///
-/// \brief canStopScriptOnForm
-/// \param widget
-/// \return
-///
-bool canStopScriptOnForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->canStopScript();
-    return false;
-}
-
-///
-/// \brief saveXmlOfForm
-/// \param widget
-/// \param w
-///
-void saveXmlOfForm(QWidget* widget, QXmlStreamWriter& w)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->saveXml(w);
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->saveXml(w);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->saveXml(w);
-    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->saveXml(w);
-}
-
-///
-/// \brief loadXmlOfForm
-/// \param widget
-/// \param r
-///
-void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) {
-        frm->loadXml(r);
-        const AppPreferences& prefs = AppPreferences::instance();
-        frm->setFont(prefs.font());
-        frm->setZoomPercent(prefs.fontZoom());
-        frm->setForegroundColor(prefs.foregroundColor());
-        frm->setBackgroundColor(prefs.backgroundColor());
-        frm->setAddressColor(prefs.addressColor());
-        frm->setCommentColor(prefs.commentColor());
-    }
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->loadXml(r);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->loadXml(r);
-    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->loadXml(r);
-    else r.skipCurrentElement();
-}
-
-///
-/// \brief tabTitlesForArea
-/// \param area
-/// \return
-///
-QStringList tabTitlesForArea(const MdiArea* area)
-{
-    QStringList titles;
-    if(!area)
-        return titles;
-
-    const auto* tabBar = qobject_cast<const MdiTabBar*>(area->tabBar());
-    if(!tabBar)
-        return titles;
-
-    titles.reserve(tabBar->count());
-    for(int i = 0; i < tabBar->count(); ++i) {
-        const auto* wnd = tabBar->subWindowAt(i);
-        const auto* widget = wnd ? wnd->widget() : nullptr;
-        if(widget)
-            titles << widget->windowTitle();
-    }
-    return titles;
-}
-
-///
-/// \brief applyTabOrderToArea
-/// \param area
-/// \param orderedTitles
-///
-void applyTabOrderToArea(MdiArea* area, const QStringList& orderedTitles)
-{
-    if(!area || orderedTitles.isEmpty())
-        return;
-
-    auto* tabBar = qobject_cast<MdiTabBar*>(area->tabBar());
-    if(!tabBar)
-        return;
-
-    for(int targetIndex = 0; targetIndex < orderedTitles.size(); ++targetIndex) {
-        const QString& wantedTitle = orderedTitles.at(targetIndex);
-        int currentIndex = -1;
-        for(int i = 0; i < tabBar->count(); ++i) {
-            auto* wnd = tabBar->subWindowAt(i);
-            auto* widget = wnd ? wnd->widget() : nullptr;
-            if(widget && widget->windowTitle() == wantedTitle) {
-                currentIndex = i;
-                break;
-            }
-        }
-
-        if(currentIndex >= 0 && currentIndex != targetIndex)
-            tabBar->moveTab(currentIndex, targetIndex);
-    }
-}
-
 }
 
 ///
@@ -362,6 +86,9 @@ AppProject::AppProject(MdiAreaEx* mdiArea,
     , _dataSimulator(dataSimulator)
     , _projectTree(projectTree)
     , _mainWindow(mainWindow)
+    , _formManager(new ProjectFormManager(mdiArea, mbServer, dataSimulator,
+                                          projectTree, mainWindow, this))
+    , _splitController(new ProjectSplitController(mdiArea, _formManager, this))
 {
     Q_ASSERT(_dataSimulator != nullptr);
 
@@ -375,6 +102,22 @@ AppProject::AppProject(MdiAreaEx* mdiArea,
     });
     connect(&_mbServer, &ModbusMultiServer::definitionsChanged,
             this, &AppProject::syncAutoRequestMap);
+    connect(_formManager, &ProjectFormManager::modified, this, &AppProject::modified);
+    connect(_formManager, &ProjectFormManager::formOpened, this, &AppProject::formOpened);
+    connect(_formManager, &ProjectFormManager::formClosed, this, &AppProject::formClosed);
+    connect(_formManager, &ProjectFormManager::formDeleted, this, &AppProject::formDeleted);
+    connect(_formManager, &ProjectFormManager::helpStateUpdateRequested,
+            this, &AppProject::helpStateUpdateRequested);
+    connect(_formManager, &ProjectFormManager::helpRequested, this, &AppProject::helpRequested);
+    connect(_formManager, &ProjectFormManager::consoleMessage, this, &AppProject::consoleMessage);
+    connect(_formManager, &ProjectFormManager::outputConsoleRequested,
+            this, &AppProject::outputConsoleRequested);
+    connect(_formManager, &ProjectFormManager::formActivationRequested,
+            this, &AppProject::formActivationRequested);
+    connect(_formManager, &ProjectFormManager::splitFormStateChanged,
+            this, &AppProject::updateSplitPairScriptIcons);
+    connect(_formManager, &ProjectFormManager::splitMayBeEmpty,
+            this, &AppProject::resetSplitViewIfEmpty);
 }
 
 ///
@@ -384,6 +127,8 @@ AppProject::~AppProject()
 {
     AppTrace::log("AppProject::~AppProject",
                   QStringLiteral("destroyed state=%1").arg(mdiExState(_mdiArea)));
+    if (_mdiArea)
+        _formManager->clear();
 }
 
 ///
@@ -391,42 +136,17 @@ AppProject::~AppProject()
 ///
 QList<QWidget*> AppProject::allProjectForms() const
 {
-    QList<QWidget*> result;
-    for (auto* wnd : _mdiArea->subWindowList()) {
-        auto* widget = wnd ? wnd->widget() : nullptr;
-        if (!widget || widget->property(kSplitAutoCloneProperty).toBool())
-            continue;
-        if (!result.contains(widget))
-            result.append(widget);
-    }
-
-    for (auto* frm : _closedForms) {
-        if (frm && !result.contains(frm))
-            result.append(frm);
-    }
-
-    return result;
+    return _formManager->forms();
 }
 
 QList<QWidget*> AppProject::forms(ProjectFormKind kind) const
 {
-    QList<QWidget*> result;
-    for (auto* widget : allProjectForms()) {
-        bool okKind = false;
-        if (projectFormKindFromWidget(widget, &okKind) == kind && okKind)
-            result.append(widget);
-    }
-    return result;
+    return _formManager->forms(kind);
 }
 
 QList<FormScriptView*> AppProject::scriptForms() const
 {
-    QList<FormScriptView*> result;
-    for (auto* widget : allProjectForms()) {
-        if (auto* script = qobject_cast<FormScriptView*>(widget))
-            result.append(script);
-    }
-    return result;
+    return _formManager->scriptForms();
 }
 
 ///
@@ -479,7 +199,7 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
 
         if (auto* map = ensureAutoRequestMap()) {
             map->setAutoAddOnRequest(true);
-            map->setProperty(kDeleteLockedProperty, true);
+            map->setProperty(ProjectFormMetadata::DeleteLocked, true);
             map->setWindowIcon(dataMapIcon(true));
             _projectTree->updateFormTitle(map);
             if (shouldRevealMap) {
@@ -492,27 +212,10 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
 
     if (auto* map = findAutoRequestMap()) {
         map->setAutoAddOnRequest(false);
-        map->setProperty(kDeleteLockedProperty, false);
+        map->setProperty(ProjectFormMetadata::DeleteLocked, false);
         map->setWindowIcon(dataMapIcon(false));
         _projectTree->updateFormTitle(map);
     }
-}
-
-///
-/// \brief AppProject::addClosedForm
-///
-void AppProject::addClosedForm(QWidget* frm)
-{
-    if(frm && !_closedForms.contains(frm))
-        _closedForms.append(frm);
-}
-
-///
-/// \brief AppProject::removeClosedForm
-///
-void AppProject::removeClosedForm(QWidget* frm)
-{
-    _closedForms.removeOne(frm);
 }
 
 ///
@@ -520,7 +223,7 @@ void AppProject::removeClosedForm(QWidget* frm)
 ///
 bool AppProject::containsClosedForm(QWidget* frm) const
 {
-    return frm && _closedForms.contains(frm);
+    return _formManager->isClosed(frm);
 }
 
 ///
@@ -528,7 +231,16 @@ bool AppProject::containsClosedForm(QWidget* frm) const
 ///
 bool AppProject::isFormClosed(QWidget* frm) const
 {
-    return containsClosedForm(qobject_cast<QWidget*>(frm));
+    return _formManager->isClosed(frm);
+}
+
+///
+/// \brief Returns the canonical forms currently parked outside the MDI area.
+/// \return Closed project forms.
+///
+const QList<QWidget*>& AppProject::closedForms() const
+{
+    return _formManager->closedForms();
 }
 
 ///
@@ -539,36 +251,10 @@ void AppProject::closeProject()
 {
     _dataSimulator->stopSimulations();
     _mbServer.closeConnections();
-
-    // Close any remaining windows (for example split auto-clones).
-    _mdiArea->closeAllSubWindows();
-
-    const auto deleteClosedForms = [this](auto&& shouldDelete) {
-        const auto snapshot = _closedForms;
-        for (auto* frm : snapshot) {
-            if (!frm || !shouldDelete(frm))
-                continue;
-
-            _closedForms.removeOne(frm);
-            _projectTree->removeForm(frm);
-            delete frm;
-        }
-    };
-
-    // Delete DataMap forms first. They own per-address registrations; removing them
-    // before Data forms prevents noisy "Address space removed ... length 1" cascades
-    // during shutdown and keeps teardown logs consistent.
-    deleteClosedForms([](QWidget* frm) {
-        return projectFormKindFromWidget(frm) == ProjectFormKind::DataMap;
-    });
-    deleteClosedForms([](QWidget*) { return true; });
-
-    _closedForms.clear();
+    _formManager->clear();
     _mbServer.clearAddressSpace();
-    _dataCounter        = 0;
-    _trafficCounter     = 0;
-    _scriptCounter      = 0;
-    _dataMapCounter = 0;
+    _mbServer.clearDescriptions();
+    _mbServer.clearTimestamps();
 
     if (!_projectFilename.isEmpty()) {
         emit projectClosed(_projectFilename);
@@ -582,23 +268,7 @@ void AppProject::closeProject()
 ///
 void AppProject::markFormClosed(QWidget* frm)
 {
-    if (!frm)
-        return;
-
-    // Remove the QMdiSubWindow's event filter from frm before reparenting.
-    // QMdiSubWindow installs this filter via setWidget(). After reparenting frm,
-    // the subwindow is DeferredDeleted via WA_DeleteOnClose. Without this call,
-    // frm's extraData->eventFilters retains a dangling pointer to the deleted
-    // QMdiSubWindow. When frm is later explicitly deleted, QEvent::Destroy is sent
-    // through sendThroughObjectEventFilters(), dereferencing that dangling pointer.
-    if (auto wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget()))
-        frm->removeEventFilter(wnd);
-
-    frm->setParent(_mainWindow);
-    frm->hide();
-    addClosedForm(frm);
-    _projectTree->setFormOpen(frm, false);
-    emit formClosed(frm);
+    _formManager->park(frm);
 }
 
 ///
@@ -607,14 +277,7 @@ void AppProject::markFormClosed(QWidget* frm)
 ///
 int AppProject::nextFormDisplayNumber(ProjectFormKind kind)
 {
-    switch(kind)
-    {
-        case ProjectFormKind::Data:        return ++_dataCounter;
-        case ProjectFormKind::Traffic:     return ++_trafficCounter;
-        case ProjectFormKind::Script:      return ++_scriptCounter;
-        case ProjectFormKind::DataMap: return ++_dataMapCounter;
-    }
-    return 0;
+    return _formManager->nextDisplayNumber(kind);
 }
 
 ///
@@ -638,203 +301,7 @@ QWidget* AppProject::createMdiChild(ProjectFormKind kind)
 ///
 QWidget* AppProject::createMdiChildOnArea(ProjectFormKind kind, MdiArea* area, bool addToWindowList)
 {
-    if(!area)
-        return nullptr;
-
-    QWidget* frm = nullptr;
-    switch (kind)
-    {
-        case ProjectFormKind::Data:
-            frm = new FormDataView(_mbServer, _dataSimulator, _mainWindow);
-            break;
-        case ProjectFormKind::Traffic:
-            frm = new FormTrafficView(_mbServer, _mainWindow);
-            break;
-        case ProjectFormKind::Script:
-            frm = new FormScriptView(_mbServer, _dataSimulator, _mainWindow);
-            break;
-        case ProjectFormKind::DataMap:
-            frm = new FormDataMapView(_mbServer, _mainWindow);
-            break;
-    }
-    if(!frm)
-        return nullptr;
-
-    frm->setProperty(kFormIdProperty, QUuid::createUuid());
-
-    if(addToWindowList)
-    {
-        const int num = nextFormDisplayNumber(kind);
-        switch(kind)
-        {
-            case ProjectFormKind::Data:        frm->setWindowTitle(QString("Data%1").arg(num));        break;
-            case ProjectFormKind::Traffic:     frm->setWindowTitle(QString("Traffic%1").arg(num));     break;
-            case ProjectFormKind::Script:      frm->setWindowTitle(QString("Script%1").arg(num));      break;
-            case ProjectFormKind::DataMap:     frm->setWindowTitle(QString("Map%1").arg(num));         break;
-        }
-    }
-
-    enableAutoCompleteOnForm(frm, AppPreferences::instance().codeAutoComplete());
-
-    auto wnd = area->addSubWindow(frm);
-    if(!wnd)
-    {
-        frm->deleteLater();
-        return nullptr;
-    }
-
-    wnd->installEventFilter(_mainWindow);
-    wnd->setAttribute(Qt::WA_DeleteOnClose, true);
-    setupMdiChild(frm, wnd, addToWindowList);
-
-    return frm;
-}
-
-///
-/// \brief AppProject::setupMdiChild
-/// \param frm
-/// \param wnd
-/// \param addToWindowList
-///
-void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindowList)
-{
-    if(!frm || !wnd)
-        return;
-
-    // Keep the subwindow (and therefore tab icon/title) in sync with the form.
-    wnd->setWindowTitle(frm->windowTitle());
-    wnd->setWindowIcon(frm->windowIcon());
-    connect(frm, &QWidget::windowTitleChanged, wnd, &QMdiSubWindow::setWindowTitle);
-    connect(frm, &QWidget::windowIconChanged, wnd, &QMdiSubWindow::setWindowIcon);
-
-    connect(wnd, &QMdiSubWindow::windowStateChanged, _mainWindow,
-            [this, frm](Qt::WindowStates, Qt::WindowStates newState)
-    {
-        switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
-        {
-            case Qt::WindowActive:
-                _mainWindow->updateHelpWidgetState();
-                connectEditSlotsOnForm(frm);
-            break;
-
-            case Qt::WindowNoState:
-                disconnectEditSlotsOnForm(frm);
-            break;
-        }
-    });
-
-    auto onPointTypeChanged = [frm](QModbusDataUnit::RegisterType type)
-    {
-        switch(type)
-        {
-            case QModbusDataUnit::Coils:
-            case QModbusDataUnit::DiscreteInputs:
-                frm->setProperty("PrevDataType", QVariant::fromValue(dataTypeOfForm(frm)));
-                setDataTypeOnForm(frm, DataType::Binary);
-                break;
-            case QModbusDataUnit::HoldingRegisters:
-            case QModbusDataUnit::InputRegisters:
-            {
-                const auto prevType = frm->property("PrevDataType");
-                if(prevType.isValid())
-                    setDataTypeOnForm(frm, prevType.value<DataType>());
-            }
-            break;
-            default:
-                break;
-        }
-    };
-    if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        connect(data, &FormDataView::pointTypeChanged, _mainWindow, onPointTypeChanged);
-    }
-
-    auto onShowed = [this, frm]
-    {
-        AppTrace::log("AppProject::onShowed",
-                      QStringLiteral("form=%1 state=%2")
-                          .arg(formTag(frm))
-                          .arg(mdiExState(_mdiArea)));
-        // Activate whichever subwindow currently holds this form
-        for (auto w : _mdiArea->subWindowList()) {
-            if (w && w->widget() == frm) {
-                AppTrace::log("AppProject::onShowed",
-                              QStringLiteral("calling MainWindow::windowActivate %1")
-                                  .arg(AppTrace::subWindowTag(w)));
-                _mainWindow->windowActivate(w);
-                break;
-            }
-        }
-    };
-    if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        connect(data, &FormDataView::showed, _mainWindow, onShowed);
-    } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
-        connect(traffic, &FormTrafficView::showed, _mainWindow, onShowed);
-    } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
-        connect(script, &FormScriptView::showed, _mainWindow, onShowed);
-    } else if (auto* regMap = qobject_cast<FormDataMapView*>(frm)) {
-        connect(regMap, &FormDataMapView::showed, _mainWindow, onShowed);
-    }
-
-    auto onHelpRequested = [this](const QString& helpKey)
-    {
-        _mainWindow->showHelpContext(helpKey);
-    };
-    if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        connect(data, &FormDataView::helpContextRequested, _mainWindow, onHelpRequested);
-    } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
-        connect(script, &FormScriptView::helpContextRequested, _mainWindow, onHelpRequested);
-    }
-
-    auto onConsoleMessage = [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
-        _mainWindow->appendConsoleMessage(source, text, type);
-    };
-    if (auto* script = qobject_cast<FormScriptView*>(frm)) {
-        connect(script, &FormScriptView::consoleMessage, _mainWindow, onConsoleMessage);
-    }
-
-    auto onScriptRunning = [this, frm]()
-    {
-        frm->setProperty(kSplitScriptRunning, true);
-        _projectTree->setFormScriptRunning(frm, true);
-        updateSplitPairScriptIcons(frm);
-        _mainWindow->showOutputConsole();
-    };
-    auto onScriptStopped = [this, frm]()
-    {
-        frm->setProperty(kSplitScriptRunning, false);
-        _projectTree->setFormScriptRunning(frm, false);
-        updateSplitPairScriptIcons(frm);
-    };
-    if (auto* script = qobject_cast<FormScriptView*>(frm)) {
-        connect(script, &FormScriptView::scriptRunning, _mainWindow, onScriptRunning);
-        connect(script, &FormScriptView::scriptStopped, _mainWindow, onScriptStopped);
-    }
-
-    connect(wnd, &QObject::destroyed, _mdiArea, [this]() {
-        resetSplitViewIfEmpty();
-    });
-
-    if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        connect(data, &FormDataView::definitionChanged, _mainWindow, &MainWindow::markModified);
-    } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
-        connect(traffic, &FormTrafficView::definitionChanged, _mainWindow, &MainWindow::markModified);
-    } else if (auto* regMap = qobject_cast<FormDataMapView*>(frm)) {
-        connect(regMap, &FormDataMapView::definitionChanged, _mainWindow, &MainWindow::markModified);
-    } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
-        connect(script, &FormScriptView::scriptSettingsChanged, _mainWindow, [this](const ScriptSettings&) { _mainWindow->markModified(); });
-        connect(script->scriptDocument(), &QTextDocument::contentsChanged, _mainWindow, &MainWindow::markModified);
-    }
-
-    if(addToWindowList) {
-        bool okKind = false;
-        const auto kind = projectFormKindFromWidget(frm, &okKind);
-        if(okKind) {
-            _projectTree->addForm(toProjectFormType(kind), frm);
-            connect(frm, &QWidget::windowTitleChanged, _projectTree, [this, frm](const QString&) {
-                _projectTree->updateFormTitle(frm);
-            });
-        }
-    }
+    return _formManager->create(kind, area, addToWindowList);
 }
 
 ///
@@ -843,55 +310,7 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
 ///
 void AppProject::rewrapMdiChild(QWidget* frm)
 {
-    if (!frm || !containsClosedForm(frm))
-        return;
-
-    auto area = activeCreateArea();
-    if (!area)
-        return;
-
-    removeClosedForm(frm);
-
-    frm->setParent(nullptr); // detach from MainWindow before adding to MDI area
-    auto wnd = area->addSubWindow(frm);
-    if (!wnd) {
-        frm->setParent(_mainWindow);
-        frm->hide();
-        addClosedForm(frm);
-        return;
-    }
-
-    wnd->installEventFilter(_mainWindow);
-    wnd->setAttribute(Qt::WA_DeleteOnClose, true);
-    wnd->setWindowTitle(frm->windowTitle());
-    wnd->setWindowIcon(frm->windowIcon());
-
-    // Window-specific connections (new wnd each time)
-    connect(wnd, &QMdiSubWindow::windowStateChanged, _mainWindow,
-            [this, frm](Qt::WindowStates, Qt::WindowStates newState)
-    {
-        switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
-        {
-            case Qt::WindowActive:
-                _mainWindow->updateHelpWidgetState();
-                connectEditSlotsOnForm(frm);
-            break;
-            case Qt::WindowNoState:
-                disconnectEditSlotsOnForm(frm);
-            break;
-        }
-    });
-
-    connect(wnd, &QObject::destroyed, _mdiArea, [this]() {
-        resetSplitViewIfEmpty();
-    });
-
-    _projectTree->setFormOpen(frm, true);
-    AppTrace::log("AppProject::rewrapMdiChild",
-                  QStringLiteral("activateForm form=%1").arg(formTag(frm)));
-    _projectTree->activateForm(frm);
-
-    frm->show();
+    _formManager->reopen(frm, activeCreateArea());
 }
 
 ///
@@ -900,10 +319,7 @@ void AppProject::rewrapMdiChild(QWidget* frm)
 ///
 void AppProject::closeMdiChild(QWidget* frm)
 {
-    for(auto&& wnd : _mdiArea->subWindowList()) {
-        auto* f = wnd ? wnd->widget() : nullptr;
-        if(f == frm) wnd->close();
-    }
+    _formManager->close(frm);
 }
 
 ///
@@ -912,70 +328,7 @@ void AppProject::closeMdiChild(QWidget* frm)
 ///
 void AppProject::deleteForm(QWidget* frm)
 {
-    if (!frm)
-        return;
-
-    const QUuid originId = frm->property(kSplitOriginIdProperty).toUuid().isNull()
-                               ? formIdOf(frm)
-                               : frm->property(kSplitOriginIdProperty).toUuid();
-
-    QWidget* projectForm = frm;
-    if (frm->property(kSplitAutoCloneProperty).toBool()) {
-        projectForm = nullptr;
-
-        for (auto* closedFrm : _closedForms) {
-            if (closedFrm
-                && !closedFrm->property(kSplitAutoCloneProperty).toBool()
-                && formIdOf(closedFrm) == originId) {
-                projectForm = closedFrm;
-                break;
-            }
-        }
-
-        if (!projectForm) {
-            for (auto* wnd : _mdiArea->subWindowList()) {
-                auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-                if (candidate
-                    && !candidate->property(kSplitAutoCloneProperty).toBool()
-                    && formIdOf(candidate) == originId) {
-                    projectForm = candidate;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!projectForm)
-        return;
-
-    if (projectForm->property(kDeleteLockedProperty).toBool())
-        return;
-
-    emit formDeleted(projectForm);
-
-    // Close all split auto-clones for this form pair first.
-    const auto subWindows = _mdiArea->subWindowList();
-    for (auto* wnd : subWindows) {
-        auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-        if (candidate
-            && candidate->property(kSplitAutoCloneProperty).toBool()
-            && candidate->property(kSplitOriginIdProperty).toUuid() == originId) {
-            wnd->close();
-        }
-    }
-
-    // Close the project form itself if it is currently open.
-    for (auto* wnd : subWindows) {
-        if (wnd && wnd->widget() == projectForm) {
-            wnd->close(); // triggers closing signal -> moves projectForm to _closedForms
-            break;
-        }
-    }
-
-    removeClosedForm(projectForm);
-    _projectTree->removeForm(projectForm);
-    delete projectForm;
-    resetSplitViewIfEmpty();
+    _formManager->remove(frm);
 }
 
 ///
@@ -984,37 +337,7 @@ void AppProject::deleteForm(QWidget* frm)
 ///
 QWidget* AppProject::currentMdiChild() const
 {
-    auto wnd = _mdiArea->currentSubWindow();
-    if (!wnd) {
-        AppTrace::log("AppProject::currentMdiChild",
-                      QStringLiteral("mdiArea->currentSubWindow() is null; state=%1")
-                          .arg(mdiExState(_mdiArea)));
-    }
-
-    if(!wnd && _mdiArea->viewMode() == QMdiArea::TabbedView) {
-        // Qt5: d->active may still be null on the first event loop iteration
-        // because _q_currentTabChanged is posted via QueuedConnection while
-        // awake() fires before posted events are processed. Read the tab bar
-        // directly to get the correct subwindow.
-        if (const auto* tabBar = qobject_cast<const MdiTabBar*>(_mdiArea->tabBar())) {
-            wnd = tabBar->subWindowAt(tabBar->currentIndex());
-        } else {
-            const auto* fallbackTabBar = _mdiArea->tabBar();
-            const auto list = _mdiArea->subWindowList();
-            const auto idx = fallbackTabBar ? fallbackTabBar->currentIndex() : -1;
-            if(idx >= 0 && idx < list.size())
-                wnd = list.at(idx);
-        }
-
-        AppTrace::log("AppProject::currentMdiChild",
-                      QStringLiteral("fallback picked wnd=%1 state=%2")
-                          .arg(AppTrace::subWindowTag(wnd))
-                          .arg(mdiExState(_mdiArea)));
-    }
-
-    AppTrace::log("AppProject::currentMdiChild",
-                  QStringLiteral("result=%1").arg(AppTrace::subWindowTag(wnd)));
-    return wnd ? qobject_cast<QWidget*>(wnd->widget()) : nullptr;
+    return _formManager->currentForm();
 }
 
 ///
@@ -1056,12 +379,7 @@ FormDataMapView* AppProject::currentDataMapMdiChild() const
 ///
 QWidget* AppProject::findMdiChild(QUuid id) const
 {
-    for(auto&& wnd : _mdiArea->subWindowList())
-    {
-        const auto frm = qobject_cast<QWidget*>(wnd->widget());
-        if(frm && formIdOf(frm) == id) return frm;
-    }
-    return nullptr;
+    return _formManager->find(id);
 }
 
 ///
@@ -1072,17 +390,7 @@ QWidget* AppProject::findMdiChild(QUuid id) const
 ///
 QWidget* AppProject::findMdiChildInArea(MdiArea* area, QUuid id) const
 {
-    if(!area)
-        return nullptr;
-
-    for(auto&& wnd : area->localSubWindowList())
-    {
-        const auto frm = qobject_cast<QWidget*>(wnd->widget());
-        if(frm && formIdOf(frm) == id)
-            return frm;
-    }
-
-    return nullptr;
+    return _formManager->findInArea(area, id);
 }
 
 ///
@@ -1093,29 +401,7 @@ QWidget* AppProject::findMdiChildInArea(MdiArea* area, QUuid id) const
 ///
 QWidget* AppProject::resolveFormForActiveArea(QWidget* primaryForm) const
 {
-    if(!primaryForm || !isSplitTabbedView())
-        return primaryForm;
-
-    auto* secondary = secondaryArea();
-    if(!secondary)
-        return primaryForm;
-
-    if(activeCreateArea() != secondary)
-        return primaryForm;
-
-    const QUuid originId = formIdOf(primaryForm);
-    for(auto* wnd : secondary->localSubWindowList())
-    {
-        auto* cloneFrm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-        if(cloneFrm &&
-           cloneFrm->property(kSplitAutoCloneProperty).toBool() &&
-           cloneFrm->property(kSplitOriginIdProperty).toUuid() == originId)
-        {
-            return cloneFrm;
-        }
-    }
-
-    return primaryForm;
+    return _splitController->resolveForActiveArea(primaryForm);
 }
 
 ///
@@ -1124,72 +410,7 @@ QWidget* AppProject::resolveFormForActiveArea(QWidget* primaryForm) const
 ///
 QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
 {
-    if(!source || !area)
-        return nullptr;
-
-    bool okKind = false;
-    const auto cloneKind = projectFormKindFromWidget(source, &okKind);
-    if(!okKind)
-        return nullptr;
-
-    auto* clone = createMdiChildOnArea(cloneKind, area, false);
-    if(!clone)
-        return nullptr;
-
-    QUuid originId = source->property(kSplitOriginIdProperty).toUuid();
-    if(originId.isNull())
-        originId = formIdOf(source);
-
-    cloneMdiChildState(source, clone);
-    clone->setWindowTitle(source->windowTitle());
-    clone->setWindowIcon(source->windowIcon());
-    clone->setFont(source->font()); // copy form-level font (affects definitions panel labels)
-    clone->setProperty(kSplitOriginIdProperty, originId);
-    clone->setProperty(kSplitAutoCloneProperty, true);
-    clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
-
-    connect(source, &QWidget::windowTitleChanged, clone, [clone](const QString& title) {
-        if(clone->windowTitle() != title)
-            clone->setWindowTitle(title);
-    });
-    connect(source, &QWidget::windowIconChanged, clone, [clone](const QIcon& icon) {
-        clone->setWindowIcon(icon);
-    });
-
-    if(auto* srcScript = qobject_cast<FormScriptView*>(source)) {
-        if(auto* cloneScript = qobject_cast<FormScriptView*>(clone)) {
-            cloneScript->setScriptDocument(srcScript->scriptDocument());
-            cloneScript->setScriptSettings(srcScript->scriptSettings());
-            connect(srcScript,   &FormScriptView::scriptSettingsChanged,
-                    cloneScript, &FormScriptView::setScriptSettings);
-            connect(cloneScript, &FormScriptView::scriptSettingsChanged,
-                    srcScript,   &FormScriptView::setScriptSettings);
-            connect(srcScript, &QWidget::windowTitleChanged, cloneScript, [cloneScript](const QString& title) {
-                if(cloneScript->windowTitle() != title)
-                    cloneScript->setFormName(title);
-            });
-            cloneScript->linkRunStopTo(srcScript);
-        }
-    }
-
-    if(auto* srcTraffic = qobject_cast<FormTrafficView*>(source)) {
-        if(auto* cloneTraffic = qobject_cast<FormTrafficView*>(clone)) {
-            cloneTraffic->linkTo(srcTraffic);
-        }
-    }
-
-    if(auto* srcData = qobject_cast<FormDataView*>(source)) {
-        if(auto* cloneData = qobject_cast<FormDataView*>(clone)) {
-            cloneData->linkTo(srcData);
-        }
-    }
-
-    clone->show();
-    if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
-        if(area->viewMode() == QMdiArea::TabbedView)
-            cloneWnd->showMaximized();
-
-    return clone;
+    return _splitController->createClone(source, area);
 }
 
 ///
@@ -1199,58 +420,7 @@ QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
 ///
 void AppProject::openFormOnActivePanel(QWidget* frm)
 {
-    if(!frm)
-        return;
-
-    auto* panel = _mdiArea->activePanel();
-
-    // Search in active panel for frm or its clone (clones share the same title)
-    if(panel) {
-        const QString title = frm->windowTitle();
-        for(auto* wnd : panel->localSubWindowList()) {
-            auto* w = wnd ? wnd->widget() : nullptr;
-            if(!w) continue;
-            if(w == frm || (w->property(kSplitAutoCloneProperty).toBool() && w->windowTitle() == title)) {
-                traceMdiActivationRequest("AppProject::openFormOnActivePanel",
-                                          _mdiArea, wnd,
-                                          QStringLiteral("found target on active panel"));
-                _mdiArea->setActiveSubWindow(wnd);
-                return;
-            }
-        }
-    }
-
-    // Form is closed - rewrap on the active panel
-    if(containsClosedForm(frm)) {
-        rewrapMdiChild(frm);
-        emit formOpened(frm);
-        return;
-    }
-
-    // Form is open in the other panel - create a clone on the active panel
-    if(isSplitTabbedView() && panel) {
-        auto* clone = createCloneOnArea(frm, panel);
-        if(clone) {
-            if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget())) {
-                traceMdiActivationRequest("AppProject::openFormOnActivePanel",
-                                          _mdiArea, cloneWnd,
-                                          QStringLiteral("activating newly created clone"));
-                _mdiArea->setActiveSubWindow(cloneWnd);
-            }
-            return;
-        }
-    }
-
-    // Fallback: activate wherever the form is open
-    for(auto* wnd : _mdiArea->subWindowList()) {
-        if(wnd->widget() == frm) {
-            traceMdiActivationRequest("AppProject::openFormOnActivePanel",
-                                      _mdiArea, wnd,
-                                      QStringLiteral("fallback activate existing window"));
-            _mdiArea->setActiveSubWindow(wnd);
-            return;
-        }
-    }
+    _splitController->openOnActivePanel(frm);
 }
 
 ///
@@ -1259,10 +429,7 @@ void AppProject::openFormOnActivePanel(QWidget* frm)
 ///
 QWidget* AppProject::firstMdiChild() const
 {
-    for(auto&& wnd : _mdiArea->subWindowList())
-        return qobject_cast<QWidget*>(wnd->widget());
-
-    return nullptr;
+    return _formManager->firstForm();
 }
 
 ///
@@ -1273,33 +440,7 @@ QWidget* AppProject::firstMdiChild() const
 ///
 bool AppProject::cloneMdiChildState(QWidget* source, QWidget* target) const
 {
-    if(!source || !target)
-        return false;
-
-    QByteArray xmlBuffer;
-    QBuffer writeBuffer(&xmlBuffer);
-    if(!writeBuffer.open(QIODevice::WriteOnly))
-        return false;
-
-    QXmlStreamWriter writer(&writeBuffer);
-    writer.writeStartDocument();
-    saveXmlOfForm(source, writer);
-    writer.writeEndDocument();
-    writeBuffer.close();
-
-    QBuffer readBuffer(&xmlBuffer);
-    if(!readBuffer.open(QIODevice::ReadOnly))
-        return false;
-
-    QXmlStreamReader reader(&readBuffer);
-    if(!reader.readNextStartElement())
-        return false;
-
-    loadXmlOfForm(target, reader);
-    if(reader.hasError())
-        return false;
-
-    return true;
+    return _splitController->cloneState(source, target);
 }
 
 ///
@@ -1308,27 +449,7 @@ bool AppProject::cloneMdiChildState(QWidget* source, QWidget* target) const
 ///
 MdiArea* AppProject::activeCreateArea() const
 {
-    auto* primary = _mdiArea->primaryArea();
-    if(!primary)
-        return nullptr;
-
-    if(!isSplitTabbedView())
-        return primary;
-
-    auto* secondary = secondaryArea();
-    if(!secondary)
-        return primary;
-
-    if(auto* focus = QApplication::focusWidget()) {
-        if(secondary->isAncestorOf(focus))
-            return secondary;
-        if(primary->isAncestorOf(focus))
-            return primary;
-    }
-
-    // Focus is outside both areas (e.g., project tree, menu bar).
-    // Use the last area where a subwindow was activated.
-    return _mdiArea->activePanel();
+    return _splitController->activeCreateArea();
 }
 
 ///
@@ -1338,25 +459,7 @@ MdiArea* AppProject::activeCreateArea() const
 ///
 MdiArea* AppProject::areaOfForm(QWidget* frm) const
 {
-    if(!frm)
-        return nullptr;
-
-    auto* primary = _mdiArea->primaryArea();
-    if(!primary)
-        return nullptr;
-
-    auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
-    if(!wnd)
-        return nullptr;
-
-    if(primary->localSubWindowList().contains(wnd))
-        return primary;
-
-    if(auto* secondary = secondaryArea())
-        if(secondary->localSubWindowList().contains(wnd))
-            return secondary;
-
-    return nullptr;
+    return _splitController->areaOfForm(frm);
 }
 
 ///
@@ -1365,7 +468,7 @@ MdiArea* AppProject::areaOfForm(QWidget* frm) const
 ///
 MdiArea* AppProject::secondaryArea() const
 {
-    return _mdiArea->secondaryArea();
+    return _splitController->secondaryArea();
 }
 
 ///
@@ -1374,9 +477,7 @@ MdiArea* AppProject::secondaryArea() const
 ///
 bool AppProject::isSplitTabbedView() const
 {
-    return _mdiArea->viewMode() == QMdiArea::TabbedView &&
-           _mdiArea->isSplitView() &&
-           secondaryArea() != nullptr;
+    return _splitController->isSplitTabbedView();
 }
 
 ///
@@ -1386,13 +487,7 @@ bool AppProject::isSplitTabbedView() const
 ///
 bool AppProject::canMoveFormToOtherPanel(QWidget* frm) const
 {
-    if(!frm || !isSplitTabbedView())
-        return false;
-
-    if(frm->property(kSplitAutoCloneProperty).toBool())
-        return false;
-
-    return areaOfForm(frm) != nullptr;
+    return _splitController->canMoveToOtherPanel(frm);
 }
 
 ///
@@ -1403,36 +498,7 @@ bool AppProject::canMoveFormToOtherPanel(QWidget* frm) const
 ///
 void AppProject::moveFormToOtherPanel(QWidget* frm, QPoint globalDropPos)
 {
-    if(!canMoveFormToOtherPanel(frm))
-        return;
-
-    auto* sourceArea    = areaOfForm(frm);
-    auto* primaryArea   = _mdiArea->primaryArea();
-    auto* secondaryArea = _mdiArea->secondaryArea();
-    auto* targetArea    = (sourceArea == primaryArea) ? secondaryArea : primaryArea;
-    if(!targetArea)
-        return;
-
-    // Remove auto-clone of this form from target panel (if any).
-    const QUuid originId = frm->property(kSplitOriginIdProperty).toUuid().isNull()
-                               ? formIdOf(frm)
-                               : frm->property(kSplitOriginIdProperty).toUuid();
-
-    for(auto* wnd : targetArea->localSubWindowList()) {
-        auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-        if(candidate
-            && candidate->property(kSplitAutoCloneProperty).toBool()
-            && candidate->property(kSplitOriginIdProperty).toUuid() == originId)
-        {
-            // WA_DeleteOnClose is set; auto-clones bypass markFormClosed (see eventFilter guard)
-            wnd->close();
-            break;
-        }
-    }
-
-    auto* subWnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
-    if(subWnd)
-        _mdiArea->moveSubWindowToOtherPanel(subWnd, globalDropPos);
+    _splitController->moveToOtherPanel(frm, globalDropPos);
 }
 
 ///
@@ -1440,14 +506,7 @@ void AppProject::moveFormToOtherPanel(QWidget* frm, QPoint globalDropPos)
 ///
 void AppProject::resetSplitViewIfEmpty()
 {
-    if(!isSplitTabbedView())
-        return;
-
-    auto* secondary = secondaryArea();
-    if(!secondary || !secondary->localSubWindowList().isEmpty())
-        return;
-
-    _mdiArea->setSplitViewEnabled(false);
+    _splitController->resetIfEmpty();
 }
 
 ///
@@ -1457,10 +516,7 @@ void AppProject::resetSplitViewIfEmpty()
 ///
 bool AppProject::isScriptRunningOnSplitPair(QWidget* frm) const
 {
-    if(!frm)
-        return false;
-
-    return canStopScriptOnForm(frm) || frm->property(kSplitScriptRunning).toBool();
+    return _splitController->isScriptPairRunning(frm);
 }
 
 ///
@@ -1469,27 +525,7 @@ bool AppProject::isScriptRunningOnSplitPair(QWidget* frm) const
 ///
 void AppProject::updateSplitPairScriptIcons(QWidget* frm)
 {
-    if(!frm)
-        return;
-
-    auto applyIcon = [this](QWidget* target, bool running)
-    {
-        if(!target)
-            return;
-
-        auto targetWnd = qobject_cast<QMdiSubWindow*>(target->parentWidget());
-        if(!targetWnd)
-            return;
-
-        if(running)
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), themedIcon(QStringLiteral("omodsim/run-script")));
-        else
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), target->windowIcon());
-    };
-
-    const bool periodicMode = scriptSettingsOfForm(frm).Mode == RunMode::Periodically;
-    const bool running = periodicMode && isScriptRunningOnSplitPair(frm);
-    applyIcon(frm, running);
+    _splitController->updateScriptPairIcons(frm);
 }
 
 ///
@@ -1500,96 +536,7 @@ void AppProject::updateSplitPairScriptIcons(QWidget* frm)
 ///
 int AppProject::duplicatePrimaryTabsToSecondary()
 {
-    if(!isSplitTabbedView())
-        return 0;
-
-    auto* primary = _mdiArea->primaryArea();
-    auto* secondary = secondaryArea();
-    if(!primary || !secondary)
-        return 0;
-
-    // Tabbed split should keep activated subwindows maximized on both panels.
-    primary->setOption(QMdiArea::DontMaximizeSubWindowOnActivation, false);
-    secondary->setOption(QMdiArea::DontMaximizeSubWindowOnActivation, false);
-
-    // Secondary must be empty when split is just enabled.
-    if(!secondary->localSubWindowList().isEmpty())
-        return 0;
-
-    auto* primaryActiveWnd = _mdiArea->activePrimarySubWindow();
-    if(!primaryActiveWnd)
-        return 0;
-
-    auto* activeFrm = qobject_cast<QWidget*>(primaryActiveWnd->widget());
-    if(!activeFrm)
-        return 0;
-
-    // Ensure origin tracking properties are initialized.
-    QUuid activeOriginId = activeFrm->property(kSplitOriginIdProperty).toUuid();
-    if(activeOriginId.isNull()) {
-        activeOriginId = formIdOf(activeFrm);
-        activeFrm->setProperty(kSplitOriginIdProperty, activeOriginId);
-    }
-    if(!activeFrm->property(kSplitAutoCloneProperty).isValid())
-        activeFrm->setProperty(kSplitAutoCloneProperty, false);
-
-    // If the active window is itself an auto-clone, resolve to its non-clone counterpart.
-    if(activeFrm->property(kSplitAutoCloneProperty).toBool()) {
-        for(auto* wnd : primary->localSubWindowList()) {
-            auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-            if(frm
-                && frm->property(kSplitOriginIdProperty).toUuid() == activeOriginId
-                && !frm->property(kSplitAutoCloneProperty).toBool()) {
-                activeFrm = frm;
-                primaryActiveWnd = wnd;
-                break;
-            }
-        }
-    }
-
-    // Check for an existing auto-clone of the active form on primary (leftover from a previous split).
-    QMdiSubWindow* toMove = nullptr;
-    for(auto* wnd : primary->localSubWindowList()) {
-        auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-        if(frm
-            && frm->property(kSplitOriginIdProperty).toUuid() == activeOriginId
-            && frm->property(kSplitAutoCloneProperty).toBool()) {
-            toMove = wnd;
-            break;
-        }
-    }
-
-    QMdiSubWindow* secondaryWnd = nullptr;
-    if(toMove) {
-        // Reuse the existing auto-clone rather than creating a new one.
-        primary->removeSubWindow(toMove);
-        secondary->addSubWindow(toMove, Qt::WindowFlags());
-        if(auto* frm = qobject_cast<QWidget*>(toMove->widget()))
-            frm->show();
-        secondaryWnd = toMove;
-    } else {
-        // Split clones are visual peers only: do not add them to project tree/window menu.
-        auto* clone = createCloneOnArea(activeFrm, secondary);
-        if(clone)
-            secondaryWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget());
-    }
-
-    if(secondaryWnd) {
-        if(secondary->viewMode() == QMdiArea::TabbedView && !secondaryWnd->isMaximized())
-            secondaryWnd->showMaximized();
-        AppTrace::log("AppProject::splitActiveFormToSecondary",
-                      QStringLiteral("secondary->setActiveSubWindow %1")
-                          .arg(AppTrace::subWindowTag(secondaryWnd)));
-        secondary->setActiveSubWindow(secondaryWnd);
-    }
-
-    // Restore the primary panel's active tab (moving toMove may have shifted focus).
-    AppTrace::log("AppProject::splitActiveFormToSecondary",
-                  QStringLiteral("restore primary->setActiveSubWindow %1")
-                      .arg(AppTrace::subWindowTag(primaryActiveWnd)));
-    primary->setActiveSubWindow(primaryActiveWnd);
-
-    return secondaryWnd ? 1 : 0;
+    return _splitController->duplicatePrimaryTab();
 }
 
 ///
@@ -1598,337 +545,77 @@ int AppProject::duplicatePrimaryTabsToSecondary()
 ///
 void AppProject::removeSplitAutoClonesFromSecondary()
 {
-    if(!isSplitTabbedView())
-        return;
-
-    auto* secondary = secondaryArea();
-    if(!secondary)
-        return;
-
-    const auto secondaryWindows = secondary->localSubWindowList();
-    for(auto* wnd : secondaryWindows)
-    {
-        auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-        if(frm && frm->property(kSplitAutoCloneProperty).toBool())
-            wnd->close();
-    }
+    _splitController->removeSecondaryClones();
 }
 
 ///
-/// \brief AppProject::loadProject
-/// \param filename
+/// \brief Loads or merges a validated project document.
+/// \param filename Project file path.
+/// \return Load status and error text.
 ///
-void AppProject::loadProject(const QString& filename)
+ProjectLoadResult AppProject::loadProject(const QString& filename)
 {
     QFile file(filename);
-    if(!file.open(QFile::ReadOnly))
-        return;
-
-    _projectFilename = QFileInfo(filename).absoluteFilePath();
-    emit projectOpened(_projectFilename);
-
-    _mbServer.clearDescriptions();
-    _mbServer.clearTimestamps();
-
-    ModbusDefinitions defs;
-    QList<ConnectionDetails> conns;
-    QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
-    bool splitView = false;
-    QString activePrimaryWin;
-    QString activeSecWin;
-    QString activePanel;
-    bool hasProjectGlobalZeroBasedAddress = false;
-    bool projectGlobalZeroBasedAddress = false;
-    bool hasProjectGlobalHexView = false;
-    bool projectGlobalHexView = false;
-    bool viewPreparedForForms = false;
-    QStringList primaryTabOrder;
-    QStringList secondaryTabOrder;
-
-    AddressDescriptionMap globalDescriptionMap;
-    bool hasGlobalDescriptionMap = false;
-    AddressTimestampMap globalTimestampMap;
-    bool hasGlobalTimestampMap = false;
-    struct PendingValue {
-        quint8 deviceId;
-        QModbusDataUnit::RegisterType type;
-        quint16 address;
-        quint16 value;
-    };
-    struct PendingSimulation {
-        quint8 deviceId;
-        QModbusDataUnit::RegisterType type;
-        quint16 address;
-        ModbusSimulationParams params;
-    };
-    QList<PendingValue> pendingValues;
-    QList<PendingSimulation> pendingSimulations;
-
-    QXmlStreamReader xml(&file);
-    while (xml.readNextStartElement()) {
-        if (xml.name() == QLatin1String("OpenModSim")) {
-            while (xml.readNextStartElement()) {
-                if (xml.name() == QLatin1String("AppPreferences")) {
-                    // Backward compatibility: ignore legacy app-preferences block in project files.
-                    xml.skipCurrentElement();
-                }
-                else if (xml.name() == QLatin1String("ViewSettings")) {
-                    const auto attrs = xml.attributes();
-                    viewMode = (QMdiArea::ViewMode)qBound(0, attrs.value("ViewMode").toInt(), 1);
-                    splitView = attrs.value("SplitView").toInt() != 0;
-                    activePrimaryWin = attrs.value("ActivePrimaryWindow").toString();
-                    activeSecWin = attrs.value("ActiveSecondaryWindow").toString();
-                    activePanel = attrs.value("ActivePanel").toString();
-                    if (attrs.hasAttribute("GlobalZeroBasedAddress")) {
-                        hasProjectGlobalZeroBasedAddress = true;
-                        projectGlobalZeroBasedAddress = attrs.value("GlobalZeroBasedAddress").toInt() != 0;
-                    }
-                    if (attrs.hasAttribute("GlobalHexView")) {
-                        hasProjectGlobalHexView = true;
-                        projectGlobalHexView = attrs.value("GlobalHexView").toInt() != 0;
-                    }
-                    xml.skipCurrentElement();
-                }
-                else if (xml.name() == QLatin1String("ModbusDefinitions")) {
-                    xml >> defs;
-                }
-                else if (xml.name() == QLatin1String("Connections")) {
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("ConnectionDetails")) {
-                            ConnectionDetails cd;
-                            xml >> cd;
-                            conns.append(cd);
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else if (xml.name() == QLatin1String("Forms")) {
-                    if(!viewPreparedForForms) {
-                        _mainWindow->setViewMode(viewMode);
-                        if(_mdiArea->viewMode() == QMdiArea::TabbedView && _mdiArea->isSplitView() != splitView)
-                            _mdiArea->setSplitViewEnabled(splitView);
-                        viewPreparedForForms = true;
-                    }
-
-                    _mdiArea->closeAllSubWindows();
-                    // Force immediate destruction of MDI subwindows (WA_DeleteOnClose uses
-                    // deleteLater, so without this their destructors run after new forms are
-                    // already created, causing deviceIdAdded/unitMapAdded signals to be
-                    // suppressed for the newly opened project).
-                    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
-                    // Clean up forms that were already closed (hidden)
-                    const auto closed = _closedForms;
-                    for (auto&& frm : closed) {
-                        _projectTree->removeForm(frm);
-                        delete frm;
-                    }
-                    _closedForms.clear();
-                    while (xml.readNextStartElement()) {
-                        ProjectFormKind kind;
-                        bool isForm = true;
-                        if (xml.name() == QLatin1String("FormDataView")) {
-                            kind = ProjectFormKind::Data;
-                        } else if (xml.name() == QLatin1String("FormTrafficView")) {
-                            kind = ProjectFormKind::Traffic;
-                        } else if (xml.name() == QLatin1String("FormScriptView")) {
-                            kind = ProjectFormKind::Script;
-                        } else if (xml.name() == QLatin1String("FormDataMapView")) {
-                            kind = ProjectFormKind::DataMap;
-                        } else {
-                            isForm = false;
-                        }
-
-                        if (isForm) {
-                            MdiArea* targetArea = _mdiArea->primaryArea();
-                            const auto attrs = xml.attributes();
-                            const QString panel = attrs.value("Panel").toString();
-                            const QString savedTitle = attrs.value("Title").toString();
-                            const bool isClosed = attrs.value("Closed").toString() == "1";
-                            const bool isAutoClone = attrs.value("AutoClone").toString() == "1";
-                            const bool onRightPanel = splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0;
-                            if(onRightPanel) {
-                                if(auto* secondary = secondaryArea())
-                                    targetArea = secondary;
-                            }
-
-                            QWidget* frm = nullptr;
-                            if(onRightPanel && isAutoClone && targetArea == secondaryArea()) {
-                                QWidget* sourceForm = nullptr;
-                                if(auto* primary = _mdiArea->primaryArea()) {
-                                    for(auto* wnd : primary->localSubWindowList()) {
-                                        auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-                                        bool okCandidate = false;
-                                        if(!candidate || candidate->property(kSplitAutoCloneProperty).toBool())
-                                            continue;
-                                        if(projectFormKindFromWidget(candidate, &okCandidate) == kind &&
-                                           okCandidate &&
-                                           candidate->windowTitle() == savedTitle) {
-                                            sourceForm = candidate;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if(sourceForm)
-                                    frm = createCloneOnArea(sourceForm, targetArea);
-                            }
-
-                            if(!frm)
-                                frm = createMdiChildOnArea(kind, targetArea, !isAutoClone);
-
-                            if (frm) {
-                                loadXmlOfForm(frm, xml);
-                                if (isClosed) {
-                                    // Park closed forms directly without emitting close/activation churn.
-                                    auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
-                                    markFormClosed(frm);
-                                    if (wnd) {
-                                        targetArea->removeSubWindow(wnd);
-                                        wnd->deleteLater();
-                                    }
-                                } else {
-                                    frm->show();
-                                }
-                            } else {
-                                xml.skipCurrentElement();
-                            }
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else if (xml.name() == QLatin1String("TabOrder")) {
-                    const auto attrs = xml.attributes();
-                    const QString panel = attrs.value("Panel").toString();
-                    QStringList* targetOrder = &primaryTabOrder;
-                    if(panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0)
-                        targetOrder = &secondaryTabOrder;
-
-                    while(xml.readNextStartElement()) {
-                        if(xml.name() == QLatin1String("TabRef"))
-                            targetOrder->append(xml.attributes().value("title").toString());
-                        xml.skipCurrentElement();
-                    }
-                }
-                else if (xml.name() == QLatin1String("Scripts")) {
-                    xml.skipCurrentElement();
-                }
-                else if (xml.name() == QLatin1String("AddressSpace")) {
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("AddressDescriptionMap")) {
-                            hasGlobalDescriptionMap = true;
-                            xml >> globalDescriptionMap;
-                        }
-                        else if (xml.name() == QLatin1String("AddressTimestampMap")) {
-                            hasGlobalTimestampMap = true;
-                            xml >> globalTimestampMap;
-                        }
-                        else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("Simulation")) {
-                                    const auto attrs = xml.attributes();
-                                    bool ok;
-                                    const quint8 deviceId = static_cast<quint8>(attrs.value("DeviceId").toUShort(&ok));
-                                    if (ok) {
-                                        const auto type = static_cast<QModbusDataUnit::RegisterType>(attrs.value("Type").toInt(&ok));
-                                        if (ok) {
-                                            const quint16 addr = attrs.value("Address").toUShort(&ok);
-                                            if (ok && xml.readNextStartElement()) {
-                                                ModbusSimulationParams params;
-                                                xml >> params;
-                                                pendingSimulations.append({deviceId, type, addr, params});
-                                            }
-                                        }
-                                    }
-                                    xml.skipCurrentElement();
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
-                            }
-                        }
-                        else if (xml.name() == QLatin1String("ModbusDataValues")) {
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("Value")) {
-                                    const auto attrs = xml.attributes();
-                                    bool ok;
-                                    const quint8 deviceId = static_cast<quint8>(attrs.value("DeviceId").toUShort(&ok));
-                                    if (ok) {
-                                        const auto type = static_cast<QModbusDataUnit::RegisterType>(attrs.value("Type").toInt(&ok));
-                                        if (ok) {
-                                            const quint16 address = attrs.value("Address").toUShort(&ok);
-                                            if (ok) {
-                                                const quint16 value = xml.readElementText().toUShort(&ok);
-                                                if (ok) pendingValues.append({deviceId, type, address, value});
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                    xml.skipCurrentElement();
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
-                            }
-                        }
-                        else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else {
-                    xml.skipCurrentElement();
-                }
-            }
-        }
-        else {
-            xml.skipCurrentElement();
-        }
+    if(!file.open(QFile::ReadOnly)) {
+        const ProjectLoadResult status{false, file.errorString()};
+        emit projectLoadFailed(QFileInfo(filename).absoluteFilePath(), status.Error);
+        return status;
     }
 
-    if(!viewPreparedForForms) {
-        _mainWindow->setViewMode(viewMode);
-        if(_mdiArea->viewMode() == QMdiArea::TabbedView && _mdiArea->isSplitView() != splitView)
-            _mdiArea->setSplitViewEnabled(splitView);
+    const auto replace = _projectFilename.isEmpty();
+    ProjectSerializer serializer(*this, *_formManager, *_splitController,
+                                 _mbServer, _dataSimulator, _mdiArea, _mainWindow);
+    const auto result = serializer.load(file, replace);
+    if (!result.Status.Success) {
+        emit projectLoadFailed(QFileInfo(filename).absoluteFilePath(), result.Status.Error);
+        return result.Status;
     }
 
-    // Apply values from <AddressSpace> (requires forms to exist so _mbServer has unit maps)
-    for (const auto& pv : std::as_const(pendingValues)) {
-        QModbusDataUnit unit(pv.type, pv.address, 1);
-        unit.setValue(0, pv.value);
-        _mbServer.setData(pv.deviceId, unit, WriteSource::ProjectLoad);
+    if (replace) {
+        setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+        _projectFilename = QFileInfo(filename).absoluteFilePath();
+        emit projectOpened(_projectFilename);
     }
 
-    // Apply simulations after initial values are restored.
-    for (const auto& ps : std::as_const(pendingSimulations))
-        _dataSimulator->startSimulation(ps.deviceId, ps.type, ps.address, ps.params);
+    if (!replace)
+        return result.Status;
 
-    // Prefer global AddressSpace metadata when present; otherwise keep legacy per-form values.
-    if (hasGlobalDescriptionMap)
-        _mbServer.setDescriptionMap(globalDescriptionMap, WriteSource::ProjectLoad);
-    if (hasGlobalTimestampMap)
-        _mbServer.setTimestampMap(globalTimestampMap);
-
-    _mainWindow->applyConnections(defs, conns);
+    _mainWindow->applyConnections(result.Definitions, result.Connections);
     syncAutoRequestMap(_mbServer.getModbusDefinitions());
 
     auto& prefs = AppPreferences::instance();
-    if (hasProjectGlobalZeroBasedAddress)
-        prefs.setGlobalAddressBase(projectGlobalZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    if (hasProjectGlobalHexView)
-        prefs.setGlobalHexView(projectGlobalHexView);
+    if (result.HasGlobalZeroBasedAddress)
+        prefs.setGlobalAddressBase(result.GlobalZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    if (result.HasGlobalHexView)
+        prefs.setGlobalHexView(result.GlobalHexView);
 
     if(auto* primary = _mdiArea->primaryArea())
-        applyTabOrderToArea(primary, primaryTabOrder);
-    if(splitView)
+        applyTabOrderToArea(primary, result.PrimaryTabOrder);
+    if(result.SplitView)
         if(auto* secondary = secondaryArea())
-            applyTabOrderToArea(secondary, secondaryTabOrder);
+            applyTabOrderToArea(secondary, result.SecondaryTabOrder);
 
-    _pendingActivePrimaryWin = activePrimaryWin;
-    _pendingActiveSecWin = splitView ? activeSecWin : QString();
-    _pendingActivePanel = activePanel;
+    _splitController->setPendingActivation(result.ActivePrimaryWindow,
+                                           result.SplitView ? result.ActiveSecondaryWindow : QString(),
+                                           result.ActivePanel);
 
     if(_mdiArea->isVisible())
         restoreActiveWindows();
+
+    return result.Status;
+}
+
+///
+/// \brief Validates a project file without changing application state.
+/// \param filename Project file path.
+/// \return Validation status and error text.
+///
+ProjectLoadResult AppProject::validateProject(const QString& filename) const
+{
+    QFile file(filename);
+    if (!file.open(QFile::ReadOnly))
+        return {false, file.errorString()};
+    return ProjectSerializer::validate(file);
 }
 
 ///
@@ -1939,96 +626,13 @@ void AppProject::loadProject(const QString& filename)
 ///
 void AppProject::restoreActiveWindows()
 {
-    if(_pendingActivePrimaryWin.isEmpty() && _pendingActiveSecWin.isEmpty() && _pendingActivePanel.isEmpty())
-        return;
-
-    auto findWindowByTitle = [](MdiArea* area, const QString& title) -> QMdiSubWindow* {
-        if(!area || title.isEmpty())
-            return nullptr;
-
-        for(auto* wnd : area->localSubWindowList()) {
-            if(wnd && wnd->widget() && wnd->widget()->windowTitle() == title)
-                return wnd;
-        }
-
-        return nullptr;
-    };
-
-    QMdiSubWindow* primaryTarget = nullptr;
-    if(!_pendingActivePrimaryWin.isEmpty()) {
-        if(auto* primary = _mdiArea->primaryArea()) {
-            primaryTarget = findWindowByTitle(primary, _pendingActivePrimaryWin);
-            if(primaryTarget) {
-                AppTrace::log("AppProject::restoreActiveWindows",
-                              QStringLiteral("primary->setActiveSubWindow %1")
-                                  .arg(AppTrace::subWindowTag(primaryTarget)));
-                primary->setActiveSubWindow(primaryTarget);
-            }
-        }
-    }
-
-    QMdiSubWindow* secondaryTarget = nullptr;
-    if(!_pendingActiveSecWin.isEmpty()) {
-        if(auto* secondary = secondaryArea()) {
-            secondaryTarget = findWindowByTitle(secondary, _pendingActiveSecWin);
-            if(secondaryTarget) {
-                AppTrace::log("AppProject::restoreActiveWindows",
-                              QStringLiteral("secondary->setActiveSubWindow %1")
-                                  .arg(AppTrace::subWindowTag(secondaryTarget)));
-                secondary->setActiveSubWindow(secondaryTarget);
-            }
-        }
-    }
-
-    QMdiSubWindow* finalTarget = nullptr;
-
-    if (_pendingActivePanel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0) {
-        finalTarget = secondaryTarget;
-        if(!finalTarget)
-            if(auto* secondary = secondaryArea())
-                finalTarget = secondary->activeSubWindow();
-    } else {
-        finalTarget = primaryTarget;
-        if(!finalTarget)
-            if(auto* primary = _mdiArea->primaryArea())
-                finalTarget = primary->activeSubWindow();
-    }
-
-    if(finalTarget) {
-        AppTrace::log("AppProject::restoreActiveWindows",
-                      QStringLiteral("mdiArea->setActiveSubWindow(finalTarget) %1")
-                          .arg(AppTrace::subWindowTag(finalTarget)));
-        _mdiArea->setActiveSubWindow(finalTarget);
-    }
-
-    QPointer<QMdiSubWindow> queuedPrimaryTarget = primaryTarget;
-    QPointer<QMdiSubWindow> queuedSecondaryTarget = secondaryTarget;
-    QPointer<QMdiSubWindow> queuedFinalTarget = finalTarget;
-
-    _pendingActivePrimaryWin.clear();
-    _pendingActiveSecWin.clear();
-    _pendingActivePanel.clear();
-
-    QTimer::singleShot(0, _mdiArea, [this, queuedPrimaryTarget, queuedSecondaryTarget, queuedFinalTarget]() {
-        if(!_mdiArea)
-            return;
-
-        if(queuedPrimaryTarget)
-            if(auto* primary = _mdiArea->primaryArea())
-                primary->setActiveSubWindow(queuedPrimaryTarget);
-
-        if(queuedSecondaryTarget)
-            if(auto* secondary = secondaryArea())
-                secondary->setActiveSubWindow(queuedSecondaryTarget);
-
-        if(queuedFinalTarget)
-            _mdiArea->setActiveSubWindow(queuedFinalTarget);
-    });
+    _splitController->restoreActiveWindows();
 }
 
 ///
 /// \brief AppProject::saveProject
 /// \param filename
+/// \return
 ///
 bool AppProject::saveProject(const QString& filename)
 {
@@ -2040,161 +644,12 @@ bool AppProject::saveProject(const QString& filename)
         return false;
     }
 
+    setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _projectFilename = absoluteFilename;
 
-    QXmlStreamWriter w(&file);
-    w.setAutoFormatting(true);
-
-    w.writeStartDocument();
-    w.writeStartElement("OpenModSim");
-    w.writeAttribute("Version", qApp->applicationVersion());
-
-    w << _mbServer.getModbusDefinitions();
-
-    w.writeStartElement("Connections");
-    for(auto&& cd : _mbServer.connections()) {
-        w << cd;
-    }
-    w.writeEndElement(); // Connections
-
-    {
-        const auto globalDescriptionMap = _mbServer.descriptionMap();
-        const auto globalTimestampMap = _mbServer.timestampMap();
-
-        w.writeStartElement("AddressSpace");
-
-        w << globalDescriptionMap;
-        w << globalTimestampMap;
-
-        {
-            const auto simMap = _dataSimulator->simulationMap();
-            w.writeStartElement("ModbusSimulationMap");
-            for (auto it = simMap.constBegin(); it != simMap.constEnd(); ++it) {
-                const auto& key = it.key();
-                const auto& params = it.value();
-                if (params.Mode != SimulationMode::Off && params.Mode != SimulationMode::Disabled) {
-                    w.writeStartElement("Simulation");
-                    w.writeAttribute("DeviceId", QString::number(key.DeviceId));
-                    w.writeAttribute("Type", QString::number(key.Type));
-                    w.writeAttribute("Address", QString::number(key.Address));
-                    w << params;
-                    w.writeEndElement(); // Simulation
-                }
-            }
-            w.writeEndElement(); // ModbusSimulationMap
-        }
-
-        {
-            const auto maxLen = (_mbServer.getModbusDefinitions().AddrSpace == AddressSpace::Addr6Digits)
-                                ? quint16(65535) : quint16(9999);
-            const QList<QModbusDataUnit::RegisterType> regTypes = {
-                QModbusDataUnit::Coils, QModbusDataUnit::DiscreteInputs,
-                QModbusDataUnit::InputRegisters, QModbusDataUnit::HoldingRegisters
-            };
-            w.writeStartElement("ModbusDataValues");
-            for (const int deviceId : _mbServer.registeredDeviceIds()) {
-                for (auto regType : regTypes) {
-                    const auto unit = _mbServer.data(static_cast<quint8>(deviceId), regType, 0, maxLen);
-                    quint16 address = 0;
-                    for (const auto value : unit.values()) {
-                        if (value != 0) {
-                            w.writeStartElement("Value");
-                            w.writeAttribute("DeviceId", QString::number(deviceId));
-                            w.writeAttribute("Type", QString::number(regType));
-                            w.writeAttribute("Address", QString::number(address));
-                            w.writeCharacters(QString::number(value));
-                            w.writeEndElement(); // Value
-                        }
-                        address++;
-                    }
-                }
-            }
-            w.writeEndElement(); // ModbusDataValues
-        }
-
-        w.writeEndElement(); // AddressSpace
-    }
-
-    w.writeStartElement("ViewSettings");
-    w.writeAttribute("ViewMode", QString::number(_mdiArea->viewMode()));
-    w.writeAttribute("SplitView", _mdiArea->isSplitView() ? "1" : "0");
-    w.writeAttribute("GlobalZeroBasedAddress", AppPreferences::instance().globalAddressBase() == AddressBase::Base0 ? "1" : "0");
-    w.writeAttribute("GlobalHexView", AppPreferences::instance().globalHexView() ? "1" : "0");
-    if (auto* activePanel = _mdiArea->activePanel()) {
-        if (activePanel == _mdiArea->primaryArea())
-            w.writeAttribute("ActivePanel", kPanelLeft);
-        else if (activePanel == secondaryArea())
-            w.writeAttribute("ActivePanel", kPanelRight);
-    }
-    if(auto primary = _mdiArea->primaryArea())
-        if(auto wnd = primary->activeSubWindow())
-            if(auto frm = wnd->widget())
-                w.writeAttribute("ActivePrimaryWindow", frm->windowTitle());
-    if(isSplitTabbedView())
-        if(auto secondary = secondaryArea())
-            if(auto wnd = secondary->activeSubWindow())
-                if(auto frm = wnd->widget())
-                    w.writeAttribute("ActiveSecondaryWindow", frm->windowTitle());
-    w.writeEndElement(); // ViewSettings
-
-    w.writeStartElement("Forms");
-    auto saveOpenFormsFromArea = [&](MdiArea* area, const char* panel, bool autoClonesOnly) {
-        if(!area)
-            return;
-
-        for(auto* wnd : area->localSubWindowList()) {
-            auto* widget = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-            if(!widget)
-                continue;
-
-            const bool isAutoClone = widget->property(kSplitAutoCloneProperty).toBool();
-            if(isAutoClone != autoClonesOnly)
-                continue;
-
-            widget->setProperty(kFormPanelProperty, QLatin1String(panel));
-            saveXmlOfForm(widget, w);
-            widget->setProperty(kFormPanelProperty, QVariant());
-        }
-    };
-    saveOpenFormsFromArea(_mdiArea->primaryArea(), kPanelLeft, false);
-    if(isSplitTabbedView()) {
-        saveOpenFormsFromArea(secondaryArea(), kPanelRight, false);
-        saveOpenFormsFromArea(secondaryArea(), kPanelRight, true);
-    }
-    // Also save forms that are closed (hidden in project tree)
-    const auto closed = _closedForms;
-    for (auto&& frm : closed) {
-        if (frm) {
-            frm->setProperty(kFormPanelProperty, QLatin1String(kPanelLeft));
-            frm->setProperty(kFormClosedProperty, true);
-            saveXmlOfForm(frm, w);
-            frm->setProperty(kFormPanelProperty, QVariant());
-            frm->setProperty(kFormClosedProperty, QVariant());
-        }
-    }
-    w.writeEndElement(); // Forms
-
-    auto writeTabOrder = [&](MdiArea* area, const char* panel) {
-        const auto order = tabTitlesForArea(area);
-        if(order.isEmpty())
-            return;
-        w.writeStartElement("TabOrder");
-        w.writeAttribute("Panel", panel);
-        for(const auto& title : order) {
-            w.writeStartElement("TabRef");
-            w.writeAttribute("title", title);
-            w.writeEndElement(); // TabRef
-        }
-        w.writeEndElement(); // TabOrder
-    };
-    writeTabOrder(_mdiArea->primaryArea(), kPanelLeft);
-    if(isSplitTabbedView())
-        writeTabOrder(secondaryArea(), kPanelRight);
-
-    w.writeEndElement(); // OpenModSim
-    w.writeEndDocument();
-
-    if (w.hasError()) {
+    ProjectSerializer serializer(*this, *_formManager, *_splitController,
+                                 _mbServer, _dataSimulator, _mdiArea, _mainWindow);
+    if (!serializer.save(file)) {
         emit projectSaveFailed(_projectFilename, QObject::tr("Failed to write project XML."));
         return false;
     }

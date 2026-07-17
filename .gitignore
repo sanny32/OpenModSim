@@ -32,6 +32,8 @@ ui_*.h
 *.qhc
 Makefile*
 *build-*
+!/.github/actions/build-openssl3-runtime/
+!/.github/actions/build-openssl3-runtime/action.yml
 debug
 release
 
@@ -60,7 +62,13 @@ CMakeUserPresets.json
 .pytest_cache
 __pycache__
 
+# AI agents
+.skills
 .claude
+.codex_tmp
+.vscode
+AGENTS.md
+
 .directory
 .DS_Store
 *.cmd
@@ -69,11 +77,10 @@ __pycache__
 *.idx
 *.rc
 *.qtds
+*.log
 *.ts text eol=lf
 src/res/license.txt
 /docs/PROJECT_SUMMARY.md
 /docs/README.md
 /docs/SITE_STRUCTURE.md
 /docs/DEPLOYMENT.md
-/AGENTS.md
-/CHANGELOG.md

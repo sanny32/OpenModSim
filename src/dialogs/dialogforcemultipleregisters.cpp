@@ -112,9 +112,6 @@ DialogForceMultipleRegisters::~DialogForceMultipleRegisters()
 }
 
 ///
-/// rief DialogForceMultipleRegisters::changeEvent
-///
-///
 /// \brief DialogForceMultipleRegisters::changeEvent
 ///
 void DialogForceMultipleRegisters::changeEvent(QEvent* event)
