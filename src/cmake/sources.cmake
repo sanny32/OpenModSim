@@ -82,6 +82,7 @@ set(SOURCES
     jscompleter.cpp
     jshighlighter.cpp
     main.cpp
+    helpdockpolicy.cpp
     mainwindow.cpp
     menuconnect.cpp
 
@@ -219,6 +220,7 @@ set(HEADERS
     jsobjects/server.h
     jsobjects/storage.h
 
+    helpdockpolicy.h
     mainwindow.h
     menuconnect.h
 

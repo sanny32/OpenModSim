@@ -270,12 +270,12 @@
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../../controls/consoleoutput.cpp" line="321"/>
+        <location filename="../../controls/consoleoutput.cpp" line="391"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../controls/consoleoutput.cpp" line="332"/>
+        <location filename="../../controls/consoleoutput.cpp" line="402"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -1820,12 +1820,12 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../formdatamapview.ui" line="88"/>
-        <location filename="../../formdatamapview.cpp" line="1454"/>
+        <location filename="../../formdatamapview.cpp" line="1462"/>
         <source>Clear Table</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1455"/>
+        <location filename="../../formdatamapview.cpp" line="1463"/>
         <source>Clear all visible rows from the table?</source>
         <translation>是否清除表格中所有可见行？</translation>
     </message>
@@ -1882,7 +1882,7 @@ Open the download page?</source>
     <message>
         <location filename="../../formdatamapview.cpp" line="1000"/>
         <location filename="../../formdatamapview.cpp" line="1224"/>
-        <location filename="../../formdatamapview.cpp" line="1557"/>
+        <location filename="../../formdatamapview.cpp" line="1565"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
@@ -1897,44 +1897,44 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1225"/>
-        <location filename="../../formdatamapview.cpp" line="1558"/>
+        <location filename="../../formdatamapview.cpp" line="1566"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1226"/>
-        <location filename="../../formdatamapview.cpp" line="1559"/>
+        <location filename="../../formdatamapview.cpp" line="1567"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1227"/>
-        <location filename="../../formdatamapview.cpp" line="1560"/>
+        <location filename="../../formdatamapview.cpp" line="1568"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1228"/>
-        <location filename="../../formdatamapview.cpp" line="1561"/>
+        <location filename="../../formdatamapview.cpp" line="1569"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1216"/>
-        <location filename="../../formdatamapview.cpp" line="1568"/>
+        <location filename="../../formdatamapview.cpp" line="1576"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1217"/>
-        <location filename="../../formdatamapview.cpp" line="1569"/>
+        <location filename="../../formdatamapview.cpp" line="1577"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="989"/>
         <location filename="../../formdatamapview.cpp" line="1218"/>
-        <location filename="../../formdatamapview.cpp" line="1553"/>
+        <location filename="../../formdatamapview.cpp" line="1561"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -1942,171 +1942,171 @@ Type Filter: %3</source>
 <context>
     <name>FormDataView</name>
     <message>
-        <location filename="../../formdataview.ui" line="125"/>
+        <location filename="../../formdataview.ui" line="128"/>
         <source>Starting Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="132"/>
+        <location filename="../../formdataview.ui" line="135"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="217"/>
+        <location filename="../../formdataview.ui" line="223"/>
         <source>Unit Identifier:</source>
         <translation>单元标识符：</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="309"/>
+        <location filename="../../formdataview.ui" line="318"/>
         <source>Column Distance:</source>
         <translation>列距：</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="252"/>
+        <location filename="../../formdataview.ui" line="258"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="341"/>
+        <location filename="../../formdataview.ui" line="350"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>无符号数前导零</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="401"/>
-        <location filename="../../formdataview.ui" line="404"/>
+        <location filename="../../formdataview.ui" line="410"/>
+        <location filename="../../formdataview.ui" line="413"/>
         <source>Binary</source>
         <translation>二进制</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="422"/>
-        <location filename="../../formdataview.ui" line="425"/>
+        <location filename="../../formdataview.ui" line="431"/>
+        <location filename="../../formdataview.ui" line="434"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="443"/>
-        <location filename="../../formdataview.ui" line="446"/>
+        <location filename="../../formdataview.ui" line="452"/>
+        <location filename="../../formdataview.ui" line="455"/>
         <source>Ansi</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="458"/>
-        <location filename="../../formdataview.ui" line="461"/>
+        <location filename="../../formdataview.ui" line="467"/>
+        <location filename="../../formdataview.ui" line="470"/>
         <source>16-bit Integer</source>
         <translation>16位整数</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="479"/>
-        <location filename="../../formdataview.ui" line="482"/>
+        <location filename="../../formdataview.ui" line="488"/>
+        <location filename="../../formdataview.ui" line="491"/>
         <source>Unsigned 16-bit Integer</source>
         <translation>无符号16位整数</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="500"/>
-        <location filename="../../formdataview.ui" line="503"/>
+        <location filename="../../formdataview.ui" line="509"/>
+        <location filename="../../formdataview.ui" line="512"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="521"/>
-        <location filename="../../formdataview.ui" line="524"/>
+        <location filename="../../formdataview.ui" line="530"/>
+        <location filename="../../formdataview.ui" line="533"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="542"/>
-        <location filename="../../formdataview.ui" line="545"/>
+        <location filename="../../formdataview.ui" line="551"/>
+        <location filename="../../formdataview.ui" line="554"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>无符号32位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="563"/>
-        <location filename="../../formdataview.ui" line="566"/>
+        <location filename="../../formdataview.ui" line="572"/>
+        <location filename="../../formdataview.ui" line="575"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>无符号32位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="584"/>
-        <location filename="../../formdataview.ui" line="587"/>
+        <location filename="../../formdataview.ui" line="593"/>
+        <location filename="../../formdataview.ui" line="596"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="605"/>
-        <location filename="../../formdataview.ui" line="608"/>
+        <location filename="../../formdataview.ui" line="614"/>
+        <location filename="../../formdataview.ui" line="617"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="626"/>
-        <location filename="../../formdataview.ui" line="629"/>
+        <location filename="../../formdataview.ui" line="635"/>
+        <location filename="../../formdataview.ui" line="638"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>无符号64位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="647"/>
-        <location filename="../../formdataview.ui" line="650"/>
+        <location filename="../../formdataview.ui" line="656"/>
+        <location filename="../../formdataview.ui" line="659"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>无符号64位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="668"/>
+        <location filename="../../formdataview.ui" line="677"/>
         <source>Float (MSRF)</source>
         <translation>浮点数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="671"/>
+        <location filename="../../formdataview.ui" line="680"/>
         <source>32-bit Float (MSRF)</source>
         <translation>32位浮点数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="689"/>
+        <location filename="../../formdataview.ui" line="698"/>
         <source>Float (LSRF)</source>
         <translation>浮点数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="692"/>
+        <location filename="../../formdataview.ui" line="701"/>
         <source>32-bit Float (LSRF)</source>
         <translation>32位浮点数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="710"/>
+        <location filename="../../formdataview.ui" line="719"/>
         <source>Double (MSRF)</source>
         <translation>双精度（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="713"/>
+        <location filename="../../formdataview.ui" line="722"/>
         <source>64-bit Float (MSRF)</source>
         <translation>64位浮点数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="731"/>
+        <location filename="../../formdataview.ui" line="740"/>
         <source>Double (LSRF)</source>
         <translation>双精度（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="734"/>
+        <location filename="../../formdataview.ui" line="743"/>
         <source>64-bit Float (LSRF)</source>
         <translation>64位浮点数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="752"/>
-        <location filename="../../formdataview.ui" line="755"/>
+        <location filename="../../formdataview.ui" line="761"/>
+        <location filename="../../formdataview.ui" line="764"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>交换字节（0xAB → 0xBA）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="611"/>
+        <location filename="../../formdataview.cpp" line="617"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="611"/>
+        <location filename="../../formdataview.cpp" line="617"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="612"/>
+        <location filename="../../formdataview.cpp" line="618"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2115,7 +2115,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="620"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2609,7 +2609,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1925"/>
+        <location filename="../../mainwindow.cpp" line="1936"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2809,19 +2809,19 @@ Open the download page?</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="932"/>
+        <location filename="../../mainwindow.cpp" line="933"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="301"/>
-        <location filename="../../mainwindow.cpp" line="679"/>
+        <location filename="../../mainwindow.cpp" line="302"/>
+        <location filename="../../mainwindow.cpp" line="680"/>
         <source>Open Recent</source>
         <translation>最近打开</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2061"/>
+        <location filename="../../mainwindow.cpp" line="303"/>
+        <location filename="../../mainwindow.cpp" line="2072"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
@@ -2836,21 +2836,21 @@ Open the download page?</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="931"/>
-        <location filename="../../mainwindow.cpp" line="1955"/>
+        <location filename="../../mainwindow.cpp" line="932"/>
+        <location filename="../../mainwindow.cpp" line="1966"/>
         <source>Project files (*.omsim)</source>
         <translation>项目文件 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1579"/>
-        <location filename="../../mainwindow.cpp" line="1983"/>
+        <location filename="../../mainwindow.cpp" line="1586"/>
+        <location filename="../../mainwindow.cpp" line="1994"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
-        <location filename="../../mainwindow.cpp" line="682"/>
-        <location filename="../../mainwindow.cpp" line="1764"/>
+        <location filename="../../mainwindow.cpp" line="683"/>
+        <location filename="../../mainwindow.cpp" line="1775"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3155,7 +3155,7 @@ Open the download page?</source>
         <translation>窗体已重命名：&apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1318"/>
+        <location filename="../../mainwindow.cpp" line="1325"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3177,12 +3177,12 @@ Open the download page?</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1926"/>
+        <location filename="../../mainwindow.cpp" line="1937"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2049"/>
+        <location filename="../../mainwindow.cpp" line="2060"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
@@ -3192,7 +3192,7 @@ Open the download page?</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1276"/>
+        <location filename="../../mainwindow.cpp" line="1283"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
@@ -3577,12 +3577,12 @@ Open the download page?</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="992"/>
+        <location filename="../../modbusmultiserver.cpp" line="1000"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了错误的设备地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1592"/>
+        <location filename="../../modbusmultiserver.cpp" line="1630"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
@@ -3946,7 +3946,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="2198"/>
+        <location filename="../../appproject.cpp" line="2222"/>
         <source>Failed to write project XML.</source>
         <translation>项目 XML 写入失败。</translation>
     </message>
@@ -4047,6 +4047,24 @@ Open the download page?</source>
         <location filename="../../controls/searchlineedit.cpp" line="35"/>
         <source>Type text to search...</source>
         <translation>输入文字进行搜索...</translation>
+    </message>
+</context>
+<context>
+    <name>Server</name>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="86"/>
+        <source>An incorrect device ID was specified (%1)</source>
+        <translation type="unfinished">指定了错误的设备地址（%1）</translation>
+    </message>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="498"/>
+        <source>An array of values is expected</source>
+        <translation>需要一个值数组</translation>
+    </message>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="1004"/>
+        <source>A callback function is expected</source>
+        <translation>需要一个回调函数</translation>
     </message>
 </context>
 <context>

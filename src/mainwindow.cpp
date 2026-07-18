@@ -29,6 +29,7 @@
 #include "menuconnect.h"
 #include "mdiareaex.h"
 #include "formscriptview.h"
+#include "helpdockpolicy.h"
 #include "formdatamapview.h"
 #include "applogoutput.h"
 #include "applogger.h"
@@ -1240,22 +1241,28 @@ void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 ///
 void MainWindow::updateHelpWidgetState()
 {
-    auto frm = _project->currentMdiChild();
-    if(!frm) return;
-    if (qobject_cast<FormScriptView*>(frm)) {
-        if(!ui->helpDockWidget->isVisible() &&
-            ui->helpDockWidget->property("WasShown").toBool())
-        {
-            ui->helpDockWidget->setVisible(true);
-        }
-        return;
-    }
+    const auto frm = _project->currentMdiChild();
 
-    if(ui->helpDockWidget->isVisible() &&
-        !ui->helpDockWidget->isFloating())
+    HelpDockPolicy::State state;
+    state.hasActiveForm = (frm != nullptr);
+    state.isScriptForm  = (qobject_cast<FormScriptView*>(frm) != nullptr);
+    state.isVisible     = ui->helpDockWidget->isVisible();
+    state.isFloating    = ui->helpDockWidget->isFloating();
+    state.wasShown      = ui->helpDockWidget->property("WasShown").toBool();
+
+    switch(HelpDockPolicy::nextAction(state))
     {
-        ui->helpDockWidget->setProperty("WasShown", true);
-        ui->helpDockWidget->setVisible(false);
+        case HelpDockPolicy::Action::Show:
+            ui->helpDockWidget->setVisible(true);
+        break;
+
+        case HelpDockPolicy::Action::HideAndRemember:
+            ui->helpDockWidget->setProperty("WasShown", true);
+            ui->helpDockWidget->setVisible(false);
+        break;
+
+        case HelpDockPolicy::Action::None:
+        break;
     }
 }
 
@@ -1703,6 +1710,10 @@ bool MainWindow::loadAppSettings(const QString& filename)
     if(!QFile::exists(_profile)) {
         _newFormKind = ProjectFormKind::Data;
         restoreNewFormKindIcon();
+
+        // First run: arm the script help so it shows up as soon as a script form
+        // is activated, otherwise new users have no hint that the panel exists.
+        ui->helpDockWidget->setProperty("WasShown", true);
         return false;
     }
 

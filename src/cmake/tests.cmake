@@ -18,12 +18,28 @@ function(omodsim_configure_tests)
         qdoublevalidatorex.cpp
         modbusmessages/modbusmessage.cpp
         jsobjects/storage.cpp
+        helpdockpolicy.cpp
+        jsobjects/script.cpp
+        jsobjects/server.cpp
+        controls/consoleoutput.cpp
+        controls/consoleoutput.ui
+        controls/toolbar.cpp
+        styles/themedicons.cpp
+        styles/apptheme.cpp
+        application.cpp
+        apppreferences.cpp
+        modbusmultiserver.cpp
+        modbusserver.cpp
+        modbusrtutcpserver.cpp
+        modbustcpserver.cpp
+        modbusrtuserialserver.cpp
     )
 
     target_include_directories(omodsim_testable PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/controls
         ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles
     )
 
     target_link_libraries(omodsim_testable PUBLIC
@@ -72,4 +88,9 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_serialportutils      test_serialportutils.cpp)
     omodsim_add_test(omodsim_tests_simulationparams     test_simulationparams.cpp)
     omodsim_add_test(omodsim_tests_storage              test_storage.cpp)
+    omodsim_add_test(omodsim_tests_script               test_script.cpp)
+    omodsim_add_test(omodsim_tests_consoleoutput        test_consoleoutput.cpp)
+    omodsim_add_test(omodsim_tests_multiserver          test_modbusmultiserver.cpp)
+    omodsim_add_test(omodsim_tests_serverapi            test_server_api.cpp)
+    omodsim_add_test(omodsim_tests_helpdockpolicy       test_helpdockpolicy.cpp)
 endfunction()

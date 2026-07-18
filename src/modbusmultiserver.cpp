@@ -767,6 +767,7 @@ void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps)
 
     clearTimestamps();
 
+    bool applied = false;
     for(auto it = timestamps.constBegin(); it != timestamps.constEnd(); ++it)
     {
         if(!it.value().isValid())
@@ -779,8 +780,11 @@ void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps)
         }
 
         _modbusDataUnitMaps[key.DeviceId].setTimestamp(key.Type, key.Address, it.value());
-        emit timestampChanged(key.DeviceId, key.Type, key.Address, it.value());
+        applied = true;
     }
+
+    if(applied)
+        emit timestampsChanged();
 }
 
 ///
@@ -796,13 +800,17 @@ void ModbusMultiServer::clearTimestamps()
         return;
     }
 
+    bool cleared = false;
     for(auto it = _modbusDataUnitMaps.begin(); it != _modbusDataUnitMaps.end(); ++it) {
-        const auto deviceId = static_cast<quint8>(it.key());
-        const auto map = it->timestampMap();
+        if(it->timestampMap().isEmpty())
+            continue;
+
         it->clearTimestamps();
-        for(auto jt = map.constBegin(); jt != map.constEnd(); ++jt)
-            emit timestampChanged(deviceId, jt.key().Type, jt.key().Address, QDateTime());
+        cleared = true;
     }
+
+    if(cleared)
+        emit timestampsChanged();
 }
 
 ///
@@ -1033,12 +1041,26 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
         s->blockSignals(false);
     }
 
+    int changedTimestamps = 0;
+    quint16 changedAddress = 0;
+    QDateTime changedTimestamp;
     for(int i = 0; i < data.valueCount(); ++i) {
         const quint16 address = static_cast<quint16>(data.startAddress() + i);
         const auto timestamp = _modbusDataUnitMaps[deviceId].timestamp(data.registerType(), address);
-        if(timestamp != previousTimestamps[i])
-            emit timestampChanged(deviceId, data.registerType(), address, timestamp);
+        if(timestamp == previousTimestamps[i])
+            continue;
+
+        if(changedTimestamps == 0) {
+            changedAddress = address;
+            changedTimestamp = timestamp;
+        }
+        changedTimestamps++;
     }
+
+    if(changedTimestamps == 1)
+        emit timestampChanged(deviceId, data.registerType(), changedAddress, changedTimestamp);
+    else if(changedTimestamps > 1)
+        emit timestampsChanged();
 
     if(error.isEmpty()) {
         emit dataChanged(deviceId, data, source, client);
@@ -1081,7 +1103,7 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
         for(int i = 0; i < vv.size(); i++)
             vv[i] = toByteOrderValue(values[i], order);
 
-        data.setValues(values);
+        data.setValues(vv);
     }
 
     return data;
@@ -1226,6 +1248,22 @@ void ModbusMultiServer::writeValue(quint8 deviceId, QModbusDataUnit::RegisterTyp
     auto data = QModbusDataUnit(pointType, pointAddress, 1);
     data.setValue(0, toByteOrderValue(value, order));
     setData(deviceId, data);
+}
+
+///
+/// \brief ModbusMultiServer::writeValues
+/// \param deviceId
+/// \param pointType
+/// \param startAddress
+/// \param values
+/// \param order
+///
+void ModbusMultiServer::writeValues(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 startAddress, const QVector<quint16>& values, ByteOrder order)
+{
+    if(values.isEmpty())
+        return;
+
+    setData(deviceId, createDataUnit(pointType, startAddress, values, order));
 }
 
 ///

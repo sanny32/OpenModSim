@@ -1891,11 +1891,35 @@ void AppProject::loadProject(const QString& filename)
             _mdiArea->setSplitViewEnabled(splitView);
     }
 
-    // Apply values from <AddressSpace> (requires forms to exist so _mbServer has unit maps)
-    for (const auto& pv : std::as_const(pendingValues)) {
-        QModbusDataUnit unit(pv.type, pv.address, 1);
-        unit.setValue(0, pv.value);
-        _mbServer.setData(pv.deviceId, unit, WriteSource::ProjectLoad);
+    // Apply values from <AddressSpace> (requires forms to exist so _mbServer has unit maps).
+    // Values are grouped into contiguous runs so a large project needs one setData per run
+    // instead of one per register.
+    QMap<QPair<quint8, QModbusDataUnit::RegisterType>, QMap<quint16, quint16>> valuesByUnit;
+    for (const auto& pv : std::as_const(pendingValues))
+        valuesByUnit[{pv.deviceId, pv.type}][pv.address] = pv.value;
+
+    for (auto it = valuesByUnit.constBegin(); it != valuesByUnit.constEnd(); ++it) {
+        const quint8 deviceId = it.key().first;
+        const auto type = it.key().second;
+        const auto& values = it.value();
+
+        for (auto jt = values.constBegin(); jt != values.constEnd(); ) {
+            const quint16 startAddress = jt.key();
+            QVector<quint16> run;
+
+            quint16 expected = startAddress;
+            while (jt != values.constEnd() && jt.key() == expected) {
+                run.append(jt.value());
+                ++jt;
+                if (expected == 0xFFFF)
+                    break;
+                ++expected;
+            }
+
+            QModbusDataUnit unit(type, startAddress, run.size());
+            unit.setValues(run);
+            _mbServer.setData(deviceId, unit, WriteSource::ProjectLoad);
+        }
     }
 
     // Apply simulations after initial values are restored.

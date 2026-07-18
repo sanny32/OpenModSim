@@ -130,11 +130,15 @@
 				<li><a href="#script.period">Script.period</a></li>
 				<li><a href="#script.oninit">Script.onInit</a></li>
 				<li><a href="#script.settimeout">Script.setTimeout</a></li>
+				<li><a href="#script.setinterval">Script.setInterval</a></li>
+				<li><a href="#script.cleartimeout">Script.clearTimeout</a></li>
+				<li><a href="#script.clearinterval">Script.clearInterval</a></li>
 				<li><a href="#script.stop">Script.stop</a></li>
 			</ul>
 		</li>
 		<li class="object"><a href="#server"><strong>Server</strong></a>
 			<ul class="level2">
+				<li><a href="#server.deviceid">Server.deviceId</a></li>
 				<li><a href="#server.addressbase">Server.addressBase</a></li>
 				<li><a href="#server.addressspace">Server.addressSpace</a></li>
 				<li><a href="#server.noresponse">Server.noResponse</a></li>
@@ -164,6 +168,10 @@
 				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
 				<li><a href="#server.writeinput">Server.writeInput</a></li>
 				<li><a href="#server.writeholding">Server.writeHolding</a></li>
+				<li><a href="#server.writecoils">Server.writeCoils</a></li>
+				<li><a href="#server.writediscretes">Server.writeDiscretes</a></li>
+				<li><a href="#server.writeinputs">Server.writeInputs</a></li>
+				<li><a href="#server.writeholdings">Server.writeHoldings</a></li>
 				<li><a href="#server.writeansi">Server.writeAnsi</a></li>
 				<li><a href="#server.writeint32">Server.writeInt32</a></li>
 				<li><a href="#server.writeint64">Server.writeInt64</a></li>
@@ -635,7 +643,21 @@
 			</dd>
 			<dt id="script.settimeout"><code>Script.setTimeout(functionRef, delay)</code></dt>
 			<dd>
-				<p>Метод устанавливает таймер, который выполняет функцию по истечении времени таймера.</p>
+				<p>Метод устанавливает таймер, который выполняет функцию по истечении времени таймера. Возвращает идентификатор таймера, который можно передать в <code>Script.clearTimeout()</code>.</p>
+				<p>В режиме <em>Однократно</em> скрипт продолжает выполняться, пока не сработают все отложенные таймеры, поэтому цепочка вызовов <code>setTimeout()</code> не прерывается.</p>
+			</dd>
+			<dt id="script.setinterval"><code>Script.setInterval(functionRef, interval)</code></dt>
+			<dd>
+				<p>Метод периодически выполняет функцию с заданным интервалом. Возвращает идентификатор таймера, который можно передать в <code>Script.clearInterval()</code>.</p>
+				<p>Активный интервал удерживает скрипт запущенным до вызова <code>Script.clearInterval()</code> или <code>Script.stop()</code>.</p>
+			</dd>
+			<dt id="script.cleartimeout"><code>Script.clearTimeout(id)</code></dt>
+			<dd>
+				<p>Отменяет таймер, созданный вызовом <code>Script.setTimeout()</code>.</p>
+			</dd>
+			<dt id="script.clearinterval"><code>Script.clearInterval(id)</code></dt>
+			<dd>
+				<p>Отменяет таймер, созданный вызовом <code>Script.setInterval()</code>.</p>
 			</dd>
 			<dt id="script.stop"><code>Script.stop()</code></dt>
 			<dd>
@@ -649,6 +671,10 @@
 		</div>
 		<div class="section-content"><p>Объект <strong><code>Server</code></strong> обеспечивает доступ к функциям сервера MODBUS.</p></div>
 		<section aria-labelledby="static_properties"><h2 id="script.static_properties">Статические свойства</h2><div class="section-content"><dl>
+			<dt id="server.deviceid"><code>Server.deviceId</code></dt>
+			<dd>
+			  <p>Возвращает или задает номер устройства, который используется всеми методами <code>Server</code>, если аргумент <code>deviceId</code> не указан. По умолчанию <code>1</code>.</p>
+			</dd>
 			<dt id="server.addressbase"><code>Server.addressBase</code></dt>
 			<dd>
 			  <p>Возвращает или устанавливает нумерацию <a href="#addressbase">адресного пространства</a> сервера.</p>
@@ -702,10 +728,12 @@
 			<dt id="server.onchange"><code>Server.onChange(deviceId, Register, address, functionRef)</code></dt>
 			<dd>
 				<p>Выполняет функцию <code>functionRef(value)</code> при изменении значения регистра тип <code>Register</code> с адресом <code>address</code> и номером устройства <code>deviceId</code>.</p>
+				<p>Также допустима форма <code>Server.onChange(Register, address, functionRef)</code>, использующая <code>Server.deviceId</code>.</p>
 			</dd>
 			<dt id="server.onerror"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
 				<p>Выполняет функцию <code>functionRef(error)</code> когда произошла ошибка на сервере с номером устройства <code>deviceId</code>.</p>
+				<p>Также допустима форма <code>Server.onError(functionRef)</code>, использующая <code>Server.deviceId</code>. Если обработчик не задан, ошибки выводятся в консоль скрипта.</p>
 			</dd>
 			<dt id="server.onrequest"><code>Server.onRequest(functionRef)</code></dt>
 			<dd>
@@ -837,6 +865,25 @@
 			<dt id="server.writeholding"><code>Server.writeHolding(address, value, deviceId)</code></dt>
 			<dd>
 				<p>Записывает <code>value</code> в регистр Holding по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.writeholdings"><code>Server.writeHoldings(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Записывает массив <code>values</code> в последовательные регистры Holding, начиная с адреса <code>startAddress</code>, для устройства <code>deviceId</code>.</p>
+				<div class="notecard note">
+					<p><strong>Примечание:</strong> Запись массива одним вызовом существенно быстрее цикла из вызовов <code>Server.writeHolding()</code>, так как весь диапазон применяется к серверу за одну операцию.</p>
+				</div>
+			</dd>
+			<dt id="server.writeinputs"><code>Server.writeInputs(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Записывает массив <code>values</code> в последовательные регистры Input, начиная с адреса <code>startAddress</code>, для устройства <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.writecoils"><code>Server.writeCoils(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Записывает массив логических значений <code>values</code> в последовательные регистры Coil, начиная с адреса <code>startAddress</code>, для устройства <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.writediscretes"><code>Server.writeDiscretes(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Записывает массив логических значений <code>values</code> в последовательные регистры Discrete, начиная с адреса <code>startAddress</code>, для устройства <code>deviceId</code>.</p>
 			</dd>
 			<dt id="server.writeansi"><code>Server.writeAnsi(Register, address, value, codepage, deviceId)</code></dt>
 			<dd>

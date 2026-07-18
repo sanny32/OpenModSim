@@ -147,9 +147,11 @@ private slots:
     void on_simulationStarted(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses);
     void on_simulationStopped(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses);
     void on_dataSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 startAddress, QVariant value);
+    void on_dataViewFlushTimeout();
 
 private:
     void updateStatus();
+    void refreshDisplayedData();
     void reapplyFind();
     void syncDescriptionsFromServer();
     void onDefinitionChanged();
@@ -169,6 +171,7 @@ private:
     DataSimulator* _dataSimulator;
     bool _initialMapSynced = false;
     FindReplaceBar* _findReplaceBar = nullptr;
+    QTimer* _dataViewFlushTimer = nullptr;
 
     AnsiMenu*  _ansiMenu = nullptr;
     QMap<QPair<DataType, RegisterOrder>, QAction*> _displayModeActions;

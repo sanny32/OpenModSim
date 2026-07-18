@@ -30,6 +30,7 @@
 namespace {
 constexpr const char* kFormIdProperty = "FormId";
 constexpr int kBitPointLengthLimit = 2000;
+constexpr int DataViewFlushIntervalMs = 20;
 
 bool isBitPointType(QModbusDataUnit::RegisterType type)
 {
@@ -98,6 +99,11 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
     connect(this, &FormDataView::definitionChanged, this, &FormDataView::onDefinitionChanged);
+
+    _dataViewFlushTimer = new QTimer(this);
+    _dataViewFlushTimer->setSingleShot(true);
+    _dataViewFlushTimer->setInterval(DataViewFlushIntervalMs);
+    connect(_dataViewFlushTimer, &QTimer::timeout, this, &FormDataView::on_dataViewFlushTimeout);
 
     _findReplaceBar = new FindReplaceBar(this);
     _findReplaceBar->setReplaceEnabled(false);
@@ -1113,13 +1119,30 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
 ///
 void FormDataView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 {
+    if(deviceId != displayDefinition().DeviceId)
+        return;
+
+    if(!_dataViewFlushTimer->isActive())
+        _dataViewFlushTimer->start();
+}
+
+///
+/// \brief FormDataView::on_dataViewFlushTimeout
+///
+void FormDataView::on_dataViewFlushTimeout()
+{
+    refreshDisplayedData();
+}
+
+///
+/// \brief FormDataView::refreshDisplayedData
+///
+void FormDataView::refreshDisplayedData()
+{
     const auto dd = displayDefinition();
-    if(deviceId == dd.DeviceId)
-    {
-        const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
-        ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
-        reapplyFind();
-    }
+    const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    reapplyFind();
 }
 
 ///

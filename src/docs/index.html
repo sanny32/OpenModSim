@@ -130,11 +130,15 @@
 				<li><a href="#script.period">Script.period</a></li>
 				<li><a href="#script.oninit">Script.onInit</a></li>
 				<li><a href="#script.settimeout">Script.setTimeout</a></li>
+				<li><a href="#script.setinterval">Script.setInterval</a></li>
+				<li><a href="#script.cleartimeout">Script.clearTimeout</a></li>
+				<li><a href="#script.clearinterval">Script.clearInterval</a></li>
 				<li><a href="#script.stop">Script.stop</a></li>
 			</ul>
 		</li>
 		<li class="object"><a href="#server"><strong>Server</strong></a>
 			<ul class="level2">
+				<li><a href="#server.deviceid">Server.deviceId</a></li>
 				<li><a href="#server.addressbase">Server.addressBase</a></li>
 				<li><a href="#server.addressspace">Server.addressSpace</a></li>
 				<li><a href="#server.noresponse">Server.noResponse</a></li>
@@ -164,6 +168,10 @@
 				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
 				<li><a href="#server.writeinput">Server.writeInput</a></li>
 				<li><a href="#server.writeholding">Server.writeHolding</a></li>
+				<li><a href="#server.writecoils">Server.writeCoils</a></li>
+				<li><a href="#server.writediscretes">Server.writeDiscretes</a></li>
+				<li><a href="#server.writeinputs">Server.writeInputs</a></li>
+				<li><a href="#server.writeholdings">Server.writeHoldings</a></li>
 				<li><a href="#server.writeansi">Server.writeAnsi</a></li>
 				<li><a href="#server.writeint32">Server.writeInt32</a></li>
 				<li><a href="#server.writeint64">Server.writeInt64</a></li>
@@ -635,7 +643,21 @@
 			</dd>
 			<dt id="script.settimeout"><code>Script.setTimeout(functionRef, delay)</code></dt>
 			<dd>
-				<p>The method sets a timer which executes a function once the timer expires.</p>
+				<p>The method sets a timer which executes a function once the timer expires. Returns a timer id that can be passed to <code>Script.clearTimeout()</code>.</p>
+				<p>In <em>Once</em> mode the script keeps running until every pending timer has fired, so a chain of <code>setTimeout()</code> calls stays alive.</p>
+			</dd>
+			<dt id="script.setinterval"><code>Script.setInterval(functionRef, interval)</code></dt>
+			<dd>
+				<p>The method repeatedly executes a function with a fixed delay between each call. Returns a timer id that can be passed to <code>Script.clearInterval()</code>.</p>
+				<p>An active interval keeps the script running until <code>Script.clearInterval()</code> or <code>Script.stop()</code> is called.</p>
+			</dd>
+			<dt id="script.cleartimeout"><code>Script.clearTimeout(id)</code></dt>
+			<dd>
+				<p>Cancels a timer previously created by <code>Script.setTimeout()</code>.</p>
+			</dd>
+			<dt id="script.clearinterval"><code>Script.clearInterval(id)</code></dt>
+			<dd>
+				<p>Cancels a timer previously created by <code>Script.setInterval()</code>.</p>
 			</dd>
 			<dt id="script.stop"><code>Script.stop()</code></dt>
 			<dd>
@@ -649,6 +671,10 @@
 		</div>
 		<div class="section-content"><p>The <strong><code>Server</code></strong> object provides access to the MODBUS server functionality.</p></div>
 		<section aria-labelledby="static_properties"><h2 id="script.static_properties">Static properties</h2><div class="section-content"><dl>
+			<dt id="server.deviceid"><code>Server.deviceId</code></dt>
+			<dd>
+			  <p>Returns or sets the device (unit) id used by every <code>Server</code> method whose <code>deviceId</code> argument is omitted. Defaults to <code>1</code>.</p>
+			</dd>
 			<dt id="server.addressbase"><code>Server.addressBase</code></dt>
 			<dd>
 			  <p>Returns or sets <a href="#addressbase">addressbase</a> of the Server object.</p>
@@ -702,10 +728,12 @@
 			<dt id="server.onchange"><code>Server.onChange(deviceId, Register, address, functionRef)</code></dt>
 			<dd>
 				<p>Executes a <code>functionRef(value)</code> when a <code>Register</code> value at <code>address</code> with <code>deviceId</code> was changed.</p>
+				<p><code>Server.onChange(Register, address, functionRef)</code> is also accepted and uses <code>Server.deviceId</code>.</p>
 			</dd>
 			<dt id="server.onerror"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
 				<p>Executes a <code>functionRef(error)</code> when an error occurred for <code>deviceId</code>.</p>
+				<p><code>Server.onError(functionRef)</code> is also accepted and uses <code>Server.deviceId</code>. When no handler is registered, errors are reported to the script console.</p>
 			</dd>
 			<dt id="server.onrequest"><code>Server.onRequest(functionRef)</code></dt>
 			<dd>
@@ -837,6 +865,25 @@
 			<dt id="server.writeholding"><code>Server.writeHolding(address, value, deviceId)</code></dt>
 			<dd>
 				<p>Writes a <code>value</code> to the Holding register at <code>address</code> with <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.writeholdings"><code>Server.writeHoldings(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Writes an array of <code>values</code> to consecutive Holding registers starting at <code>startAddress</code> with <code>deviceId</code>.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> Writing an array in a single call is considerably faster than a loop of <code>Server.writeHolding()</code> calls, because the whole range is applied to the server at once.</p>
+				</div>
+			</dd>
+			<dt id="server.writeinputs"><code>Server.writeInputs(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Writes an array of <code>values</code> to consecutive Input registers starting at <code>startAddress</code> with <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.writecoils"><code>Server.writeCoils(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Writes an array of boolean <code>values</code> to consecutive Coil registers starting at <code>startAddress</code> with <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.writediscretes"><code>Server.writeDiscretes(startAddress, values, deviceId)</code></dt>
+			<dd>
+				<p>Writes an array of boolean <code>values</code> to consecutive Discrete registers starting at <code>startAddress</code> with <code>deviceId</code>.</p>
 			</dd>
 			<dt id="server.writeansi"><code>Server.writeAnsi(Register, address, value, codepage, deviceId)</code></dt>
 			<dd>

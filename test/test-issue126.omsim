@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenModSim Version="2.0-dev">
+    <ModbusDefinitions AddrSpace="6-Digits" UseGlobalUnitMap="false" AutoAddRegistersOnRequest="false">
+        <ModbusErrorSimulations NoResponse="false" ResponseIncorrectId="false" ResponseIllegalFunction="false" ResponseDeviceBusy="false" ResponseIncorrectCrc="false" ResponseDelay="false" ResponseRandomDelay="false" ResponseDelayTime="0" ResponseRandomDelayUpToTime="1000"/>
+    </ModbusDefinitions>
+    <Connections>
+        <ConnectionDetails ConnectionType="Tcp">
+            <TcpConnectionParams IPAddress="0.0.0.0" ServicePort="5020"/>
+        </ConnectionDetails>
+    </Connections>
+    <AddressSpace>
+        <AddressDescriptionMap/>
+        <AddressTimestampMap/>
+        <ModbusSimulationMap/>
+        <ModbusDataValues/>
+    </AddressSpace>
+    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="1" GlobalHexView="0" ActivePanel="L" ActivePrimaryWindow="Issue126"/>
+    <Forms>
+        <FormDataView Panel="L" Title="InputsLow" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
+            <DataViewDefinitions FormName="InputsLow" DeviceId="1" PointType="InputRegisters" PointAddress="0" Length="200" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="InputsHigh" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
+            <DataViewDefinitions FormName="InputsHigh" DeviceId="1" PointType="InputRegisters" PointAddress="201" Length="100" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="HoldingsLow" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
+            <DataViewDefinitions FormName="HoldingsLow" DeviceId="1" PointType="HoldingRegisters" PointAddress="0" Length="200" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="HoldingsHigh" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
+            <DataViewDefinitions FormName="HoldingsHigh" DeviceId="1" PointType="HoldingRegisters" PointAddress="201" Length="100" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormScriptView Panel="L" Title="Issue126">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="683" Height="278"/>
+            <Colors Background="#ffffff" Foreground="#000000"/>
+            <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <ScriptViewDefinitions FormName="Issue126">
+                <ScriptSettings Mode="Once" Interval="1000" RunOnStartup="true"/>
+            </ScriptViewDefinitions>
+            <JScriptControl>
+                <Script CursorPosition="0" ScrollPosition="0"><![CDATA[/**************************************************************************/
+/*
+/* Regression script for issue #126
+/*
+/* Reproduces the reported freeze: a large initial fill from Script.onInit()
+/* followed by a self-rescheduling Script.setTimeout() chain.
+/*
+/* Expected behaviour:
+/*   - the initial fill completes without blocking the UI
+/*   - input registers keep updating once per second afterwards
+/*
+/* Run mode: Once (the setTimeout chain keeps the script alive)
+/*
+***************************************************************************/
+
+Server.addressBase = AddressBase.Base0;
+
+var REGISTER_COUNT = 300;
+
+var REGISTER_HEARTBEAT = 0;
+var REGISTER_SECONDS = 1;
+var REGISTER_TICKS = 2;
+
+var ticks = 0;
+
+function fillInitialValues()
+{
+    var holdings = [];
+    var inputs = [];
+
+    for(var i = 0; i < REGISTER_COUNT; i++)
+    {
+        holdings.push(i);
+        inputs.push(REGISTER_COUNT - i);
+    }
+
+    /* Batch API: one call per register block instead of 300 separate writes */
+    Server.writeHoldings(0, holdings);
+    Server.writeInputs(0, inputs);
+}
+
+function runOncePerSecond()
+{
+    ticks++;
+
+    var now = new Date();
+    Server.writeInput(REGISTER_HEARTBEAT, ticks % 2);
+    Server.writeInput(REGISTER_SECONDS, now.getSeconds());
+    Server.writeInput(REGISTER_TICKS, ticks);
+
+    console.log("tick " + ticks + " seconds=" + now.getSeconds());
+}
+
+function timer()
+{
+    Script.setTimeout(function() {
+        runOncePerSecond();
+        timer();
+    }, 1000);
+}
+
+Script.onInit(function() {
+    fillInitialValues();
+    console.log("initial fill done: " + REGISTER_COUNT + " holdings + " + REGISTER_COUNT + " inputs");
+
+    timer();
+
+    console.log("Init done");
+});
+]]></Script>
+                <AutoComplete Enabled="true"/>
+            </JScriptControl>
+        </FormScriptView>
+    </Forms>
+    <TabOrder>
+        <TabRef title="InputsLow"/>
+        <TabRef title="InputsHigh"/>
+        <TabRef title="HoldingsLow"/>
+        <TabRef title="HoldingsHigh"/>
+        <TabRef title="Issue126"/>
+    </TabOrder>
+</OpenModSim>
