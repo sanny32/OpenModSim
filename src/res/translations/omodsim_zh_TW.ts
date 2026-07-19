@@ -2343,13 +2343,13 @@ Source: %3</source>
 <context>
     <name>HelpBrowser</name>
     <message>
-        <location filename="../../controls/helpbrowser.cpp" line="33"/>
-        <location filename="../../controls/helpbrowser.cpp" line="80"/>
+        <location filename="../../controls/helpbrowser.cpp" line="35"/>
+        <location filename="../../controls/helpbrowser.cpp" line="82"/>
         <source>qthelp://omodsim/doc/index.html</source>
         <translation>qthelp://omodsim/doc/index.html</translation>
     </message>
     <message>
-        <location filename="../../controls/helpbrowser.cpp" line="60"/>
+        <location filename="../../controls/helpbrowser.cpp" line="62"/>
         <source>qthelp://omodsim/doc/index.html#%1</source>
         <translation>qthelp://omodsim/doc/index.html#%1</translation>
     </message>
