@@ -114,11 +114,12 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusDefinitions& d
             definitions.AutoAddRegistersOnRequest = stringToBool(attributes.value("AutoAddRegistersOnRequest").toString());
         }
 
-        if (xml.readNextStartElement() && xml.name() == QLatin1String("ModbusErrorSimulations")) {
-            xml >> definitions.ErrorSimulations;
+        while (xml.readNextStartElement()) {
+            if (xml.name() == QLatin1String("ModbusErrorSimulations"))
+                xml >> definitions.ErrorSimulations;
+            else
+                xml.skipCurrentElement();
         }
-
-        xml.skipCurrentElement();
 
         definitions.normalize();
     }

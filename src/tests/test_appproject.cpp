@@ -32,6 +32,10 @@ private slots:
     void createsAndRemovesSplitClone();
     void roundTripsOpenAndClosedForms();
     void rejectsMalformedProjectWithoutChangingState();
+    void loadsProjectWithChildlessDefinitionsAndConnection();
+    void preservesXmlCommentsAcrossRoundTrip();
+    void keepsCommentsOnRepeatedSave();
+    void dropsCommentsAfterCloseProject();
 };
 
 namespace {
@@ -46,6 +50,96 @@ struct ProjectFixture
     ProjectTreeWidget Tree;
     AppProject Project{&Mdi, Server, &Simulator, &Tree, &Host};
 };
+
+///
+/// \brief The project text used by the comment tests, annotated in the prolog, between
+/// elements, inside a container and in the epilog.
+///
+const char* kAnnotatedProject =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    "<!-- Pump station, hand written -->\n"
+    "<OpenModSim Version=\"2.0-dev\">\n"
+    "    <ModbusDefinitions AddrSpace=\"6-Digits\"/>\n"
+    "    <!-- network settings -->\n"
+    "    <Connections>\n"
+    "        <ConnectionDetails ConnectionType=\"Tcp\">\n"
+    "            <TcpConnectionParams IPAddress=\"0.0.0.0\" ServicePort=\"502\"/>\n"
+    "        </ConnectionDetails>\n"
+    "    </Connections>\n"
+    "    <AddressSpace>\n"
+    "        <AddressDescriptionMap>\n"
+    "            <!-- telemetry block -->\n"
+    "            <Description DeviceId=\"1\" Type=\"4\" Address=\"0\"><![CDATA[Sine]]></Description>\n"
+    "        </AddressDescriptionMap>\n"
+    "    </AddressSpace>\n"
+    "    <ViewSettings ViewMode=\"1\" SplitView=\"0\"/>\n"
+    "    <Forms>\n"
+    "        <FormDataView Panel=\"L\" Title=\"Data1\" DataType=\"UInt16\" RegisterOrder=\"MSRF\" Codepage=\"\" ByteOrder=\"Direct\">\n"
+    "            <Window Maximized=\"true\" Minimized=\"false\" Left=\"0\" Top=\"0\" Width=\"610\" Height=\"331\"/>\n"
+    "            <DataViewDefinitions DeviceId=\"1\" PointType=\"HoldingRegisters\" PointAddress=\"1\" Length=\"8\" DataViewColumnsDistance=\"25\" LeadingZeros=\"true\"/>\n"
+    "            <AddressColorMap/>\n"
+    "        </FormDataView>\n"
+    "    </Forms>\n"
+    "</OpenModSim>\n"
+    "<!-- end of project -->\n";
+
+///
+/// \brief Writes a project file.
+/// \param path Destination path.
+/// \param content Project text.
+///
+void writeProjectFile(const QString& path, const char* content)
+{
+    QFile file(path);
+    QVERIFY(file.open(QIODevice::WriteOnly));
+    file.write(content);
+}
+
+///
+/// \brief Describes where each comment of a project file sits, as "parent path|following
+/// element|text". The following element is "END" for a comment closing its parent.
+/// \param path The project file to inspect.
+/// \return One entry per comment, in document order.
+///
+QStringList commentPlacements(const QString& path)
+{
+    QStringList placements;
+    QStringList elements;
+    QStringList pending;
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return placements;
+
+    QXmlStreamReader xml(&file);
+    const auto flush = [&placements, &pending, &elements](const QString& following) {
+        for (const auto& text : pending)
+            placements.append(elements.join(QLatin1Char('/')) + QLatin1Char('|') + following
+                              + QLatin1Char('|') + text.trimmed());
+        pending.clear();
+    };
+
+    while (!xml.atEnd()) {
+        switch (xml.readNext()) {
+        case QXmlStreamReader::Comment:
+            pending.append(xml.text().toString());
+            break;
+        case QXmlStreamReader::StartElement:
+            flush(xml.name().toString());
+            elements.append(xml.name().toString());
+            break;
+        case QXmlStreamReader::EndElement:
+            flush(QStringLiteral("END"));
+            elements.removeLast();
+            break;
+        default:
+            break;
+        }
+    }
+    flush(QStringLiteral("END"));
+
+    return placements;
+}
 
 }
 
@@ -187,6 +281,94 @@ void TestAppProject::rejectsMalformedProjectWithoutChangingState()
     QVERIFY(!result.Error.isEmpty());
     QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).size(), 1);
     QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).first(), existing);
+}
+
+/// \brief Verifies a hand-written project whose ModbusDefinitions and ConnectionDetails
+/// carry no child elements is read to the end. Both readers used to consume the closing
+/// tag of their own element and then skip the parent, discarding the rest of the file.
+void TestAppProject::loadsProjectWithChildlessDefinitionsAndConnection()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString path = files.filePath(QStringLiteral("minimal.omsim"));
+    writeProjectFile(path,
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<OpenModSim Version=\"2.0-dev\">\n"
+        "    <ModbusDefinitions AddrSpace=\"6-Digits\"/>\n"
+        "    <Connections>\n"
+        "        <ConnectionDetails ConnectionType=\"Tcp\"/>\n"
+        "    </Connections>\n"
+        "    <Forms>\n"
+        "        <FormDataView Panel=\"L\" Title=\"Data1\" DataType=\"UInt16\" RegisterOrder=\"MSRF\" Codepage=\"\" ByteOrder=\"Direct\">\n"
+        "            <Window Maximized=\"true\" Minimized=\"false\" Left=\"0\" Top=\"0\" Width=\"610\" Height=\"331\"/>\n"
+        "            <DataViewDefinitions DeviceId=\"1\" PointType=\"HoldingRegisters\" PointAddress=\"1\" Length=\"8\" DataViewColumnsDistance=\"25\" LeadingZeros=\"true\"/>\n"
+        "            <AddressColorMap/>\n"
+        "        </FormDataView>\n"
+        "    </Forms>\n"
+        "</OpenModSim>\n");
+
+    const auto result = fixture.Project.loadProject(path);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).size(), 1);
+}
+
+/// \brief Verifies XML comments survive a load/save cycle at their original positions.
+void TestAppProject::preservesXmlCommentsAcrossRoundTrip()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    const auto result = fixture.Project.loadProject(source);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    QCOMPARE(commentPlacements(saved), QStringList({
+        QStringLiteral("|OpenModSim|Pump station, hand written"),
+        QStringLiteral("OpenModSim|Connections|network settings"),
+        QStringLiteral("OpenModSim/AddressSpace/AddressDescriptionMap|Description|telemetry block"),
+        QStringLiteral("|END|end of project")
+    }));
+
+    QFile file(saved);
+    QVERIFY(file.open(QIODevice::ReadOnly));
+    QVERIFY(file.readAll().contains("<![CDATA[Sine]]>"));
+}
+
+/// \brief Verifies the comment store is not consumed by a save.
+void TestAppProject::keepsCommentsOnRepeatedSave()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString first = files.filePath(QStringLiteral("first.omsim"));
+    const QString second = files.filePath(QStringLiteral("second.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    QVERIFY(fixture.Project.saveProject(first));
+    QVERIFY(fixture.Project.saveProject(second));
+
+    QCOMPARE(commentPlacements(second), commentPlacements(first));
+    QCOMPARE(commentPlacements(second).size(), 4);
+}
+
+/// \brief Verifies closing a project discards its comments.
+void TestAppProject::dropsCommentsAfterCloseProject()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    fixture.Project.closeProject();
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    QVERIFY(commentPlacements(saved).isEmpty());
 }
 
 int main(int argc, char** argv)

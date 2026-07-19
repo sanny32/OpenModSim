@@ -104,6 +104,7 @@ set(SOURCES
 
     projectaddressspacefilter.cpp
     projectaddressspacexml.cpp
+    projectcomments.cpp
     projectformmetadata.cpp
     projectformmanager.cpp
     projectformxml.cpp
@@ -276,6 +277,7 @@ set(HEADERS
     pch.h
     projectaddressspacefilter.h
     projectaddressspacexml.h
+    projectcomments.h
     projectformmetadata.h
     projectformmanager.h
     projectformkind.h

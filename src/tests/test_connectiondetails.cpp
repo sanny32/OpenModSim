@@ -111,6 +111,7 @@ private slots:
     void streamsConnectionDetails();
     void storesConnectionDetailsInSettings();
     void serializesConnectionDetailsToXml();
+    void readsChildlessConnectionWithoutSwallowingSiblings();
     void comparesConnectionsByType();
     void validatesClientInfo();
 };
@@ -292,6 +293,33 @@ void TestConnectionDetails::validatesClientInfo()
     QCOMPARE(copy, info);
     copy.Port = 4321;
     QVERIFY(!(copy == info));
+}
+
+/// \brief Verifies a ConnectionDetails element without a parameters child leaves the
+/// reader on its own closing tag, so the elements following it are still parsed.
+void TestConnectionDetails::readsChildlessConnectionWithoutSwallowingSiblings()
+{
+    QXmlStreamReader xml(QStringLiteral(
+        "<Connections>"
+        "<ConnectionDetails ConnectionType=\"Tcp\"/>"
+        "<ConnectionDetails ConnectionType=\"Serial\">"
+        "<SerialConnectionParams PortName=\"COM7\"/>"
+        "</ConnectionDetails>"
+        "</Connections>"));
+
+    QList<ConnectionDetails> connections;
+    QVERIFY(xml.readNextStartElement());
+    while (xml.readNextStartElement()) {
+        ConnectionDetails cd;
+        xml >> cd;
+        connections.append(cd);
+    }
+
+    QVERIFY(!xml.hasError());
+    QCOMPARE(connections.size(), 2);
+    QCOMPARE(connections.at(0).Type, ConnectionType::Tcp);
+    QCOMPARE(connections.at(1).Type, ConnectionType::Serial);
+    QCOMPARE(connections.at(1).SerialParams.PortName, QStringLiteral("COM7"));
 }
 
 QTEST_GUILESS_MAIN(TestConnectionDetails)

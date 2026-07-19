@@ -20,6 +20,7 @@
 #include "formtrafficview.h"
 #include "formscriptview.h"
 #include "formdatamapview.h"
+#include "projectcomments.h"
 #include "projectformkind.h"
 #include "projectloadresult.h"
 
@@ -149,6 +150,7 @@ private:
     ProjectSplitController*       _splitController;
     QString            _savePath;
     QString            _projectFilename;
+    ProjectComments    _projectComments;
 };
 
 #endif // APPPROJECT_H

@@ -255,6 +255,7 @@ void AppProject::closeProject()
     _mbServer.clearAddressSpace();
     _mbServer.clearDescriptions();
     _mbServer.clearTimestamps();
+    _projectComments.clear();
 
     if (!_projectFilename.isEmpty()) {
         emit projectClosed(_projectFilename);
@@ -572,6 +573,7 @@ ProjectLoadResult AppProject::loadProject(const QString& filename)
     }
 
     if (replace) {
+        _projectComments = result.Comments;
         setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
         _projectFilename = QFileInfo(filename).absoluteFilePath();
         emit projectOpened(_projectFilename);
@@ -649,7 +651,7 @@ bool AppProject::saveProject(const QString& filename)
 
     ProjectSerializer serializer(*this, *_formManager, *_splitController,
                                  _mbServer, _dataSimulator, _mdiArea, _mainWindow);
-    if (!serializer.save(file)) {
+    if (!serializer.save(file, _projectComments)) {
         emit projectSaveFailed(_projectFilename, QObject::tr("Failed to write project XML."));
         return false;
     }

@@ -12,6 +12,7 @@
 #include <QStringList>
 #include "connectiondetails.h"
 #include "modbusdefinitions.h"
+#include "projectcomments.h"
 #include "projectloadresult.h"
 
 class QIODevice;
@@ -29,8 +30,8 @@ class ProjectSplitController;
 /// \brief The ProjectSerializer class streams the project XML: it restores forms,
 /// view state and address-space data on load and writes them back on save.
 /// It owns no state between calls; global application state (connections,
-/// preferences, pending window activation) is returned in LoadResult and applied
-/// by AppProject.
+/// preferences, pending window activation) and the comments collected from the
+/// loaded document are returned in LoadResult and applied by AppProject.
 ///
 class ProjectSerializer
 {
@@ -54,6 +55,7 @@ public:
         QString ActivePrimaryWindow;
         QString ActiveSecondaryWindow;
         QString ActivePanel;
+        ProjectComments Comments;
     };
 
     ProjectSerializer(AppProject& project,
@@ -66,9 +68,10 @@ public:
 
     LoadResult load(QIODevice& device, bool replace);
     static ProjectLoadResult validate(QIODevice& device);
-    bool save(QIODevice& device);
+    bool save(QIODevice& device, const ProjectComments& comments = {});
 
 private:
+    bool writeDocument(QIODevice& device);
     void saveOpenFormsFromArea(QXmlStreamWriter& w, MdiArea* area, const char* panel, bool autoClonesOnly);
     void writeTabOrder(QXmlStreamWriter& w, MdiArea* area, const char* panel);
 
