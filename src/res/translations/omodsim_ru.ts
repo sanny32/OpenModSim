@@ -1150,13 +1150,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="320"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="673"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="693"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="357"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="710"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="730"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
@@ -1181,23 +1181,43 @@ Open the download page?</source>
         <translation>Сохранять все измененные регистры</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="776"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="544"/>
+        <source>Write the last change time of each register into the project file.</source>
+        <translation>Записывать в файл проекта время последнего изменения каждого регистра.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
+        <source>Save register timestamps</source>
+        <translation>Сохранять метки времени регистров</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="554"/>
+        <source>Write current register values. When disabled, the values loaded with the project and those edited by hand are saved instead, so a running simulation does not change the file.</source>
+        <translation>Записывать текущие значения регистров. Если выключено, вместо них сохраняются значения, загруженные вместе с проектом, и измененные вручную, поэтому работающая симуляция не изменяет файл.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="557"/>
+        <source>Save runtime register values</source>
+        <translation>Сохранять текущие значения регистров</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="796"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="788"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="808"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="826"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="846"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="335"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="688"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="708"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1218,7 +1238,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="432"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="744"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="764"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
@@ -1228,12 +1248,12 @@ Open the download page?</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="559"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="579"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="566"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="586"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
@@ -1248,22 +1268,22 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="567"/>
         <source>Traffic View</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="641"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="661"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="754"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="774"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="766"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="786"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
@@ -3618,12 +3638,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1008"/>
+        <location filename="../../modbusmultiserver.cpp" line="1061"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1566"/>
+        <location filename="../../modbusmultiserver.cpp" line="1624"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -3987,17 +4007,17 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="653"/>
+        <location filename="../../appproject.cpp" line="656"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="285"/>
+        <location filename="../../projectserializer.cpp" line="291"/>
         <source>The project document is empty.</source>
         <translation>Файл проекта пуст.</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="292"/>
+        <location filename="../../projectserializer.cpp" line="298"/>
         <source>Unsupported project document root: %1</source>
         <translation>Неподдерживаемый корневой элемент файла проекта: %1</translation>
     </message>

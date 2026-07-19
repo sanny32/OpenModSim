@@ -990,6 +990,59 @@ void ModbusMultiServer::clearDescriptions()
 }
 
 ///
+/// \brief ModbusMultiServer::configuredValueMap returns the values of the given range as
+/// configured by the project or the user, ignoring anything a simulation or a Modbus
+/// client has written since.
+/// \param deviceId
+/// \param pointType
+/// \param pointAddress
+/// \param length
+/// \return
+///
+AddressValueMap ModbusMultiServer::configuredValueMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        AddressValueMap result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, pointType, pointAddress, length]() {
+            result = configuredValueMap(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    AddressValueMap result;
+    const auto it = _modbusDataUnitMaps.constFind(deviceId);
+    if (it == _modbusDataUnitMaps.constEnd())
+        return result;
+
+    const auto map = it->configuredValueMap(pointType, pointAddress, length);
+    for (auto jt = map.constBegin(); jt != map.constEnd(); ++jt) {
+        auto key = jt.key();
+        key.DeviceId = deviceId;
+        result.insert(key, jt.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusMultiServer::clearConfiguredValues
+///
+void ModbusMultiServer::clearConfiguredValues()
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            clearConfiguredValues();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    for(auto& map : _modbusDataUnitMaps)
+        map.clearConfiguredValues();
+}
+
+///
 /// \brief ModbusMultiServer::setData
 /// \param data
 ///
@@ -1008,6 +1061,11 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
         emit errorOccured(deviceId, tr("An incorrect device ID was specified (%1)").arg(deviceId));
         return;
     }
+
+    // Recorded before the unchanged-data early return below, so that re-entering the
+    // value a simulation already produced still marks it as configured.
+    if(source == WriteSource::ProjectLoad || source == WriteSource::User)
+        _modbusDataUnitMaps[deviceId].setConfiguredValues(data);
 
     QVector<QDateTime> previousTimestamps;
     previousTimestamps.reserve(data.valueCount());

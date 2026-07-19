@@ -84,6 +84,9 @@ public:
     void setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source, bool replace = true);
     void clearDescriptions();
 
+    AddressValueMap configuredValueMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+    void clearConfiguredValues();
+
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
     void writeValues(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 startAddress, const QVector<quint16>& values, ByteOrder order);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, WriteSource source = WriteSource::User);

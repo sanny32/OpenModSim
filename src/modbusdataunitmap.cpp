@@ -461,6 +461,58 @@ void ModbusDataUnitMap::clearTimestamps()
 }
 
 ///
+/// \brief ModbusDataUnitMap::setConfiguredValues records the given values as part of the
+/// project configuration, as opposed to state produced by a running simulation or a
+/// Modbus client.
+/// \param data The written data unit.
+///
+void ModbusDataUnitMap::setConfiguredValues(const QModbusDataUnit& data)
+{
+    for(int i = 0; i < data.valueCount(); ++i)
+    {
+        const auto address = static_cast<quint16>(data.startAddress() + i);
+        _configuredValues.insert(makeLocalKey(data.registerType(), address), data.value(i));
+    }
+}
+
+///
+/// \brief ModbusDataUnitMap::configuredValueMap
+/// \param type
+/// \param startAddress
+/// \param length
+/// \return The configured values of the given range.
+///
+AddressValueMap ModbusDataUnitMap::configuredValueMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
+{
+    AddressValueMap result;
+    if(length == 0)
+        return result;
+
+    const quint32 endAddress = static_cast<quint32>(startAddress) + length;
+    for(auto it = _configuredValues.constBegin(); it != _configuredValues.constEnd(); ++it)
+    {
+        if(it.key().Type != type)
+            continue;
+
+        const auto addr = it.key().Address;
+        if(addr < startAddress || static_cast<quint32>(addr) >= endAddress)
+            continue;
+
+        result.insert(it.key(), it.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusDataUnitMap::clearConfiguredValues
+///
+void ModbusDataUnitMap::clearConfiguredValues()
+{
+    _configuredValues.clear();
+}
+
+///
 /// \brief ModbusDataUnitMap::updateDataUnitMap
 ///
 void ModbusDataUnitMap::updateDataUnitMap()

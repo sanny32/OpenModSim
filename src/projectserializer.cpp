@@ -387,7 +387,11 @@ bool ProjectSerializer::writeDocument(QIODevice& device)
                 projectRanges.append(range);
         }
 
-        writeProjectAddressSpace(w, _mbServer, allSimulationMap, projectRanges);
+        const ProjectAddressSpaceWriteOptions options = {
+            AppPreferences::instance().saveRegisterTimestamps(),
+            AppPreferences::instance().saveRuntimeRegisterValues()
+        };
+        writeProjectAddressSpace(w, _mbServer, allSimulationMap, projectRanges, options);
     }
 
     w.writeStartElement("ViewSettings");

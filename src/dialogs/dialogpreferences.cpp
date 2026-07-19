@@ -202,6 +202,8 @@ void DialogPreferences::loadFromPreferences()
     ui->spinBoxLogLimit->setValue(trafficDd.LogViewLimit);
     ui->checkBoxAutoscrollLog->setChecked(trafficDd.Autoscroll);
     ui->checkBoxSaveAllModifiedRegisters->setChecked(prefs.saveAllModifiedRegisters());
+    ui->checkBoxSaveRegisterTimestamps->setChecked(prefs.saveRegisterTimestamps());
+    ui->checkBoxSaveRuntimeRegisterValues->setChecked(prefs.saveRuntimeRegisterValues());
 
     // Script - font
     const QFont& sf = prefs.scriptFont();
@@ -281,6 +283,8 @@ void DialogPreferences::apply()
     prefs.setTrafficViewDefinitions(trafficDd);
     prefs.setScriptViewDefinitions(scriptDd);
     prefs.setSaveAllModifiedRegisters(ui->checkBoxSaveAllModifiedRegisters->isChecked());
+    prefs.setSaveRegisterTimestamps(ui->checkBoxSaveRegisterTimestamps->isChecked());
+    prefs.setSaveRuntimeRegisterValues(ui->checkBoxSaveRuntimeRegisterValues->isChecked());
 
     // Script - font
     const QFont scriptFont = fontFromControls(ui->fontComboBoxScriptFont, ui->spinBoxScriptFontSize, ui->checkBoxScriptFontAntialias);

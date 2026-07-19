@@ -13,6 +13,7 @@
 #include <QTest>
 
 #include "appproject.h"
+#include "apppreferences.h"
 #include "application.h"
 #include "controls/mdiareaex.h"
 #include "controls/projecttreewidget.h"
@@ -36,6 +37,7 @@ private slots:
     void preservesXmlCommentsAcrossRoundTrip();
     void keepsCommentsOnRepeatedSave();
     void dropsCommentsAfterCloseProject();
+    void omitsTimestampsWhenPreferenceDisabled();
 };
 
 namespace {
@@ -369,6 +371,37 @@ void TestAppProject::dropsCommentsAfterCloseProject()
     QVERIFY(fixture.Project.saveProject(saved));
 
     QVERIFY(commentPlacements(saved).isEmpty());
+}
+
+/// \brief Verifies the timestamp preference reaches the written project file.
+void TestAppProject::omitsTimestampsWhenPreferenceDisabled()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString withStamps = files.filePath(QStringLiteral("with.omsim"));
+    const QString withoutStamps = files.filePath(QStringLiteral("without.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    fixture.Server.setTimestamp(1, QModbusDataUnit::HoldingRegisters, 0, QDateTime::currentDateTime());
+
+    auto& prefs = AppPreferences::instance();
+    const bool restore = prefs.saveRegisterTimestamps();
+
+    prefs.setSaveRegisterTimestamps(true);
+    QVERIFY(fixture.Project.saveProject(withStamps));
+    prefs.setSaveRegisterTimestamps(false);
+    QVERIFY(fixture.Project.saveProject(withoutStamps));
+    prefs.setSaveRegisterTimestamps(restore);
+
+    QFile enabled(withStamps);
+    QVERIFY(enabled.open(QIODevice::ReadOnly));
+    QVERIFY(enabled.readAll().contains("<AddressTimestampMap"));
+
+    QFile disabled(withoutStamps);
+    QVERIFY(disabled.open(QIODevice::ReadOnly));
+    QVERIFY(!disabled.readAll().contains("AddressTimestampMap"));
 }
 
 int main(int argc, char** argv)

@@ -66,16 +66,33 @@ void applyProjectAddressSpace(const ProjectAddressSpacePayload& payload,
                               bool replace);
 
 ///
+/// \brief The ProjectAddressSpaceWriteOptions struct selects which parts of the runtime
+/// state reach the project file.
+///
+struct ProjectAddressSpaceWriteOptions
+{
+    /// Write the AddressTimestampMap element. Timestamps carry millisecond precision and
+    /// change on every client write, which makes projects noisy under version control.
+    bool SaveTimestamps = true;
+
+    /// Write the live register values. When false the values configured by the project
+    /// and by the user are written instead, so a running simulation leaves the file alone.
+    bool SaveRuntimeValues = true;
+};
+
+///
 /// \brief writeProjectAddressSpace writes the AddressSpace element covering the
 /// given ranges: descriptions, timestamps, active simulations and non-zero values.
 /// \param w The writer the element is written to.
 /// \param mbServer The server the values and metadata are read from.
 /// \param simulations All currently configured simulations.
 /// \param ranges The address ranges to serialize.
+/// \param options Selects which runtime state is written.
 ///
 void writeProjectAddressSpace(QXmlStreamWriter& w,
                               ModbusMultiServer& mbServer,
                               const ModbusSimulationMap2& simulations,
-                              const ProjectAddressSpaceRanges& ranges);
+                              const ProjectAddressSpaceRanges& ranges,
+                              const ProjectAddressSpaceWriteOptions& options = {});
 
 #endif // PROJECTADDRESSSPACEXML_H

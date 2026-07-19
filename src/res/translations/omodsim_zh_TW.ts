@@ -1150,13 +1150,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="320"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="673"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="693"/>
         <source>Font</source>
         <translation>字型</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="357"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="710"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="730"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
@@ -1181,23 +1181,43 @@ Open the download page?</source>
         <translation>儲存所有已修改的暫存器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="776"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="544"/>
+        <source>Write the last change time of each register into the project file.</source>
+        <translation>將每個暫存器的最後修改時間寫入專案檔案。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
+        <source>Save register timestamps</source>
+        <translation>儲存暫存器時間戳記</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="554"/>
+        <source>Write current register values. When disabled, the values loaded with the project and those edited by hand are saved instead, so a running simulation does not change the file.</source>
+        <translation>寫入目前的暫存器值。停用時，改為儲存隨專案載入的值以及手動編輯的值，因此執行中的模擬不會變更檔案。</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="557"/>
+        <source>Save runtime register values</source>
+        <translation>儲存執行階段暫存器值</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="796"/>
         <source>Console</source>
         <translation>主控台</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="788"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="808"/>
         <source>Console Output Limit:</source>
         <translation>主控台輸出限制：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="826"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="846"/>
         <source>Automatically show output console</source>
         <translation>自動顯示輸出主控台</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="335"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="688"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="708"/>
         <source>Family:</source>
         <translation>字型族：</translation>
     </message>
@@ -1218,7 +1238,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="432"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="744"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="764"/>
         <source>Antialias</source>
         <translation>反鋸齒</translation>
     </message>
@@ -1228,12 +1248,12 @@ Open the download page?</source>
         <translation>欄間距：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="559"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="579"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="566"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="586"/>
         <source>Log View Limit:</source>
         <translation>日誌限制：</translation>
     </message>
@@ -1248,22 +1268,22 @@ Open the download page?</source>
         <translation>資料檢視</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="567"/>
         <source>Traffic View</source>
         <translation>流量檢視</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="641"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="661"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;這些設定僅適用於新開啟的視窗。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="754"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="774"/>
         <source>Editor</source>
         <translation>編輯器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="766"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="786"/>
         <source>Enable code auto-complete</source>
         <translation>啟用程式碼自動完成</translation>
     </message>
@@ -3619,12 +3639,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1008"/>
+        <location filename="../../modbusmultiserver.cpp" line="1061"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了錯誤的裝置地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1566"/>
+        <location filename="../../modbusmultiserver.cpp" line="1624"/>
         <source>Connection error. %1</source>
         <translation>連線錯誤 %1</translation>
     </message>
@@ -3988,17 +4008,17 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="653"/>
+        <location filename="../../appproject.cpp" line="656"/>
         <source>Failed to write project XML.</source>
         <translation>專案 XML 寫入失敗。</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="285"/>
+        <location filename="../../projectserializer.cpp" line="291"/>
         <source>The project document is empty.</source>
         <translation>專案文件是空的。</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="292"/>
+        <location filename="../../projectserializer.cpp" line="298"/>
         <source>Unsupported project document root: %1</source>
         <translation>不支援的專案文件根元素：%1</translation>
     </message>

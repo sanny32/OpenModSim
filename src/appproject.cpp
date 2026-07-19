@@ -255,6 +255,7 @@ void AppProject::closeProject()
     _mbServer.clearAddressSpace();
     _mbServer.clearDescriptions();
     _mbServer.clearTimestamps();
+    _mbServer.clearConfiguredValues();
     _projectComments.clear();
 
     if (!_projectFilename.isEmpty()) {
