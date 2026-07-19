@@ -249,6 +249,10 @@ const QList<QWidget*>& AppProject::closedForms() const
 ///
 void AppProject::closeProject()
 {
+    // Written before the forms go away, and silently: the layout is not something the user
+    // should be asked about.
+    persistUserState();
+
     _dataSimulator->stopSimulations();
     _mbServer.closeConnections();
     _formManager->clear();
@@ -564,17 +568,32 @@ ProjectLoadResult AppProject::loadProject(const QString& filename)
         return status;
     }
 
+    const QByteArray projectData = file.readAll();
+
+    // The user state lives beside the project; a project arriving without it, from version
+    // control or from another machine, simply opens with default window placement.
+    QByteArray userData;
+    QFile userFile(projectUserStatePath(filename));
+    if(userFile.open(QFile::ReadOnly))
+        userData = userFile.readAll();
+
+    QBuffer document;
+    document.setData(mergeProjectUserState(projectData, userData));
+    document.open(QIODevice::ReadOnly);
+
     const auto replace = _projectFilename.isEmpty();
     ProjectSerializer serializer(*this, *_formManager, *_splitController,
                                  _mbServer, _dataSimulator, _mdiArea, _mainWindow);
-    const auto result = serializer.load(file, replace);
+    const auto result = serializer.load(document, replace);
     if (!result.Status.Success) {
         emit projectLoadFailed(QFileInfo(filename).absoluteFilePath(), result.Status.Error);
         return result.Status;
     }
 
     if (replace) {
-        _projectComments = result.Comments;
+        // Taken from the file on disk rather than from the merged document, so that a
+        // comment written next to state that has moved out is not carried into the split.
+        _projectComments = collectProjectComments(projectData);
         setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
         _projectFilename = QFileInfo(filename).absoluteFilePath();
         emit projectOpened(_projectFilename);
@@ -633,7 +652,8 @@ void AppProject::restoreActiveWindows()
 }
 
 ///
-/// \brief AppProject::saveProject
+/// \brief AppProject::saveProject writes the project as a pair of files: the shared
+/// project data, and the machine-local user state beside it.
 /// \param filename
 /// \return
 ///
@@ -641,23 +661,95 @@ bool AppProject::saveProject(const QString& filename)
 {
     const QString absoluteFilename = QFileInfo(filename).absoluteFilePath();
 
+    QByteArray fullDocument;
+    if (!generateProjectDocument(fullDocument)) {
+        emit projectSaveFailed(absoluteFilename, QObject::tr("Failed to write project XML."));
+        return false;
+    }
+
+    const auto documents = splitProjectUserState(fullDocument);
+
     QFile file(filename);
     if(!file.open(QFile::WriteOnly)) {
         emit projectSaveFailed(absoluteFilename, file.errorString());
         return false;
     }
+    if(file.write(documents.Project) != documents.Project.size()) {
+        emit projectSaveFailed(absoluteFilename, file.errorString());
+        return false;
+    }
+    file.close();
 
     setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _projectFilename = absoluteFilename;
 
+    // The window layout is a convenience, not part of the project: failing to store it must
+    // not turn a successful save into a failed one.
+    writeProjectUserState(filename, documents.User);
+
+    emit projectSaved(_projectFilename);
+    return true;
+}
+
+///
+/// \brief AppProject::generateProjectDocument serializes the whole project into memory.
+/// \param document Receives the generated XML.
+/// \return True when the XML was produced without errors.
+///
+bool AppProject::generateProjectDocument(QByteArray& document)
+{
+    QBuffer buffer(&document);
+    buffer.open(QIODevice::WriteOnly);
+
     ProjectSerializer serializer(*this, *_formManager, *_splitController,
                                  _mbServer, _dataSimulator, _mdiArea, _mainWindow);
-    if (!serializer.save(file, _projectComments)) {
-        emit projectSaveFailed(_projectFilename, QObject::tr("Failed to write project XML."));
+    return serializer.save(buffer, _projectComments);
+}
+
+///
+/// \brief AppProject::persistUserState stores the window layout of the open project without
+/// touching the project file itself. Arranging windows never marks the project as modified,
+/// so without this the layout would be lost on exit unless the project happened to be saved
+/// for some other reason.
+///
+void AppProject::persistUserState()
+{
+    if(_projectFilename.isEmpty())
+        return;
+
+    QByteArray document;
+    if(!generateProjectDocument(document))
+        return;
+
+    writeProjectUserState(_projectFilename, splitProjectUserState(document).User);
+}
+
+///
+/// \brief AppProject::writeProjectUserState stores the user state next to the project, or
+/// removes a stale one when the project no longer has any.
+/// \param filename Path of the project file.
+/// \param document The user-state document; empty when there is nothing to store.
+/// \return True on success.
+///
+bool AppProject::writeProjectUserState(const QString& filename, const QByteArray& document)
+{
+    const auto path = projectUserStatePath(filename);
+
+    if(document.isEmpty()) {
+        QFile::remove(path);
+        return true;
+    }
+
+    QFile file(path);
+    if(!file.open(QFile::WriteOnly) || file.write(document) != document.size()) {
+        // Only the window layout is at stake, so this is reported rather than raised as a
+        // save failure.
+        emit consoleMessage(QFileInfo(path).fileName(),
+                            tr("Failed to store the window layout: %1").arg(file.errorString()),
+                            ConsoleOutput::MessageType::Warning);
         return false;
     }
 
-    emit projectSaved(_projectFilename);
     return true;
 }
 

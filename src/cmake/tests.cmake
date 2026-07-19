@@ -12,6 +12,8 @@ function(omodsim_configure_tests)
         modbusdataunitmap.cpp
         projectaddressspacexml.cpp
         projectcomments.cpp
+        projectuserstate.cpp
+        projectxmlanchor.cpp
         modbusmultiserver.cpp
         modbusrtuserialserver.cpp
         modbusrtutcpserver.cpp
@@ -113,6 +115,7 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_projectaddressspacefilter test_projectaddressspacefilter.cpp)
     omodsim_add_test(omodsim_tests_projectaddressspacexml test_projectaddressspacexml.cpp)
     omodsim_add_test(omodsim_tests_projectcomments      test_projectcomments.cpp)
+    omodsim_add_test(omodsim_tests_projectuserstate     test_projectuserstate.cpp)
     omodsim_add_test(omodsim_tests_connectiondetails     test_connectiondetails.cpp)
     omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)

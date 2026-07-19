@@ -38,6 +38,12 @@ private slots:
     void keepsCommentsOnRepeatedSave();
     void dropsCommentsAfterCloseProject();
     void omitsTimestampsWhenPreferenceDisabled();
+    void splitsUserStateIntoSeparateFile();
+    void restoresWindowGeometryFromUserStateFile();
+    void opensProjectWithoutUserStateFile();
+    void removesStaleUserStateFile();
+    void roundTripsSeveralFormsOfTheSameKind();
+    void storesUserStateOnCloseWithoutSavingProject();
 };
 
 namespace {
@@ -402,6 +408,173 @@ void TestAppProject::omitsTimestampsWhenPreferenceDisabled()
     QFile disabled(withoutStamps);
     QVERIFY(disabled.open(QIODevice::ReadOnly));
     QVERIFY(!disabled.readAll().contains("AddressTimestampMap"));
+}
+
+/// \brief Verifies saving a project written in the old single-file shape produces a clean
+/// project file plus a user-state file beside it.
+void TestAppProject::splitsUserStateIntoSeparateFile()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    const QString userPath = projectUserStatePath(saved);
+    QVERIFY(QFile::exists(userPath));
+
+    QFile project(saved);
+    QVERIFY(project.open(QIODevice::ReadOnly));
+    const auto projectText = project.readAll();
+    QVERIFY(!projectText.contains("<Window"));
+    QVERIFY(!projectText.contains("<ViewSettings"));
+    QVERIFY(projectText.contains("<FormDataView"));
+    QVERIFY(projectText.contains("<ModbusDefinitions"));
+
+    QFile user(userPath);
+    QVERIFY(user.open(QIODevice::ReadOnly));
+    const auto userText = user.readAll();
+    QVERIFY(userText.contains("OpenModSimUser"));
+    QVERIFY(userText.contains("<Window"));
+    QVERIFY(userText.contains("<ViewSettings"));
+}
+
+/// \brief Verifies the window size stored in the user-state file comes back on load.
+void TestAppProject::restoresWindowGeometryFromUserStateFile()
+{
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(source).Success);
+        QVERIFY(fixture.Project.saveProject(saved));
+    }
+
+    QFile user(projectUserStatePath(saved));
+    QVERIFY(user.open(QIODevice::ReadOnly));
+    QVERIFY(user.readAll().contains("Width="));
+    user.close();
+
+    ProjectFixture reopened;
+    QVERIFY(reopened.Project.loadProject(saved).Success);
+    QCOMPARE(reopened.Project.forms(ProjectFormKind::Data).size(), 1);
+
+    const QString resaved = files.filePath(QStringLiteral("resaved.omsim"));
+    QVERIFY(reopened.Project.saveProject(resaved));
+
+    QFile resavedUser(projectUserStatePath(resaved));
+    QVERIFY(resavedUser.open(QIODevice::ReadOnly));
+    QVERIFY(resavedUser.readAll().contains("<Window"));
+}
+
+/// \brief Verifies a project checked out without its user-state file still opens.
+void TestAppProject::opensProjectWithoutUserStateFile()
+{
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(source).Success);
+        QVERIFY(fixture.Project.saveProject(saved));
+    }
+
+    QVERIFY(QFile::remove(projectUserStatePath(saved)));
+
+    ProjectFixture reopened;
+    const auto result = reopened.Project.loadProject(saved);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QCOMPARE(reopened.Project.forms(ProjectFormKind::Data).size(), 1);
+}
+
+/// \brief Verifies an existing user-state file is replaced rather than appended to or left
+/// with content from an earlier save. Every project has view settings, so the file is
+/// always written; the empty-document branch only guards against a future project shape
+/// that carries no user state at all.
+void TestAppProject::removesStaleUserStateFile()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString saved = files.filePath(QStringLiteral("empty.omsim"));
+    const QString userPath = projectUserStatePath(saved);
+
+    QFile stale(userPath);
+    QVERIFY(stale.open(QIODevice::WriteOnly));
+    stale.write("<OpenModSimUser><Marker Stale=\"yes\"/></OpenModSimUser>");
+    stale.close();
+
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    QFile written(userPath);
+    QVERIFY(written.open(QIODevice::ReadOnly));
+    const auto text = written.readAll();
+    QVERIFY(!text.contains("Stale"));
+    QVERIFY(text.contains("<ViewSettings"));
+}
+
+/// \brief Verifies a project holding several forms of one kind survives save and reload.
+/// Their user state used to collapse onto the first form, and the reloaded document was
+/// rejected outright for repeating an attribute.
+void TestAppProject::roundTripsSeveralFormsOfTheSameKind()
+{
+    QTemporaryDir files;
+    const QString saved = files.filePath(QStringLiteral("many.omsim"));
+    const QString resaved = files.filePath(QStringLiteral("many2.omsim"));
+
+    {
+        ProjectFixture fixture;
+        for (int i = 0; i < 3; ++i)
+            QVERIFY(fixture.Project.createMdiChild(ProjectFormKind::Data));
+        QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).size(), 3);
+        QVERIFY(fixture.Project.saveProject(saved));
+    }
+
+    ProjectFixture reopened;
+    const auto result = reopened.Project.loadProject(saved);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QCOMPARE(reopened.Project.forms(ProjectFormKind::Data).size(), 3);
+
+    QVERIFY(reopened.Project.saveProject(resaved));
+    const auto again = reopened.Project.validateProject(resaved);
+    QVERIFY2(again.Success, qPrintable(again.Error));
+}
+
+/// \brief Verifies closing the project stores the layout on its own. Arranging windows
+/// never marks the project modified, so nothing would otherwise prompt or trigger a save.
+void TestAppProject::storesUserStateOnCloseWithoutSavingProject()
+{
+    QTemporaryDir files;
+    const QString path = files.filePath(QStringLiteral("layout.omsim"));
+    const QString userPath = projectUserStatePath(path);
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.createMdiChild(ProjectFormKind::Data));
+        QVERIFY(fixture.Project.saveProject(path));
+    }
+
+    QVERIFY(QFile::remove(userPath));
+
+    ProjectFixture reopened;
+    QVERIFY(reopened.Project.loadProject(path).Success);
+
+    // No saveProject() here: closing alone has to put the layout back on disk.
+    reopened.Project.closeProject();
+
+    QVERIFY(QFile::exists(userPath));
+    QFile user(userPath);
+    QVERIFY(user.open(QIODevice::ReadOnly));
+    const auto text = user.readAll();
+    QVERIFY(text.contains("OpenModSimUser"));
+    QVERIFY(text.contains("<ViewSettings"));
 }
 
 int main(int argc, char** argv)

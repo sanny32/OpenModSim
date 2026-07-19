@@ -11,53 +11,9 @@
 #include <QXmlStreamWriter>
 
 #include "projectcomments.h"
+#include "projectxmlanchor.h"
 
 namespace {
-
-constexpr QLatin1Char kFieldSeparator('\x1f');
-constexpr QLatin1Char kPathSeparator('\x1e');
-constexpr QLatin1Char kAnchorSeparator('\x1d');
-
-///
-/// \brief identifyingAttributes lists the attributes that distinguish one sibling from
-/// another. Attributes carrying mutable state are deliberately absent, since an anchor
-/// built from them would break as soon as the data changes: the root Version, window
-/// geometry and cursor positions, and Panel, which save() rewrites to the left panel for
-/// every closed form.
-///
-const QStringList& identifyingAttributes()
-{
-    static const QStringList attributes = {
-        QStringLiteral("DeviceId"),
-        QStringLiteral("Type"),
-        QStringLiteral("Address"),
-        QStringLiteral("Title"),
-        QStringLiteral("AutoClone"),
-        QStringLiteral("ConnectionType"),
-        QStringLiteral("title")
-    };
-    return attributes;
-}
-
-///
-/// \brief elementSignature builds the identity of the element the reader is positioned on.
-/// \param xml The reader positioned on a start element.
-/// \return The element name followed by its identifying attributes.
-///
-QString elementSignature(const QXmlStreamReader& xml)
-{
-    QString signature = xml.name().toString();
-    const auto attributes = xml.attributes();
-    for (const auto& name : identifyingAttributes()) {
-        if (!attributes.hasAttribute(name))
-            continue;
-        signature += kFieldSeparator;
-        signature += name;
-        signature += QLatin1Char('=');
-        signature += attributes.value(name).toString();
-    }
-    return signature;
-}
 
 ///
 /// \brief anchorKey flattens an anchor into a lookup key.
@@ -66,40 +22,8 @@ QString elementSignature(const QXmlStreamReader& xml)
 ///
 QString anchorKey(const ProjectCommentAnchor& anchor)
 {
-    QString key = anchor.Path.join(kPathSeparator);
-    key += kAnchorSeparator;
-    key += anchor.Signature;
-    key += kAnchorSeparator;
-    key += QString::number(anchor.Occurrence);
-    return key;
+    return projectXmlAnchorKey(anchor.Path, anchor.Signature, anchor.Occurrence);
 }
-
-///
-/// \brief The DocumentWalk struct keeps the bookkeeping shared by both passes: the
-/// current element path and, per level, how many siblings of each signature were seen.
-///
-struct DocumentWalk
-{
-    QStringList Path;
-    QList<QHash<QString, int>> Counters{ QHash<QString, int>() };
-
-    int nextOccurrence(const QString& signature)
-    {
-        return Counters.last()[signature]++;
-    }
-
-    void enter(const QString& name)
-    {
-        Path.append(name);
-        Counters.append(QHash<QString, int>());
-    }
-
-    void leave()
-    {
-        Path.removeLast();
-        Counters.removeLast();
-    }
-};
 
 }
 
@@ -115,7 +39,7 @@ ProjectComments collectProjectComments(const QByteArray& document)
     QXmlStreamReader xml(document);
     xml.setNamespaceProcessing(false);
 
-    DocumentWalk walk;
+    ProjectXmlWalk walk;
     // Comments inside an element carrying text or CDATA are dropped: script bodies and
     // descriptions are read back with readElementText, which would not preserve them anyway.
     QList<bool> carriesText;
@@ -136,7 +60,7 @@ ProjectComments collectProjectComments(const QByteArray& document)
         case QXmlStreamReader::StartElement: {
             const auto signature = elementSignature(xml);
             flush({ walk.Path, signature, walk.nextOccurrence(signature) });
-            walk.enter(xml.name().toString());
+            walk.enter(signature);
             carriesText.append(false);
             break;
         }
@@ -189,7 +113,7 @@ QByteArray injectProjectComments(const QByteArray& document, const ProjectCommen
     QXmlStreamWriter w(&output);
     w.setAutoFormatting(true);
 
-    DocumentWalk walk;
+    ProjectXmlWalk walk;
 
     const auto writeAnchored = [&byAnchor, &w](const ProjectCommentAnchor& anchor) {
         const auto it = byAnchor.constFind(anchorKey(anchor));
@@ -215,7 +139,7 @@ QByteArray injectProjectComments(const QByteArray& document, const ProjectCommen
             writeAnchored({ walk.Path, signature, walk.nextOccurrence(signature) });
             w.writeStartElement(xml.name().toString());
             w.writeAttributes(xml.attributes());
-            walk.enter(xml.name().toString());
+            walk.enter(signature);
             break;
         }
 

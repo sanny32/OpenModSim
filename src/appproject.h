@@ -21,6 +21,7 @@
 #include "formscriptview.h"
 #include "formdatamapview.h"
 #include "projectcomments.h"
+#include "projectuserstate.h"
 #include "projectformkind.h"
 #include "projectloadresult.h"
 
@@ -139,6 +140,9 @@ private:
     FormDataMapView* ensureAutoRequestMap();
     void syncAutoRequestMap(const ModbusDefinitions& defs);
     bool containsClosedForm(QWidget* frm) const;
+    bool generateProjectDocument(QByteArray& document);
+    bool writeProjectUserState(const QString& filename, const QByteArray& document);
+    void persistUserState();
 
 private:
     QPointer<MdiAreaEx>           _mdiArea;
@@ -148,6 +152,8 @@ private:
     MainWindow*                   _mainWindow;
     ProjectFormManager*           _formManager;
     ProjectSplitController*       _splitController;
+
+private:
     QString            _savePath;
     QString            _projectFilename;
     ProjectComments    _projectComments;

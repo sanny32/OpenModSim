@@ -176,6 +176,14 @@
     </message>
 </context>
 <context>
+    <name>AppProject</name>
+    <message>
+        <location filename="../../appproject.cpp" line="748"/>
+        <source>Failed to store the window layout: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BitPatternControl</name>
     <message>
         <location filename="../../controls/bitpatterncontrol.ui" line="14"/>
@@ -4008,7 +4016,7 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="656"/>
+        <location filename="../../appproject.cpp" line="666"/>
         <source>Failed to write project XML.</source>
         <translation>專案 XML 寫入失敗。</translation>
     </message>
