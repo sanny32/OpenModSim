@@ -157,10 +157,34 @@ void applyProjectAddressSpace(const ProjectAddressSpacePayload& payload,
                               DataSimulator* dataSimulator,
                               bool replace)
 {
-    for (const auto& pv : payload.Values) {
-        QModbusDataUnit unit(pv.Type, pv.Address, 1);
-        unit.setValue(0, pv.RegisterValue);
-        mbServer.setData(pv.DeviceId, unit, WriteSource::ProjectLoad);
+    // Values are grouped into contiguous runs so a large project needs one setData
+    // per run instead of one per register (issue #126).
+    QMap<QPair<quint8, QModbusDataUnit::RegisterType>, QMap<quint16, quint16>> valuesByUnit;
+    for (const auto& pv : payload.Values)
+        valuesByUnit[{pv.DeviceId, pv.Type}][pv.Address] = pv.RegisterValue;
+
+    for (auto it = valuesByUnit.constBegin(); it != valuesByUnit.constEnd(); ++it) {
+        const quint8 deviceId = it.key().first;
+        const auto type = it.key().second;
+        const auto& values = it.value();
+
+        for (auto jt = values.constBegin(); jt != values.constEnd(); ) {
+            const quint16 startAddress = jt.key();
+            QVector<quint16> run;
+
+            quint16 expected = startAddress;
+            while (jt != values.constEnd() && jt.key() == expected) {
+                run.append(jt.value());
+                ++jt;
+                if (expected == 0xFFFF)
+                    break;
+                ++expected;
+            }
+
+            QModbusDataUnit range(type, startAddress, static_cast<quint16>(run.size()));
+            range.setValues(run);
+            mbServer.setData(deviceId, range, WriteSource::ProjectLoad);
+        }
     }
 
     // Apply simulations after initial values are restored.

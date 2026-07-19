@@ -8,6 +8,7 @@
 
 #include <QBuffer>
 #include <QDateTime>
+#include <QSignalSpy>
 #include <QTest>
 #include <QUuid>
 
@@ -27,6 +28,9 @@ private slots:
     void writeOmitsInactiveSimulations();
     void applyRespectsReplaceFlag();
     void applyHonorsMissingSections();
+    void applyBatchesContiguousValues();
+    void applySplitsRunsOnGaps();
+    void applyKeepsMappedPartOfOverflowingRun();
 };
 
 namespace {
@@ -257,6 +261,70 @@ void TestProjectAddressSpaceXml::applyHonorsMissingSections()
 
     QCOMPARE(server.description(1, QModbusDataUnit::HoldingRegisters, 1), QStringLiteral("kept"));
     QCOMPARE(server.timestamp(1, QModbusDataUnit::HoldingRegisters, 1), timestamp);
+}
+
+///
+/// \brief Regression for issue #126: a contiguous block of values must notify
+/// views once per run, not once per register.
+///
+void TestProjectAddressSpaceXml::applyBatchesContiguousValues()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 300);
+
+    ProjectAddressSpacePayload payload;
+    for (quint16 a = 0; a < 200; ++a)
+        payload.Values.append({1, QModbusDataUnit::HoldingRegisters, a, quint16(a + 1)});
+
+    QSignalSpy dataSpy(&server, &ModbusMultiServer::dataChanged);
+    applyProjectAddressSpace(payload, server, nullptr, true);
+
+    QCOMPARE(dataSpy.count(), 1);
+    const auto stored = server.data(1, QModbusDataUnit::HoldingRegisters, 0, 200);
+    for (quint16 a = 0; a < 200; ++a)
+        QCOMPARE(stored.value(a), quint16(a + 1));
+}
+
+///
+/// \brief Gaps must split the block so unwritten addresses stay untouched.
+///
+void TestProjectAddressSpaceXml::applySplitsRunsOnGaps()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 100);
+
+    ProjectAddressSpacePayload payload;
+    for (quint16 a : {quint16(0), quint16(1), quint16(2), quint16(50), quint16(51)})
+        payload.Values.append({1, QModbusDataUnit::HoldingRegisters, a, quint16(a + 7)});
+
+    QSignalSpy dataSpy(&server, &ModbusMultiServer::dataChanged);
+    applyProjectAddressSpace(payload, server, nullptr, true);
+
+    QCOMPARE(dataSpy.count(), 2);
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 2, 1).value(0), quint16(9));
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 3, 1).value(0), quint16(0));
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 50, 1).value(0), quint16(57));
+}
+
+///
+/// \brief A run crossing the end of the unit map must still apply the mapped part
+/// to the unit map instead of being dropped as a whole. Note that no transport
+/// server is attached here, so this covers the unit map only.
+///
+void TestProjectAddressSpaceXml::applyKeepsMappedPartOfOverflowingRun()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 10);
+
+    ProjectAddressSpacePayload payload;
+    for (quint16 a = 0; a < 20; ++a)
+        payload.Values.append({1, QModbusDataUnit::HoldingRegisters, a, quint16(a + 1)});
+
+    applyProjectAddressSpace(payload, server, nullptr, true);
+
+    const auto stored = server.data(1, QModbusDataUnit::HoldingRegisters, 0, 10);
+    for (quint16 a = 0; a < 10; ++a)
+        QCOMPARE(stored.value(a), quint16(a + 1));
 }
 
 QTEST_GUILESS_MAIN(TestProjectAddressSpaceXml)
