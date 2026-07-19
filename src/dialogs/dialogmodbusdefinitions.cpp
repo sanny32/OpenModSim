@@ -96,9 +96,6 @@ DialogModbusDefinitions::~DialogModbusDefinitions()
 }
 
 ///
-/// rief DialogModbusDefinitions::changeEvent
-///
-///
 /// \brief DialogModbusDefinitions::changeEvent
 ///
 void DialogModbusDefinitions::changeEvent(QEvent* event)

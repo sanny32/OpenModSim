@@ -331,7 +331,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, SerialConnectionPara
         }
 
         if (attributes.hasAttribute("BaudRate")) {
-            bool ok; const auto baudRate = attributes.value("ServicePort").toUInt(&ok);
+            bool ok; const auto baudRate = attributes.value("BaudRate").toUInt(&ok);
             if (ok) params.BaudRate = static_cast<QSerialPort::BaudRate>(baudRate);
         }
 

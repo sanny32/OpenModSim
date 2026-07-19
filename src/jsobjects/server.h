@@ -175,6 +175,7 @@ private:
 
     void writeRange(QModbusDataUnit::RegisterType type, quint16 startAddress, const QJSValue& values, quint8 deviceId);
     quint8 resolveDeviceId(int deviceId) const;
+    quint16 toServerAddress(quint16 address) const;
 
     int _deviceId = 1;
     Address::Base _addressBase;

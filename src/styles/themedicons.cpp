@@ -42,7 +42,7 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/data-locked"),               { QStringLiteral("action/lock"),                         QStringLiteral("data-locked") } },
         { QStringLiteral("omodsim/directory"),                 { QStringLiteral("file/folder-filled"),                  QStringLiteral("directory") } },
         { QStringLiteral("omodsim/disconnect"),                { QStringLiteral("misc/link-break"),                     QStringLiteral("disconnect") } },
-        { QStringLiteral("omodsim/export"),                    { QStringLiteral("action/export"),                       QStringLiteral("export") } },
+        { QStringLiteral("omodsim/export"),                    { QStringLiteral("action/export"),                       QStringLiteral("export.png") } },
         { QStringLiteral("omodsim/force-coils"),               { QStringLiteral("omodsim/force-coils"),                 QStringLiteral("force-coils") } },
         { QStringLiteral("omodsim/force-discretes"),           { QStringLiteral("omodsim/force-discretes"),             QStringLiteral("force-discretes") } },
         { QStringLiteral("omodsim/github"),                    { QStringLiteral("brand/github-fill"),                   QStringLiteral("emblem-github") } },

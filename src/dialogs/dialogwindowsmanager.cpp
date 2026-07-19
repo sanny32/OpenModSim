@@ -61,9 +61,6 @@ DialogWindowsManager::~DialogWindowsManager()
 }
 
 ///
-/// rief DialogWindowsManager::changeEvent
-///
-///
 /// \brief DialogWindowsManager::changeEvent
 ///
 void DialogWindowsManager::changeEvent(QEvent* event)

@@ -268,6 +268,19 @@ void AppPreferences::setGlobalHexView(bool value)
 }
 
 ///
+/// \brief AppPreferences::setSaveAllModifiedRegisters
+/// \param value
+///
+void AppPreferences::setSaveAllModifiedRegisters(bool value)
+{
+    if (_saveAllModifiedRegisters == value)
+        return;
+
+    emit settingChanged("SaveAllModifiedRegisters", boolToText(_saveAllModifiedRegisters), boolToText(value));
+    _saveAllModifiedRegisters = value;
+}
+
+///
 /// \brief AppPreferences::setScriptFont
 /// \param f
 ///
@@ -382,6 +395,7 @@ void AppPreferences::load(QSettings& settings)
     settings >> _scriptViewDefinitions;
     _globalAddressBase = settings.value("GlobalZeroBasedAddress", false).toBool() ? AddressBase::Base0 : AddressBase::Base1;
     _globalHexView = settings.value("GlobalHexView", false).toBool();
+    _saveAllModifiedRegisters = settings.value("SaveAllModifiedRegisters", _saveAllModifiedRegisters).toBool();
 
     settings.endGroup();
 }
@@ -416,6 +430,7 @@ void AppPreferences::save(QSettings& settings) const
     settings << _scriptViewDefinitions;
     settings.setValue("GlobalZeroBasedAddress", _globalAddressBase == AddressBase::Base0);
     settings.setValue("GlobalHexView", _globalHexView);
+    settings.setValue("SaveAllModifiedRegisters", _saveAllModifiedRegisters);
 
     settings.endGroup();
 }
@@ -441,6 +456,7 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("ThemeMode", themeModeToText(_themeMode));
     xml.writeAttribute("GlobalZeroBasedAddress", boolToString(_globalAddressBase == AddressBase::Base0));
     xml.writeAttribute("GlobalHexView", boolToString(_globalHexView));
+    xml.writeAttribute("SaveAllModifiedRegisters", boolToString(_saveAllModifiedRegisters));
     xml << _dataViewDefinitions;
     xml << _trafficViewDefinitions;
     xml << _scriptViewDefinitions;
@@ -511,6 +527,10 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
 
     if (attributes.hasAttribute("GlobalHexView")) {
         _globalHexView = stringToBool(attributes.value("GlobalHexView").toString());
+    }
+
+    if (attributes.hasAttribute("SaveAllModifiedRegisters")) {
+        _saveAllModifiedRegisters = stringToBool(attributes.value("SaveAllModifiedRegisters").toString());
     }
 
     while (xml.readNextStartElement()) {

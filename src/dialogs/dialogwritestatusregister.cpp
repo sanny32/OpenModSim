@@ -68,9 +68,6 @@ DialogWriteStatusRegister::~DialogWriteStatusRegister()
 }
 
 ///
-/// rief DialogWriteStatusRegister::changeEvent
-///
-///
 /// \brief DialogWriteStatusRegister::changeEvent
 ///
 void DialogWriteStatusRegister::changeEvent(QEvent* event)

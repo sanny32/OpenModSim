@@ -7,6 +7,9 @@
 ///
 
 #include <QTest>
+
+#include <limits>
+
 #include <QtEndian>
 
 #include "byteorderutils.h"

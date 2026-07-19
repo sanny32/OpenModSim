@@ -256,9 +256,6 @@ bool ModbusServer::setValue(int option, const QVariant &newValue, int serverAddr
 /// \param serverAddress
 /// \return
 ///
-///
-/// \brief ModbusServer::data
-///
 bool ModbusServer::data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data, int serverAddress) const
 {
     QModbusDataUnit unit(table, address, 1u);
@@ -388,9 +385,6 @@ bool ModbusServer::data(QModbusDataUnit *newData, int serverAddress) const
 /// \param data
 /// \param serverAddress
 /// \return
-///
-///
-/// \brief ModbusServer::setData
 ///
 bool ModbusServer::setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data, int serverAddress)
 {

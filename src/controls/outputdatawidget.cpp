@@ -768,11 +768,6 @@ void OutputDataWidget::setDataViewColumnsDistance(int value)
 
 
 ///
-/// \brief OutputDataWidget::paint
-/// \param rc
-/// \param painter
-///
-///
 /// \brief OutputDataWidget::rowCount
 /// \return
 ///

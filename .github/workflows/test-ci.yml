@@ -1,0 +1,140 @@
+name: Test CI
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - '.github/workflows/test-ci.yml'
+      - 'src/**'
+      - 'tools/coverage.py'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - '.github/workflows/test-ci.yml'
+      - 'src/**'
+      - 'tools/coverage.py'
+  workflow_dispatch:
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Tests (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+          - os: windows-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+          - os: macos-26
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+          - os: ubuntu-latest
+            qt-version: '5.15.2'
+            qt-modules: ''
+            cmake-options: '-DUSE_QT5=ON'
+          - os: windows-2022
+            qt-version: '5.15.2'
+            qt-modules: ''
+            cmake-options: '-DUSE_QT5=ON'
+
+    env:
+      # Run Qt GUI/Test binaries without a real display.
+      QT_QPA_PLATFORM: offscreen
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            libgl1-mesa-dev \
+            libxkbcommon-x11-0
+
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ninja
+
+      - name: Set up MSVC environment (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qt-version }}
+          modules: ${{ matrix.qt-modules }}
+          cache: true
+
+      - name: Configure
+        run: >
+          cmake -S src -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
+          ${{ matrix.cmake-options }}
+
+      - name: Build tests
+        run: cmake --build build --config Release --parallel --target omodsim_tests
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
+
+  coverage:
+    name: Coverage (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+
+    env:
+      QT_QPA_PLATFORM: offscreen
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            libgl1-mesa-dev \
+            libxkbcommon-x11-0
+          python3 -m pip install --upgrade gcovr
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qt-version }}
+          modules: ${{ matrix.qt-modules }}
+          cache: true
+
+      - name: Run coverage
+        run: python3 tools/coverage.py --strict -- -G Ninja ${{ matrix.cmake-options }}
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build-coverage/coverage

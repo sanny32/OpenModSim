@@ -81,6 +81,8 @@ set(SOURCES
     htmldelegate.cpp
     jscompleter.cpp
     jshighlighter.cpp
+    legacyprojectloader.cpp
+    legacyprojectparser.cpp
     main.cpp
     helpdockpolicy.cpp
     mainwindow.cpp
@@ -100,6 +102,15 @@ set(SOURCES
     modbusserver.cpp
     modbustcpserver.cpp
 
+    projectaddressspacefilter.cpp
+    projectaddressspacexml.cpp
+    projectformmetadata.cpp
+    projectformmanager.cpp
+    projectformxml.cpp
+    projectserializer.cpp
+    projectsplitcontroller.cpp
+    registerwritecontroller.cpp
+
     qadjustedsizedialog.cpp
     qdoublevalidatorex.cpp
     qhexvalidator.cpp
@@ -107,7 +118,7 @@ set(SOURCES
     qintvalidatorex.cpp
     qfixedsizedialog.cpp
     quintvalidator.cpp
-    recentfileactionlist.cpp
+    recentprojectsprompt.cpp
     scriptdocument.cpp
 
     styles/appstyle.cpp
@@ -204,6 +215,7 @@ set(HEADERS
     displaydefinition.h
     enums.h
     fontutils.h
+    forcerangeparams.h
     formatutils.h
 
     formdatamapview.h
@@ -214,6 +226,8 @@ set(HEADERS
     htmldelegate.h
     jscompleter.h
     jshighlighter.h
+    legacyprojectloader.h
+    legacyprojectparser.h
 
     jsobjects/console.h
     jsobjects/script.h
@@ -260,6 +274,16 @@ set(HEADERS
 
     numericutils.h
     pch.h
+    projectaddressspacefilter.h
+    projectaddressspacexml.h
+    projectformmetadata.h
+    projectformmanager.h
+    projectformkind.h
+    projectloadresult.h
+    projectformxml.h
+    projectserializer.h
+    projectsplitcontroller.h
+    registerwritecontroller.h
     qadjustedsizedialog.h
     qcountedset.h
     qdoublevalidatorex.h
@@ -273,7 +297,7 @@ set(HEADERS
     qmodbuscommevent.h
     qrange.h
     quintvalidator.h
-    recentfileactionlist.h
+    recentprojectsprompt.h
     scriptdocument.h
     scriptsettings.h
     serialportutils.h
@@ -326,4 +350,3 @@ set(UI_FILES
 
     mainwindow.ui
 )
-

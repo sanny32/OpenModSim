@@ -54,6 +54,9 @@ bool AppTheme::supportsTheme() const
 ///
 bool AppTheme::isDark() const
 {
+    if (!supportsTheme())
+        return false;
+
     switch (AppPreferences::instance().themeMode()) {
         case AppThemeMode::Light:
             return false;

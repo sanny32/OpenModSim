@@ -7,6 +7,7 @@
 ///
 
 #include <algorithm>
+#include <type_traits>
 #include "numericutils.h"
 #include "modbusrtutcpserver.h"
 #include "modbustcpserver.h"
@@ -754,18 +755,21 @@ void ModbusMultiServer::setTimestamp(quint8 deviceId, QModbusDataUnit::RegisterT
 ///
 /// \brief ModbusMultiServer::setTimestampMap
 /// \param timestamps
+/// \param replace
 ///
-void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps)
+void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps, bool replace)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, timestamps]() {
-            setTimestampMap(timestamps);
+        QMetaObject::invokeMethod(this, [this, timestamps, replace]() {
+            setTimestampMap(timestamps, replace);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    clearTimestamps();
+    if (replace) {
+        clearTimestamps();
+    }
 
     bool applied = false;
     for(auto it = timestamps.constBegin(); it != timestamps.constEnd(); ++it)
@@ -935,18 +939,22 @@ void ModbusMultiServer::setDescription(quint8 deviceId, QModbusDataUnit::Registe
 ///
 /// \brief ModbusMultiServer::setDescriptionMap
 /// \param descriptions
+/// \param source
+/// \param replace
 ///
-void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source)
+void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source, bool replace)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, descriptions, source]() {
-            setDescriptionMap(descriptions, source);
+        QMetaObject::invokeMethod(this, [this, descriptions, source, replace]() {
+            setDescriptionMap(descriptions, source, replace);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    clearDescriptions();
+    if (replace) {
+        clearDescriptions();
+    }
 
     for(auto it = descriptions.constBegin(); it != descriptions.constEnd(); ++it)
     {
@@ -1126,114 +1134,69 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
 }
 
 ///
-/// \brief createInt32DataUnit
-/// \param type
-/// \param newStartAddress
-/// \param value
-/// \param order
-/// \param swapped
-/// \return
+/// \brief createTypedDataUnit builds a register data unit for a multi-register value of type T,
+/// storing registers low-to-high when swapped (LRSF) or high-to-low otherwise (MRSF).
+/// \param value The typed value: qint32, quint32, float, qint64, quint64 or double.
+/// \return The data unit covering sizeof(T)/2 registers starting at newStartAddress.
 ///
-QModbusDataUnit createInt32DataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, qint32 value, ByteOrder order, bool swapped)
+template<typename T>
+QModbusDataUnit createTypedDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, T value, ByteOrder order, bool swapped)
 {
     Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
              || type == QModbusDataUnit::InputRegisters);
 
-    QVector<quint16> values(2);
-    auto data = QModbusDataUnit(type, newStartAddress, 2);
+    constexpr int count = int(sizeof(T) / sizeof(quint16));
+    quint16 w[count]; // register words in low..high order
 
-    if(swapped)
-        // LRSF
-        breakInt32(value, values[0], values[1], order);
+    if constexpr (std::is_same_v<T, qint32>)
+        breakInt32(value, w[0], w[1], order);
+    else if constexpr (std::is_same_v<T, quint32>)
+        breakUInt32(value, w[0], w[1], order);
+    else if constexpr (std::is_same_v<T, float>)
+        breakFloat(value, w[0], w[1], order);
+    else if constexpr (std::is_same_v<T, qint64>)
+        breakInt64(value, w[0], w[1], w[2], w[3], order);
+    else if constexpr (std::is_same_v<T, quint64>)
+        breakUInt64(value, w[0], w[1], w[2], w[3], order);
     else
-        // MRSF
-        breakInt32(value, values[1], values[0], order);
+        breakDouble(value, w[0], w[1], w[2], w[3], order);
 
+    QVector<quint16> values(count);
+    for(int i = 0; i < count; i++)
+        values[i] = swapped ? w[i] : w[count - 1 - i];
 
+    auto data = QModbusDataUnit(type, newStartAddress, count);
     data.setValues(values);
     return data;
 }
 
 ///
-/// \brief createInt64DataUnit
-/// \param type
-/// \param newStartAddress
-/// \param value
-/// \param order
-/// \param swapped
-/// \return
+/// \brief readTypedValue reads a multi-register value of type T from the server,
+/// interpreting registers low-to-high when swapped (LRSF) or high-to-low otherwise (MRSF).
+/// \return The value assembled from sizeof(T)/2 registers starting at pointAddress.
 ///
-QModbusDataUnit createInt64DataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, qint64 value, ByteOrder order, bool swapped)
+template<typename T>
+T readTypedValue(const ModbusMultiServer& server, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    QVector<quint16> values(4);
-    auto data = QModbusDataUnit(type, newStartAddress, 4);
+    constexpr int count = int(sizeof(T) / sizeof(quint16));
+    const auto data = server.data(deviceId, pointType, pointAddress, count);
 
-    if(swapped)
-        // LRSF
-        breakInt64(value, values[0], values[1], values[2], values[3], order);
+    quint16 w[count]; // register words in low..high order
+    for(int i = 0; i < count; i++)
+        w[i] = data.value(swapped ? i : count - 1 - i);
+
+    if constexpr (std::is_same_v<T, qint32>)
+        return makeInt32(w[0], w[1], order);
+    else if constexpr (std::is_same_v<T, quint32>)
+        return makeUInt32(w[0], w[1], order);
+    else if constexpr (std::is_same_v<T, float>)
+        return makeFloat(w[0], w[1], order);
+    else if constexpr (std::is_same_v<T, qint64>)
+        return makeInt64(w[0], w[1], w[2], w[3], order);
+    else if constexpr (std::is_same_v<T, quint64>)
+        return makeUInt64(w[0], w[1], w[2], w[3], order);
     else
-        // MRSF
-        breakInt64(value, values[3], values[2], values[1], values[0], order);
-
-
-    data.setValues(values);
-    return data;
-}
-
-///
-/// \brief createFloatDataUnit
-/// \param type
-/// \param newStartAddress
-/// \param value
-/// \param order
-/// \param swapped
-/// \return
-///
-QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, ByteOrder order, bool swapped)
-{
-    Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
-             || type == QModbusDataUnit::InputRegisters);
-
-    QVector<quint16> values(2);
-    auto data = QModbusDataUnit(type, newStartAddress, 2);
-
-    if(swapped)
-        // LRSF
-        breakFloat(value, values[0], values[1], order);
-    else
-        // MRSF
-        breakFloat(value, values[1], values[0], order);
-
-    data.setValues(values);
-    return data;
-}
-
-///
-/// \brief createDoubleDataUnit
-/// \param type
-/// \param newStartAddress
-/// \param value
-/// \param order
-/// \param swapped
-/// \return
-///
-QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, ByteOrder order, bool swapped)
-{
-    Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
-             || type == QModbusDataUnit::InputRegisters);
-
-    QVector<quint16> values(4);
-    auto data = QModbusDataUnit(type, newStartAddress, 4);
-
-    if(swapped)
-        // LRSF
-        breakDouble(value, values[0], values[1], values[2], values[3], order);
-    else
-        // MRSF
-        breakDouble(value, values[3], values[2], values[1], values[0], order);
-
-    data.setValues(values);
-    return data;
+        return makeDouble(w[0], w[1], w[2], w[3], order);
 }
 
 ///
@@ -1274,13 +1237,9 @@ void ModbusMultiServer::writeValues(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param swapped
 /// \return
 ///
-///
-/// \brief ModbusMultiServer::readInt32
-///
 qint32 ModbusMultiServer::readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    const auto data = this->data(deviceId, pointType, pointAddress, 2);
-    return swapped ?  makeInt32(data.value(1), data.value(0), order): makeInt32(data.value(0), data.value(1), order);
+    return readTypedValue<qint32>(*this, deviceId, pointType, pointAddress, order, swapped);
 }
 
 ///
@@ -1290,13 +1249,10 @@ qint32 ModbusMultiServer::readInt32(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param value
 /// \param order
 /// \param swapped
-///
-///
-/// \brief ModbusMultiServer::writeInt32
 ///
 void ModbusMultiServer::writeInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped)
 {
-    setData(deviceId, createInt32DataUnit(pointType, pointAddress, value, order, swapped));
+    setData(deviceId, createTypedDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -1306,13 +1262,10 @@ void ModbusMultiServer::writeInt32(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param order
 /// \param swapped
 /// \return
-///
-///
-/// \brief ModbusMultiServer::readUInt32
 ///
 quint32 ModbusMultiServer::readUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    return (quint32)readInt32(deviceId, pointType, pointAddress, order, swapped);
+    return readTypedValue<quint32>(*this, deviceId, pointType, pointAddress, order, swapped);
 }
 
 ///
@@ -1322,13 +1275,10 @@ quint32 ModbusMultiServer::readUInt32(quint8 deviceId, QModbusDataUnit::Register
 /// \param value
 /// \param order
 /// \param swapped
-///
-///
-/// \brief ModbusMultiServer::writeUInt32
 ///
 void ModbusMultiServer::writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped)
 {
-    writeInt32(deviceId, pointType, pointAddress, value, order, swapped);
+    setData(deviceId, createTypedDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -1338,15 +1288,10 @@ void ModbusMultiServer::writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 /// \return
-///
-///
-/// \brief ModbusMultiServer::readInt64
 ///
 qint64 ModbusMultiServer::readInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    const auto data = this->data(deviceId, pointType, pointAddress, 4);
-    return swapped ?  makeInt64(data.value(3), data.value(2), data.value(1), data.value(0), order):
-               makeInt64(data.value(0), data.value(1), data.value(2), data.value(3), order);
+    return readTypedValue<qint64>(*this, deviceId, pointType, pointAddress, order, swapped);
 }
 
 ///
@@ -1356,13 +1301,10 @@ qint64 ModbusMultiServer::readInt64(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param value
 /// \param order
 /// \param swapped
-///
-///
-/// \brief ModbusMultiServer::writeInt64
 ///
 void ModbusMultiServer::writeInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint64 value, ByteOrder order, bool swapped)
 {
-    setData(deviceId, createInt64DataUnit(pointType, pointAddress, value, order, swapped));
+    setData(deviceId, createTypedDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -1373,12 +1315,9 @@ void ModbusMultiServer::writeInt64(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param swapped
 /// \return
 ///
-///
-/// \brief ModbusMultiServer::readUInt64
-///
 quint64 ModbusMultiServer::readUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    return (quint64)readInt64(deviceId, pointType, pointAddress, order, swapped);
+    return readTypedValue<quint64>(*this, deviceId, pointType, pointAddress, order, swapped);
 }
 
 ///
@@ -1389,12 +1328,9 @@ quint64 ModbusMultiServer::readUInt64(quint8 deviceId, QModbusDataUnit::Register
 /// \param order
 /// \param swapped
 ///
-///
-/// \brief ModbusMultiServer::writeUInt64
-///
 void ModbusMultiServer::writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint64 value, ByteOrder order, bool swapped)
 {
-    writeInt64(deviceId, pointType, pointAddress, value, order, swapped);
+    setData(deviceId, createTypedDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -1405,13 +1341,9 @@ void ModbusMultiServer::writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param swapped
 /// \return
 ///
-///
-/// \brief ModbusMultiServer::readFloat
-///
 float ModbusMultiServer::readFloat(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    const auto data = this->data(deviceId, pointType, pointAddress, 2);
-    return swapped ?  makeFloat(data.value(1), data.value(0), order): makeFloat(data.value(0), data.value(1), order);
+    return readTypedValue<float>(*this, deviceId, pointType, pointAddress, order, swapped);
 }
 
 ///
@@ -1423,7 +1355,7 @@ float ModbusMultiServer::readFloat(quint8 deviceId, QModbusDataUnit::RegisterTyp
 ///
 void ModbusMultiServer::writeFloat(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped)
 {
-    setData(deviceId, createFloatDataUnit(pointType, pointAddress, value, order, swapped));
+    setData(deviceId, createTypedDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -1435,9 +1367,7 @@ void ModbusMultiServer::writeFloat(quint8 deviceId, QModbusDataUnit::RegisterTyp
 ///
 double ModbusMultiServer::readDouble(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    const auto data = this->data(deviceId, pointType, pointAddress, 4);
-    return swapped ?  makeDouble(data.value(3), data.value(2), data.value(1), data.value(0), order):
-                      makeDouble(data.value(0), data.value(1), data.value(2), data.value(3), order);
+    return readTypedValue<double>(*this, deviceId, pointType, pointAddress, order, swapped);
 }
 
 ///
@@ -1449,7 +1379,7 @@ double ModbusMultiServer::readDouble(quint8 deviceId, QModbusDataUnit::RegisterT
 ///
 void ModbusMultiServer::writeDouble(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, ByteOrder order, bool swapped)
 {
-    setData(deviceId, createDoubleDataUnit(pointType, pointAddress, value, order, swapped));
+    setData(deviceId, createTypedDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -1503,21 +1433,27 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
                     break;
 
                     case DataType::Float32:
-                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, lsrf);
+                        data = createTypedDataUnit(pointType, addr, params.Value.toFloat(), params.Order, lsrf);
                     break;
 
                     case DataType::Float64:
-                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, lsrf);
+                        data = createTypedDataUnit(pointType, addr, params.Value.toDouble(), params.Order, lsrf);
                     break;
 
                     case DataType::Int32:
+                        data = createTypedDataUnit(pointType, addr, qint32(params.Value.toInt()), params.Order, lsrf);
+                    break;
+
                     case DataType::UInt32:
-                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, lsrf);
+                        data = createTypedDataUnit(pointType, addr, quint32(params.Value.toUInt()), params.Order, lsrf);
                     break;
 
                     case DataType::Int64:
+                        data = createTypedDataUnit(pointType, addr, qint64(params.Value.toLongLong()), params.Order, lsrf);
+                    break;
+
                     case DataType::UInt64:
-                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, lsrf);
+                        data = createTypedDataUnit(pointType, addr, quint64(params.Value.toULongLong()), params.Order, lsrf);
                     break;
                 }
             }

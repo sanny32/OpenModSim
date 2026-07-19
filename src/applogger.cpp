@@ -439,6 +439,13 @@ void AppLogger::setupAppProjectLogging(AppProject& project, QObject* context)
                                .arg(filename, error);
     }, Qt::DirectConnection);
 
+    QObject::connect(&project, &AppProject::projectLoadFailed, context,
+                     [](const QString& filename, const QString& error) {
+        qWarning(lcApp) << QCoreApplication::translate("MainWindow",
+                                                       "Project load failed: %1 (%2)")
+                               .arg(filename, error);
+    }, Qt::DirectConnection);
+
     QObject::connect(&project, &AppProject::formCreated, context,
                      [](QWidget* form) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Form created: %1")

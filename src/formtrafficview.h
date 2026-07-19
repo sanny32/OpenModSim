@@ -20,6 +20,7 @@
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 #include "apppreferences.h"
+#include "projectformmetadata.h"
 #include "controls/funccodefiltercombobox.h"
 #include "controls/numericcombobox.h"
 
@@ -248,13 +249,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
 
     xml.writeStartElement("FormTrafficView");
 
-    const auto panel = frm->property("SplitPanel").toString();
+    const auto panel = frm->property(ProjectFormMetadata::SplitPanel).toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
     xml.writeAttribute("Title", frm->windowTitle());
-    if(frm->property("SplitAutoClone").toBool())
+    if(isSplitClone(frm))
         xml.writeAttribute("AutoClone", "1");
-    if(frm->property("Closed").toBool())
+    if(frm->property(ProjectFormMetadata::Closed).toBool())
         xml.writeAttribute("Closed", "1");
 
     const auto wnd = frm->parentWidget();
@@ -286,7 +287,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
 
     const auto dd = frm->displayDefinition();
     xml.writeStartElement("TrafficViewDefinitions");
-    xml.writeAttribute("FormName", dd.FormName);
     xml.writeAttribute("UnitFilter", QString::number(dd.UnitFilter));
     xml.writeAttribute("FunctionCodeFilter", QString::number(dd.FunctionCodeFilter));
     xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
@@ -315,6 +315,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm
         QHash<quint16, quint16> data;
 
         const QXmlStreamAttributes attributes = xml.attributes();
+        const QString formTitle = attributes.value("Title").toString();
 
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("Window")) {
@@ -409,6 +410,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm
             else if (xml.name() == QLatin1String("TrafficViewDefinitions")) {
                 xml >> dd;
                 xml.skipCurrentElement();
+                if (dd.FormName.isEmpty() && !formTitle.isEmpty())
+                    dd.FormName = formTitle;
                 frm->setDisplayDefinition(dd);
             }
             else {

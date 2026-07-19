@@ -19,7 +19,10 @@ private slots:
     void setGetAndLength();
     void missingKeyReturnsNull();
     void removeItem();
+    void removeMissingItemKeepsStorage();
     void clear();
+    void clearEmptyStorage();
+    void setItemOverwritesExistingKey();
     void keyReturnsStoredValue();
     void keyAtLengthReturnsNull();
     void keyOutOfRangeReturnsNull();
@@ -59,12 +62,40 @@ void TestStorage::removeItem()
     QCOMPARE(storage.getItem(QStringLiteral("b")).toInt(), 2);
 }
 
+void TestStorage::removeMissingItemKeepsStorage()
+{
+    Storage storage;
+    storage.setItem(QStringLiteral("a"), _engine.toScriptValue(1));
+
+    storage.removeItem(QStringLiteral("missing"));
+
+    QCOMPARE(storage.length(), 1);
+    QCOMPARE(storage.getItem(QStringLiteral("a")).toInt(), 1);
+}
+
 void TestStorage::clear()
 {
     Storage storage;
     storage.setItem(QStringLiteral("a"), _engine.toScriptValue(1));
     storage.clear();
     QCOMPARE(storage.length(), 0);
+}
+
+void TestStorage::clearEmptyStorage()
+{
+    Storage storage;
+    storage.clear();
+    QCOMPARE(storage.length(), 0);
+}
+
+void TestStorage::setItemOverwritesExistingKey()
+{
+    Storage storage;
+    storage.setItem(QStringLiteral("a"), _engine.toScriptValue(1));
+    storage.setItem(QStringLiteral("a"), _engine.toScriptValue(2));
+
+    QCOMPARE(storage.length(), 1);
+    QCOMPARE(storage.getItem(QStringLiteral("a")).toInt(), 2);
 }
 
 void TestStorage::keyReturnsStoredValue()
