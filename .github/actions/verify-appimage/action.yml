@@ -1,0 +1,62 @@
+name: Verify AppImage
+description: Extract an AppImage in container images and check its runtime links.
+
+inputs:
+  package:
+    description: AppImage file name in the workflow workspace.
+    required: true
+  desktop-file:
+    description: Desktop file name at the AppDir root, e.g. omodsim2.desktop.
+    required: true
+  images:
+    description: Whitespace-separated Docker image list.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Verify AppImage
+      shell: bash
+      env:
+        PKG: ${{ inputs.package }}
+        DESKTOP_FILE: ${{ inputs.desktop-file }}
+        IMAGES: ${{ inputs.images }}
+      run: |
+        chmod +x "$PKG"
+
+        status=0
+        for image in $IMAGES; do
+          echo "::group::$image"
+          if ! docker run --rm -e PKG -e DESKTOP_FILE \
+              -v "$PWD:/pkg:ro" -w /tmp "$image" bash -eux -c '
+            # ALT ships ldd separately, in glibc-utils.
+            if [ "$(. /etc/os-release && echo "$ID")" = altlinux ]; then
+              apt-get update
+              apt-get install -y glibc-utils
+            fi
+
+            # The AppImage runtime needs FUSE, extraction does not.
+            "/pkg/$PKG" --appimage-extract > /dev/null
+
+            test -x squashfs-root/AppRun
+            test -x squashfs-root/usr/bin/omodsim
+            test -f "squashfs-root/$DESKTOP_FILE"
+            test -f squashfs-root/.DirIcon
+
+            if ldd -r squashfs-root/usr/bin/omodsim | grep -E "not found|undefined symbol"; then
+              echo "The bundled binary has unresolved libraries or symbols"
+              exit 1
+            fi
+
+            # cqtdeployer excludes OpenSSL, the workflow bundles it by hand.
+            if ! ls squashfs-root/usr/lib/libssl.so.* squashfs-root/usr/lib/libcrypto.so.* > /dev/null; then
+              echo "OpenSSL libraries are missing from the bundle"
+              exit 1
+            fi
+          '; then
+            echo "::error::The AppImage does not run on $image"
+            status=1
+          fi
+          echo "::endgroup::"
+        done
+        exit "$status"

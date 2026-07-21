@@ -27,7 +27,6 @@ jobs:
     env:
       QT_VERSION: "6.9.3"
       APPIMAGETOOL_VERSION: "13"
-      # appimagetool needs FUSE, extract-and-run works without it in containers.
       APPIMAGE_EXTRACT_AND_RUN: "1"
       ARCH: x86_64
 
