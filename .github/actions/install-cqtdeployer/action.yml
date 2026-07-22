@@ -5,48 +5,20 @@ inputs:
   qt-prefix-path:
     description: Qt installation prefix path for CMake.
     required: true
-  apply-qt6-patch:
-    description: Apply the upstream Qt6 deployment patch.
-    required: false
-    default: "false"
 
 runs:
   using: composite
   steps:
-    - name: Prepare CQtDeployer cache
-      id: prepare
-      shell: bash
-      env:
-        APPLY_QT6_PATCH: ${{ inputs.apply-qt6-patch }}
-        QT_PREFIX_PATH: ${{ inputs.qt-prefix-path }}
-      run: |
-        qt_key=$(printf '%s' "$QT_PREFIX_PATH" | sed 's/[^A-Za-z0-9_.-]/-/g')
-        install_dir="${RUNNER_TEMP}/cqtdeployer/v1.6.2365-${APPLY_QT6_PATCH}"
-        echo "install-dir=$install_dir" >> "$GITHUB_OUTPUT"
-        echo "cache-key=cqtdeployer-v1-v1.6.2365-${qt_key}-patch-${APPLY_QT6_PATCH}" >> "$GITHUB_OUTPUT"
-
-    - name: Restore CQtDeployer cache
-      id: cache
-      uses: actions/cache@v5
-      with:
-        path: ${{ steps.prepare.outputs.install-dir }}
-        key: ${{ steps.prepare.outputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
-
     - name: Install cqtdeployer from sources
-      if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
       env:
-        APPLY_QT6_PATCH: ${{ inputs.apply-qt6-patch }}
-        CQTDEPLOYER_INSTALL_DIR: ${{ steps.prepare.outputs.install-dir }}
+        CQTDEPLOYER_INSTALL_DIR: ${{ runner.temp }}/cqtdeployer/v1.6.2441.67ee1ef
         QT_PREFIX_PATH: ${{ inputs.qt-prefix-path }}
       run: |
         source_dir=$(mktemp -d)
         git clone https://github.com/QuasarApp/CQtDeployer.git "$source_dir"
         cd "$source_dir"
-        git checkout v1.6.2365
-        if [ "$APPLY_QT6_PATCH" = "true" ]; then
-          wget -qO- https://github.com/QuasarApp/CQtDeployer/pull/846.patch | git apply
-        fi
+        git checkout v1.6.2441.67ee1ef
         git submodule update --init --recursive
         cmake -B build -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="$QT_PREFIX_PATH" \
@@ -61,7 +33,7 @@ runs:
     - name: Add CQtDeployer to PATH
       shell: bash
       env:
-        CQTDEPLOYER_INSTALL_DIR: ${{ steps.prepare.outputs.install-dir }}
+        CQTDEPLOYER_INSTALL_DIR: ${{ runner.temp }}/cqtdeployer/v1.6.2441.67ee1ef
       run: |
         test -x "$CQTDEPLOYER_INSTALL_DIR/bin/CQtDeployer"
         echo "$CQTDEPLOYER_INSTALL_DIR/bin" >> "$GITHUB_PATH"

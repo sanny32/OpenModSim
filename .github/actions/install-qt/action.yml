@@ -34,43 +34,22 @@ outputs:
   qt-root-dir:
     description: Path to the installed Qt kit.
     value: ${{ steps.prepare.outputs.qt-root-dir }}
-  cache-hit:
-    description: Whether the Qt kit was restored from cache.
-    value: ${{ steps.cache.outputs.cache-hit }}
 
 runs:
   using: composite
   steps:
-    - name: Prepare Qt cache
+    - name: Prepare Qt installation
       id: prepare
       shell: bash
       env:
-        AQT_ARCH: ${{ inputs.arch }}
-        AQT_HOST: ${{ inputs.host }}
         AQT_INSTALL_DIR: ${{ inputs.install-dir }}
-        AQT_MODULES: ${{ inputs.modules }}
-        AQT_TARGET: ${{ inputs.target }}
         AQT_VERSION: ${{ inputs.version }}
         QT_DIR_NAME: ${{ inputs.qt-dir-name }}
       run: |
         qt_root_dir="${AQT_INSTALL_DIR%/}/${AQT_VERSION}/${QT_DIR_NAME}"
-        module_key=$(printf '%s' "$AQT_MODULES" | sed 's/[^A-Za-z0-9_.-]/-/g')
-        if [ -z "$module_key" ]; then
-          module_key=base
-        fi
-
         echo "qt-root-dir=$qt_root_dir" >> "$GITHUB_OUTPUT"
-        echo "cache-key=qt-v1-${AQT_HOST}-${AQT_TARGET}-${AQT_VERSION}-${AQT_ARCH}-${module_key}" >> "$GITHUB_OUTPUT"
-
-    - name: Restore Qt cache
-      id: cache
-      uses: actions/cache@v5
-      with:
-        path: ${{ steps.prepare.outputs.qt-root-dir }}
-        key: ${{ steps.prepare.outputs.cache-key }}-${{ runner.os }}-${{ runner.arch }}
 
     - name: Install Qt
-      if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
       env:
         AQT_ARCH: ${{ inputs.arch }}

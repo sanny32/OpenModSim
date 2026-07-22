@@ -6,33 +6,19 @@ inputs:
     description: Python version to build and install.
     required: true
 
-outputs:
-  cache-hit:
-    description: Whether the Python installation was restored from cache.
-    value: ${{ steps.cache.outputs.cache-hit }}
-
 runs:
   using: composite
   steps:
-    - name: Prepare Python cache
+    - name: Prepare Python installation
       id: prepare
       shell: bash
       env:
         PYTHON_VERSION: ${{ inputs.version }}
       run: |
-        source /etc/os-release
         python_minor_version=${PYTHON_VERSION%.*}
         install_dir="${RUNNER_TEMP}/python/${PYTHON_VERSION}"
         echo "install-dir=$install_dir" >> "$GITHUB_OUTPUT"
         echo "python-path=$install_dir/bin/python$python_minor_version" >> "$GITHUB_OUTPUT"
-        echo "cache-key=python-source-v1-${ID}-${VERSION_ID}-${PYTHON_VERSION}" >> "$GITHUB_OUTPUT"
-
-    - name: Restore Python cache
-      id: cache
-      uses: actions/cache@v5
-      with:
-        path: ${{ steps.prepare.outputs.install-dir }}
-        key: ${{ steps.prepare.outputs.cache-key }}-${{ runner.arch }}
 
     - name: Install Python dependencies
       shell: bash
@@ -43,7 +29,6 @@ runs:
           libncurses-dev libgdbm-compat-dev xz-utils
 
     - name: Build and install Python ${{ inputs.version }}
-      if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
       env:
         PYTHON_INSTALL_DIR: ${{ steps.prepare.outputs.install-dir }}

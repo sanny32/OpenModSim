@@ -41,17 +41,7 @@ runs:
         echo "version=$OPENSSL_VERSION" >> "$GITHUB_OUTPUT"
         echo "Resolved OpenSSL version: $OPENSSL_VERSION"
 
-    - name: Restore OpenSSL runtime cache
-      id: cache
-      uses: actions/cache@v5
-      with:
-        path: |
-          /usr/local/lib64/libssl.so.3
-          /usr/local/lib64/libcrypto.so.3
-        key: openssl3-runtime-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.resolve.outputs.version }}-shared-zlib
-
     - name: Build and install OpenSSL 3 runtime libraries
-      if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
         wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz
