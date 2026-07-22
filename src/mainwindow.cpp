@@ -1178,14 +1178,22 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
         case ConnectionType::RtuTcp:
         {
             DialogSelectServicePort dlg(cd.TcpParams, this);
-            if(dlg.exec() == QDialog::Accepted) _mbMultiServer.connectDevice(cd);
+            if(dlg.exec() == QDialog::Accepted)
+            {
+                _mbMultiServer.connectDevice(cd);
+                markModified();
+            }
         }
         break;
 
         case ConnectionType::Serial:
         {
             DialogSetupSerialPort dlg(cd.SerialParams, this);
-            if(dlg.exec()) _mbMultiServer.connectDevice(cd);
+            if(dlg.exec())
+            {
+                _mbMultiServer.connectDevice(cd);
+                markModified();
+            }
         }
         break;
     }
@@ -1199,6 +1207,7 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
 void MainWindow::on_disconnectAction(ConnectionType type, const QString& port)
 {
     _mbMultiServer.disconnectDevice(type, port);
+    markModified();
 }
 
 ///
