@@ -845,7 +845,7 @@ void MainWindow::on_awake()
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionScriptHelp->setChecked(ui->helpDockWidget->isVisible());
-    ui->actionScriptHelp->setVisible(isScript);
+    ui->actionScriptHelp->setEnabled(isScript || ui->helpDockWidget->isFloating());
     ui->actionOutputWindow->setChecked(ui->consoleDockWidget->isVisible());
     ui->actionProjectTree->setChecked(ui->projectDockWidget->isVisible());
 
