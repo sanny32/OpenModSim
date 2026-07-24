@@ -1550,7 +1550,9 @@ QString MainWindow::projectName() const
 void MainWindow::updateProjectWindowTitle()
 {
     const QString modifiedMark = _isModified ? "*" : "";
-    const QString name = projectName();
+    const QString name = _project->filePath().isEmpty()
+        ? projectName()
+        : QDir::toNativeSeparators(_project->filePath());
 
     if(name.isEmpty())
         setWindowTitle(modifiedMark + APP_PRODUCT_NAME);

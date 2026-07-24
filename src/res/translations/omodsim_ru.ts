@@ -2667,7 +2667,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1898"/>
+        <location filename="../../mainwindow.cpp" line="1900"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2859,17 +2859,17 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="303"/>
-        <location filename="../../mainwindow.cpp" line="2032"/>
+        <location filename="../../mainwindow.cpp" line="2034"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2043"/>
+        <location filename="../../mainwindow.cpp" line="2045"/>
         <source>Clear Recent Projects</source>
         <translation>Очистить недавние проекты</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2044"/>
+        <location filename="../../mainwindow.cpp" line="2046"/>
         <source>Clear the list of recent projects?</source>
         <translation>Очистить список недавних проектов?</translation>
     </message>
@@ -2896,7 +2896,7 @@ Please verify the merge result carefully.</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="981"/>
-        <location filename="../../mainwindow.cpp" line="1927"/>
+        <location filename="../../mainwindow.cpp" line="1929"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
@@ -2907,14 +2907,14 @@ Please verify the merge result carefully.</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="1542"/>
-        <location filename="../../mainwindow.cpp" line="1953"/>
+        <location filename="../../mainwindow.cpp" line="1955"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
         <location filename="../../mainwindow.cpp" line="689"/>
-        <location filename="../../mainwindow.cpp" line="1731"/>
+        <location filename="../../mainwindow.cpp" line="1733"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3246,12 +3246,12 @@ Please verify the merge result carefully.</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1899"/>
+        <location filename="../../mainwindow.cpp" line="1901"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2020"/>
+        <location filename="../../mainwindow.cpp" line="2022"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>

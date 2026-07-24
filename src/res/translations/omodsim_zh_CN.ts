@@ -2647,7 +2647,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1898"/>
+        <location filename="../../mainwindow.cpp" line="1900"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2859,17 +2859,17 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="303"/>
-        <location filename="../../mainwindow.cpp" line="2032"/>
+        <location filename="../../mainwindow.cpp" line="2034"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2043"/>
+        <location filename="../../mainwindow.cpp" line="2045"/>
         <source>Clear Recent Projects</source>
         <translation>清除最近使用的项目</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2044"/>
+        <location filename="../../mainwindow.cpp" line="2046"/>
         <source>Clear the list of recent projects?</source>
         <translation>是否清除最近使用的项目列表？</translation>
     </message>
@@ -2897,7 +2897,7 @@ Please verify the merge result carefully.</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="981"/>
-        <location filename="../../mainwindow.cpp" line="1927"/>
+        <location filename="../../mainwindow.cpp" line="1929"/>
         <source>Project files (*.omsim)</source>
         <translation>项目文件 (*.omsim)</translation>
     </message>
@@ -2908,14 +2908,14 @@ Please verify the merge result carefully.</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="1542"/>
-        <location filename="../../mainwindow.cpp" line="1953"/>
+        <location filename="../../mainwindow.cpp" line="1955"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
         <location filename="../../mainwindow.cpp" line="689"/>
-        <location filename="../../mainwindow.cpp" line="1731"/>
+        <location filename="../../mainwindow.cpp" line="1733"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3247,12 +3247,12 @@ Please verify the merge result carefully.</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1899"/>
+        <location filename="../../mainwindow.cpp" line="1901"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2020"/>
+        <location filename="../../mainwindow.cpp" line="2022"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
