@@ -1555,9 +1555,9 @@ void MainWindow::updateProjectWindowTitle()
         : QDir::toNativeSeparators(_project->filePath());
 
     if(name.isEmpty())
-        setWindowTitle(modifiedMark + APP_PRODUCT_NAME);
+        setWindowTitle(APP_PRODUCT_NAME + modifiedMark);
     else
-        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, name, APP_PRODUCT_NAME));
+        setWindowTitle(QString("%1 - %2%3").arg(name, APP_PRODUCT_NAME, modifiedMark));
 }
 
 ///
