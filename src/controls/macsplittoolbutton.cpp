@@ -14,9 +14,9 @@
 #include <QPalette>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QPixmap>
 #include <QStyle>
 #include <QStyleOptionTabBarBase>
+#include <QStyleOptionToolButton>
 #include <QTabBar>
 
 ///
@@ -105,52 +105,13 @@ void MacSplitToolButton::paintEvent(QPaintEvent*)
         _tabBar->style()->drawPrimitive(QStyle::PE_FrameTabBarBase, &option, &painter, _tabBar);
     }
 
-    const bool pressed = isDown();
-    const bool active = isChecked();
-    const bool hovered = underMouse();
+    QStyleOptionToolButton option;
+    initStyleOption(&option);
+    option.rect = chromeRect();
+    option.state.setFlag(QStyle::State_MouseOver, isEnabled() && underMouse());
 
-    QColor fill = base;
-    QColor border = palette().mid().color();
-    bool drawChrome = false;
-
-    if (active) {
-        fill = mix(base, palette().highlight().color(), 0.20);
-        border = palette().highlight().color();
-        drawChrome = true;
-    } else if (pressed) {
-        fill = base.darker(108);
-        drawChrome = true;
-    } else if (hovered) {
-        fill = base.lighter(106);
-        drawChrome = true;
-    }
-
-    if (drawChrome) {
-        const QRectF buttonRect = chromeRect().adjusted(1, 1, -1, -1);
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(fill);
-        painter.drawRoundedRect(buttonRect, 3, 3);
-    }
-
-    const QSize glyphSize = iconSize();
-    const QRect innerRect = chromeRect();
-    const QRect iconRect(QPoint(innerRect.x() + (innerRect.width() - glyphSize.width()) / 2,
-                                innerRect.y() + (innerRect.height() - glyphSize.height()) / 2),
-                         glyphSize);
-    const auto iconMode = isEnabled() ? QIcon::Normal : QIcon::Disabled;
-    const auto iconState = active ? QIcon::On : QIcon::Off;
-    QPixmap pixmap = icon().pixmap(glyphSize, iconMode, iconState);
-    if (!pixmap.isNull()) {
-        const auto colorGroup = isEnabled() ? QPalette::Active : QPalette::Disabled;
-        QColor color = palette().color(colorGroup, QPalette::ButtonText);
-        if (!color.isValid() || color.alpha() == 0)
-            color = palette().color(colorGroup, QPalette::WindowText);
-
-        QPainter iconPainter(&pixmap);
-        iconPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-        iconPainter.fillRect(pixmap.rect(), color);
-        painter.drawPixmap(iconRect, pixmap);
-    }
+    style()->drawPrimitive(QStyle::PE_PanelButtonTool, &option, &painter, this);
+    style()->drawControl(QStyle::CE_ToolButtonLabel, &option, &painter, this);
 }
 
 ///
@@ -175,23 +136,6 @@ QRect MacSplitToolButton::chromeRect() const
     return QRect(x, y,
                  qMin(chromeSize.width(), width()),
                  qMin(chromeSize.height(), height()));
-}
-
-///
-/// \brief MacSplitToolButton::mix
-/// \param a
-/// \param b
-/// \param amount
-/// \return
-///
-QColor MacSplitToolButton::mix(const QColor& a, const QColor& b, qreal amount)
-{
-    amount = qBound<qreal>(0.0, amount, 1.0);
-    const qreal inv = 1.0 - amount;
-    return QColor::fromRgbF(a.redF()   * inv + b.redF()   * amount,
-                            a.greenF() * inv + b.greenF() * amount,
-                            a.blueF()  * inv + b.blueF()  * amount,
-                            1.0);
 }
 
 #endif // Q_OS_MAC
