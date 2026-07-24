@@ -12,8 +12,11 @@
 #include "appcolors.h"
 #include "application.h"
 #include <oclero/qlementine/icons/QlementineIcons.hpp>
+#include <oclero/qlementine/utils/PrimitiveUtils.hpp>
+#include <oclero/qlementine/utils/StateUtils.hpp>
 
 #include <QComboBox>
+#include <QCursor>
 #include <QDockWidget>
 #include <QPushButton>
 #include <QBrush>
@@ -51,7 +54,11 @@ using oclero::qlementine::CheckState;
 using oclero::qlementine::ColorRole;
 using oclero::qlementine::FocusState;
 using oclero::qlementine::MouseState;
+using oclero::qlementine::RadiusesF;
 using oclero::qlementine::SelectionState;
+using oclero::qlementine::drawTab;
+using oclero::qlementine::getMouseState;
+using oclero::qlementine::getSelectionState;
 using oclero::qlementine::Status;
 using oclero::qlementine::Theme;
 
@@ -60,6 +67,7 @@ constexpr QRgb kCanvas = 0xffffff;
 constexpr QRgb kChrome = 0xf5f5f5;
 constexpr QRgb kChromeStrong = 0xececec;
 constexpr QRgb kChromePressed = 0xe0e0e0;
+constexpr QRgb kChromeDeep = 0xd2d5da;
 constexpr QRgb kChromeMuted = 0xfefefe;
 constexpr QRgb kChromeDisabled = 0xf4f6f8;
 constexpr QRgb kSurfaceDisabled = 0xf2f2f2;
@@ -88,6 +96,7 @@ constexpr QRgb kCanvas = 0x1e1f24;
 constexpr QRgb kChrome = 0x272a30;
 constexpr QRgb kChromeStrong = 0x333841;
 constexpr QRgb kChromePressed = 0x414854;
+constexpr QRgb kChromeDeep = 0x4e5665;
 constexpr QRgb kChromeMuted = 0x2d3138;
 constexpr QRgb kChromeDisabled = 0x24272d;
 constexpr QRgb kSurfaceDisabled = 0x21242a;
@@ -558,6 +567,32 @@ void QlementineAppStyle::drawControl(ControlElement element, const QStyleOption*
         return;
     }
 
+    if (element == CE_TabBarTabShape) {
+        const auto* tabOption = qstyleoption_cast<const QStyleOptionTab*>(option);
+        const auto* tabBar = qobject_cast<const QTabBar*>(widget);
+        if (tabOption && tabBar) {
+            const SelectionState selected = getSelectionState(tabOption->state);
+            const bool isSelected = selected == SelectionState::Selected;
+
+            MouseState mouse = getMouseState(tabOption->state);
+            if ((mouse == MouseState::Hovered || mouse == MouseState::Pressed)
+                && !tabOption->rect.contains(tabBar->mapFromGlobal(QCursor::pos())))
+                mouse = MouseState::Normal;
+
+            const qreal radius = theme().borderRadius;
+            const QRect rect = isSelected ? tabOption->rect : tabOption->rect.adjusted(1, 0, -1, 0);
+            const RadiusesF radiuses = isSelected
+                ? RadiusesF(radius, radius, radius, radius)
+                : RadiusesF(radius, radius, 0., 0.);
+
+            painter->save();
+            drawTab(painter, rect, radiuses, tabBackgroundColor(mouse, selected),
+                    isSelected && mouse != MouseState::Pressed, theme().shadowColor2);
+            painter->restore();
+            return;
+        }
+    }
+
     QlementineStyle::drawControl(element, option, painter, widget);
 
     if (element != CE_TabBarTab || !widget)
@@ -885,23 +920,20 @@ QColor const& QlementineAppStyle::tabBackgroundColor(MouseState mouse, Selection
     const bool darkMode = isDarkMode();
     const bool isSelected = selected == SelectionState::Selected;
 
+    if (isSelected)
+        return colorRef(darkMode ? Dark::kCanvas : Light::kCanvas);
+
     switch (mouse) {
         case MouseState::Pressed:
-            return isSelected
-                ? colorRef(darkMode ? Dark::kCanvas : Light::kCanvas)
-                : colorRef(darkMode ? Dark::kChromePressed : Light::kChromePressed);
+            return colorRef(darkMode ? Dark::kChromeDeep : Light::kChromeDeep);
         case MouseState::Hovered:
-            return isSelected
-                ? colorRef(darkMode ? Dark::kCanvas : Light::kCanvas)
-                : colorRef(darkMode ? Dark::kChromeStrong : Light::kChromeStrong);
+            return colorRef(darkMode ? Dark::kChromePressed : Light::kChromePressed);
         case MouseState::Disabled:
             return transparentRef(darkMode ? Dark::kChrome : Light::kChrome);
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return isSelected
-                ? colorRef(darkMode ? Dark::kCanvas : Light::kCanvas)
-                : transparentRef(darkMode ? Dark::kChrome : Light::kChrome);
+            return colorRef(darkMode ? Dark::kChromeStrong : Light::kChromeStrong);
     }
 }
 
@@ -925,11 +957,17 @@ QColor const& QlementineAppStyle::tabBarBackgroundColor(MouseState mouse) const
 ///
 QColor const& QlementineAppStyle::tabForegroundColor(MouseState mouse, SelectionState selected) const
 {
-    Q_UNUSED(selected)
+    const bool darkMode = isDarkMode();
 
-    return mouse == MouseState::Disabled
-        ? colorRef(isDarkMode() ? Dark::kDisabledText : Light::kDisabledText)
-        : colorRef(isDarkMode() ? Dark::kText : Light::kText);
+    if (mouse == MouseState::Disabled)
+        return colorRef(darkMode ? Dark::kDisabledText : Light::kDisabledText);
+
+    if (selected == SelectionState::Selected
+        || mouse == MouseState::Hovered
+        || mouse == MouseState::Pressed)
+        return colorRef(darkMode ? Dark::kText : Light::kText);
+
+    return colorRef(darkMode ? Dark::kTextMuted : Light::kTextMuted);
 }
 
 ///

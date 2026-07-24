@@ -39,6 +39,7 @@ namespace Light {
     constexpr QRgb kChrome         = 0xefefef;
     constexpr QRgb kChromeStrong   = 0xe4e4e4;
     constexpr QRgb kChromePressed  = 0xd6d6d6;
+    constexpr QRgb kChromeDeep     = 0xcacaca;
     constexpr QRgb kBorder         = 0xc8c8c8;
     constexpr QRgb kBorderActive   = 0xa0a0a0;
     constexpr QRgb kText           = 0x000000;
@@ -62,6 +63,7 @@ namespace Dark {
     constexpr QRgb kChrome         = 0x2c2c2e;
     constexpr QRgb kChromeStrong   = 0x3a3a3c;
     constexpr QRgb kChromePressed  = 0x48484a;
+    constexpr QRgb kChromeDeep     = 0x545456;
     constexpr QRgb kBorder         = 0x38383a;
     constexpr QRgb kBorderActive   = 0x545456;
     constexpr QRgb kText           = 0xffffff;
@@ -696,31 +698,37 @@ QColor const& MacAppStyle::tabBackgroundColor(MouseState mouse, SelectionState s
 
     if (isDarkMode()) {
         using namespace Dark;
+        if (isSelected)
+            return colorRef(kCanvas);
+
         switch (mouse) {
             case MouseState::Pressed:
-                return isSelected ? colorRef(kCanvas) : colorRef(kChromePressed);
+                return colorRef(kChromeDeep);
             case MouseState::Hovered:
-                return isSelected ? colorRef(kCanvas) : colorRef(kChromeStrong);
+                return colorRef(kChromePressed);
             case MouseState::Disabled:
                 return transparentRef(kChrome);
             case MouseState::Transparent:
             case MouseState::Normal:
             default:
-                return isSelected ? colorRef(kCanvas) : transparentRef(kChrome);
+                return colorRef(kChromeStrong);
         }
     } else {
         using namespace Light;
+        if (isSelected)
+            return colorRef(kCanvas);
+
         switch (mouse) {
             case MouseState::Pressed:
-                return isSelected ? colorRef(kCanvas) : colorRef(kChromePressed);
+                return colorRef(kChromeDeep);
             case MouseState::Hovered:
-                return isSelected ? colorRef(kCanvas) : colorRef(kChromeStrong);
+                return colorRef(kChromePressed);
             case MouseState::Disabled:
                 return transparentRef(kChrome);
             case MouseState::Transparent:
             case MouseState::Normal:
             default:
-                return isSelected ? colorRef(kCanvas) : transparentRef(kChrome);
+                return colorRef(kChromeStrong);
         }
     }
 }
@@ -744,14 +752,20 @@ QColor const& MacAppStyle::tabBarBackgroundColor(MouseState mouse) const
 ///
 QColor const& MacAppStyle::tabForegroundColor(MouseState mouse, SelectionState selected) const
 {
-    Q_UNUSED(selected)
+    const bool isActive = selected == SelectionState::Selected
+        || mouse == MouseState::Hovered
+        || mouse == MouseState::Pressed;
 
     if (isDarkMode()) {
         using namespace Dark;
-        return mouse == MouseState::Disabled ? colorRef(kDisabledText) : colorRef(kText);
+        if (mouse == MouseState::Disabled)
+            return colorRef(kDisabledText);
+        return isActive ? colorRef(kText) : colorRef(kMutedText);
     } else {
         using namespace Light;
-        return mouse == MouseState::Disabled ? colorRef(kDisabledText) : colorRef(kText);
+        if (mouse == MouseState::Disabled)
+            return colorRef(kDisabledText);
+        return isActive ? colorRef(kText) : colorRef(kMutedText);
     }
 }
 
