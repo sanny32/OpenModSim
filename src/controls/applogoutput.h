@@ -49,6 +49,7 @@ protected:
 private slots:
     void on_customContextMenuRequested(const QPoint& pos);
     void applyFilters();
+    void confirmClear();
     void exportLog();
     void copyAllToClipboard();
 

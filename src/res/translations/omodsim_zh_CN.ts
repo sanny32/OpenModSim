@@ -158,17 +158,27 @@
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../controls/applogoutput.cpp" line="435"/>
+        <location filename="../../controls/applogoutput.cpp" line="425"/>
+        <source>Clear Log</source>
+        <translation>清除日志</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="426"/>
+        <source>Clear all events from the log?</source>
+        <translation>确定要清除日志中的所有事件吗？</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="453"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../controls/applogoutput.cpp" line="440"/>
+        <location filename="../../controls/applogoutput.cpp" line="458"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../../controls/applogoutput.cpp" line="440"/>
+        <location filename="../../controls/applogoutput.cpp" line="458"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>无法打开文件进行写入：
@@ -273,19 +283,62 @@
 <context>
     <name>ConsoleOutput</name>
     <message>
-        <location filename="../../controls/consoleoutput.ui" line="96"/>
+        <location filename="../../controls/consoleoutput.ui" line="97"/>
         <source>Clear console</source>
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../../controls/consoleoutput.cpp" line="391"/>
+        <location filename="../../controls/consoleoutput.ui" line="106"/>
+        <source>Export console</source>
+        <translation>导出控制台</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="195"/>
+        <location filename="../../controls/consoleoutput.cpp" line="413"/>
+        <source>Copy All</source>
+        <translation>全部复制</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="404"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../controls/consoleoutput.cpp" line="402"/>
+        <location filename="../../controls/consoleoutput.cpp" line="420"/>
+        <source>Export...</source>
+        <translation>导出...</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="426"/>
         <source>Clear</source>
         <translation>清除</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="440"/>
+        <source>Clear Console</source>
+        <translation>清除控制台</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="441"/>
+        <source>Clear all messages from the console?</source>
+        <translation>确定要清除控制台中的所有消息吗？</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="473"/>
+        <source>Text files (*.txt)</source>
+        <translation>文本文件 (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="478"/>
+        <source>Export</source>
+        <translation>导出</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="478"/>
+        <source>Cannot open file for writing:
+%1</source>
+        <translation>无法打开文件进行写入：
+%1</translation>
     </message>
 </context>
 <context>
@@ -2210,8 +2263,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="730"/>
-        <location filename="../../formtrafficview.cpp" line="882"/>
+        <location filename="../../formtrafficview.cpp" line="741"/>
+        <location filename="../../formtrafficview.cpp" line="893"/>
         <source>Exceptions Only</source>
         <translation>仅异常</translation>
     </message>
@@ -2231,53 +2284,63 @@ Source: %3</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="651"/>
+        <location filename="../../formtrafficview.cpp" line="647"/>
+        <source>Clear Traffic</source>
+        <translation>清除通信记录</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="648"/>
+        <source>Clear all messages from the traffic log?</source>
+        <translation>确定要清除通信记录中的所有消息吗？</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="662"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="658"/>
+        <location filename="../../formtrafficview.cpp" line="669"/>
         <source>Log exported successfully to file %1</source>
         <translation>日志成功导出至 %1</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="660"/>
+        <location filename="../../formtrafficview.cpp" line="671"/>
         <source>Export log error!</source>
         <translation>导出日志错误！</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="693"/>
-        <location filename="../../formtrafficview.cpp" line="866"/>
+        <location filename="../../formtrafficview.cpp" line="704"/>
+        <location filename="../../formtrafficview.cpp" line="877"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="699"/>
-        <location filename="../../formtrafficview.cpp" line="870"/>
+        <location filename="../../formtrafficview.cpp" line="710"/>
+        <location filename="../../formtrafficview.cpp" line="881"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = 所有单元ID</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="720"/>
-        <location filename="../../formtrafficview.cpp" line="877"/>
+        <location filename="../../formtrafficview.cpp" line="731"/>
+        <location filename="../../formtrafficview.cpp" line="888"/>
         <source>Source:</source>
         <translation>来源：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="731"/>
-        <location filename="../../formtrafficview.cpp" line="883"/>
+        <location filename="../../formtrafficview.cpp" line="742"/>
+        <location filename="../../formtrafficview.cpp" line="894"/>
         <source>Show only responses with Modbus exception</source>
         <translation>仅显示带有Modbus异常的响应</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="738"/>
-        <location filename="../../formtrafficview.cpp" line="887"/>
+        <location filename="../../formtrafficview.cpp" line="749"/>
+        <location filename="../../formtrafficview.cpp" line="898"/>
         <source>Autoscroll</source>
         <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="739"/>
-        <location filename="../../formtrafficview.cpp" line="888"/>
+        <location filename="../../formtrafficview.cpp" line="750"/>
+        <location filename="../../formtrafficview.cpp" line="899"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>自动滚动到最新条目</translation>
     </message>
@@ -2286,21 +2349,21 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
         <location filename="../../formtrafficview.cpp" line="541"/>
-        <location filename="../../formtrafficview.cpp" line="698"/>
-        <location filename="../../formtrafficview.cpp" line="723"/>
-        <location filename="../../formtrafficview.cpp" line="869"/>
+        <location filename="../../formtrafficview.cpp" line="709"/>
+        <location filename="../../formtrafficview.cpp" line="734"/>
+        <location filename="../../formtrafficview.cpp" line="880"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="747"/>
-        <location filename="../../formtrafficview.cpp" line="892"/>
+        <location filename="../../formtrafficview.cpp" line="758"/>
+        <location filename="../../formtrafficview.cpp" line="903"/>
         <source>Rows:</source>
         <translation>行数：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="708"/>
-        <location filename="../../formtrafficview.cpp" line="874"/>
+        <location filename="../../formtrafficview.cpp" line="719"/>
+        <location filename="../../formtrafficview.cpp" line="885"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>
@@ -4218,61 +4281,71 @@ Please verify the merge result carefully.</source>
 <context>
     <name>TrafficLogWindow</name>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="23"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="208"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="24"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="220"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="121"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="209"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="122"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="221"/>
         <source>Unit ID:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="125"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="132"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="210"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="218"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="126"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="133"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="222"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="230"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="126"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="211"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="127"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="223"/>
         <source>Filter by Unit Identifier (0 = all)</source>
         <translation>按单元标识符过滤（0 = 全部）</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="130"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="212"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="131"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="224"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="144"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="213"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="145"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="225"/>
         <source>Limit:</source>
         <translation>限制：</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="156"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="198"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="214"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="157"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="199"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="226"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="161"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="215"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="162"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="227"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="198"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="214"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="199"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="226"/>
         <source>Resume</source>
         <translation>恢复</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="206"/>
+        <source>Clear Traffic</source>
+        <translation>清除通信记录</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="207"/>
+        <source>Clear all messages from the traffic log?</source>
+        <translation>确定要清除通信记录中的所有消息吗？</translation>
     </message>
 </context>
 <context>

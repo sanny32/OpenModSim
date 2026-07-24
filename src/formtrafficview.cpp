@@ -640,6 +640,17 @@ void FormTrafficView::on_actionPauseTraffic_toggled(bool checked)
 ///
 void FormTrafficView::on_actionClearTraffic_triggered()
 {
+    if (ui->outputWidget->isLogEmpty() && _pendingLogViewUpdates.isEmpty())
+        return;
+
+    const auto answer = QMessageBox::question(this,
+                                              tr("Clear Traffic"),
+                                              tr("Clear all messages from the traffic log?"),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::No);
+    if (answer != QMessageBox::Yes)
+        return;
+
     clearTrafficLog();
 }
 

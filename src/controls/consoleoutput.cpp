@@ -8,11 +8,15 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QFile>
+#include <QFileDialog>
 #include <QGuiApplication>
 #include <QListWidget>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPainter>
 #include <QSizePolicy>
+#include <QTextStream>
 #include <QTimer>
 #include <QStyledItemDelegate>
 #include <QToolBar>
@@ -158,12 +162,14 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     setupToolbarBtn(ui->actionFilterWarn);
     setupToolbarBtn(ui->actionFilterError);
     setupToolbarBtn(ui->actionClear);
+    setupToolbarBtn(ui->actionExport);
 
     auto* filterSpacer = new QWidget(ui->toolBar);
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBar->insertWidget(ui->actionFilterLog, filterSpacer);
 
     ui->actionClear->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
+    ui->actionExport->setIcon(themedIcon(QStringLiteral("omodsim/export")));
 
     ui->listWidget->setItemDelegate(new ConsoleItemDelegate(ui->listWidget));
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -178,12 +184,19 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     _flushTimer->setInterval(ConsoleUiFlushIntervalMs);
     connect(_flushTimer, &QTimer::timeout, this, &ConsoleOutput::on_flushTimeout);
 
-    connect(ui->actionClear, &QAction::triggered, this, &ConsoleOutput::clear);
+    connect(ui->actionClear, &QAction::triggered, this, &ConsoleOutput::confirmClear);
+    connect(ui->actionExport, &QAction::triggered, this, &ConsoleOutput::exportConsole);
     connect(ui->actionFilterLog, &QAction::toggled, this, &ConsoleOutput::applyFilters);
     connect(ui->actionFilterWarn, &QAction::toggled, this, &ConsoleOutput::applyFilters);
     connect(ui->actionFilterError, &QAction::toggled, this, &ConsoleOutput::applyFilters);
     connect(ui->listWidget, &QWidget::customContextMenuRequested,
             this, &ConsoleOutput::on_customContextMenuRequested);
+
+    _copyAllAction = new QAction(tr("Copy All"), this);
+    _copyAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
+    _copyAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(_copyAllAction);
+    connect(_copyAllAction, &QAction::triggered, this, &ConsoleOutput::copyAllToClipboard);
 }
 
 ///
@@ -397,10 +410,75 @@ void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
     });
     copyAction->setEnabled(!ui->listWidget->selectedItems().isEmpty());
 
+    auto copyAllAction = menu.addAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy All"), this,
+                                        &ConsoleOutput::copyAllToClipboard);
+    copyAllAction->setShortcut(_copyAllAction->shortcut());
+    copyAllAction->setEnabled(!isEmpty());
+
     menu.addSeparator();
 
-    auto clearAction = menu.addAction(tr("Clear"), this, [this]() { clear(); });
+    auto exportAction = menu.addAction(themedIcon(QStringLiteral("omodsim/export")), tr("Export..."), this,
+                                       &ConsoleOutput::exportConsole);
+    exportAction->setEnabled(!isEmpty());
+
+    menu.addSeparator();
+
+    auto clearAction = menu.addAction(tr("Clear"), this, &ConsoleOutput::confirmClear);
     clearAction->setEnabled(!isEmpty());
 
     menu.exec(ui->listWidget->mapToGlobal(pos));
+}
+
+///
+/// \brief ConsoleOutput::confirmClear
+///
+void ConsoleOutput::confirmClear()
+{
+    if (isEmpty()) return;
+
+    const auto answer = QMessageBox::question(this,
+                                              tr("Clear Console"),
+                                              tr("Clear all messages from the console?"),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::No);
+    if (answer != QMessageBox::Yes)
+        return;
+
+    clear();
+}
+
+///
+/// \brief ConsoleOutput::copyAllToClipboard
+///
+void ConsoleOutput::copyAllToClipboard()
+{
+    flush();
+
+    if (isEmpty()) return;
+
+    QStringList lines;
+    for (int i = 0; i < ui->listWidget->count(); ++i)
+        lines << ui->listWidget->item(i)->text();
+    QApplication::clipboard()->setText(lines.join('\n'));
+}
+
+///
+/// \brief ConsoleOutput::exportConsole
+///
+void ConsoleOutput::exportConsole()
+{
+    flush();
+
+    const QString filename = QFileDialog::getSaveFileName(
+        this, QString(), QString(), tr("Text files (*.txt)"));
+    if (filename.isEmpty()) return;
+
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Export"), tr("Cannot open file for writing:\n%1").arg(filename));
+        return;
+    }
+    QTextStream out(&file);
+    for (int i = 0; i < ui->listWidget->count(); ++i)
+        out << ui->listWidget->item(i)->text() << '\n';
 }

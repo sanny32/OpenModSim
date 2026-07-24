@@ -12,6 +12,7 @@
 #include <QVector>
 #include <QWidget>
 
+class QAction;
 class QTimer;
 
 namespace Ui {
@@ -48,6 +49,9 @@ private slots:
     void on_customContextMenuRequested(const QPoint& pos);
     void on_flushTimeout();
     void applyFilters();
+    void confirmClear();
+    void exportConsole();
+    void copyAllToClipboard();
 
 private:
     void updateFilterButtons();
@@ -64,6 +68,7 @@ private:
 
     Ui::ConsoleOutput* ui;
     QTimer* _flushTimer;
+    QAction* _copyAllAction = nullptr;
     QVector<PendingMessage> _pending;
     int _logCount   = 0;
     int _warnCount  = 0;
