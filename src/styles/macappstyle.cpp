@@ -33,14 +33,14 @@ using oclero::qlementine::SelectionState;
 using oclero::qlementine::Status;
 using oclero::qlementine::Theme;
 
-// Light mode macOS colors
+// Light mode colors (Qt Creator Flat Light neutral grays)
 namespace Light {
     constexpr QRgb kCanvas         = 0xffffff;
-    constexpr QRgb kChrome         = 0xf2f2f7;
-    constexpr QRgb kChromeStrong   = 0xe5e5ea;
-    constexpr QRgb kChromePressed  = 0xd1d1d6;
-    constexpr QRgb kBorder         = 0xd1d1d6;
-    constexpr QRgb kBorderActive   = 0xaeaeb2;
+    constexpr QRgb kChrome         = 0xefefef;
+    constexpr QRgb kChromeStrong   = 0xe4e4e4;
+    constexpr QRgb kChromePressed  = 0xd6d6d6;
+    constexpr QRgb kBorder         = 0xc8c8c8;
+    constexpr QRgb kBorderActive   = 0xa0a0a0;
     constexpr QRgb kText           = 0x000000;
     constexpr QRgb kMutedText      = 0x8e8e93;
     constexpr QRgb kDisabledText   = 0xc7c7cc;
@@ -52,8 +52,8 @@ namespace Light {
     constexpr QRgb kGreen          = 0x34c759;
     constexpr QRgb kIconNormal     = 0x3c3c43;
     constexpr QRgb kIconActive     = 0x0062cc;
-    constexpr QRgb kChromeDimmed   = 0xf4f6f8;
-    constexpr QRgb kCanvasWarm     = 0xfefefe;
+    constexpr QRgb kChromeDimmed   = 0xf5f5f5;
+    constexpr QRgb kCanvasWarm     = 0xfcfcfc;
 }
 
 // Dark mode macOS colors
@@ -175,8 +175,8 @@ Theme makeMacLightTheme()
 
     theme.neutralColor = QColor(kChromeStrong);
     theme.neutralColorHovered = QColor(kChromePressed);
-    theme.neutralColorPressed = QColor(0xc7c7cc);
-    theme.neutralColorDisabled = QColor(0xf2f2f7);
+    theme.neutralColorPressed = QColor(0xcccccc);
+    theme.neutralColorDisabled = QColor(kChromeDimmed);
     theme.neutralColorTransparent = transparent(kChromeStrong);
 
     theme.primaryColor = QColor(kBlue);
@@ -220,8 +220,8 @@ Theme makeMacLightTheme()
 
     theme.borderColor = QColor(kBorder);
     theme.borderColorHovered = QColor(kBorderActive);
-    theme.borderColorPressed = QColor(0x9e9ea3);
-    theme.borderColorDisabled = QColor(0xe5e5ea);
+    theme.borderColorPressed = QColor(0x8f8f8f);
+    theme.borderColorDisabled = QColor(kChromeStrong);
     theme.borderColorTransparent = transparent(kBorder);
 
     theme.semiTransparentColor1 = alpha(kText, 0);
@@ -625,12 +625,12 @@ QColor MacAppStyle::listItemBackgroundColor(MouseState mouse, SelectionState sel
     } else {
         using namespace Light;
         if (isSelected)
-            return mouse == MouseState::Disabled ? QColor(0xe5e5ea) : QColor(0xd9eaff);
+            return mouse == MouseState::Disabled ? QColor(kChromeStrong) : QColor(0xd9eaff);
         switch (mouse) {
             case MouseState::Hovered:
-                return QColor(0xf2f2f7);
+                return QColor(kChrome);
             case MouseState::Pressed:
-                return QColor(0xe5e5ea);
+                return QColor(kChromeStrong);
             case MouseState::Disabled:
             case MouseState::Transparent:
             case MouseState::Normal:
