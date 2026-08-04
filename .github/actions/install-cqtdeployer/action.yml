@@ -7,8 +7,8 @@ inputs:
     required: true
   apply-qt5-patch:
     description: >-
-      Apply the QuasarAppLib Qt5 compatibility patch. Required for Qt5 builds,
-      upstream builds this version with Qt6 only.
+      Apply the Qt5 compatibility patches. Required for Qt5 builds, upstream
+      builds this version with Qt6 only.
     required: false
     default: "false"
 
@@ -20,7 +20,8 @@ runs:
       env:
         APPLY_QT5_PATCH: ${{ inputs.apply-qt5-patch }}
         CQTDEPLOYER_INSTALL_DIR: ${{ runner.temp }}/cqtdeployer/v1.6.2441.67ee1ef
-        QT5_PATCH: ${{ github.action_path }}/quasarapplib-qt5.patch
+        QT5_PATCH_APP: ${{ github.action_path }}/cqtdeployer-qt5.patch
+        QT5_PATCH_LIB: ${{ github.action_path }}/quasarapplib-qt5.patch
         QT_PREFIX_PATH: ${{ inputs.qt-prefix-path }}
       run: |
         source_dir=$(mktemp -d)
@@ -29,7 +30,9 @@ runs:
         git checkout v1.6.2441.67ee1ef
         git submodule update --init --recursive
         if [ "$APPLY_QT5_PATCH" = "true" ]; then
-          git -C submodules/QuasarAppLib apply "$QT5_PATCH"
+          # git apply cannot reach files inside a submodule, patch it separately.
+          git apply "$QT5_PATCH_APP"
+          git -C submodules/QuasarAppLib apply "$QT5_PATCH_LIB"
         fi
         cmake -B build -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH="$QT_PREFIX_PATH" \
