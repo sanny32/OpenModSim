@@ -1,12 +1,13 @@
 name: Test Linux build script
 
 on:
-  workflow_run:
-    workflows: ["Test"]
-    types:
-      - completed
+  push:
     branches:
       - main
+    paths:
+      - '.github/workflows/test-linux-build-script.yml'
+      - 'build.sh'
+      - 'src/**'
 
   workflow_dispatch:
     inputs:
@@ -22,7 +23,6 @@ permissions:
 jobs:
   prepare-matrix:
     name: Prepare matrix
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
@@ -198,7 +198,7 @@ jobs:
 
       - name: Checkout repository
         env:
-          CHECKOUT_REF: ${{ inputs.branch || github.event.workflow_run.head_sha || github.sha }}
+          CHECKOUT_REF: ${{ inputs.branch || github.sha }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git init -b checkout "$GITHUB_WORKSPACE"
