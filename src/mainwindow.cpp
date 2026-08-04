@@ -28,6 +28,7 @@
 #include "menuconnect.h"
 #include "mdiareaex.h"
 #include "formscriptview.h"
+#include "helpdockpolicy.h"
 #include "formdatamapview.h"
 #include "applogoutput.h"
 #include "applogger.h"
@@ -844,7 +845,7 @@ void MainWindow::on_awake()
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionScriptHelp->setChecked(ui->helpDockWidget->isVisible());
-    ui->actionScriptHelp->setVisible(isScript);
+    ui->actionScriptHelp->setEnabled(isScript || ui->helpDockWidget->isFloating());
     ui->actionOutputWindow->setChecked(ui->consoleDockWidget->isVisible());
     ui->actionProjectTree->setChecked(ui->projectDockWidget->isVisible());
 
@@ -1177,14 +1178,22 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
         case ConnectionType::RtuTcp:
         {
             DialogSelectServicePort dlg(cd.TcpParams, this);
-            if(dlg.exec() == QDialog::Accepted) _mbMultiServer.connectDevice(cd);
+            if(dlg.exec() == QDialog::Accepted)
+            {
+                _mbMultiServer.connectDevice(cd);
+                markModified();
+            }
         }
         break;
 
         case ConnectionType::Serial:
         {
             DialogSetupSerialPort dlg(cd.SerialParams, this);
-            if(dlg.exec()) _mbMultiServer.connectDevice(cd);
+            if(dlg.exec())
+            {
+                _mbMultiServer.connectDevice(cd);
+                markModified();
+            }
         }
         break;
     }
@@ -1198,6 +1207,7 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
 void MainWindow::on_disconnectAction(ConnectionType type, const QString& port)
 {
     _mbMultiServer.disconnectDevice(type, port);
+    markModified();
 }
 
 ///
@@ -1281,22 +1291,28 @@ void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 ///
 void MainWindow::updateHelpWidgetState()
 {
-    auto frm = _project->currentMdiChild();
-    if(!frm) return;
-    if (qobject_cast<FormScriptView*>(frm)) {
-        if(!ui->helpDockWidget->isVisible() &&
-            ui->helpDockWidget->property("WasShown").toBool())
-        {
-            ui->helpDockWidget->setVisible(true);
-        }
-        return;
-    }
+    const auto frm = _project->currentMdiChild();
 
-    if(ui->helpDockWidget->isVisible() &&
-        !ui->helpDockWidget->isFloating())
+    HelpDockPolicy::State state;
+    state.hasActiveForm = (frm != nullptr);
+    state.isScriptForm  = (qobject_cast<FormScriptView*>(frm) != nullptr);
+    state.isVisible     = ui->helpDockWidget->isVisible();
+    state.isFloating    = ui->helpDockWidget->isFloating();
+    state.wasShown      = ui->helpDockWidget->property("WasShown").toBool();
+
+    switch(HelpDockPolicy::nextAction(state))
     {
-        ui->helpDockWidget->setProperty("WasShown", true);
-        ui->helpDockWidget->setVisible(false);
+        case HelpDockPolicy::Action::Show:
+            ui->helpDockWidget->setVisible(true);
+        break;
+
+        case HelpDockPolicy::Action::HideAndRemember:
+            ui->helpDockWidget->setProperty("WasShown", true);
+            ui->helpDockWidget->setVisible(false);
+        break;
+
+        case HelpDockPolicy::Action::None:
+        break;
     }
 }
 
@@ -1534,12 +1550,14 @@ QString MainWindow::projectName() const
 void MainWindow::updateProjectWindowTitle()
 {
     const QString modifiedMark = _isModified ? "*" : "";
-    const QString name = projectName();
+    const QString name = _project->filePath().isEmpty()
+        ? projectName()
+        : QDir::toNativeSeparators(_project->filePath());
 
     if(name.isEmpty())
-        setWindowTitle(modifiedMark + APP_PRODUCT_NAME);
+        setWindowTitle(APP_PRODUCT_NAME + modifiedMark);
     else
-        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, name, APP_PRODUCT_NAME));
+        setWindowTitle(QString("%1 - %2%3").arg(name, APP_PRODUCT_NAME, modifiedMark));
 }
 
 ///
@@ -1650,6 +1668,10 @@ bool MainWindow::loadAppSettings(const QString& filename)
     if(!QFile::exists(_profile)) {
         _newFormKind = ProjectFormKind::Data;
         restoreNewFormKindIcon();
+
+        // First run: arm the script help so it shows up as soon as a script form
+        // is activated, otherwise new users have no hint that the panel exists.
+        ui->helpDockWidget->setProperty("WasShown", true);
         return false;
     }
 

@@ -771,6 +771,7 @@ void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps, b
         clearTimestamps();
     }
 
+    bool applied = false;
     for(auto it = timestamps.constBegin(); it != timestamps.constEnd(); ++it)
     {
         if(!it.value().isValid())
@@ -783,8 +784,11 @@ void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps, b
         }
 
         _modbusDataUnitMaps[key.DeviceId].setTimestamp(key.Type, key.Address, it.value());
-        emit timestampChanged(key.DeviceId, key.Type, key.Address, it.value());
+        applied = true;
     }
+
+    if(applied)
+        emit timestampsChanged();
 }
 
 ///
@@ -800,13 +804,17 @@ void ModbusMultiServer::clearTimestamps()
         return;
     }
 
+    bool cleared = false;
     for(auto it = _modbusDataUnitMaps.begin(); it != _modbusDataUnitMaps.end(); ++it) {
-        const auto deviceId = static_cast<quint8>(it.key());
-        const auto map = it->timestampMap();
+        if(it->timestampMap().isEmpty())
+            continue;
+
         it->clearTimestamps();
-        for(auto jt = map.constBegin(); jt != map.constEnd(); ++jt)
-            emit timestampChanged(deviceId, jt.key().Type, jt.key().Address, QDateTime());
+        cleared = true;
     }
+
+    if(cleared)
+        emit timestampsChanged();
 }
 
 ///
@@ -982,6 +990,59 @@ void ModbusMultiServer::clearDescriptions()
 }
 
 ///
+/// \brief ModbusMultiServer::configuredValueMap returns the values of the given range as
+/// configured by the project or the user, ignoring anything a simulation or a Modbus
+/// client has written since.
+/// \param deviceId
+/// \param pointType
+/// \param pointAddress
+/// \param length
+/// \return
+///
+AddressValueMap ModbusMultiServer::configuredValueMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        AddressValueMap result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, pointType, pointAddress, length]() {
+            result = configuredValueMap(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    AddressValueMap result;
+    const auto it = _modbusDataUnitMaps.constFind(deviceId);
+    if (it == _modbusDataUnitMaps.constEnd())
+        return result;
+
+    const auto map = it->configuredValueMap(pointType, pointAddress, length);
+    for (auto jt = map.constBegin(); jt != map.constEnd(); ++jt) {
+        auto key = jt.key();
+        key.DeviceId = deviceId;
+        result.insert(key, jt.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusMultiServer::clearConfiguredValues
+///
+void ModbusMultiServer::clearConfiguredValues()
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            clearConfiguredValues();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    for(auto& map : _modbusDataUnitMaps)
+        map.clearConfiguredValues();
+}
+
+///
 /// \brief ModbusMultiServer::setData
 /// \param data
 ///
@@ -1000,6 +1061,11 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
         emit errorOccured(deviceId, tr("An incorrect device ID was specified (%1)").arg(deviceId));
         return;
     }
+
+    // Recorded before the unchanged-data early return below, so that re-entering the
+    // value a simulation already produced still marks it as configured.
+    if(source == WriteSource::ProjectLoad || source == WriteSource::User)
+        _modbusDataUnitMaps[deviceId].setConfiguredValues(data);
 
     QVector<QDateTime> previousTimestamps;
     previousTimestamps.reserve(data.valueCount());
@@ -1041,12 +1107,26 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
         s->blockSignals(false);
     }
 
+    int changedTimestamps = 0;
+    quint16 changedAddress = 0;
+    QDateTime changedTimestamp;
     for(int i = 0; i < data.valueCount(); ++i) {
         const quint16 address = static_cast<quint16>(data.startAddress() + i);
         const auto timestamp = _modbusDataUnitMaps[deviceId].timestamp(data.registerType(), address);
-        if(timestamp != previousTimestamps[i])
-            emit timestampChanged(deviceId, data.registerType(), address, timestamp);
+        if(timestamp == previousTimestamps[i])
+            continue;
+
+        if(changedTimestamps == 0) {
+            changedAddress = address;
+            changedTimestamp = timestamp;
+        }
+        changedTimestamps++;
     }
+
+    if(changedTimestamps == 1)
+        emit timestampChanged(deviceId, data.registerType(), changedAddress, changedTimestamp);
+    else if(changedTimestamps > 1)
+        emit timestampsChanged();
 
     if(error.isEmpty()) {
         emit dataChanged(deviceId, data, source, client);
@@ -1189,6 +1269,22 @@ void ModbusMultiServer::writeValue(quint8 deviceId, QModbusDataUnit::RegisterTyp
     auto data = QModbusDataUnit(pointType, pointAddress, 1);
     data.setValue(0, toByteOrderValue(value, order));
     setData(deviceId, data);
+}
+
+///
+/// \brief ModbusMultiServer::writeValues
+/// \param deviceId
+/// \param pointType
+/// \param startAddress
+/// \param values
+/// \param order
+///
+void ModbusMultiServer::writeValues(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 startAddress, const QVector<quint16>& values, ByteOrder order)
+{
+    if(values.isEmpty())
+        return;
+
+    setData(deviceId, createDataUnit(pointType, startAddress, values, order));
 }
 
 ///

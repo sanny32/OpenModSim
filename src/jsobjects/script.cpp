@@ -59,16 +59,120 @@ void Script::onInit(const QJSValue& func)
 /// \brief Script::setTimeout
 /// \param func
 /// \param timeout
+/// \return timer id, or 0 if func is not callable
 ///
-void Script::setTimeout(const QJSValue& func, int timeout)
+int Script::setTimeout(const QJSValue& func, int timeout)
+{
+    return startTimer(func, timeout, true);
+}
+
+///
+/// \brief Script::setInterval
+/// \param func
+/// \param interval
+/// \return timer id, or 0 if func is not callable
+///
+int Script::setInterval(const QJSValue& func, int interval)
+{
+    return startTimer(func, interval, false);
+}
+
+///
+/// \brief Script::clearTimeout
+/// \param id
+///
+void Script::clearTimeout(int id)
+{
+    removeTimer(id);
+}
+
+///
+/// \brief Script::clearInterval
+/// \param id
+///
+void Script::clearInterval(int id)
+{
+    removeTimer(id);
+}
+
+///
+/// \brief Script::startTimer
+/// \param func
+/// \param interval
+/// \param singleShot
+/// \return
+///
+int Script::startTimer(const QJSValue& func, int interval, bool singleShot)
 {
     if(!func.isCallable())
-       return;
+        return 0;
 
-    QTimer::singleShot(timeout, this, [func]
+    const int id = ++_lastTimerId;
+
+    auto timer = new QTimer(this);
+    timer->setSingleShot(singleShot);
+    timer->setInterval(qMax(0, interval));
+
+    connect(timer, &QTimer::timeout, this, [this, id, func, singleShot]
     {
+        if(singleShot)
+        {
+            auto expired = _timers.take(id);
+            if(expired != nullptr)
+                expired->deleteLater();
+        }
+
         const_cast<QJSValue&>(func).call();
+
+        if(singleShot && _timers.isEmpty())
+            emit idle();
     });
+
+    _timers.insert(id, timer);
+    timer->start();
+
+    return id;
+}
+
+///
+/// \brief Script::removeTimer
+/// \param id
+///
+void Script::removeTimer(int id)
+{
+    auto timer = _timers.take(id);
+    if(timer == nullptr)
+        return;
+
+    timer->stop();
+    timer->deleteLater();
+
+    if(_timers.isEmpty())
+        emit idle();
+}
+
+///
+/// \brief Script::hasPendingTimers
+/// \return
+///
+bool Script::hasPendingTimers() const
+{
+    return !_timers.isEmpty();
+}
+
+///
+/// \brief Script::stopAllTimers
+///
+void Script::stopAllTimers()
+{
+    const auto timers = _timers;
+    _timers.clear();
+
+    for(auto timer : timers)
+    {
+        timer->stop();
+        timer->deleteLater();
+    }
 }
 
 ///

@@ -281,6 +281,32 @@ void AppPreferences::setSaveAllModifiedRegisters(bool value)
 }
 
 ///
+/// \brief AppPreferences::setSaveRegisterTimestamps
+/// \param value
+///
+void AppPreferences::setSaveRegisterTimestamps(bool value)
+{
+    if (_saveRegisterTimestamps == value)
+        return;
+
+    emit settingChanged("SaveRegisterTimestamps", boolToText(_saveRegisterTimestamps), boolToText(value));
+    _saveRegisterTimestamps = value;
+}
+
+///
+/// \brief AppPreferences::setSaveRuntimeRegisterValues
+/// \param value
+///
+void AppPreferences::setSaveRuntimeRegisterValues(bool value)
+{
+    if (_saveRuntimeRegisterValues == value)
+        return;
+
+    emit settingChanged("SaveRuntimeRegisterValues", boolToText(_saveRuntimeRegisterValues), boolToText(value));
+    _saveRuntimeRegisterValues = value;
+}
+
+///
 /// \brief AppPreferences::setScriptFont
 /// \param f
 ///
@@ -396,6 +422,8 @@ void AppPreferences::load(QSettings& settings)
     _globalAddressBase = settings.value("GlobalZeroBasedAddress", false).toBool() ? AddressBase::Base0 : AddressBase::Base1;
     _globalHexView = settings.value("GlobalHexView", false).toBool();
     _saveAllModifiedRegisters = settings.value("SaveAllModifiedRegisters", _saveAllModifiedRegisters).toBool();
+    _saveRegisterTimestamps = settings.value("SaveRegisterTimestamps", _saveRegisterTimestamps).toBool();
+    _saveRuntimeRegisterValues = settings.value("SaveRuntimeRegisterValues", _saveRuntimeRegisterValues).toBool();
 
     settings.endGroup();
 }
@@ -431,6 +459,8 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("GlobalZeroBasedAddress", _globalAddressBase == AddressBase::Base0);
     settings.setValue("GlobalHexView", _globalHexView);
     settings.setValue("SaveAllModifiedRegisters", _saveAllModifiedRegisters);
+    settings.setValue("SaveRegisterTimestamps", _saveRegisterTimestamps);
+    settings.setValue("SaveRuntimeRegisterValues", _saveRuntimeRegisterValues);
 
     settings.endGroup();
 }
@@ -457,6 +487,8 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("GlobalZeroBasedAddress", boolToString(_globalAddressBase == AddressBase::Base0));
     xml.writeAttribute("GlobalHexView", boolToString(_globalHexView));
     xml.writeAttribute("SaveAllModifiedRegisters", boolToString(_saveAllModifiedRegisters));
+    xml.writeAttribute("SaveRegisterTimestamps", boolToString(_saveRegisterTimestamps));
+    xml.writeAttribute("SaveRuntimeRegisterValues", boolToString(_saveRuntimeRegisterValues));
     xml << _dataViewDefinitions;
     xml << _trafficViewDefinitions;
     xml << _scriptViewDefinitions;
@@ -531,6 +563,14 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
 
     if (attributes.hasAttribute("SaveAllModifiedRegisters")) {
         _saveAllModifiedRegisters = stringToBool(attributes.value("SaveAllModifiedRegisters").toString());
+    }
+
+    if (attributes.hasAttribute("SaveRegisterTimestamps")) {
+        _saveRegisterTimestamps = stringToBool(attributes.value("SaveRegisterTimestamps").toString());
+    }
+
+    if (attributes.hasAttribute("SaveRuntimeRegisterValues")) {
+        _saveRuntimeRegisterValues = stringToBool(attributes.value("SaveRuntimeRegisterValues").toString());
     }
 
     while (xml.readNextStartElement()) {

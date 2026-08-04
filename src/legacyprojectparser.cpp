@@ -39,13 +39,6 @@ DataViewDefinitions readDataViewDefinitions(QXmlStreamReader& xml, const QString
         dd.PointType = enumFromString<QModbusDataUnit::RegisterType>(attributes.value("PointType").toString());
     }
 
-    if (attributes.hasAttribute("PointAddress")) {
-        bool ok;
-        const quint16 pointAddress = attributes.value("PointAddress").toUShort(&ok);
-        if (ok)
-            dd.PointAddress = pointAddress;
-    }
-
     if (attributes.hasAttribute("Length")) {
         bool ok;
         const quint16 length = attributes.value("Length").toUShort(&ok);
@@ -70,6 +63,15 @@ DataViewDefinitions readDataViewDefinitions(QXmlStreamReader& xml, const QString
         dd.FormName = formTitle;
 
     dd.normalize();
+
+    // Reload PointAddress since normalize() may wrongly clamp it from 0 to 1,
+    // which breaks 0-based version 1.x projects.
+    if (attributes.hasAttribute("PointAddress")) {
+        bool ok;
+        const quint16 pointAddress = attributes.value("PointAddress").toUShort(&ok);
+        if (ok)
+            dd.PointAddress = pointAddress;
+    }
 
     return dd;
 }

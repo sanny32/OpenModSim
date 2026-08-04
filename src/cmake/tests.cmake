@@ -11,6 +11,9 @@ function(omodsim_configure_tests)
         modbuserrorsimulations.cpp
         modbusdataunitmap.cpp
         projectaddressspacexml.cpp
+        projectcomments.cpp
+        projectuserstate.cpp
+        projectxmlanchor.cpp
         modbusmultiserver.cpp
         modbusrtuserialserver.cpp
         modbusrtutcpserver.cpp
@@ -27,12 +30,28 @@ function(omodsim_configure_tests)
         qdoublevalidatorex.cpp
         modbusmessages/modbusmessage.cpp
         jsobjects/storage.cpp
+        helpdockpolicy.cpp
+        jsobjects/script.cpp
+        jsobjects/server.cpp
+        controls/consoleoutput.cpp
+        controls/consoleoutput.ui
+        controls/toolbar.cpp
+        styles/themedicons.cpp
+        styles/apptheme.cpp
+        application.cpp
+        apppreferences.cpp
+        modbusmultiserver.cpp
+        modbusserver.cpp
+        modbusrtutcpserver.cpp
+        modbustcpserver.cpp
+        modbusrtuserialserver.cpp
     )
 
     target_include_directories(omodsim_testable PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/controls
         ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
+        ${CMAKE_CURRENT_SOURCE_DIR}/styles
     )
 
     target_link_libraries(omodsim_testable PUBLIC
@@ -88,9 +107,15 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_serialportutils      test_serialportutils.cpp)
     omodsim_add_test(omodsim_tests_simulationparams     test_simulationparams.cpp)
     omodsim_add_test(omodsim_tests_storage              test_storage.cpp)
+    omodsim_add_test(omodsim_tests_script               test_script.cpp)
+    omodsim_add_test(omodsim_tests_consoleoutput        test_consoleoutput.cpp)
+    omodsim_add_test(omodsim_tests_serverapi            test_server_api.cpp)
+    omodsim_add_test(omodsim_tests_helpdockpolicy       test_helpdockpolicy.cpp)
     omodsim_add_test(omodsim_tests_legacyprojectparser  test_legacyprojectparser.cpp)
     omodsim_add_test(omodsim_tests_projectaddressspacefilter test_projectaddressspacefilter.cpp)
     omodsim_add_test(omodsim_tests_projectaddressspacexml test_projectaddressspacexml.cpp)
+    omodsim_add_test(omodsim_tests_projectcomments      test_projectcomments.cpp)
+    omodsim_add_test(omodsim_tests_projectuserstate     test_projectuserstate.cpp)
     omodsim_add_test(omodsim_tests_connectiondetails     test_connectiondetails.cpp)
     omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)
@@ -138,6 +163,7 @@ function(omodsim_configure_tests)
         APP_VERSION_PATCH="0"
         APP_VERSION="2.0.0-test"
         BUILD_YEAR="2026"
+        OMODSIM_DEMOS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../demos/projects"
     )
     if(MSVC)
         target_compile_options(omodsim_tests_appproject PRIVATE /utf-8)

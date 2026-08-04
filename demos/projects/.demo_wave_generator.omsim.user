@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenModSimUser>
+    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L"/>
+    <Forms>
+        <FormDataView Title="WaveValues">
+            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="682" Height="355"/>
+            <DataViewDefinitions DeviceId="1" LeadingZeros="true"/>
+        </FormDataView>
+        <FormScriptView Title="WaveGenerator">
+            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="738" Height="319"/>
+            <Colors Background="#ffffff" Foreground="#000000"/>
+            <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <JScriptControl>
+                <Script CursorPosition="3529" ScrollPosition="80"/>
+            </JScriptControl>
+        </FormScriptView>
+        <FormDataMapView Title="DataMap">
+            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="486" Height="267"/>
+            <ColumnWidths Unit="86" Type="120" Address="70" DataType="70" Order="79" ByteOrder="72" Comment="200" Value="160" Timestamp="160"/>
+        </FormDataMapView>
+    </Forms>
+    <TabOrder Panel="L">
+        <TabRef title="WaveValues"/>
+        <TabRef title="WaveGenerator"/>
+        <TabRef title="DataMap"/>
+    </TabOrder>
+</OpenModSimUser>

@@ -84,3 +84,6 @@ src/res/license.txt
 /docs/README.md
 /docs/SITE_STRUCTURE.md
 /docs/DEPLOYMENT.md
+
+# Local project user state (window layout, view mode, tab order)
+*.omsim.user

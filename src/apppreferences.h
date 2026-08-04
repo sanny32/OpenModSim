@@ -84,6 +84,12 @@ public:
     bool saveAllModifiedRegisters() const { return _saveAllModifiedRegisters; }
     void setSaveAllModifiedRegisters(bool value);
 
+    bool saveRegisterTimestamps() const { return _saveRegisterTimestamps; }
+    void setSaveRegisterTimestamps(bool value);
+
+    bool saveRuntimeRegisterValues() const { return _saveRuntimeRegisterValues; }
+    void setSaveRuntimeRegisterValues(bool value);
+
     // ----- Script Editor -----
     QFont scriptFont() const { return _scriptFont; }
     void setScriptFont(const QFont& f);
@@ -133,6 +139,8 @@ private:
     AddressBase   _globalAddressBase{ AddressBase::Base1 };
     bool          _globalHexView{ false };
     bool          _saveAllModifiedRegisters{ false };
+    bool          _saveRegisterTimestamps{ true };
+    bool          _saveRuntimeRegisterValues{ true };
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };
     bool          _autoShowConsoleOutput{ true };

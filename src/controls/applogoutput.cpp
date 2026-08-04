@@ -212,7 +212,7 @@ AppLogOutput::AppLogOutput(QWidget* parent)
     const int lineHeight = QFontMetrics(QFont("Fira Code")).lineSpacing() * 2;
     setMinimumHeight(ui->toolBar->sizeHint().height() + lineHeight);
 
-    connect(ui->actionClear,       &QAction::triggered, this, &AppLogOutput::clear);
+    connect(ui->actionClear,       &QAction::triggered, this, &AppLogOutput::confirmClear);
     connect(ui->actionExport,      &QAction::triggered, this, &AppLogOutput::exportLog);
     connect(ui->actionFilterInfo,  &QAction::toggled,   this, &AppLogOutput::applyFilters);
     connect(ui->actionFilterWarn,  &QAction::toggled,   this, &AppLogOutput::applyFilters);
@@ -408,10 +408,28 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
 
     menu.addSeparator();
 
-    auto clearAction = menu.addAction(tr("Clear"), this, [this]() { clear(); });
+    auto clearAction = menu.addAction(tr("Clear"), this, &AppLogOutput::confirmClear);
     clearAction->setEnabled(!isEmpty());
 
     menu.exec(ui->listWidget->mapToGlobal(pos));
+}
+
+///
+/// \brief AppLogOutput::confirmClear
+///
+void AppLogOutput::confirmClear()
+{
+    if (isEmpty()) return;
+
+    const auto answer = QMessageBox::question(this,
+                                              tr("Clear Log"),
+                                              tr("Clear all events from the log?"),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::No);
+    if (answer != QMessageBox::Yes)
+        return;
+
+    clear();
 }
 
 ///

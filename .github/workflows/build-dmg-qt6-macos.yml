@@ -60,7 +60,6 @@ jobs:
           arch: clang_64
           modules: qt5compat qtserialport qtserialbus
           dir: ${{ env.QT_INSTALL_DIR }}
-          cache: true
 
       - name: Set BUILD_DIR
         run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_clang_arm64-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV

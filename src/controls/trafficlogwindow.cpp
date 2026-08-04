@@ -8,6 +8,7 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QMessageBox>
 #include <QToolButton>
 #include "trafficlogwindow.h"
 #include "modbusfunction.h"
@@ -197,7 +198,18 @@ void TrafficLogWindow::setupToolbar()
         _logWidget->setState(paused ? LogViewState::Paused : LogViewState::Running);
         _pauseButton->setToolTip(paused ? tr("Resume") : tr("Pause"));
     });
-    connect(_clearButton, &QToolButton::clicked, _logWidget, &ModbusLogWidget::clear);
+    connect(_clearButton, &QToolButton::clicked, this, [this]() {
+        if (_logWidget->rowCount() == 0)
+            return;
+
+        const auto answer = QMessageBox::question(this,
+                                                  tr("Clear Traffic"),
+                                                  tr("Clear all messages from the traffic log?"),
+                                                  QMessageBox::Yes | QMessageBox::No,
+                                                  QMessageBox::No);
+        if (answer == QMessageBox::Yes)
+            _logWidget->clear();
+    });
 }
 
 ///

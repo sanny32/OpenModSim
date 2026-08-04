@@ -9,7 +9,11 @@
 #ifndef CONSOLEOUTPUT_H
 #define CONSOLEOUTPUT_H
 
+#include <QVector>
 #include <QWidget>
+
+class QAction;
+class QTimer;
 
 namespace Ui {
 class ConsoleOutput;
@@ -28,6 +32,7 @@ public:
     ~ConsoleOutput();
 
     void addMessage(const QString& text, MessageType type, const QString& source = {});
+    void flush();
     bool isEmpty() const;
     void setMaxLines(int n);
 
@@ -42,13 +47,29 @@ protected:
 
 private slots:
     void on_customContextMenuRequested(const QPoint& pos);
+    void on_flushTimeout();
     void applyFilters();
+    void confirmClear();
+    void exportConsole();
+    void copyAllToClipboard();
 
 private:
     void updateFilterButtons();
+    void flushChunk();
+    void insertMessage(const QString& text, MessageType type, const QString& source);
+    void evictOverflow();
 
 private:
+    struct PendingMessage {
+        QString text;
+        MessageType type;
+        QString source;
+    };
+
     Ui::ConsoleOutput* ui;
+    QTimer* _flushTimer;
+    QAction* _copyAllAction = nullptr;
+    QVector<PendingMessage> _pending;
     int _logCount   = 0;
     int _warnCount  = 0;
     int _errorCount = 0;

@@ -8,6 +8,7 @@
 
 #include <QBuffer>
 #include <QDateTime>
+#include <QSignalSpy>
 #include <QTest>
 #include <QUuid>
 
@@ -27,6 +28,12 @@ private slots:
     void writeOmitsInactiveSimulations();
     void applyRespectsReplaceFlag();
     void applyHonorsMissingSections();
+    void applyBatchesContiguousValues();
+    void applySplitsRunsOnGaps();
+    void applyKeepsMappedPartOfOverflowingRun();
+    void omitsTimestampsWhenDisabled();
+    void writesConfiguredValuesInsteadOfSimulatedOnes();
+    void keepsUserEditsWhenRuntimeValuesDisabled();
 };
 
 namespace {
@@ -257,6 +264,163 @@ void TestProjectAddressSpaceXml::applyHonorsMissingSections()
 
     QCOMPARE(server.description(1, QModbusDataUnit::HoldingRegisters, 1), QStringLiteral("kept"));
     QCOMPARE(server.timestamp(1, QModbusDataUnit::HoldingRegisters, 1), timestamp);
+}
+
+///
+/// \brief Regression for issue #126: a contiguous block of values must notify
+/// views once per run, not once per register.
+///
+void TestProjectAddressSpaceXml::applyBatchesContiguousValues()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 300);
+
+    ProjectAddressSpacePayload payload;
+    for (quint16 a = 0; a < 200; ++a)
+        payload.Values.append({1, QModbusDataUnit::HoldingRegisters, a, quint16(a + 1)});
+
+    QSignalSpy dataSpy(&server, &ModbusMultiServer::dataChanged);
+    applyProjectAddressSpace(payload, server, nullptr, true);
+
+    QCOMPARE(dataSpy.count(), 1);
+    const auto stored = server.data(1, QModbusDataUnit::HoldingRegisters, 0, 200);
+    for (quint16 a = 0; a < 200; ++a)
+        QCOMPARE(stored.value(a), quint16(a + 1));
+}
+
+///
+/// \brief Gaps must split the block so unwritten addresses stay untouched.
+///
+void TestProjectAddressSpaceXml::applySplitsRunsOnGaps()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 100);
+
+    ProjectAddressSpacePayload payload;
+    for (quint16 a : {quint16(0), quint16(1), quint16(2), quint16(50), quint16(51)})
+        payload.Values.append({1, QModbusDataUnit::HoldingRegisters, a, quint16(a + 7)});
+
+    QSignalSpy dataSpy(&server, &ModbusMultiServer::dataChanged);
+    applyProjectAddressSpace(payload, server, nullptr, true);
+
+    QCOMPARE(dataSpy.count(), 2);
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 2, 1).value(0), quint16(9));
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 3, 1).value(0), quint16(0));
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 50, 1).value(0), quint16(57));
+}
+
+///
+/// \brief A run crossing the end of the unit map must still apply the mapped part
+/// to the unit map instead of being dropped as a whole. Note that no transport
+/// server is attached here, so this covers the unit map only.
+///
+void TestProjectAddressSpaceXml::applyKeepsMappedPartOfOverflowingRun()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 10);
+
+    ProjectAddressSpacePayload payload;
+    for (quint16 a = 0; a < 20; ++a)
+        payload.Values.append({1, QModbusDataUnit::HoldingRegisters, a, quint16(a + 1)});
+
+    applyProjectAddressSpace(payload, server, nullptr, true);
+
+    const auto stored = server.data(1, QModbusDataUnit::HoldingRegisters, 0, 10);
+    for (quint16 a = 0; a < 10; ++a)
+        QCOMPARE(stored.value(a), quint16(a + 1));
+}
+
+namespace {
+
+///
+/// \brief Writes the AddressSpace of the given server and parses it back.
+/// \param server The server to serialize.
+/// \param ranges The ranges to serialize.
+/// \param options The write options under test.
+/// \return The parsed payload.
+///
+ProjectAddressSpacePayload writeAndReadBack(ModbusMultiServer& server,
+                                            const ProjectAddressSpaceRanges& ranges,
+                                            const ProjectAddressSpaceWriteOptions& options)
+{
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    QXmlStreamWriter w(&buffer);
+    w.writeStartDocument();
+    writeProjectAddressSpace(w, server, {}, ranges, options);
+    w.writeEndDocument();
+    buffer.close();
+
+    return payloadFromXml(QString::fromUtf8(buffer.data()));
+}
+
+///
+/// \brief Builds a single-register data unit.
+/// \param address Register address.
+/// \param value Register value.
+/// \return The data unit.
+///
+QModbusDataUnit holdingRegister(quint16 address, quint16 value)
+{
+    QModbusDataUnit unit(QModbusDataUnit::HoldingRegisters, address, 1);
+    unit.setValue(0, value);
+    return unit;
+}
+
+}
+
+/// \brief Verifies the timestamp map is left out when the preference is disabled.
+void TestProjectAddressSpaceXml::omitsTimestampsWhenDisabled()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 20);
+    server.setData(1, holdingRegister(5, 123), WriteSource::ProjectLoad);
+    server.setTimestamp(1, QModbusDataUnit::HoldingRegisters, 5, QDateTime::currentDateTime());
+
+    const ProjectAddressSpaceRanges ranges = {{1, QModbusDataUnit::HoldingRegisters, 0, 20}};
+
+    QVERIFY(writeAndReadBack(server, ranges, {true, true}).HasTimestamps);
+    QVERIFY(!writeAndReadBack(server, ranges, {false, true}).HasTimestamps);
+}
+
+/// \brief Verifies a running simulation does not reach the file when runtime values are
+/// disabled: the value loaded with the project is written instead, and a register the
+/// simulation alone produced is left out.
+void TestProjectAddressSpaceXml::writesConfiguredValuesInsteadOfSimulatedOnes()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 20);
+    server.setData(1, holdingRegister(5, 100), WriteSource::ProjectLoad);
+    server.setData(1, holdingRegister(5, 999), WriteSource::Simulator);
+    server.setData(1, holdingRegister(6, 777), WriteSource::Simulator);
+
+    const ProjectAddressSpaceRanges ranges = {{1, QModbusDataUnit::HoldingRegisters, 0, 20}};
+
+    const auto runtime = writeAndReadBack(server, ranges, {true, true});
+    QCOMPARE(runtime.Values.size(), 2);
+
+    const auto configured = writeAndReadBack(server, ranges, {true, false});
+    QCOMPARE(configured.Values.size(), 1);
+    QCOMPARE(configured.Values.at(0).Address, quint16(5));
+    QCOMPARE(configured.Values.at(0).RegisterValue, quint16(100));
+}
+
+/// \brief Verifies a register edited by hand counts as configuration, including when the
+/// entered value matches what a simulation had already produced.
+void TestProjectAddressSpaceXml::keepsUserEditsWhenRuntimeValuesDisabled()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 0, 20);
+    server.setData(1, holdingRegister(5, 42), WriteSource::User);
+    server.setData(1, holdingRegister(6, 55), WriteSource::Simulator);
+    server.setData(1, holdingRegister(6, 55), WriteSource::User);
+
+    const ProjectAddressSpaceRanges ranges = {{1, QModbusDataUnit::HoldingRegisters, 0, 20}};
+    const auto configured = writeAndReadBack(server, ranges, {true, false});
+
+    QCOMPARE(configured.Values.size(), 2);
+    QCOMPARE(configured.Values.at(0).RegisterValue, quint16(42));
+    QCOMPARE(configured.Values.at(1).RegisterValue, quint16(55));
 }
 
 QTEST_GUILESS_MAIN(TestProjectAddressSpaceXml)

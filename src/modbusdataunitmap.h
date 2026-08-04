@@ -50,6 +50,9 @@ public:
     AddressDescriptionMap descriptionMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const;
     void clearDescriptions();
     void clearTimestamps();
+    void setConfiguredValues(const QModbusDataUnit& data);
+    AddressValueMap configuredValueMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const;
+    void clearConfiguredValues();
 
     QModbusDataUnitMap::ConstIterator begin();
     QModbusDataUnitMap::Iterator end();
@@ -74,6 +77,7 @@ private:
     QModbusDataUnitMap _modbusDataUnitGlobalMap;
     AddressDescriptionMap _descriptions;
     AddressTimestampMap _timestamps;
+    AddressValueMap _configuredValues;
 };
 
 

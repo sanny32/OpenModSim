@@ -158,21 +158,39 @@
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../controls/applogoutput.cpp" line="435"/>
+        <location filename="../../controls/applogoutput.cpp" line="425"/>
+        <source>Clear Log</source>
+        <translation>Очистка журнала</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="426"/>
+        <source>Clear all events from the log?</source>
+        <translation>Удалить все записи из журнала?</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="453"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../controls/applogoutput.cpp" line="440"/>
+        <location filename="../../controls/applogoutput.cpp" line="458"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../../controls/applogoutput.cpp" line="440"/>
+        <location filename="../../controls/applogoutput.cpp" line="458"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>Не удалось открыть файл для записи:
 %1</translation>
+    </message>
+</context>
+<context>
+    <name>AppProject</name>
+    <message>
+        <location filename="../../appproject.cpp" line="748"/>
+        <source>Failed to store the window layout: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -265,19 +283,62 @@
 <context>
     <name>ConsoleOutput</name>
     <message>
-        <location filename="../../controls/consoleoutput.ui" line="96"/>
+        <location filename="../../controls/consoleoutput.ui" line="97"/>
         <source>Clear console</source>
         <translation>Очистить консоль</translation>
     </message>
     <message>
-        <location filename="../../controls/consoleoutput.cpp" line="321"/>
+        <location filename="../../controls/consoleoutput.ui" line="106"/>
+        <source>Export console</source>
+        <translation>Экспорт консоли</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="195"/>
+        <location filename="../../controls/consoleoutput.cpp" line="413"/>
+        <source>Copy All</source>
+        <translation>Копировать всё</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="404"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../controls/consoleoutput.cpp" line="332"/>
+        <location filename="../../controls/consoleoutput.cpp" line="420"/>
+        <source>Export...</source>
+        <translation>Экспорт...</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="426"/>
         <source>Clear</source>
         <translation>Очистить</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="440"/>
+        <source>Clear Console</source>
+        <translation>Очистка консоли</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="441"/>
+        <source>Clear all messages from the console?</source>
+        <translation>Удалить все сообщения из консоли?</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="473"/>
+        <source>Text files (*.txt)</source>
+        <translation>Текстовые файлы (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="478"/>
+        <source>Export</source>
+        <translation>Экспорт</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="478"/>
+        <source>Cannot open file for writing:
+%1</source>
+        <translation>Не удалось открыть файл для записи:
+%1</translation>
     </message>
 </context>
 <context>
@@ -1150,13 +1211,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="320"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="673"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="693"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="357"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="710"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="730"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
@@ -1181,23 +1242,43 @@ Open the download page?</source>
         <translation>Сохранять все измененные регистры</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="776"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="544"/>
+        <source>Write the last change time of each register into the project file.</source>
+        <translation>Записывать в файл проекта время последнего изменения каждого регистра.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
+        <source>Save register timestamps</source>
+        <translation>Сохранять метки времени регистров</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="554"/>
+        <source>Write current register values. When disabled, the values loaded with the project and those edited by hand are saved instead, so a running simulation does not change the file.</source>
+        <translation>Записывать текущие значения регистров. Если выключено, вместо них сохраняются значения, загруженные вместе с проектом, и измененные вручную, поэтому работающая симуляция не изменяет файл.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="557"/>
+        <source>Save runtime register values</source>
+        <translation>Сохранять текущие значения регистров</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="796"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="788"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="808"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="826"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="846"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="335"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="688"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="708"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1218,7 +1299,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="432"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="744"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="764"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
@@ -1228,12 +1309,12 @@ Open the download page?</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="559"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="579"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="566"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="586"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
@@ -1248,22 +1329,22 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="567"/>
         <source>Traffic View</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="641"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="661"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="754"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="774"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="766"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="786"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
@@ -1830,12 +1911,12 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../formdatamapview.ui" line="88"/>
-        <location filename="../../formdatamapview.cpp" line="1483"/>
+        <location filename="../../formdatamapview.cpp" line="1491"/>
         <source>Clear Table</source>
         <translation>Очистить таблицу</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1484"/>
+        <location filename="../../formdatamapview.cpp" line="1492"/>
         <source>Clear all visible rows from the table?</source>
         <translation>Удалить все видимые строки из таблицы?</translation>
     </message>
@@ -1892,7 +1973,7 @@ Open the download page?</source>
     <message>
         <location filename="../../formdatamapview.cpp" line="1029"/>
         <location filename="../../formdatamapview.cpp" line="1253"/>
-        <location filename="../../formdatamapview.cpp" line="1586"/>
+        <location filename="../../formdatamapview.cpp" line="1594"/>
         <source>All Types</source>
         <translation>Все типы</translation>
     </message>
@@ -1907,44 +1988,44 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1254"/>
-        <location filename="../../formdatamapview.cpp" line="1587"/>
+        <location filename="../../formdatamapview.cpp" line="1595"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1255"/>
-        <location filename="../../formdatamapview.cpp" line="1588"/>
+        <location filename="../../formdatamapview.cpp" line="1596"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1256"/>
-        <location filename="../../formdatamapview.cpp" line="1589"/>
+        <location filename="../../formdatamapview.cpp" line="1597"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1257"/>
-        <location filename="../../formdatamapview.cpp" line="1590"/>
+        <location filename="../../formdatamapview.cpp" line="1598"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1245"/>
-        <location filename="../../formdatamapview.cpp" line="1597"/>
+        <location filename="../../formdatamapview.cpp" line="1605"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1246"/>
-        <location filename="../../formdatamapview.cpp" line="1598"/>
+        <location filename="../../formdatamapview.cpp" line="1606"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1018"/>
         <location filename="../../formdatamapview.cpp" line="1247"/>
-        <location filename="../../formdatamapview.cpp" line="1582"/>
+        <location filename="../../formdatamapview.cpp" line="1590"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -1952,171 +2033,171 @@ Type Filter: %3</source>
 <context>
     <name>FormDataView</name>
     <message>
-        <location filename="../../formdataview.ui" line="125"/>
+        <location filename="../../formdataview.ui" line="128"/>
         <source>Starting Address:</source>
         <translation>Начальный адрес:</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="132"/>
+        <location filename="../../formdataview.ui" line="135"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="217"/>
+        <location filename="../../formdataview.ui" line="223"/>
         <source>Unit Identifier:</source>
         <translation>Адрес устройства:</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="309"/>
+        <location filename="../../formdataview.ui" line="318"/>
         <source>Column Distance:</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="252"/>
+        <location filename="../../formdataview.ui" line="258"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="341"/>
+        <location filename="../../formdataview.ui" line="350"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="401"/>
-        <location filename="../../formdataview.ui" line="404"/>
+        <location filename="../../formdataview.ui" line="410"/>
+        <location filename="../../formdataview.ui" line="413"/>
         <source>Binary</source>
         <translation>Двоичный</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="422"/>
-        <location filename="../../formdataview.ui" line="425"/>
+        <location filename="../../formdataview.ui" line="431"/>
+        <location filename="../../formdataview.ui" line="434"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="443"/>
-        <location filename="../../formdataview.ui" line="446"/>
+        <location filename="../../formdataview.ui" line="452"/>
+        <location filename="../../formdataview.ui" line="455"/>
         <source>Ansi</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="458"/>
-        <location filename="../../formdataview.ui" line="461"/>
+        <location filename="../../formdataview.ui" line="467"/>
+        <location filename="../../formdataview.ui" line="470"/>
         <source>16-bit Integer</source>
         <translation>16-бит целое</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="479"/>
-        <location filename="../../formdataview.ui" line="482"/>
+        <location filename="../../formdataview.ui" line="488"/>
+        <location filename="../../formdataview.ui" line="491"/>
         <source>Unsigned 16-bit Integer</source>
         <translation>Беззнаковое 16-бит целое</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="500"/>
-        <location filename="../../formdataview.ui" line="503"/>
+        <location filename="../../formdataview.ui" line="509"/>
+        <location filename="../../formdataview.ui" line="512"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="521"/>
-        <location filename="../../formdataview.ui" line="524"/>
+        <location filename="../../formdataview.ui" line="530"/>
+        <location filename="../../formdataview.ui" line="533"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="542"/>
-        <location filename="../../formdataview.ui" line="545"/>
+        <location filename="../../formdataview.ui" line="551"/>
+        <location filename="../../formdataview.ui" line="554"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>Беззнаковое 32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="563"/>
-        <location filename="../../formdataview.ui" line="566"/>
+        <location filename="../../formdataview.ui" line="572"/>
+        <location filename="../../formdataview.ui" line="575"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>Беззнаковое 32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="584"/>
-        <location filename="../../formdataview.ui" line="587"/>
+        <location filename="../../formdataview.ui" line="593"/>
+        <location filename="../../formdataview.ui" line="596"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="605"/>
-        <location filename="../../formdataview.ui" line="608"/>
+        <location filename="../../formdataview.ui" line="614"/>
+        <location filename="../../formdataview.ui" line="617"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="626"/>
-        <location filename="../../formdataview.ui" line="629"/>
+        <location filename="../../formdataview.ui" line="635"/>
+        <location filename="../../formdataview.ui" line="638"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>Беззнаковое 64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="647"/>
-        <location filename="../../formdataview.ui" line="650"/>
+        <location filename="../../formdataview.ui" line="656"/>
+        <location filename="../../formdataview.ui" line="659"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>Беззнаковое 64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="668"/>
+        <location filename="../../formdataview.ui" line="677"/>
         <source>Float (MSRF)</source>
         <translation>С плавающей точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="671"/>
+        <location filename="../../formdataview.ui" line="680"/>
         <source>32-bit Float (MSRF)</source>
         <translation>32-бит с плав. точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="689"/>
+        <location filename="../../formdataview.ui" line="698"/>
         <source>Float (LSRF)</source>
         <translation>С плавающей точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="692"/>
+        <location filename="../../formdataview.ui" line="701"/>
         <source>32-bit Float (LSRF)</source>
         <translation>32-бит с плав. точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="710"/>
+        <location filename="../../formdataview.ui" line="719"/>
         <source>Double (MSRF)</source>
         <translation>Двойной точности (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="713"/>
+        <location filename="../../formdataview.ui" line="722"/>
         <source>64-bit Float (MSRF)</source>
         <translation>64-бит с плав. точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="731"/>
+        <location filename="../../formdataview.ui" line="740"/>
         <source>Double (LSRF)</source>
         <translation>Двойной точности (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="734"/>
+        <location filename="../../formdataview.ui" line="743"/>
         <source>64-bit Float (LSRF)</source>
         <translation>64-бит с плав. точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.ui" line="752"/>
-        <location filename="../../formdataview.ui" line="755"/>
+        <location filename="../../formdataview.ui" line="761"/>
+        <location filename="../../formdataview.ui" line="764"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>Перестановка байт (0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="608"/>
+        <location filename="../../formdataview.cpp" line="614"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="608"/>
+        <location filename="../../formdataview.cpp" line="614"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="609"/>
+        <location filename="../../formdataview.cpp" line="615"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2125,7 +2206,7 @@ Length: %3</source>
 Длина: %3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="611"/>
+        <location filename="../../formdataview.cpp" line="617"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2182,8 +2263,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="730"/>
-        <location filename="../../formtrafficview.cpp" line="882"/>
+        <location filename="../../formtrafficview.cpp" line="741"/>
+        <location filename="../../formtrafficview.cpp" line="893"/>
         <source>Exceptions Only</source>
         <translation>Только исключения</translation>
     </message>
@@ -2203,53 +2284,63 @@ Source: %3</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="651"/>
+        <location filename="../../formtrafficview.cpp" line="647"/>
+        <source>Clear Traffic</source>
+        <translation>Очистка журнала трафика</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="648"/>
+        <source>Clear all messages from the traffic log?</source>
+        <translation>Удалить все сообщения из журнала трафика?</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="662"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="658"/>
+        <location filename="../../formtrafficview.cpp" line="669"/>
         <source>Log exported successfully to file %1</source>
         <translation>Лог успешно экспортирован в файл %1</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="660"/>
+        <location filename="../../formtrafficview.cpp" line="671"/>
         <source>Export log error!</source>
         <translation>Ошибка экспорта лога!</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="693"/>
-        <location filename="../../formtrafficview.cpp" line="866"/>
+        <location filename="../../formtrafficview.cpp" line="704"/>
+        <location filename="../../formtrafficview.cpp" line="877"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="699"/>
-        <location filename="../../formtrafficview.cpp" line="870"/>
+        <location filename="../../formtrafficview.cpp" line="710"/>
+        <location filename="../../formtrafficview.cpp" line="881"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = все устройства</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="720"/>
-        <location filename="../../formtrafficview.cpp" line="877"/>
+        <location filename="../../formtrafficview.cpp" line="731"/>
+        <location filename="../../formtrafficview.cpp" line="888"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="731"/>
-        <location filename="../../formtrafficview.cpp" line="883"/>
+        <location filename="../../formtrafficview.cpp" line="742"/>
+        <location filename="../../formtrafficview.cpp" line="894"/>
         <source>Show only responses with Modbus exception</source>
         <translation>Показывать только ответы с исключением Modbus</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="738"/>
-        <location filename="../../formtrafficview.cpp" line="887"/>
+        <location filename="../../formtrafficview.cpp" line="749"/>
+        <location filename="../../formtrafficview.cpp" line="898"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="739"/>
-        <location filename="../../formtrafficview.cpp" line="888"/>
+        <location filename="../../formtrafficview.cpp" line="750"/>
+        <location filename="../../formtrafficview.cpp" line="899"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>Автоматически прокручивать к последней записи</translation>
     </message>
@@ -2258,21 +2349,21 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
         <location filename="../../formtrafficview.cpp" line="541"/>
-        <location filename="../../formtrafficview.cpp" line="698"/>
-        <location filename="../../formtrafficview.cpp" line="723"/>
-        <location filename="../../formtrafficview.cpp" line="869"/>
+        <location filename="../../formtrafficview.cpp" line="709"/>
+        <location filename="../../formtrafficview.cpp" line="734"/>
+        <location filename="../../formtrafficview.cpp" line="880"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="747"/>
-        <location filename="../../formtrafficview.cpp" line="892"/>
+        <location filename="../../formtrafficview.cpp" line="758"/>
+        <location filename="../../formtrafficview.cpp" line="903"/>
         <source>Rows:</source>
         <translation>Строк:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="708"/>
-        <location filename="../../formtrafficview.cpp" line="874"/>
+        <location filename="../../formtrafficview.cpp" line="719"/>
+        <location filename="../../formtrafficview.cpp" line="885"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>
@@ -2353,13 +2444,13 @@ Source: %3</source>
 <context>
     <name>HelpBrowser</name>
     <message>
-        <location filename="../../controls/helpbrowser.cpp" line="33"/>
-        <location filename="../../controls/helpbrowser.cpp" line="80"/>
+        <location filename="../../controls/helpbrowser.cpp" line="35"/>
+        <location filename="../../controls/helpbrowser.cpp" line="82"/>
         <source>qthelp://omodsim/doc/index.html</source>
         <translation>qthelp://omodsim/doc/index_ru.html</translation>
     </message>
     <message>
-        <location filename="../../controls/helpbrowser.cpp" line="60"/>
+        <location filename="../../controls/helpbrowser.cpp" line="62"/>
         <source>qthelp://omodsim/doc/index.html#%1</source>
         <translation>qthelp://omodsim/doc/index_ru.html#%1</translation>
     </message>
@@ -2639,7 +2730,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1878"/>
+        <location filename="../../mainwindow.cpp" line="1900"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2819,29 +2910,29 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="982"/>
+        <location filename="../../mainwindow.cpp" line="983"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="301"/>
-        <location filename="../../mainwindow.cpp" line="685"/>
+        <location filename="../../mainwindow.cpp" line="302"/>
+        <location filename="../../mainwindow.cpp" line="686"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2012"/>
+        <location filename="../../mainwindow.cpp" line="303"/>
+        <location filename="../../mainwindow.cpp" line="2034"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2023"/>
+        <location filename="../../mainwindow.cpp" line="2045"/>
         <source>Clear Recent Projects</source>
         <translation>Очистить недавние проекты</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2024"/>
+        <location filename="../../mainwindow.cpp" line="2046"/>
         <source>Clear the list of recent projects?</source>
         <translation>Очистить список недавних проектов?</translation>
     </message>
@@ -2856,7 +2947,7 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="773"/>
+        <location filename="../../mainwindow.cpp" line="774"/>
         <source>Would you like to combine the file(s) with the project?
 
 The global settings part of the merging file(s) will be ignored.
@@ -2867,26 +2958,26 @@ Please verify the merge result carefully.</source>
 Пожалуйста, внимательно проверьте результат объединения.</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="980"/>
-        <location filename="../../mainwindow.cpp" line="1907"/>
+        <location filename="../../mainwindow.cpp" line="981"/>
+        <location filename="../../mainwindow.cpp" line="1929"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="981"/>
+        <location filename="../../mainwindow.cpp" line="982"/>
         <source>Project 1.x files (*.xml)</source>
         <translation>Файлы проектов 1.x (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1526"/>
-        <location filename="../../mainwindow.cpp" line="1933"/>
+        <location filename="../../mainwindow.cpp" line="1542"/>
+        <location filename="../../mainwindow.cpp" line="1955"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
-        <location filename="../../mainwindow.cpp" line="688"/>
-        <location filename="../../mainwindow.cpp" line="1711"/>
+        <location filename="../../mainwindow.cpp" line="689"/>
+        <location filename="../../mainwindow.cpp" line="1733"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3196,7 +3287,7 @@ Please verify the merge result carefully.</source>
         <translation>Форма переименована: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1359"/>
+        <location filename="../../mainwindow.cpp" line="1375"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3218,12 +3309,12 @@ Please verify the merge result carefully.</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1879"/>
+        <location filename="../../mainwindow.cpp" line="1901"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2000"/>
+        <location filename="../../mainwindow.cpp" line="2022"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3233,7 +3324,7 @@ Please verify the merge result carefully.</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1317"/>
+        <location filename="../../mainwindow.cpp" line="1333"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3618,12 +3709,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1000"/>
+        <location filename="../../modbusmultiserver.cpp" line="1061"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1528"/>
+        <location filename="../../modbusmultiserver.cpp" line="1624"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -3987,17 +4078,17 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="653"/>
+        <location filename="../../appproject.cpp" line="666"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="285"/>
+        <location filename="../../projectserializer.cpp" line="291"/>
         <source>The project document is empty.</source>
         <translation>Файл проекта пуст.</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="292"/>
+        <location filename="../../projectserializer.cpp" line="298"/>
         <source>Unsupported project document root: %1</source>
         <translation>Неподдерживаемый корневой элемент файла проекта: %1</translation>
     </message>
@@ -4101,6 +4192,24 @@ Please verify the merge result carefully.</source>
     </message>
 </context>
 <context>
+    <name>Server</name>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="86"/>
+        <source>An incorrect device ID was specified (%1)</source>
+        <translation>Некорректное значение номера устройства (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="509"/>
+        <source>An array of values is expected</source>
+        <translation>Ожидается массив значений</translation>
+    </message>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="1012"/>
+        <source>A callback function is expected</source>
+        <translation>Ожидается функция обратного вызова</translation>
+    </message>
+</context>
+<context>
     <name>SimulationModeComboBox</name>
     <message>
         <location filename="../../controls/simulationmodecombobox.cpp" line="50"/>
@@ -4171,61 +4280,71 @@ Please verify the merge result carefully.</source>
 <context>
     <name>TrafficLogWindow</name>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="23"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="208"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="24"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="220"/>
         <source>Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="121"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="209"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="122"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="221"/>
         <source>Unit ID:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="125"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="132"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="210"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="218"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="126"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="133"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="222"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="230"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="126"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="211"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="127"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="223"/>
         <source>Filter by Unit Identifier (0 = all)</source>
         <translation>Фильтр по идентификатору устройства (0 = все)</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="130"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="212"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="131"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="224"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="144"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="213"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="145"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="225"/>
         <source>Limit:</source>
         <translation>Лимит:</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="156"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="198"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="214"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="157"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="199"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="226"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="161"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="215"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="162"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="227"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../controls/trafficlogwindow.cpp" line="198"/>
-        <location filename="../../controls/trafficlogwindow.cpp" line="214"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="199"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="226"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="206"/>
+        <source>Clear Traffic</source>
+        <translation>Очистка журнала трафика</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="207"/>
+        <source>Clear all messages from the traffic log?</source>
+        <translation>Удалить все сообщения из журнала трафика?</translation>
     </message>
 </context>
 <context>

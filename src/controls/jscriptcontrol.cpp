@@ -318,7 +318,7 @@ void JScriptControl::showReplace()
 ///
 bool JScriptControl::isRunning() const
 {
-   return _timer.isActive();
+   return _timer.isActive() || (_script != nullptr && _script->hasPendingTimers());
 }
 
 ///
@@ -390,6 +390,9 @@ void JScriptControl::runScript(RunMode mode, int interval)
     connect(_console.get(), &console::messageAdded, this, [this](const QString& text, ConsoleOutput::MessageType type) {
         emit consoleMessage(_scriptSource, text, type);
     });
+    connect(_server.get(), &Server::errorOccured, this, [this](quint8, const QString& error) {
+        emit consoleMessage(_scriptSource, error, ConsoleOutput::MessageType::Error);
+    });
 
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
     _jsEngine.globalObject().setProperty("Script",  _jsEngine.newQObject(_script.get()));
@@ -407,7 +410,10 @@ void JScriptControl::runScript(RunMode mode, int interval)
     switch(mode)
     {
         case RunMode::Once:
-            _script->stop();
+            if(_script->hasPendingTimers())
+                connect(_script.get(), &Script::idle, this, &JScriptControl::stopScript, Qt::QueuedConnection);
+            else
+                _script->stop();
         break;
 
         case RunMode::Periodically:
@@ -424,7 +430,11 @@ void JScriptControl::stopScript()
     _timer.stop();
 
     if(_script != nullptr)
+    {
         disconnect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript);
+        disconnect(_script.get(), &Script::idle, this, &JScriptControl::stopScript);
+        _script->stopAllTimers();
+    }
 
     _jsEngine.setInterrupted(true);
     _jsEngine.globalObject().deleteProperty("Storage");

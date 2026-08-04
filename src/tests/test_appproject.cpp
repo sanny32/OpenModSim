@@ -13,6 +13,7 @@
 #include <QTest>
 
 #include "appproject.h"
+#include "apppreferences.h"
 #include "application.h"
 #include "controls/mdiareaex.h"
 #include "controls/projecttreewidget.h"
@@ -32,6 +33,19 @@ private slots:
     void createsAndRemovesSplitClone();
     void roundTripsOpenAndClosedForms();
     void rejectsMalformedProjectWithoutChangingState();
+    void loadsProjectWithChildlessDefinitionsAndConnection();
+    void preservesXmlCommentsAcrossRoundTrip();
+    void keepsCommentsOnRepeatedSave();
+    void dropsCommentsAfterCloseProject();
+    void omitsTimestampsWhenPreferenceDisabled();
+    void splitsUserStateIntoSeparateFile();
+    void restoresWindowGeometryFromUserStateFile();
+    void opensProjectWithoutUserStateFile();
+    void removesStaleUserStateFile();
+    void roundTripsSeveralFormsOfTheSameKind();
+    void storesUserStateOnCloseWithoutSavingProject();
+    void opensShippedDemoProjects();
+    void keepsShippedDemoProjectsFreeOfUserState();
 };
 
 namespace {
@@ -46,6 +60,110 @@ struct ProjectFixture
     ProjectTreeWidget Tree;
     AppProject Project{&Mdi, Server, &Simulator, &Tree, &Host};
 };
+
+///
+/// \brief The project text used by the comment tests, annotated in the prolog, between
+/// elements, inside a container and in the epilog.
+///
+const char* kAnnotatedProject =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    "<!-- Pump station, hand written -->\n"
+    "<OpenModSim Version=\"2.0-dev\">\n"
+    "    <ModbusDefinitions AddrSpace=\"6-Digits\"/>\n"
+    "    <!-- network settings -->\n"
+    "    <Connections>\n"
+    "        <ConnectionDetails ConnectionType=\"Tcp\">\n"
+    "            <TcpConnectionParams IPAddress=\"0.0.0.0\" ServicePort=\"502\"/>\n"
+    "        </ConnectionDetails>\n"
+    "    </Connections>\n"
+    "    <AddressSpace>\n"
+    "        <AddressDescriptionMap>\n"
+    "            <!-- telemetry block -->\n"
+    "            <Description DeviceId=\"1\" Type=\"4\" Address=\"0\"><![CDATA[Sine]]></Description>\n"
+    "        </AddressDescriptionMap>\n"
+    "    </AddressSpace>\n"
+    "    <ViewSettings ViewMode=\"1\" SplitView=\"0\"/>\n"
+    "    <Forms>\n"
+    "        <FormDataView Panel=\"L\" Title=\"Data1\" DataType=\"UInt16\" RegisterOrder=\"MSRF\" Codepage=\"\" ByteOrder=\"Direct\">\n"
+    "            <Window Maximized=\"true\" Minimized=\"false\" Left=\"0\" Top=\"0\" Width=\"610\" Height=\"331\"/>\n"
+    "            <DataViewDefinitions DeviceId=\"1\" PointType=\"HoldingRegisters\" PointAddress=\"1\" Length=\"8\" DataViewColumnsDistance=\"25\" LeadingZeros=\"true\"/>\n"
+    "            <AddressColorMap/>\n"
+    "        </FormDataView>\n"
+    "    </Forms>\n"
+    "</OpenModSim>\n"
+    "<!-- end of project -->\n";
+
+///
+/// \brief The demo projects shipped with the application, with the number of forms each
+/// one is expected to open.
+/// \return One entry per demo, as path and form count.
+///
+QList<QPair<QString, int>> demoProjects()
+{
+    const QString directory = QStringLiteral(OMODSIM_DEMOS_DIR);
+    return {
+        { directory + QStringLiteral("/demo_wave_generator.omsim"), 3 },
+        { directory + QStringLiteral("/demo_plc_simulator.omsim"), 6 }
+    };
+}
+
+///
+/// \brief Writes a project file.
+/// \param path Destination path.
+/// \param content Project text.
+///
+void writeProjectFile(const QString& path, const char* content)
+{
+    QFile file(path);
+    QVERIFY(file.open(QIODevice::WriteOnly));
+    file.write(content);
+}
+
+///
+/// \brief Describes where each comment of a project file sits, as "parent path|following
+/// element|text". The following element is "END" for a comment closing its parent.
+/// \param path The project file to inspect.
+/// \return One entry per comment, in document order.
+///
+QStringList commentPlacements(const QString& path)
+{
+    QStringList placements;
+    QStringList elements;
+    QStringList pending;
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return placements;
+
+    QXmlStreamReader xml(&file);
+    const auto flush = [&placements, &pending, &elements](const QString& following) {
+        for (const auto& text : pending)
+            placements.append(elements.join(QLatin1Char('/')) + QLatin1Char('|') + following
+                              + QLatin1Char('|') + text.trimmed());
+        pending.clear();
+    };
+
+    while (!xml.atEnd()) {
+        switch (xml.readNext()) {
+        case QXmlStreamReader::Comment:
+            pending.append(xml.text().toString());
+            break;
+        case QXmlStreamReader::StartElement:
+            flush(xml.name().toString());
+            elements.append(xml.name().toString());
+            break;
+        case QXmlStreamReader::EndElement:
+            flush(QStringLiteral("END"));
+            elements.removeLast();
+            break;
+        default:
+            break;
+        }
+    }
+    flush(QStringLiteral("END"));
+
+    return placements;
+}
 
 }
 
@@ -187,6 +305,331 @@ void TestAppProject::rejectsMalformedProjectWithoutChangingState()
     QVERIFY(!result.Error.isEmpty());
     QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).size(), 1);
     QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).first(), existing);
+}
+
+/// \brief Verifies a hand-written project whose ModbusDefinitions and ConnectionDetails
+/// carry no child elements is read to the end. Both readers used to consume the closing
+/// tag of their own element and then skip the parent, discarding the rest of the file.
+void TestAppProject::loadsProjectWithChildlessDefinitionsAndConnection()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString path = files.filePath(QStringLiteral("minimal.omsim"));
+    writeProjectFile(path,
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<OpenModSim Version=\"2.0-dev\">\n"
+        "    <ModbusDefinitions AddrSpace=\"6-Digits\"/>\n"
+        "    <Connections>\n"
+        "        <ConnectionDetails ConnectionType=\"Tcp\"/>\n"
+        "    </Connections>\n"
+        "    <Forms>\n"
+        "        <FormDataView Panel=\"L\" Title=\"Data1\" DataType=\"UInt16\" RegisterOrder=\"MSRF\" Codepage=\"\" ByteOrder=\"Direct\">\n"
+        "            <Window Maximized=\"true\" Minimized=\"false\" Left=\"0\" Top=\"0\" Width=\"610\" Height=\"331\"/>\n"
+        "            <DataViewDefinitions DeviceId=\"1\" PointType=\"HoldingRegisters\" PointAddress=\"1\" Length=\"8\" DataViewColumnsDistance=\"25\" LeadingZeros=\"true\"/>\n"
+        "            <AddressColorMap/>\n"
+        "        </FormDataView>\n"
+        "    </Forms>\n"
+        "</OpenModSim>\n");
+
+    const auto result = fixture.Project.loadProject(path);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).size(), 1);
+}
+
+/// \brief Verifies XML comments survive a load/save cycle at their original positions.
+void TestAppProject::preservesXmlCommentsAcrossRoundTrip()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    const auto result = fixture.Project.loadProject(source);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    QCOMPARE(commentPlacements(saved), QStringList({
+        QStringLiteral("|OpenModSim|Pump station, hand written"),
+        QStringLiteral("OpenModSim|Connections|network settings"),
+        QStringLiteral("OpenModSim/AddressSpace/AddressDescriptionMap|Description|telemetry block"),
+        QStringLiteral("|END|end of project")
+    }));
+
+    QFile file(saved);
+    QVERIFY(file.open(QIODevice::ReadOnly));
+    QVERIFY(file.readAll().contains("<![CDATA[Sine]]>"));
+}
+
+/// \brief Verifies the comment store is not consumed by a save.
+void TestAppProject::keepsCommentsOnRepeatedSave()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString first = files.filePath(QStringLiteral("first.omsim"));
+    const QString second = files.filePath(QStringLiteral("second.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    QVERIFY(fixture.Project.saveProject(first));
+    QVERIFY(fixture.Project.saveProject(second));
+
+    QCOMPARE(commentPlacements(second), commentPlacements(first));
+    QCOMPARE(commentPlacements(second).size(), 4);
+}
+
+/// \brief Verifies closing a project discards its comments.
+void TestAppProject::dropsCommentsAfterCloseProject()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    fixture.Project.closeProject();
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    QVERIFY(commentPlacements(saved).isEmpty());
+}
+
+/// \brief Verifies the timestamp preference reaches the written project file.
+void TestAppProject::omitsTimestampsWhenPreferenceDisabled()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString withStamps = files.filePath(QStringLiteral("with.omsim"));
+    const QString withoutStamps = files.filePath(QStringLiteral("without.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    fixture.Server.setTimestamp(1, QModbusDataUnit::HoldingRegisters, 0, QDateTime::currentDateTime());
+
+    auto& prefs = AppPreferences::instance();
+    const bool restore = prefs.saveRegisterTimestamps();
+
+    prefs.setSaveRegisterTimestamps(true);
+    QVERIFY(fixture.Project.saveProject(withStamps));
+    prefs.setSaveRegisterTimestamps(false);
+    QVERIFY(fixture.Project.saveProject(withoutStamps));
+    prefs.setSaveRegisterTimestamps(restore);
+
+    QFile enabled(withStamps);
+    QVERIFY(enabled.open(QIODevice::ReadOnly));
+    QVERIFY(enabled.readAll().contains("<AddressTimestampMap"));
+
+    QFile disabled(withoutStamps);
+    QVERIFY(disabled.open(QIODevice::ReadOnly));
+    QVERIFY(!disabled.readAll().contains("AddressTimestampMap"));
+}
+
+/// \brief Verifies saving a project written in the old single-file shape produces a clean
+/// project file plus a user-state file beside it.
+void TestAppProject::splitsUserStateIntoSeparateFile()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    const QString userPath = projectUserStatePath(saved);
+    QVERIFY(QFile::exists(userPath));
+
+    QFile project(saved);
+    QVERIFY(project.open(QIODevice::ReadOnly));
+    const auto projectText = project.readAll();
+    QVERIFY(!projectText.contains("<Window"));
+    QVERIFY(!projectText.contains("<ViewSettings"));
+    QVERIFY(projectText.contains("<FormDataView"));
+    QVERIFY(projectText.contains("<ModbusDefinitions"));
+
+    QFile user(userPath);
+    QVERIFY(user.open(QIODevice::ReadOnly));
+    const auto userText = user.readAll();
+    QVERIFY(userText.contains("OpenModSimUser"));
+    QVERIFY(userText.contains("<Window"));
+    QVERIFY(userText.contains("<ViewSettings"));
+}
+
+/// \brief Verifies the window size stored in the user-state file comes back on load.
+void TestAppProject::restoresWindowGeometryFromUserStateFile()
+{
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(source).Success);
+        QVERIFY(fixture.Project.saveProject(saved));
+    }
+
+    QFile user(projectUserStatePath(saved));
+    QVERIFY(user.open(QIODevice::ReadOnly));
+    QVERIFY(user.readAll().contains("Width="));
+    user.close();
+
+    ProjectFixture reopened;
+    QVERIFY(reopened.Project.loadProject(saved).Success);
+    QCOMPARE(reopened.Project.forms(ProjectFormKind::Data).size(), 1);
+
+    const QString resaved = files.filePath(QStringLiteral("resaved.omsim"));
+    QVERIFY(reopened.Project.saveProject(resaved));
+
+    QFile resavedUser(projectUserStatePath(resaved));
+    QVERIFY(resavedUser.open(QIODevice::ReadOnly));
+    QVERIFY(resavedUser.readAll().contains("<Window"));
+}
+
+/// \brief Verifies a project checked out without its user-state file still opens.
+void TestAppProject::opensProjectWithoutUserStateFile()
+{
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("annotated.omsim"));
+    const QString saved = files.filePath(QStringLiteral("saved.omsim"));
+    writeProjectFile(source, kAnnotatedProject);
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(source).Success);
+        QVERIFY(fixture.Project.saveProject(saved));
+    }
+
+    QVERIFY(QFile::remove(projectUserStatePath(saved)));
+
+    ProjectFixture reopened;
+    const auto result = reopened.Project.loadProject(saved);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QCOMPARE(reopened.Project.forms(ProjectFormKind::Data).size(), 1);
+}
+
+/// \brief Verifies an existing user-state file is replaced rather than appended to or left
+/// with content from an earlier save. Every project has view settings, so the file is
+/// always written; the empty-document branch only guards against a future project shape
+/// that carries no user state at all.
+void TestAppProject::removesStaleUserStateFile()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString saved = files.filePath(QStringLiteral("empty.omsim"));
+    const QString userPath = projectUserStatePath(saved);
+
+    QFile stale(userPath);
+    QVERIFY(stale.open(QIODevice::WriteOnly));
+    stale.write("<OpenModSimUser><Marker Stale=\"yes\"/></OpenModSimUser>");
+    stale.close();
+
+    QVERIFY(fixture.Project.saveProject(saved));
+
+    QFile written(userPath);
+    QVERIFY(written.open(QIODevice::ReadOnly));
+    const auto text = written.readAll();
+    QVERIFY(!text.contains("Stale"));
+    QVERIFY(text.contains("<ViewSettings"));
+}
+
+/// \brief Verifies a project holding several forms of one kind survives save and reload.
+/// Their user state used to collapse onto the first form, and the reloaded document was
+/// rejected outright for repeating an attribute.
+void TestAppProject::roundTripsSeveralFormsOfTheSameKind()
+{
+    QTemporaryDir files;
+    const QString saved = files.filePath(QStringLiteral("many.omsim"));
+    const QString resaved = files.filePath(QStringLiteral("many2.omsim"));
+
+    {
+        ProjectFixture fixture;
+        for (int i = 0; i < 3; ++i)
+            QVERIFY(fixture.Project.createMdiChild(ProjectFormKind::Data));
+        QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).size(), 3);
+        QVERIFY(fixture.Project.saveProject(saved));
+    }
+
+    ProjectFixture reopened;
+    const auto result = reopened.Project.loadProject(saved);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QCOMPARE(reopened.Project.forms(ProjectFormKind::Data).size(), 3);
+
+    QVERIFY(reopened.Project.saveProject(resaved));
+    const auto again = reopened.Project.validateProject(resaved);
+    QVERIFY2(again.Success, qPrintable(again.Error));
+}
+
+/// \brief Verifies closing the project stores the layout on its own. Arranging windows
+/// never marks the project modified, so nothing would otherwise prompt or trigger a save.
+void TestAppProject::storesUserStateOnCloseWithoutSavingProject()
+{
+    QTemporaryDir files;
+    const QString path = files.filePath(QStringLiteral("layout.omsim"));
+    const QString userPath = projectUserStatePath(path);
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.createMdiChild(ProjectFormKind::Data));
+        QVERIFY(fixture.Project.saveProject(path));
+    }
+
+    QVERIFY(QFile::remove(userPath));
+
+    ProjectFixture reopened;
+    QVERIFY(reopened.Project.loadProject(path).Success);
+
+    // No saveProject() here: closing alone has to put the layout back on disk.
+    reopened.Project.closeProject();
+
+    QVERIFY(QFile::exists(userPath));
+    QFile user(userPath);
+    QVERIFY(user.open(QIODevice::ReadOnly));
+    const auto text = user.readAll();
+    QVERIFY(text.contains("OpenModSimUser"));
+    QVERIFY(text.contains("<ViewSettings"));
+}
+
+/// \brief Verifies the demo projects shipped with the application still open. They are
+/// hand-maintained files, so nothing else would notice them drifting away from what the
+/// reader expects.
+void TestAppProject::opensShippedDemoProjects()
+{
+    for (const auto& demo : demoProjects()) {
+        ProjectFixture fixture;
+        const auto result = fixture.Project.loadProject(demo.first);
+        QVERIFY2(result.Success, qPrintable(demo.first + QStringLiteral(": ") + result.Error));
+
+        int forms = 0;
+        for (auto kind : { ProjectFormKind::Data, ProjectFormKind::Script,
+                           ProjectFormKind::DataMap, ProjectFormKind::Traffic })
+            forms += fixture.Project.forms(kind).size();
+        QCOMPARE(forms, demo.second);
+
+        fixture.Project.closeProject();
+    }
+}
+
+/// \brief Verifies the shipped demos carry no user state. Their .omsim.user file is never
+/// distributed, so anything left in the project file would be one machine's layout frozen
+/// into every installation.
+void TestAppProject::keepsShippedDemoProjectsFreeOfUserState()
+{
+    for (const auto& demo : demoProjects()) {
+        QFile file(demo.first);
+        QVERIFY2(file.open(QIODevice::ReadOnly), qPrintable(demo.first));
+        const auto text = file.readAll();
+
+        for (const auto* marker : { "<ViewSettings", "<TabOrder", "<Window", "<Colors",
+                                    "<Font", "<Zoom", "<ColumnWidths",
+                                    "CursorPosition", "ScrollPosition", "LeadingZeros" }) {
+            QVERIFY2(!text.contains(marker), qPrintable(demo.first + QStringLiteral(": ")
+                                                        + QString::fromLatin1(marker)));
+        }
+    }
 }
 
 int main(int argc, char** argv)

@@ -816,6 +816,12 @@ void DataMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataUnit&
 {
     if (!data.isValid() || _inSetData) return;
 
+    const auto dataStart = static_cast<quint16>(data.startAddress());
+    const int dataCount = data.valueCount();
+
+    int firstChanged = -1;
+    int lastChanged = -1;
+
     for (int row = 0; row < _keys.size(); ++row) {
         const ItemMapKey key = _keys[row];
         if (key.DeviceId != deviceId || key.Type != data.registerType())
@@ -825,17 +831,26 @@ void DataMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataUnit&
         if (it == _data.end())
             continue;
 
-        if (!rangesOverlap(key.Address, registersCount(it->type),
-                           static_cast<quint16>(data.startAddress()), data.valueCount()))
+        if (!rangesOverlap(key.Address, registersCount(it->type), dataStart, dataCount))
             continue;
 
-        const auto regs = regsForKey(_server, key, it->type);
-        if (!regs.isEmpty())
-            it->value = regs[0];
-        it->timestamp = timestampForKey(_server, key, it->type);
+        const int offset = static_cast<int>(key.Address) - static_cast<int>(dataStart);
+        if (offset >= 0 && offset < dataCount) {
+            it->value = static_cast<quint16>(data.value(offset));
+        }
+        else {
+            const auto regs = regsForKey(_server, key, it->type);
+            if (!regs.isEmpty())
+                it->value = regs[0];
+        }
 
-        emit dataChanged(createIndex(row, ColValue), createIndex(row, ColTimestamp));
+        if (firstChanged < 0)
+            firstChanged = row;
+        lastChanged = row;
     }
+
+    if (firstChanged >= 0)
+        emit dataChanged(createIndex(firstChanged, ColValue), createIndex(lastChanged, ColTimestamp));
 }
 
 ///
@@ -865,6 +880,36 @@ void DataMapDataModel::applyTimestampChange(quint8 deviceId, QModbusDataUnit::Re
         it->timestamp = rowTimestamp;
         emit dataChanged(createIndex(row, ColTimestamp), createIndex(row, ColTimestamp));
     }
+}
+
+///
+/// \brief DataMapDataModel::refreshTimestamps
+/// Re-reads timestamps for every row after a bulk backend update.
+///
+void DataMapDataModel::refreshTimestamps()
+{
+    int firstChanged = -1;
+    int lastChanged = -1;
+
+    for (int row = 0; row < _keys.size(); ++row) {
+        const ItemMapKey key = _keys[row];
+
+        auto it = _data.find(key);
+        if (it == _data.end())
+            continue;
+
+        const auto rowTimestamp = timestampForKey(_server, key, it->type);
+        if (it->timestamp == rowTimestamp)
+            continue;
+
+        it->timestamp = rowTimestamp;
+        if (firstChanged < 0)
+            firstChanged = row;
+        lastChanged = row;
+    }
+
+    if (firstChanged >= 0)
+        emit dataChanged(createIndex(firstChanged, ColTimestamp), createIndex(lastChanged, ColTimestamp));
 }
 
 ///

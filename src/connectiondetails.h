@@ -525,21 +525,25 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ConnectionDetails& c
             cd.Type = enumFromString<ConnectionType>(attributes.value("ConnectionType").toString());
         }
 
-        switch(cd.Type) {
-            case ConnectionType::Tcp:
-            case ConnectionType::RtuTcp:
-                if(xml.readNextStartElement() && xml.name() == QLatin1String("TcpConnectionParams")) {
-                    xml >> cd.TcpParams;
-                }
-                break;
-            case ConnectionType::Serial:
-                if(xml.readNextStartElement() && xml.name() == QLatin1String("SerialConnectionParams")) {
-                    xml >> cd.SerialParams;
-                }
-                break;
-        }
+        while(xml.readNextStartElement()) {
+            switch(cd.Type) {
+                case ConnectionType::Tcp:
+                case ConnectionType::RtuTcp:
+                    if(xml.name() == QLatin1String("TcpConnectionParams")) {
+                        xml >> cd.TcpParams;
+                        continue;
+                    }
+                    break;
+                case ConnectionType::Serial:
+                    if(xml.name() == QLatin1String("SerialConnectionParams")) {
+                        xml >> cd.SerialParams;
+                        continue;
+                    }
+                    break;
+            }
 
-        xml.skipCurrentElement();
+            xml.skipCurrentElement();
+        }
     }
 
     return xml;

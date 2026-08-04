@@ -58,6 +58,7 @@ public:
     explicit Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase base, QJSEngine* engine);
     ~Server() override;
 
+    Q_PROPERTY(int deviceId READ deviceId WRITE setDeviceId);
     Q_PROPERTY(Address::Base addressBase READ addressBase WRITE setAddressBase);
     Q_PROPERTY(Address::Space addressSpace READ addressSpace WRITE setAddressSpace);
     Q_PROPERTY(bool useGlobalUnitMap READ useGlobalUnitMap WRITE setUseGlobalUnitMap);
@@ -71,6 +72,7 @@ public:
     Q_PROPERTY(bool responseDelay READ responseDelay WRITE setResponseDelay)
     Q_PROPERTY(bool responseRandomDelay READ responseRandomDelay WRITE setResponseRandomDelay)
 
+    int deviceId() const;
     Address::Base addressBase() const;
     Address::Space addressSpace() const;
     bool useGlobalUnitMap() const;
@@ -86,47 +88,55 @@ public:
     bool responseDelay() const;
     bool responseRandomDelay() const;
 
-    Q_INVOKABLE quint16 readHolding(quint16 address, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeHolding(quint16 address, quint16 value, quint8 deviceId = 1);
+    Q_INVOKABLE quint16 readHolding(quint16 address, int deviceId = -1) const;
+    Q_INVOKABLE void writeHolding(quint16 address, quint16 value, int deviceId = -1);
 
-    Q_INVOKABLE quint16 readInput(quint16 address, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeInput(quint16 address, quint16 value, quint8 deviceId = 1);
+    Q_INVOKABLE quint16 readInput(quint16 address, int deviceId = -1) const;
+    Q_INVOKABLE void writeInput(quint16 address, quint16 value, int deviceId = -1);
 
-    Q_INVOKABLE bool readDiscrete(quint16 address, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeDiscrete(quint16 address, bool value, quint8 deviceId = 1);
+    Q_INVOKABLE bool readDiscrete(quint16 address, int deviceId = -1) const;
+    Q_INVOKABLE void writeDiscrete(quint16 address, bool value, int deviceId = -1);
 
-    Q_INVOKABLE bool readCoil(quint16 address, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeCoil(quint16 address, bool value, quint8 deviceId = 1);
+    Q_INVOKABLE bool readCoil(quint16 address, int deviceId = -1) const;
+    Q_INVOKABLE void writeCoil(quint16 address, bool value, int deviceId = -1);
 
-    Q_INVOKABLE QString readAnsi(Register::Type reg, quint16 address, const QString& codepage, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeAnsi(Register::Type reg, quint16 address, const QString& value, const QString& codepage, quint8 deviceId = 1);
+    Q_INVOKABLE void writeHoldings(quint16 startAddress, const QJSValue& values, int deviceId = -1);
+    Q_INVOKABLE void writeInputs(quint16 startAddress, const QJSValue& values, int deviceId = -1);
+    Q_INVOKABLE void writeCoils(quint16 startAddress, const QJSValue& values, int deviceId = -1);
+    Q_INVOKABLE void writeDiscretes(quint16 startAddress, const QJSValue& values, int deviceId = -1);
 
-    Q_INVOKABLE qint32 readInt32(Register::Type reg, quint16 address, bool swapped, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped, quint8 deviceId = 1);
+    Q_INVOKABLE QString readAnsi(Register::Type reg, quint16 address, const QString& codepage, int deviceId = -1) const;
+    Q_INVOKABLE void writeAnsi(Register::Type reg, quint16 address, const QString& value, const QString& codepage, int deviceId = -1);
 
-    Q_INVOKABLE quint32 readUInt32(Register::Type reg, quint16 address, bool swapped, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeUInt32(Register::Type reg, quint16 address, quint32 value, bool swapped, quint8 deviceId = 1);
+    Q_INVOKABLE qint32 readInt32(Register::Type reg, quint16 address, bool swapped, int deviceId = -1) const;
+    Q_INVOKABLE void writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped, int deviceId = -1);
 
-    Q_INVOKABLE qint64 readInt64(Register::Type reg, quint16 address, bool swapped, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeInt64(Register::Type reg, quint16 address, qint64 value, bool swapped, quint8 deviceId = 1);
+    Q_INVOKABLE quint32 readUInt32(Register::Type reg, quint16 address, bool swapped, int deviceId = -1) const;
+    Q_INVOKABLE void writeUInt32(Register::Type reg, quint16 address, quint32 value, bool swapped, int deviceId = -1);
 
-    Q_INVOKABLE quint64 readUInt64(Register::Type reg, quint16 address, bool swapped, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeUInt64(Register::Type reg, quint16 address, quint64 value, bool swapped, quint8 deviceId = 1);
+    Q_INVOKABLE qint64 readInt64(Register::Type reg, quint16 address, bool swapped, int deviceId = -1) const;
+    Q_INVOKABLE void writeInt64(Register::Type reg, quint16 address, qint64 value, bool swapped, int deviceId = -1);
 
-    Q_INVOKABLE float readFloat(Register::Type reg, quint16 address, bool swapped, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeFloat(Register::Type reg, quint16 address, float value, bool swapped, quint8 deviceId = 1);
+    Q_INVOKABLE quint64 readUInt64(Register::Type reg, quint16 address, bool swapped, int deviceId = -1) const;
+    Q_INVOKABLE void writeUInt64(Register::Type reg, quint16 address, quint64 value, bool swapped, int deviceId = -1);
 
-    Q_INVOKABLE double readDouble(Register::Type reg, quint16 address, bool swapped, quint8 deviceId = 1) const;
-    Q_INVOKABLE void writeDouble(Register::Type reg, quint16 address, double value, bool swapped, quint8 deviceId = 1);
+    Q_INVOKABLE float readFloat(Register::Type reg, quint16 address, bool swapped, int deviceId = -1) const;
+    Q_INVOKABLE void writeFloat(Register::Type reg, quint16 address, float value, bool swapped, int deviceId = -1);
 
-    Q_INVOKABLE void onChange(quint8 deviceId, Register::Type reg, quint16 address, const QJSValue& func);
-    Q_INVOKABLE void onError(quint8 deviceId, const QJSValue& func);
+    Q_INVOKABLE double readDouble(Register::Type reg, quint16 address, bool swapped, int deviceId = -1) const;
+    Q_INVOKABLE void writeDouble(Register::Type reg, quint16 address, double value, bool swapped, int deviceId = -1);
+
+    Q_INVOKABLE void onChange(int deviceId, Register::Type reg, quint16 address, const QJSValue& func);
+    Q_INVOKABLE void onChange(Register::Type reg, quint16 address, const QJSValue& func);
+    Q_INVOKABLE void onError(int deviceId, const QJSValue& func);
+    Q_INVOKABLE void onError(const QJSValue& func);
     Q_INVOKABLE void onRequest(const QJSValue& func);
 
 signals:
     void errorOccured(quint8 deviceId, const QString& error);
 
 public slots:
+    void setDeviceId(int deviceId);
     void setAddressBase(Address::Base base);
     void setAddressSpace(Address::Space space);
     void setUseGlobalUnitMap(bool value);
@@ -163,8 +173,11 @@ private:
 
     static bool runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, int deviceId, QModbusResponse& response);
 
+    void writeRange(QModbusDataUnit::RegisterType type, quint16 startAddress, const QJSValue& values, quint8 deviceId);
+    quint8 resolveDeviceId(int deviceId) const;
     quint16 toServerAddress(quint16 address) const;
 
+    int _deviceId = 1;
     Address::Base _addressBase;
     const ByteOrder* _byteOrder;
     ModbusMultiServer* _mbMultiServer;

@@ -39,6 +39,7 @@ struct ItemMapKey {
 using AddressColorMap = QMap<ItemMapKey, QColor>;
 using AddressDescriptionMap = QMap<ItemMapKey, QString>;
 using AddressTimestampMap = QMap<ItemMapKey, QDateTime>;
+using AddressValueMap = QMap<ItemMapKey, quint16>;
 
 inline QDataStream& operator<<(QDataStream& out, const ItemMapKey& key)
 {

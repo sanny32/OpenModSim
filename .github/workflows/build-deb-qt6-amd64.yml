@@ -139,7 +139,6 @@ jobs:
         uses: ./.github/actions/install-cqtdeployer
         with:
           qt-prefix-path: ${{ steps.qt.outputs.qt-root-dir }}
-          apply-qt6-patch: "true"
 
       - name: Resolve latest OpenSSL 3.5 LTS version
         uses: ./.github/actions/build-openssl3-runtime

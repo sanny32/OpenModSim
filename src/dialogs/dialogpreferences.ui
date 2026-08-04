@@ -538,6 +538,26 @@
                   </property>
                  </widget>
                 </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBoxSaveRegisterTimestamps">
+                  <property name="toolTip">
+                   <string>Write the last change time of each register into the project file.</string>
+                  </property>
+                  <property name="text">
+                   <string>Save register timestamps</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBoxSaveRuntimeRegisterValues">
+                  <property name="toolTip">
+                   <string>Write current register values. When disabled, the values loaded with the project and those edited by hand are saved instead, so a running simulation does not change the file.</string>
+                  </property>
+                  <property name="text">
+                   <string>Save runtime register values</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>

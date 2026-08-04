@@ -19,33 +19,23 @@
             <Description DeviceId="1" Type="4" Address="6"><![CDATA[Phase Step (deg/tick)]]></Description>
             <Description DeviceId="1" Type="4" Address="7"><![CDATA[Amplitude (%)]]></Description>
         </AddressDescriptionMap>
-        <AddressTimestampMap>
-            <Timestamp DeviceId="1" Type="4" Address="6" Value="2026-04-10T18:06:58.831"/>
-            <Timestamp DeviceId="1" Type="4" Address="7" Value="2026-04-10T18:06:58.831"/>
-        </AddressTimestampMap>
         <ModbusSimulationMap/>
         <ModbusDataValues>
             <Value DeviceId="1" Type="4" Address="6">2</Value>
             <Value DeviceId="1" Type="4" Address="7">100</Value>
         </ModbusDataValues>
     </AddressSpace>
-    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L" ActivePrimaryWindow="WaveValues"/>
     <Forms>
         <FormDataView Panel="L" Title="WaveValues" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
-            <DataViewDefinitions DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="8" DataViewColumnsDistance="25" LeadingZeros="true"/>
+            <DataViewDefinitions DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="8" DataViewColumnsDistance="25"/>
             <AddressColorMap/>
         </FormDataView>
         <FormScriptView Panel="L" Title="WaveGenerator">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="523" Height="278"/>
-            <Colors Background="#ffffff" Foreground="#000000"/>
-            <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
-            <Zoom Value="100%"/>
             <ScriptViewDefinitions>
                 <ScriptSettings Mode="Periodically" Interval="100" RunOnStartup="true"/>
             </ScriptViewDefinitions>
             <JScriptControl>
-                <Script CursorPosition="0" ScrollPosition="0"><![CDATA[/**************************************************************************/
+                <Script><![CDATA[/**************************************************************************/
 /*
 /* Wave Generator Demo
 /* Generates sine, cosine, sawtooth and square waves in Holding Registers
@@ -143,9 +133,7 @@ tick();
             </JScriptControl>
         </FormScriptView>
         <FormDataMapView Panel="L" Title="DataMap">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="409" Height="226"/>
             <DataMapViewDefinitions ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
-            <ColumnWidths Unit="40" Type="120" Address="70" DataType="70" Order="65" Comment="200" Value="160" Timestamp="160"/>
             <DataMap>
                 <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="0"/>
                 <Entry DeviceId="1" Type="4" Address="1" DataType="UInt16" Value="0"/>
@@ -158,9 +146,4 @@ tick();
             </DataMap>
         </FormDataMapView>
     </Forms>
-    <TabOrder Panel="L">
-        <TabRef title="WaveValues"/>
-        <TabRef title="WaveGenerator"/>
-        <TabRef title="DataMap"/>
-    </TabOrder>
 </OpenModSim>

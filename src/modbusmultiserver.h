@@ -84,7 +84,11 @@ public:
     void setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source, bool replace = true);
     void clearDescriptions();
 
+    AddressValueMap configuredValueMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+    void clearConfiguredValues();
+
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
+    void writeValues(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 startAddress, const QVector<quint16>& values, ByteOrder order);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, WriteSource source = WriteSource::User);
 
     qint32 readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
@@ -127,6 +131,7 @@ signals:
 
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data, WriteSource source, const ModbusClientInfo& client);
     void timestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
+    void timestampsChanged();
     void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress,
                             const QString& description, WriteSource source);
     void definitionsChanged(const ModbusDefinitions& defs);

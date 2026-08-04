@@ -1351,6 +1351,14 @@ void FormDataMapView::on_mbTimestampChanged(quint8 deviceId, QModbusDataUnit::Re
 }
 
 ///
+/// \brief FormDataMapView::on_mbTimestampsChanged
+///
+void FormDataMapView::on_mbTimestampsChanged()
+{
+    _model->refreshTimestamps();
+}
+
+///
 /// \brief FormDataMapView::on_mbDescriptionChanged
 ///
 void FormDataMapView::on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
@@ -1621,6 +1629,8 @@ void FormDataMapView::setupServerConnections()
             this, &FormDataMapView::on_mbDataChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::timestampChanged,
             this, &FormDataMapView::on_mbTimestampChanged);
+    connect(&_mbMultiServer, &ModbusMultiServer::timestampsChanged,
+            this, &FormDataMapView::on_mbTimestampsChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::descriptionChanged,
             this, &FormDataMapView::on_mbDescriptionChanged);
 }

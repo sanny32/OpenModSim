@@ -18,6 +18,8 @@
 HelpBrowser::HelpBrowser(QWidget* parent)
     : QTextBrowser(parent)
 {
+    setFrameShadow(QFrame::Plain);
+
     connect(&theApp()->theme(), &AppTheme::colorSchemeChanged, this, &HelpBrowser::reload);
 }
 

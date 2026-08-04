@@ -37,10 +37,20 @@ bool containsProjectAddressSpaceValue(const ProjectAddressSpaceValues& values, c
 ///
 void appendProjectAddressSpaceValues(ProjectAddressSpaceValues& values,
                                      ModbusMultiServer& mbServer,
-                                     const ProjectAddressSpaceRange& range)
+                                     const ProjectAddressSpaceRange& range,
+                                     bool runtimeValues)
 {
     if (range.Length == 0)
         return;
+
+    if (!runtimeValues) {
+        const auto configured = mbServer.configuredValueMap(range.DeviceId, range.Type, range.StartAddress, range.Length);
+        for (auto it = configured.constBegin(); it != configured.constEnd(); ++it) {
+            if (it.value() != 0 && !containsProjectAddressSpaceValue(values, it.key()))
+                values.append({ it.key(), it.value() });
+        }
+        return;
+    }
 
     const auto unit = mbServer.data(range.DeviceId, range.Type, range.StartAddress, range.Length);
     quint16 address = range.StartAddress;
@@ -157,10 +167,34 @@ void applyProjectAddressSpace(const ProjectAddressSpacePayload& payload,
                               DataSimulator* dataSimulator,
                               bool replace)
 {
-    for (const auto& pv : payload.Values) {
-        QModbusDataUnit unit(pv.Type, pv.Address, 1);
-        unit.setValue(0, pv.RegisterValue);
-        mbServer.setData(pv.DeviceId, unit, WriteSource::ProjectLoad);
+    // Values are grouped into contiguous runs so a large project needs one setData
+    // per run instead of one per register (issue #126).
+    QMap<QPair<quint8, QModbusDataUnit::RegisterType>, QMap<quint16, quint16>> valuesByUnit;
+    for (const auto& pv : payload.Values)
+        valuesByUnit[{pv.DeviceId, pv.Type}][pv.Address] = pv.RegisterValue;
+
+    for (auto it = valuesByUnit.constBegin(); it != valuesByUnit.constEnd(); ++it) {
+        const quint8 deviceId = it.key().first;
+        const auto type = it.key().second;
+        const auto& values = it.value();
+
+        for (auto jt = values.constBegin(); jt != values.constEnd(); ) {
+            const quint16 startAddress = jt.key();
+            QVector<quint16> run;
+
+            quint16 expected = startAddress;
+            while (jt != values.constEnd() && jt.key() == expected) {
+                run.append(jt.value());
+                ++jt;
+                if (expected == 0xFFFF)
+                    break;
+                ++expected;
+            }
+
+            QModbusDataUnit range(type, startAddress, static_cast<quint16>(run.size()));
+            range.setValues(run);
+            mbServer.setData(deviceId, range, WriteSource::ProjectLoad);
+        }
     }
 
     // Apply simulations after initial values are restored.
@@ -186,14 +220,15 @@ void applyProjectAddressSpace(const ProjectAddressSpacePayload& payload,
 void writeProjectAddressSpace(QXmlStreamWriter& w,
                               ModbusMultiServer& mbServer,
                               const ModbusSimulationMap2& simulations,
-                              const ProjectAddressSpaceRanges& ranges)
+                              const ProjectAddressSpaceRanges& ranges,
+                              const ProjectAddressSpaceWriteOptions& options)
 {
     AddressDescriptionMap projectDescriptionMap;
     AddressTimestampMap projectTimestampMap;
     ProjectAddressSpaceValues projectValues;
     for (const auto& range : ranges) {
         appendProjectAddressSpaceMetadata(projectDescriptionMap, projectTimestampMap, mbServer, range);
-        appendProjectAddressSpaceValues(projectValues, mbServer, range);
+        appendProjectAddressSpaceValues(projectValues, mbServer, range, options.SaveRuntimeValues);
     }
 
     const auto projectSimulationMap = filterProjectAddressSimulations(simulations, ranges);
@@ -201,7 +236,8 @@ void writeProjectAddressSpace(QXmlStreamWriter& w,
     w.writeStartElement("AddressSpace");
 
     w << filterProjectAddressDescriptions(projectDescriptionMap, ranges);
-    w << filterProjectAddressTimestamps(projectTimestampMap, ranges);
+    if (options.SaveTimestamps)
+        w << filterProjectAddressTimestamps(projectTimestampMap, ranges);
 
     {
         w.writeStartElement("ModbusSimulationMap");

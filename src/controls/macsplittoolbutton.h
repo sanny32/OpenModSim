@@ -34,7 +34,6 @@ protected:
 
 private:
     QRect chromeRect() const;
-    static QColor mix(const QColor& a, const QColor& b, qreal amount);
 
     QPointer<QTabBar> _tabBar;
 };

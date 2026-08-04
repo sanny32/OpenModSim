@@ -80,6 +80,7 @@ private slots:
     void on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbTimestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp);
+    void on_mbTimestampsChanged();
     void on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description);
     void on_actionAdd_triggered();
     void on_actionInsert_triggered();

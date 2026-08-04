@@ -17,6 +17,7 @@
 #include "legacyprojectloader.h"
 #include "mainwindow.h"
 #include "projectaddressspacexml.h"
+#include "projectcomments.h"
 #include "projectformmetadata.h"
 #include "projectformmanager.h"
 #include "projectformxml.h"
@@ -94,6 +95,11 @@ ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool re
     result.Status = validate(validationBuffer);
     if (!result.Status.Success)
         return result;
+
+    // A merged document is not the one save() writes back to, so its comments would
+    // anchor into a file they never belonged to.
+    if (replace)
+        result.Comments = collectProjectComments(documentData);
 
     QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
     bool splitView = false;
@@ -305,12 +311,35 @@ ProjectLoadResult ProjectSerializer::validate(QIODevice& device)
 }
 
 ///
-/// \brief ProjectSerializer::save writes the project XML to the device: definitions,
-/// connections, address space, view settings, forms and tab order.
+/// \brief ProjectSerializer::save writes the project XML to the device, re-inserting
+/// the comments carried over from the loaded document.
+/// \param device The opened device the XML is written to.
+/// \param comments The comments collected on load.
+/// \return True when the XML was written without errors.
+///
+bool ProjectSerializer::save(QIODevice& device, const ProjectComments& comments)
+{
+    if (comments.isEmpty())
+        return writeDocument(device);
+
+    QByteArray document;
+    QBuffer buffer(&document);
+    buffer.open(QIODevice::WriteOnly);
+    if (!writeDocument(buffer))
+        return false;
+    buffer.close();
+
+    const auto injected = injectProjectComments(document, comments);
+    return device.write(injected) == injected.size();
+}
+
+///
+/// \brief ProjectSerializer::writeDocument writes the project XML to the device:
+/// definitions, connections, address space, view settings, forms and tab order.
 /// \param device The opened device the XML is written to.
 /// \return True when the XML was written without errors.
 ///
-bool ProjectSerializer::save(QIODevice& device)
+bool ProjectSerializer::writeDocument(QIODevice& device)
 {
     QXmlStreamWriter w(&device);
     w.setAutoFormatting(true);
@@ -358,7 +387,11 @@ bool ProjectSerializer::save(QIODevice& device)
                 projectRanges.append(range);
         }
 
-        writeProjectAddressSpace(w, _mbServer, allSimulationMap, projectRanges);
+        const ProjectAddressSpaceWriteOptions options = {
+            AppPreferences::instance().saveRegisterTimestamps(),
+            AppPreferences::instance().saveRuntimeRegisterValues()
+        };
+        writeProjectAddressSpace(w, _mbServer, allSimulationMap, projectRanges, options);
     }
 
     w.writeStartElement("ViewSettings");

@@ -84,6 +84,7 @@ set(SOURCES
     legacyprojectloader.cpp
     legacyprojectparser.cpp
     main.cpp
+    helpdockpolicy.cpp
     mainwindow.cpp
     menuconnect.cpp
 
@@ -103,6 +104,9 @@ set(SOURCES
 
     projectaddressspacefilter.cpp
     projectaddressspacexml.cpp
+    projectcomments.cpp
+    projectuserstate.cpp
+    projectxmlanchor.cpp
     projectformmetadata.cpp
     projectformmanager.cpp
     projectformxml.cpp
@@ -233,6 +237,7 @@ set(HEADERS
     jsobjects/server.h
     jsobjects/storage.h
 
+    helpdockpolicy.h
     mainwindow.h
     menuconnect.h
 
@@ -274,6 +279,9 @@ set(HEADERS
     pch.h
     projectaddressspacefilter.h
     projectaddressspacexml.h
+    projectcomments.h
+    projectuserstate.h
+    projectxmlanchor.h
     projectformmetadata.h
     projectformmanager.h
     projectformkind.h
