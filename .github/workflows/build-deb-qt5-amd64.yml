@@ -138,6 +138,7 @@ jobs:
         uses: ./.github/actions/install-cqtdeployer
         with:
           qt-prefix-path: ${{ steps.qt.outputs.qt-root-dir }}
+          apply-qt5-patch: "true"
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
