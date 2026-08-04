@@ -118,7 +118,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake src -B ${{ env.BUILD_DIR }} -G "Visual Studio 17 2022" -A Win32 -T v142 -DCMAKE_PREFIX_PATH="%QT_ROOT_DIR%" -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
+          cmake src -B ${{ env.BUILD_DIR }} -G "Visual Studio 17 2022" -A Win32 -T v142 -DCMAKE_PREFIX_PATH="%QT_ROOT_DIR%" -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }} -DOMODSIM_BUILD_TESTS=OFF
         shell: cmd
 
       - name: Build
