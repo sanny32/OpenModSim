@@ -114,6 +114,7 @@ jobs:
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
+            -DOMODSIM_BUILD_TESTS=OFF \
             -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
       - name: Build
