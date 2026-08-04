@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenModSimUser>
+    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L"/>
+    <Forms>
+        <FormDataView Title="Setpoints">
+            <Window Maximized="true" Minimized="false" Left="0" Top="-8" Width="2905" Height="1301"/>
+            <DataViewDefinitions DeviceId="1" LeadingZeros="true"/>
+        </FormDataView>
+        <FormDataView Title="ProcessValues">
+            <Window Maximized="true" Minimized="false" Left="0" Top="-8" Width="2905" Height="1301"/>
+            <DataViewDefinitions DeviceId="1" LeadingZeros="true"/>
+        </FormDataView>
+        <FormDataView Title="Commands">
+            <Window Maximized="true" Minimized="false" Left="0" Top="-8" Width="2905" Height="1301"/>
+            <DataViewDefinitions DeviceId="1" LeadingZeros="true"/>
+        </FormDataView>
+        <FormDataView Title="Status">
+            <Window Maximized="true" Minimized="false" Left="0" Top="-8" Width="2905" Height="1301"/>
+            <DataViewDefinitions DeviceId="1" LeadingZeros="true"/>
+        </FormDataView>
+        <FormScriptView Title="PLCSimulator">
+            <Window Maximized="true" Minimized="false" Left="0" Top="-8" Width="2905" Height="1301"/>
+            <Colors Background="#ffffff" Foreground="#000000"/>
+            <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <JScriptControl>
+                <Script CursorPosition="0" ScrollPosition="0"/>
+            </JScriptControl>
+        </FormScriptView>
+        <FormDataMapView Title="DataMap">
+            <Window Maximized="true" Minimized="false" Left="0" Top="-8" Width="2905" Height="1301"/>
+            <ColumnWidths Unit="86" Type="120" Address="70" DataType="70" Order="79" ByteOrder="72" Comment="200" Value="160" Timestamp="160"/>
+        </FormDataMapView>
+    </Forms>
+</OpenModSimUser>
