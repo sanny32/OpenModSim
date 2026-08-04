@@ -43,7 +43,8 @@ runs:
             test -f "squashfs-root/$DESKTOP_FILE"
             test -f squashfs-root/.DirIcon
 
-            if ldd -r squashfs-root/usr/bin/omodsim | grep -E "not found|undefined symbol"; then
+            if LD_LIBRARY_PATH="$(readlink -f squashfs-root/usr/lib)" \
+                ldd -r squashfs-root/usr/bin/omodsim | grep -E "not found|undefined symbol"; then
               echo "The bundled binary has unresolved libraries or symbols"
               exit 1
             fi
