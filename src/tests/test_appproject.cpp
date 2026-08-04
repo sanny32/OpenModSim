@@ -44,6 +44,8 @@ private slots:
     void removesStaleUserStateFile();
     void roundTripsSeveralFormsOfTheSameKind();
     void storesUserStateOnCloseWithoutSavingProject();
+    void opensShippedDemoProjects();
+    void keepsShippedDemoProjectsFreeOfUserState();
 };
 
 namespace {
@@ -90,6 +92,20 @@ const char* kAnnotatedProject =
     "    </Forms>\n"
     "</OpenModSim>\n"
     "<!-- end of project -->\n";
+
+///
+/// \brief The demo projects shipped with the application, with the number of forms each
+/// one is expected to open.
+/// \return One entry per demo, as path and form count.
+///
+QList<QPair<QString, int>> demoProjects()
+{
+    const QString directory = QStringLiteral(OMODSIM_DEMOS_DIR);
+    return {
+        { directory + QStringLiteral("/demo_wave_generator.omsim"), 3 },
+        { directory + QStringLiteral("/demo_plc_simulator.omsim"), 6 }
+    };
+}
 
 ///
 /// \brief Writes a project file.
@@ -575,6 +591,45 @@ void TestAppProject::storesUserStateOnCloseWithoutSavingProject()
     const auto text = user.readAll();
     QVERIFY(text.contains("OpenModSimUser"));
     QVERIFY(text.contains("<ViewSettings"));
+}
+
+/// \brief Verifies the demo projects shipped with the application still open. They are
+/// hand-maintained files, so nothing else would notice them drifting away from what the
+/// reader expects.
+void TestAppProject::opensShippedDemoProjects()
+{
+    for (const auto& demo : demoProjects()) {
+        ProjectFixture fixture;
+        const auto result = fixture.Project.loadProject(demo.first);
+        QVERIFY2(result.Success, qPrintable(demo.first + QStringLiteral(": ") + result.Error));
+
+        int forms = 0;
+        for (auto kind : { ProjectFormKind::Data, ProjectFormKind::Script,
+                           ProjectFormKind::DataMap, ProjectFormKind::Traffic })
+            forms += fixture.Project.forms(kind).size();
+        QCOMPARE(forms, demo.second);
+
+        fixture.Project.closeProject();
+    }
+}
+
+/// \brief Verifies the shipped demos carry no user state. Their .omsim.user file is never
+/// distributed, so anything left in the project file would be one machine's layout frozen
+/// into every installation.
+void TestAppProject::keepsShippedDemoProjectsFreeOfUserState()
+{
+    for (const auto& demo : demoProjects()) {
+        QFile file(demo.first);
+        QVERIFY2(file.open(QIODevice::ReadOnly), qPrintable(demo.first));
+        const auto text = file.readAll();
+
+        for (const auto* marker : { "<ViewSettings", "<TabOrder", "<Window", "<Colors",
+                                    "<Font", "<Zoom", "<ColumnWidths",
+                                    "CursorPosition", "ScrollPosition", "LeadingZeros" }) {
+            QVERIFY2(!text.contains(marker), qPrintable(demo.first + QStringLiteral(": ")
+                                                        + QString::fromLatin1(marker)));
+        }
+    }
 }
 
 int main(int argc, char** argv)

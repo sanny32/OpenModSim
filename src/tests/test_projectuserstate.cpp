@@ -53,6 +53,10 @@ const char* kProject =
     "<![CDATA[var x = 1 < 2;]]>"
     "</Script></JScriptControl>"
     "</FormScriptView>"
+    "<FormDataMapView Panel=\"L\" Title=\"DataMap\">"
+    "<ColumnWidths Unit=\"40\" Type=\"120\"/>"
+    "<DataMap/>"
+    "</FormDataMapView>"
     "</Forms>"
     "<TabOrder Panel=\"L\"><TabRef title=\"Data1\"/></TabOrder>"
     "</OpenModSim>";
@@ -101,14 +105,15 @@ void TestProjectUserState::derivesUserStatePath()
              QStringLiteral(".pump.omsim.user"));
 }
 
-/// \brief Verifies window geometry, view settings, tab order and zoom leave the project file.
+/// \brief Verifies window geometry, view settings, tab order, zoom and data map column
+/// widths leave the project file.
 void TestProjectUserState::movesWholeUserElements()
 {
     const auto split = splitProjectUserState(kProject);
     const auto projectNames = elementNames(split.Project);
     const auto userNames = elementNames(split.User);
 
-    for (const auto& name : { "Window", "ViewSettings", "TabOrder", "Zoom" }) {
+    for (const auto& name : { "Window", "ViewSettings", "TabOrder", "Zoom", "ColumnWidths" }) {
         QVERIFY2(!projectNames.contains(QLatin1String(name)), name);
         QVERIFY2(userNames.contains(QLatin1String(name)), name);
     }
@@ -124,9 +129,12 @@ void TestProjectUserState::movesFusedAttributes()
     QCOMPARE(attributeOf(split.User, QStringLiteral("Script"), QStringLiteral("CursorPosition")), QStringLiteral("42"));
     QCOMPARE(attributeOf(split.User, QStringLiteral("Script"), QStringLiteral("ScrollPosition")), QStringLiteral("7"));
 
-    QCOMPARE(attributeOf(split.Project, QStringLiteral("DataViewDefinitions"), QStringLiteral("DataViewColumnsDistance")), QString());
-    QCOMPARE(attributeOf(split.User, QStringLiteral("DataViewDefinitions"), QStringLiteral("DataViewColumnsDistance")), QStringLiteral("25"));
+    QCOMPARE(attributeOf(split.Project, QStringLiteral("DataViewDefinitions"), QStringLiteral("LeadingZeros")), QString());
     QCOMPARE(attributeOf(split.User, QStringLiteral("DataViewDefinitions"), QStringLiteral("LeadingZeros")), QStringLiteral("true"));
+
+    // The column distance describes the project, so it stays out of the user document.
+    QCOMPARE(attributeOf(split.Project, QStringLiteral("DataViewDefinitions"), QStringLiteral("DataViewColumnsDistance")), QStringLiteral("25"));
+    QCOMPARE(attributeOf(split.User, QStringLiteral("DataViewDefinitions"), QStringLiteral("DataViewColumnsDistance")), QString());
 }
 
 /// \brief Verifies the project half keeps everything that is not user state.
@@ -153,6 +161,8 @@ void TestProjectUserState::roundTripsThroughSplitAndMerge()
     QCOMPARE(attributeOf(merged, QStringLiteral("Zoom"), QStringLiteral("Value")), QStringLiteral("120%"));
     QCOMPARE(attributeOf(merged, QStringLiteral("Script"), QStringLiteral("CursorPosition")), QStringLiteral("42"));
     QCOMPARE(attributeOf(merged, QStringLiteral("DataViewDefinitions"), QStringLiteral("DataViewColumnsDistance")), QStringLiteral("25"));
+    QCOMPARE(attributeOf(merged, QStringLiteral("DataViewDefinitions"), QStringLiteral("LeadingZeros")), QStringLiteral("true"));
+    QCOMPARE(attributeOf(merged, QStringLiteral("ColumnWidths"), QStringLiteral("Unit")), QStringLiteral("40"));
     QCOMPARE(attributeOf(merged, QStringLiteral("TabOrder"), QStringLiteral("Panel")), QStringLiteral("L"));
 
     const auto names = elementNames(merged);
@@ -362,6 +372,7 @@ void TestProjectUserState::keepsSeveralFormsOfTheSameKindApart()
     QString form;
     QHash<QString, QString> widthByForm;
     QHash<QString, QString> distanceByForm;
+    QHash<QString, QString> leadingZerosByForm;
     while (!xml.atEnd()) {
         if (xml.readNext() != QXmlStreamReader::StartElement)
             continue;
@@ -369,8 +380,10 @@ void TestProjectUserState::keepsSeveralFormsOfTheSameKindApart()
             form = xml.attributes().value(QStringLiteral("Title")).toString();
         else if (xml.name() == QLatin1String("Window"))
             widthByForm.insert(form, xml.attributes().value(QStringLiteral("Width")).toString());
-        else if (xml.name() == QLatin1String("DataViewDefinitions"))
+        else if (xml.name() == QLatin1String("DataViewDefinitions")) {
             distanceByForm.insert(form, xml.attributes().value(QStringLiteral("DataViewColumnsDistance")).toString());
+            leadingZerosByForm.insert(form, xml.attributes().value(QStringLiteral("LeadingZeros")).toString());
+        }
     }
 
     QCOMPARE(widthByForm.value(QStringLiteral("Setpoints")), QStringLiteral("100"));
@@ -379,6 +392,9 @@ void TestProjectUserState::keepsSeveralFormsOfTheSameKindApart()
     QCOMPARE(distanceByForm.value(QStringLiteral("Setpoints")), QStringLiteral("1"));
     QCOMPARE(distanceByForm.value(QStringLiteral("ProcessValues")), QStringLiteral("2"));
     QCOMPARE(distanceByForm.value(QStringLiteral("Commands")), QStringLiteral("3"));
+    QCOMPARE(leadingZerosByForm.value(QStringLiteral("Setpoints")), QStringLiteral("true"));
+    QCOMPARE(leadingZerosByForm.value(QStringLiteral("ProcessValues")), QStringLiteral("false"));
+    QCOMPARE(leadingZerosByForm.value(QStringLiteral("Commands")), QStringLiteral("true"));
 }
 
 QTEST_GUILESS_MAIN(TestProjectUserState)

@@ -163,6 +163,7 @@ function(omodsim_configure_tests)
         APP_VERSION_PATCH="0"
         APP_VERSION="2.0.0-test"
         BUILD_YEAR="2026"
+        OMODSIM_DEMOS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../demos/projects"
     )
     if(MSVC)
         target_compile_options(omodsim_tests_appproject PRIVATE /utf-8)

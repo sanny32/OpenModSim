@@ -33,7 +33,8 @@ const QSet<QString>& userElements()
         QStringLiteral("Window"),
         QStringLiteral("Colors"),
         QStringLiteral("Font"),
-        QStringLiteral("Zoom")
+        QStringLiteral("Zoom"),
+        QStringLiteral("ColumnWidths")
     };
     return elements;
 }
@@ -46,7 +47,7 @@ const QHash<QString, QStringList>& userAttributes()
 {
     static const QHash<QString, QStringList> attributes = {
         { QStringLiteral("Script"), { QStringLiteral("CursorPosition"), QStringLiteral("ScrollPosition") } },
-        { QStringLiteral("DataViewDefinitions"), { QStringLiteral("DataViewColumnsDistance"), QStringLiteral("LeadingZeros") } }
+        { QStringLiteral("DataViewDefinitions"), { QStringLiteral("LeadingZeros") } }
     };
     return attributes;
 }

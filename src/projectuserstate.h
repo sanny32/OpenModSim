@@ -34,7 +34,9 @@ QString projectUserStatePath(const QString& projectPath);
 ///
 /// \brief splitProjectUserState divides a generated project document into the shared
 /// project data and the user state: window geometry, view mode, tab order, editor fonts,
-/// colours and zoom, cursor and scroll positions, and data view column layout.
+/// colours and zoom, cursor and scroll positions, data map column widths and the leading
+/// zeros of a data view. The column distance of a data view stays project data: it is part
+/// of how a project presents its registers, not of how one machine happens to show them.
 /// \param document The generated project XML.
 /// \return Both halves; the user half is empty when there is no user state to store.
 ///
