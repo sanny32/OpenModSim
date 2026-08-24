@@ -303,10 +303,10 @@ void TestAppProject::preservesZeroBasedStartingAddressAcrossReopen()
     const auto restoreBase = qScopeGuard([&prefs, previousBase] {
         prefs.setGlobalAddressBase(previousBase);
     });
-    prefs.setGlobalAddressBase(AddressBase::Base0);
 
     {
         ProjectFixture fixture;
+        prefs.setGlobalAddressBase(AddressBase::Base0);
         auto* form = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
         QVERIFY(form);
         form->setAddressBase(AddressBase::Base0);
@@ -326,6 +326,7 @@ void TestAppProject::preservesZeroBasedStartingAddressAcrossReopen()
     {
         ProjectFixture fixture;
         QVERIFY(fixture.Project.loadProject(first).Success);
+        QCOMPARE(prefs.globalAddressBase(), AddressBase::Base0);
         auto* form = qobject_cast<FormDataView*>(fixture.Project.forms(ProjectFormKind::Data).constFirst());
         QVERIFY(form);
         form->setAddressBase(prefs.globalAddressBase());
@@ -337,6 +338,7 @@ void TestAppProject::preservesZeroBasedStartingAddressAcrossReopen()
     {
         ProjectFixture fixture;
         QVERIFY(fixture.Project.loadProject(second).Success);
+        QCOMPARE(prefs.globalAddressBase(), AddressBase::Base0);
         auto* form = qobject_cast<FormDataView*>(fixture.Project.forms(ProjectFormKind::Data).constFirst());
         QVERIFY(form);
         form->setAddressBase(prefs.globalAddressBase());
