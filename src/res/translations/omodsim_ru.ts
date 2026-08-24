@@ -4083,12 +4083,12 @@ Please verify the merge result carefully.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="291"/>
+        <location filename="../../projectserializer.cpp" line="317"/>
         <source>The project document is empty.</source>
         <translation>Файл проекта пуст.</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="298"/>
+        <location filename="../../projectserializer.cpp" line="324"/>
         <source>Unsupported project document root: %1</source>
         <translation>Неподдерживаемый корневой элемент файла проекта: %1</translation>
     </message>

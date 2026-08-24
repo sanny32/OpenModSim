@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28.4)
 set(CMAKE_MIN_REQ_VERSION ${CMAKE_MINIMUM_REQUIRED_VERSION})
 
 project(omodsim
-        VERSION 2.0.0
+        VERSION 2.0.1
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 

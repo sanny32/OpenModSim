@@ -4084,12 +4084,12 @@ Please verify the merge result carefully.</source>
         <translation>專案 XML 寫入失敗。</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="291"/>
+        <location filename="../../projectserializer.cpp" line="317"/>
         <source>The project document is empty.</source>
         <translation>專案文件是空的。</translation>
     </message>
     <message>
-        <location filename="../../projectserializer.cpp" line="298"/>
+        <location filename="../../projectserializer.cpp" line="324"/>
         <source>Unsupported project document root: %1</source>
         <translation>不支援的專案文件根元素：%1</translation>
     </message>
