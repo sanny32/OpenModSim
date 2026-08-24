@@ -188,7 +188,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../../appproject.cpp" line="748"/>
+        <location filename="../../appproject.cpp" line="758"/>
         <source>Failed to store the window layout: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4078,7 +4078,7 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="666"/>
+        <location filename="../../appproject.cpp" line="676"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>

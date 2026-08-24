@@ -34,6 +34,7 @@ private slots:
     void createsAndRemovesSplitClone();
     void roundTripsOpenAndClosedForms();
     void preservesZeroBasedStartingAddressAcrossReopen();
+    void opensProjectBeforeRestoringServerState();
     void rejectsMalformedProjectWithoutChangingState();
     void loadsProjectWithChildlessDefinitionsAndConnection();
     void preservesXmlCommentsAcrossRoundTrip();
@@ -342,6 +343,33 @@ void TestAppProject::preservesZeroBasedStartingAddressAcrossReopen()
         QCOMPARE(form->displayDefinition().PointAddress, quint16(10));
         QCOMPARE(fixture.Server.data(1, QModbusDataUnit::HoldingRegisters, 10, 3).values(), expectedValues);
     }
+}
+
+/// \brief Verifies the project-opened notification precedes restored devices and maps.
+void TestAppProject::opensProjectBeforeRestoringServerState()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString path = files.filePath(QStringLiteral("ordered.omsim"));
+    writeProjectFile(path, kAnnotatedProject);
+
+    QStringList events;
+    connect(&fixture.Project, &AppProject::projectOpened, &fixture.Project,
+            [&events](const QString&) { events.append(QStringLiteral("project")); },
+            Qt::DirectConnection);
+    connect(&fixture.Server, &ModbusMultiServer::deviceIdAdded, &fixture.Project,
+            [&events](quint8) { events.append(QStringLiteral("device")); },
+            Qt::DirectConnection);
+    connect(&fixture.Server, &ModbusMultiServer::unitMapAdded, &fixture.Project,
+            [&events](QUuid, quint8, QModbusDataUnit::RegisterType, quint16, quint16) {
+                events.append(QStringLiteral("map"));
+            }, Qt::DirectConnection);
+
+    const auto result = fixture.Project.loadProject(path);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QVERIFY(events.contains(QStringLiteral("device")));
+    QVERIFY(events.contains(QStringLiteral("map")));
+    QCOMPARE(events.constFirst(), QStringLiteral("project"));
 }
 
 /// \brief Verifies malformed XML is rejected before any project state changes.

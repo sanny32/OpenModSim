@@ -582,6 +582,19 @@ ProjectLoadResult AppProject::loadProject(const QString& filename)
     document.open(QIODevice::ReadOnly);
 
     const auto replace = _projectFilename.isEmpty();
+    const auto validation = ProjectSerializer::validate(document);
+    if (!validation.Success) {
+        emit projectLoadFailed(QFileInfo(filename).absoluteFilePath(), validation.Error);
+        return validation;
+    }
+
+    document.seek(0);
+    if (replace) {
+        setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+        _projectFilename = QFileInfo(filename).absoluteFilePath();
+        emit projectOpened(_projectFilename);
+    }
+
     ProjectSerializer serializer(*this, *_formManager, *_splitController,
                                  _mbServer, _dataSimulator, _mdiArea, _mainWindow);
     const auto result = serializer.load(document, replace);
@@ -594,9 +607,6 @@ ProjectLoadResult AppProject::loadProject(const QString& filename)
         // Taken from the file on disk rather than from the merged document, so that a
         // comment written next to state that has moved out is not carried into the split.
         _projectComments = collectProjectComments(projectData);
-        setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-        _projectFilename = QFileInfo(filename).absoluteFilePath();
-        emit projectOpened(_projectFilename);
     }
 
     if (!replace)
