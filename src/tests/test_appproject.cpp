@@ -18,6 +18,7 @@
 #include "controls/mdiareaex.h"
 #include "controls/projecttreewidget.h"
 #include "datasimulator.h"
+#include "formdataview.h"
 #include "mainwindow.h"
 #include "modbusmultiserver.h"
 #include "projectformmetadata.h"
@@ -32,6 +33,8 @@ private slots:
     void respectsDeletionLock();
     void createsAndRemovesSplitClone();
     void roundTripsOpenAndClosedForms();
+    void preservesZeroBasedStartingAddressAcrossReopen();
+    void opensProjectBeforeRestoringServerState();
     void rejectsMalformedProjectWithoutChangingState();
     void loadsProjectWithChildlessDefinitionsAndConnection();
     void preservesXmlCommentsAcrossRoundTrip();
@@ -285,6 +288,90 @@ void TestAppProject::roundTripsOpenAndClosedForms()
     QCOMPARE(fixture.Project.forms(ProjectFormKind::Data).size(), 1);
     QCOMPARE(fixture.Project.forms(ProjectFormKind::Script).size(), 1);
     QCOMPARE(fixture.Project.closedForms().size(), 1);
+}
+
+/// \brief Verifies repeated save and reopen preserve a 0-based data view (issue #130).
+void TestAppProject::preservesZeroBasedStartingAddressAcrossReopen()
+{
+    QTemporaryDir files;
+    const QString first = files.filePath(QStringLiteral("issue130-first.omsim"));
+    const QString second = files.filePath(QStringLiteral("issue130-second.omsim"));
+    const auto expectedValues = QVector<quint16>{100, 200, 300};
+
+    auto& prefs = AppPreferences::instance();
+    const AddressBase previousBase = prefs.globalAddressBase();
+    const auto restoreBase = qScopeGuard([&prefs, previousBase] {
+        prefs.setGlobalAddressBase(previousBase);
+    });
+
+    {
+        ProjectFixture fixture;
+        prefs.setGlobalAddressBase(AddressBase::Base0);
+        auto* form = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
+        QVERIFY(form);
+        form->setAddressBase(AddressBase::Base0);
+
+        auto definition = form->displayDefinition();
+        definition.PointType = QModbusDataUnit::HoldingRegisters;
+        definition.PointAddress = 10;
+        definition.Length = static_cast<quint16>(expectedValues.size());
+        form->setDisplayDefinition(definition);
+
+        QModbusDataUnit data(definition.PointType, 10, definition.Length);
+        data.setValues(expectedValues);
+        fixture.Server.setData(definition.DeviceId, data, WriteSource::User);
+        QVERIFY(fixture.Project.saveProject(first));
+    }
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(first).Success);
+        QCOMPARE(prefs.globalAddressBase(), AddressBase::Base0);
+        auto* form = qobject_cast<FormDataView*>(fixture.Project.forms(ProjectFormKind::Data).constFirst());
+        QVERIFY(form);
+        form->setAddressBase(prefs.globalAddressBase());
+        QCOMPARE(form->displayDefinition().PointAddress, quint16(10));
+        QCOMPARE(fixture.Server.data(1, QModbusDataUnit::HoldingRegisters, 10, 3).values(), expectedValues);
+        QVERIFY(fixture.Project.saveProject(second));
+    }
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(second).Success);
+        QCOMPARE(prefs.globalAddressBase(), AddressBase::Base0);
+        auto* form = qobject_cast<FormDataView*>(fixture.Project.forms(ProjectFormKind::Data).constFirst());
+        QVERIFY(form);
+        form->setAddressBase(prefs.globalAddressBase());
+        QCOMPARE(form->displayDefinition().PointAddress, quint16(10));
+        QCOMPARE(fixture.Server.data(1, QModbusDataUnit::HoldingRegisters, 10, 3).values(), expectedValues);
+    }
+}
+
+/// \brief Verifies the project-opened notification precedes restored devices and maps.
+void TestAppProject::opensProjectBeforeRestoringServerState()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString path = files.filePath(QStringLiteral("ordered.omsim"));
+    writeProjectFile(path, kAnnotatedProject);
+
+    QStringList events;
+    connect(&fixture.Project, &AppProject::projectOpened, &fixture.Project,
+            [&events](const QString&) { events.append(QStringLiteral("project")); },
+            Qt::DirectConnection);
+    connect(&fixture.Server, &ModbusMultiServer::deviceIdAdded, &fixture.Project,
+            [&events](quint8) { events.append(QStringLiteral("device")); },
+            Qt::DirectConnection);
+    connect(&fixture.Server, &ModbusMultiServer::unitMapAdded, &fixture.Project,
+            [&events](QUuid, quint8, QModbusDataUnit::RegisterType, quint16, quint16) {
+                events.append(QStringLiteral("map"));
+            }, Qt::DirectConnection);
+
+    const auto result = fixture.Project.loadProject(path);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    QVERIFY(events.contains(QStringLiteral("device")));
+    QVERIFY(events.contains(QStringLiteral("map")));
+    QCOMPARE(events.constFirst(), QStringLiteral("project"));
 }
 
 /// \brief Verifies malformed XML is rejected before any project state changes.

@@ -29,6 +29,29 @@ constexpr const char* kPanelLeft = "L";
 constexpr const char* kPanelRight = "R";
 
 ///
+/// \brief Reads the document-wide address base before forms are created.
+/// \param documentData The validated project XML.
+/// \return The saved address base, or the current preference when none is saved.
+///
+AddressBase projectAddressBase(const QByteArray& documentData)
+{
+    QXmlStreamReader xml(documentData);
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (!xml.isStartElement() || xml.name() != QLatin1String("ViewSettings"))
+            continue;
+
+        const auto attrs = xml.attributes();
+        if (attrs.hasAttribute("GlobalZeroBasedAddress"))
+            return attrs.value("GlobalZeroBasedAddress").toInt() != 0
+                ? AddressBase::Base0
+                : AddressBase::Base1;
+    }
+
+    return AppPreferences::instance().globalAddressBase();
+}
+
+///
 /// \brief loadXmlOfForm dispatches the XML load call, routing legacy data-view
 /// elements through the legacy loader.
 /// \param project The project used by the legacy loader to create helper forms.
@@ -105,6 +128,7 @@ ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool re
     bool splitView = false;
     bool viewPreparedForForms = !replace;
     ProjectAddressSpacePayload addressSpace;
+    const AddressBase loadedAddressBase = projectAddressBase(documentData);
 
     QXmlStreamReader xml(documentData);
     while (xml.readNextStartElement()) {
@@ -209,6 +233,8 @@ ProjectSerializer::LoadResult ProjectSerializer::load(QIODevice& device, bool re
                                 frm = _forms.create(kind, targetArea, !isAutoClone);
 
                             if (frm) {
+                                if (auto* dataView = qobject_cast<FormDataView*>(frm))
+                                    dataView->setAddressBase(loadedAddressBase);
                                 loadXmlOfForm(_project, frm, xml);
                                 if (isClosed) {
                                     // Park closed forms directly without emitting close/activation churn.
