@@ -97,6 +97,7 @@ private slots:
     void writesRegisterVariants();
     void writesUnsignedRegisterValues();
     void reportsDisconnectedState();
+    void togglesSnifferMode();
     void connectsTransportBackends();
 
     void bulkWriteEmitsSingleDataChanged();
@@ -516,6 +517,26 @@ void TestModbusMultiServer::reportsDisconnectedState()
     QCOMPARE(server.connectedClientCount(), 0);
     server.disconnectDevice(ConnectionType::Tcp, QStringLiteral("127.0.0.1:502"));
     server.closeConnections();
+}
+
+void TestModbusMultiServer::togglesSnifferMode()
+{
+    ModbusMultiServer server;
+    QSignalSpy changedSpy(&server, &ModbusMultiServer::snifferModeChanged);
+    QVERIFY(!server.snifferMode());
+
+    server.setSnifferMode(true);
+    QVERIFY(server.snifferMode());
+    QCOMPARE(changedSpy.count(), 1);
+    QCOMPARE(changedSpy.last().first().toBool(), true);
+
+    server.setSnifferMode(true);
+    QCOMPARE(changedSpy.count(), 1);
+
+    server.setSnifferMode(false);
+    QVERIFY(!server.snifferMode());
+    QCOMPARE(changedSpy.count(), 2);
+    QCOMPARE(changedSpy.last().first().toBool(), false);
 }
 
 void TestModbusMultiServer::connectsTransportBackends()

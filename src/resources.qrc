@@ -15,6 +15,7 @@
         <file>res/icons/16/omodsim/preset-holding-regs.svg</file>
         <file>res/icons/16/omodsim/preset-input-regs.svg</file>
         <file>res/icons/16/omodsim/replace-all.svg</file>
+        <file>res/icons/16/omodsim/sniffer.svg</file>
         <file>res/icons/fallback/about.png</file>
         <file>res/icons/fallback/add.png</file>
         <file>res/icons/fallback/ansi.png</file>
@@ -54,6 +55,7 @@
         <file>res/icons/fallback/hex-view.png</file>
         <file>res/icons/fallback/hex.png</file>
         <file>res/icons/fallback/hex.svg</file>
+        <file>res/icons/fallback/sniffer.png</file>
         <file>res/icons/fallback/import.svg</file>
         <file>res/icons/fallback/increment.svg</file>
         <file>res/icons/fallback/int16.png</file>

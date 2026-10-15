@@ -255,6 +255,7 @@ void AppProject::closeProject()
 
     _dataSimulator->stopSimulations();
     _mbServer.closeConnections();
+    _mbServer.setSnifferMode(false);
     _formManager->clear();
     _mbServer.clearAddressSpace();
     _mbServer.clearDescriptions();

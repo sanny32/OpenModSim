@@ -108,6 +108,8 @@ private slots:
     void on_connectAction(ConnectionDetails& cd);
     void on_disconnectAction(ConnectionType type, const QString& port);
     void on_actionMbDefinitions_triggered();
+    void on_actionSnifferMode_toggled(bool checked);
+    void on_mbSnifferModeChanged(bool on);
 
     /* Setup menu slots*/
     void on_actionForceCoils_triggered();

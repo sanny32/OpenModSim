@@ -51,7 +51,7 @@
   </widget>
   <widget class="QDockWidget" name="projectDockWidget">
    <property name="allowedAreas">
-    <set>Qt::DockWidgetArea::LeftDockWidgetArea|Qt::DockWidgetArea::RightDockWidgetArea</set>
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
    <property name="windowTitle">
     <string>Project</string>
@@ -96,7 +96,7 @@
     <bool>true</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::DockWidgetArea::BottomDockWidgetArea|Qt::DockWidgetArea::LeftDockWidgetArea|Qt::DockWidgetArea::RightDockWidgetArea</set>
+    <set>Qt::BottomDockWidgetArea|Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
    <property name="windowTitle">
     <string>Script Help</string>
@@ -129,7 +129,7 @@
     <bool>true</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::DockWidgetArea::BottomDockWidgetArea|Qt::DockWidgetArea::TopDockWidgetArea</set>
+    <set>Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea</set>
    </property>
    <property name="windowTitle">
     <string>Output</string>
@@ -163,7 +163,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>30</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -220,6 +220,8 @@
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
+    <addaction name="separator"/>
+    <addaction name="actionSnifferMode"/>
    </widget>
    <widget class="QMenu" name="menuSetup">
     <property name="title">
@@ -277,7 +279,7 @@
     <bool>false</bool>
    </property>
    <property name="allowedAreas">
-    <set>Qt::ToolBarArea::TopToolBarArea</set>
+    <set>Qt::TopToolBarArea</set>
    </property>
    <property name="floatable">
     <bool>false</bool>
@@ -301,6 +303,8 @@
    <addaction name="actionHexView"/>
    <addaction name="separator"/>
    <addaction name="actionMbDefinitions"/>
+   <addaction name="separator"/>
+   <addaction name="actionSnifferMode"/>
    <addaction name="separator"/>
    <addaction name="actionForceCoils"/>
    <addaction name="actionForceDiscretes"/>
@@ -385,7 +389,7 @@
     <string>Exit</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::QuitRole</enum>
+    <enum>QAction::QuitRole</enum>
    </property>
   </action>
   <action name="actionConnect">
@@ -421,6 +425,21 @@
     <string>Hex View</string>
    </property>
   </action>
+  <action name="actionSnifferMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/sniffer.png</normaloff>:/res/icons/fallback/sniffer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sniffer Mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Sniffer mode: show all Modbus RTU traffic on serial ports without responding</string>
+   </property>
+  </action>
   <action name="actionCascade">
    <property name="text">
     <string>Cascade</string>
@@ -440,7 +459,7 @@
     <string>About Open ModSim...</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::AboutRole</enum>
+    <enum>QAction::AboutRole</enum>
    </property>
   </action>
   <action name="actionToolbar">
@@ -591,7 +610,7 @@
     <string notr="true">F9</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
    <property name="autoRepeat">
     <bool>false</bool>
@@ -606,7 +625,7 @@
     <string>Modbus Definitions</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionTabbedView">
@@ -669,7 +688,7 @@
     <string notr="true">Ctrl+,</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::PreferencesRole</enum>
+    <enum>QAction::PreferencesRole</enum>
    </property>
   </action>
   <action name="actionNewDataView">

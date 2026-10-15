@@ -17,6 +17,18 @@
 #include "serialportutils.h"
 #include "themedicons.h"
 
+namespace {
+
+///
+/// \brief Returns the rich-text dot that flags a non-default server behavior.
+///
+QString warningMarker()
+{
+    return QStringLiteral("<span style='color:%1; font-size:10px;'>&#9679;</span>&nbsp;").arg(AppColors::statusWarningColor().name());
+}
+
+}
+
 ///
 /// \brief MainStatusBar::MainStatusBar
 /// \param parent
@@ -27,6 +39,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     , _deviceIdsLabel(new QLabel(this))
     , _clientCountLabel(new QLabel(this))
     , _errorSimLabel(new QLabel(this))
+    , _snifferModeLabel(new QLabel(this))
     , _requestCountLabel(new QLabel(this))
     , _updateChecker(new UpdateChecker(this))
 {
@@ -46,6 +59,12 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     _errorSimLabel->setContentsMargins(6, 0, 6, 0);
     _errorSimLabel->setVisible(false);
     addPermanentWidget(_errorSimLabel);
+
+    _snifferModeLabel->setTextFormat(Qt::RichText);
+    _snifferModeLabel->setContentsMargins(6, 0, 6, 0);
+    addPermanentWidget(_snifferModeLabel);
+    updateSnifferModeInfo(server.snifferMode());
+    connect(&server, &ModbusMultiServer::snifferModeChanged, this, &MainStatusBar::updateSnifferModeInfo);
 
     connect(&server, &ModbusMultiServer::definitionsChanged, this, [this](const ModbusDefinitions& defs)
     {
@@ -174,6 +193,7 @@ void MainStatusBar::changeEvent(QEvent* event)
 
         updateDeviceIdsInfo();
         updateErrorSimInfo();
+        updateSnifferModeInfo(_server.snifferMode());
         updateClientCountInfo();
         updateRequestCountInfo();
     }
@@ -205,7 +225,6 @@ void MainStatusBar::updateDeviceIdsInfo()
 ///
 void MainStatusBar::updateErrorSimInfo()
 {
-    const QString warn = QStringLiteral("<span style='color:%1; font-size:10px;'>&#9679;</span>&nbsp;").arg(AppColors::statusWarningColor().name());
     QStringList flags;
 
     if(_errorSimulations.noResponse())
@@ -229,9 +248,19 @@ void MainStatusBar::updateErrorSimInfo()
     }
     else
     {
-        _errorSimLabel->setText(warn + flags.join(", "));
+        _errorSimLabel->setText(warningMarker() + flags.join(", "));
         _errorSimLabel->setVisible(true);
     }
+}
+
+///
+/// \brief Shows a warning while serial RTU ports only listen to the bus and do not respond.
+///
+void MainStatusBar::updateSnifferModeInfo(bool on)
+{
+    _snifferModeLabel->setText(warningMarker() + tr("Sniffer Mode"));
+    _snifferModeLabel->setToolTip(tr("Serial RTU ports only listen to the bus and do not respond"));
+    _snifferModeLabel->setVisible(on);
 }
 
 ///

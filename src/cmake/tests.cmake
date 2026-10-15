@@ -19,6 +19,7 @@ function(omodsim_configure_tests)
         modbusrtutcpserver.cpp
         modbusserver.cpp
         modbustcpserver.cpp
+        rtusnifferparser.cpp
         datasimulator.cpp
         legacyprojectparser.cpp
         projectaddressspacefilter.cpp
@@ -120,6 +121,7 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)
     omodsim_add_test(omodsim_tests_modbustransports      test_modbustransports.cpp)
+    omodsim_add_test(omodsim_tests_rtusnifferparser      test_rtusnifferparser.cpp)
 
     set(omodsim_app_test_sources ${SOURCES})
     list(REMOVE_ITEM omodsim_app_test_sources main.cpp)

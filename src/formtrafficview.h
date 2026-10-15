@@ -104,6 +104,7 @@ private slots:
     void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void on_mbResponse(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
+    void on_mbSniffedFrame(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
     void on_actionPauseTraffic_toggled(bool checked);

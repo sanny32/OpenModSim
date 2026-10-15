@@ -225,6 +225,7 @@ void applyThemeIcons(Ui::MainWindow* ui)
     ui->actionPrint->setIcon(themedIcon(QStringLiteral("omodsim/print")));
     ui->actionConnect->setIcon(themedIcon(QStringLiteral("omodsim/connect")));
     ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("omodsim/disconnect")));
+    ui->actionSnifferMode->setIcon(themedIcon(QStringLiteral("omodsim/sniffer")));
     ui->actionHexView->setIcon(themedIcon(QStringLiteral("omodsim/hex-view")));
     ui->actionAbout->setIcon(themedIcon(QStringLiteral("omodsim/about")));
     ui->actionForceCoils->setIcon(themedIcon(QStringLiteral("omodsim/force-coils")));
@@ -320,6 +321,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setupGlobalViewToolbar();
     configureMainToolbarText(ui);
+    connect(&_mbMultiServer, &ModbusMultiServer::snifferModeChanged, this, &MainWindow::on_mbSnifferModeChanged);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -1252,6 +1254,23 @@ void MainWindow::on_actionPresetHoldingRegs_triggered()
 }
 
 ///
+/// \brief Switches serial RTU ports between serving requests and passively capturing bus traffic.
+///
+void MainWindow::on_actionSnifferMode_toggled(bool checked)
+{
+    _mbMultiServer.setSnifferMode(checked);
+}
+
+///
+/// \brief Keeps the toolbar toggle in sync when sniffer mode is reset by closing the project.
+///
+void MainWindow::on_mbSnifferModeChanged(bool on)
+{
+    QSignalBlocker b(ui->actionSnifferMode);
+    ui->actionSnifferMode->setChecked(on);
+}
+
+///
 /// \brief MainWindow::on_actionMsgParser_triggered
 ///
 void MainWindow::on_actionMsgParser_triggered()
@@ -1808,6 +1827,7 @@ void MainWindow::updateMainToolbarState()
     ui->actionRedo->setEnabled(hasProject && ui->actionRedo->isEnabled());
     ui->actionConnect->setEnabled(hasProject);
     ui->actionDisconnect->setEnabled(hasProject);
+    ui->actionSnifferMode->setEnabled(hasProject);
     ui->actionHexView->setEnabled(hasProject);
     ui->actionMbDefinitions->setEnabled(hasProject);
     ui->actionForceCoils->setEnabled(hasProject);

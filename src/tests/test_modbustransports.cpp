@@ -155,6 +155,8 @@ private slots:
     void configuresSerialTransport();
     void mapsSerialPortErrors();
     void servesRtuSerialOnPseudoTerminal();
+    void togglesSerialSnifferMode();
+    void sniffsRtuSerialOnPseudoTerminal();
 };
 
 void TestModbusTransports::servesModbusTcpRequests()
@@ -651,6 +653,73 @@ void TestModbusTransports::servesRtuSerialOnPseudoTerminal()
 
     server.disconnectDevice();
     QCOMPARE(server.state(), QModbusDevice::UnconnectedState);
+    ::close(masterFd);
+#endif
+}
+
+void TestModbusTransports::togglesSerialSnifferMode()
+{
+    ModbusRtuSerialServer server;
+    QVERIFY(!server.snifferMode());
+    server.setSnifferMode(true);
+    QVERIFY(server.snifferMode());
+    server.setSnifferMode(false);
+    QVERIFY(!server.snifferMode());
+}
+
+void TestModbusTransports::sniffsRtuSerialOnPseudoTerminal()
+{
+#ifndef Q_OS_LINUX
+    QSKIP("A POSIX pseudo-terminal is required.");
+#else
+    int masterFd = -1;
+    const QString portName = openPseudoTerminal(masterFd);
+    QVERIFY2(masterFd >= 0 && !portName.isEmpty(), "Could not create a pseudo-terminal.");
+
+    ModbusRtuSerialServer server;
+    server.setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
+    server.setConnectionParameter(QModbusDevice::SerialBaudRateParameter,
+                                  QSerialPort::Baud19200);
+    server.addServerAddress(1);
+    server.setMap(holdingMap(), 1);
+    server.setSnifferMode(true);
+    QVERIFY(server.connectDevice());
+
+    QSignalSpy sniffedSpy(&server, &ModbusRtuSerialServer::sniffedFrame);
+    QSignalSpy requestSpy(&server, &ModbusServer::modbusRequest);
+    const int gapMs = server.interFrameDelay() / 1000 + 2;
+
+    const QByteArray readFrame = rtuFrame(1, QModbusRequest(QModbusRequest::ReadHoldingRegisters,
+                                                            quint16(0), quint16(2)));
+    QVERIFY(send(masterFd, readFrame));
+    QCOMPARE(receive(masterFd, 30).size(), 0);
+
+    const QByteArray foreignResponse = rtuFrame(1, QModbusRequest(QModbusRequest::ReadHoldingRegisters,
+                                                                  QByteArray::fromHex("04000a000b")));
+    QTest::qWait(gapMs);
+    QVERIFY(send(masterFd, foreignResponse));
+    QTRY_COMPARE(sniffedSpy.count(), 2);
+
+    const auto sniffedRequest = sniffedSpy.at(0).first().value<QSharedPointer<const ModbusMessage>>();
+    const auto sniffedResponse = sniffedSpy.at(1).first().value<QSharedPointer<const ModbusMessage>>();
+    QVERIFY(sniffedRequest->isRequest());
+    QCOMPARE(sniffedRequest->rawData(), readFrame);
+    QVERIFY(!sniffedResponse->isRequest());
+    QCOMPARE(sniffedResponse->rawData(), foreignResponse);
+    QCOMPARE(requestSpy.count(), 0);
+
+    QTest::qWait(gapMs);
+    QVERIFY(send(masterFd, QByteArray::fromHex("ffff")));
+    QTRY_COMPARE(sniffedSpy.count(), 3);
+    QVERIFY(!sniffedSpy.at(2).first().value<QSharedPointer<const ModbusMessage>>()->isValid());
+
+    server.setSnifferMode(false);
+    QTest::qWait(gapMs);
+    QVERIFY(send(masterFd, readFrame));
+    QVERIFY(receive(masterFd).size() >= 7);
+    QCOMPARE(sniffedSpy.count(), 3);
+
+    server.disconnectDevice();
     ::close(masterFd);
 #endif
 }

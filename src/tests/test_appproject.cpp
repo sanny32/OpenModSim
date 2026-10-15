@@ -31,6 +31,7 @@ private slots:
     void createsAndNumbersEveryFormKind();
     void closesReopensAndDeletesCanonicalForm();
     void respectsDeletionLock();
+    void closingProjectResetsSnifferMode();
     void createsAndRemovesSplitClone();
     void roundTripsOpenAndClosedForms();
     void preservesZeroBasedStartingAddressAcrossReopen();
@@ -238,6 +239,17 @@ void TestAppProject::respectsDeletionLock()
     form->setProperty(ProjectFormMetadata::DeleteLocked, false);
     fixture.Project.deleteForm(form);
     QVERIFY(guardedForm.isNull());
+}
+
+/// \brief Verifies sniffer mode does not leak from a closed project into the next one.
+void TestAppProject::closingProjectResetsSnifferMode()
+{
+    ProjectFixture fixture;
+    QVERIFY(fixture.Project.createMdiChild(ProjectFormKind::Traffic));
+
+    fixture.Server.setSnifferMode(true);
+    fixture.Project.closeProject();
+    QVERIFY(!fixture.Server.snifferMode());
 }
 
 /// \brief Verifies split clones use UUID pairing and remain outside the project registry.

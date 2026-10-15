@@ -189,6 +189,10 @@ ModbusRtuSerialServer::ModbusRtuSerialServer(QObject *parent)
     QObject::connect(_serialPort, &QSerialPort::errorOccurred, this, &ModbusRtuSerialServer::on_errorOccurred);
     QObject::connect(_serialPort, &QSerialPort::aboutToClose, this, &ModbusRtuSerialServer::on_aboutToClose);
     QObject::connect(this, &ModbusServer::rawDataReceived, this, &ModbusRtuSerialServer::on_rawDataReceived);
+
+    _snifferIdleTimer = new QTimer(this);
+    _snifferIdleTimer->setSingleShot(true);
+    QObject::connect(_snifferIdleTimer, &QTimer::timeout, this, &ModbusRtuSerialServer::on_snifferIdleTimeout);
 }
 
 ///
@@ -204,6 +208,11 @@ ModbusRtuSerialServer::~ModbusRtuSerialServer()
 ///
 void ModbusRtuSerialServer::on_readyRead()
 {
+    if (_snifferMode) {
+        processSniffedData();
+        return;
+    }
+
     ModbusDefinitions mbDef = getDefinitions();
 
     if (_interFrameTimer.isValid()
@@ -373,6 +382,10 @@ void ModbusRtuSerialServer::on_readyRead()
     QTimer::singleShot(responseDelay, this,
                        [this, result, event, req, response, adu, msgReq]() mutable
     {
+        // Sniffer mode may have been enabled during the simulated response delay.
+        if (_snifferMode)
+            return;
+
         qint64 writtenBytes = _serialPort->write(result);
         if ((writtenBytes == -1) || (writtenBytes < result.size())) {
             qCDebug(QT_MODBUS) << "(RTU server) Cannot write requested response to serial port.";
@@ -439,6 +452,59 @@ void ModbusRtuSerialServer::on_readyRead()
         }
         storeModbusCommEvent(event); // store the final event after processing
     });
+}
+
+///
+/// \brief Switches between serving requests and passively capturing all bus traffic.
+/// \param on True to stop responding and report every frame seen on the bus.
+///
+void ModbusRtuSerialServer::setSnifferMode(bool on)
+{
+    if (_snifferMode == on)
+        return;
+
+    _snifferMode = on;
+    _snifferIdleTimer->stop();
+    _snifferParser.reset();
+    _requestBuffer.clear();
+}
+
+///
+/// \brief Reads captured bytes and reports the frames they complete.
+///
+void ModbusRtuSerialServer::processSniffedData()
+{
+    const bool afterSilence = !_interFrameTimer.isValid()
+                              || _interFrameTimer.elapsed() > _interFrameDelayMilliseconds;
+    _interFrameTimer.start();
+
+    const QByteArray chunk = _serialPort->readAll();
+    _lastSniffedChunkTime = QDateTime::currentDateTime();
+    emit rawDataReceived(_lastSniffedChunkTime, chunk);
+
+    emitSniffedFrames(_snifferParser.feed(chunk, afterSilence));
+
+    if (_snifferParser.hasPendingData())
+        _snifferIdleTimer->start(qMax(SnifferIdleFlushDelay, _interFrameDelayMilliseconds));
+    else
+        _snifferIdleTimer->stop();
+}
+
+///
+/// \brief Reports bytes left without a recognizable frame once the bus goes idle.
+///
+void ModbusRtuSerialServer::on_snifferIdleTimeout()
+{
+    emitSniffedFrames(_snifferParser.flush());
+}
+
+///
+/// \brief Emits captured frames stamped with the arrival time of the chunk that completed them.
+///
+void ModbusRtuSerialServer::emitSniffedFrames(const QVector<RtuSniffedFrame>& frames)
+{
+    for (const auto& frame : frames)
+        emit sniffedFrame(ModbusMessage::create(frame.Data, ModbusMessage::Rtu, _lastSniffedChunkTime, frame.IsRequest));
 }
 
 ///
@@ -603,6 +669,7 @@ void ModbusRtuSerialServer::setupEnvironment()
     calculateInterFrameDelay();
 
     _requestBuffer.clear();
+    _snifferParser.reset();
 }
 
 ///
@@ -652,6 +719,7 @@ void ModbusRtuSerialServer::close()
     if (_serialPort->isOpen())
         _serialPort->close();
 
+    _snifferIdleTimer->stop();
     setState(QModbusDevice::UnconnectedState);
 }
 

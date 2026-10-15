@@ -608,6 +608,15 @@ void FormTrafficView::on_mbResponse(const ConnectionDetails& cd, QSharedPointer<
 }
 
 ///
+/// \brief Logs a frame captured from the bus in sniffer mode.
+///
+void FormTrafficView::on_mbSniffedFrame(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg)
+{
+    if (msg)
+        appendTrafficEntry(cd, msg, msg, msg->isRequest());
+}
+
+///
 /// \brief FormTrafficView::on_mbDataChanged
 ///
 void FormTrafficView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
@@ -851,6 +860,7 @@ void FormTrafficView::setupServerConnections()
 {
     connect(&_mbMultiServer, &ModbusMultiServer::requestOnConnection, this, &FormTrafficView::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::responseOnConnection, this, &FormTrafficView::on_mbResponse);
+    connect(&_mbMultiServer, &ModbusMultiServer::sniffedFrameOnConnection, this, &FormTrafficView::on_mbSniffedFrame);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormTrafficView::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormTrafficView::on_mbDisconnected);
     connect(&_mbMultiServer, &ModbusMultiServer::definitionsChanged, this, &FormTrafficView::on_mbDefinitionsChanged);

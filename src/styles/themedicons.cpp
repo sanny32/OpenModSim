@@ -74,6 +74,7 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/show-data-map"),             { QStringLiteral("navigation/map"),                      QStringLiteral("show-data") } },
         { QStringLiteral("omodsim/show-script"),               { QStringLiteral("file/file-script"),                    QStringLiteral("show-script") } },
         { QStringLiteral("omodsim/show-traffic"),              { QStringLiteral("misc/sms"),                            QStringLiteral("show-traffic") } },
+        { QStringLiteral("omodsim/sniffer"),                   { QStringLiteral("omodsim/sniffer"),                     QStringLiteral("sniffer") } },
         { QStringLiteral("omodsim/split-view"),                { QStringLiteral("action/separate-horizontal"),          QStringLiteral("split-view") } },
         { QStringLiteral("omodsim/stop-script"),               { QStringLiteral("media/stop-small"),                    QStringLiteral("stop-script") } },
         { QStringLiteral("omodsim/undo"),                      { QStringLiteral("action/undo"),                         QStringLiteral("undo") } },
