@@ -282,6 +282,77 @@ const translations = {
         'footer.signing': '程式碼簽章',
         'footer.signing.desc': 'Windows 二進位檔由以下機構簽章',
         'footer.signing.provider': 'SignPath Foundation'
+    },
+    it: {
+        'nav.features': 'Funzionalità',
+        'nav.screenshots': 'Screenshot',
+        'nav.download': 'Download',
+        'hero.title': 'Simulatore Modbus gratuito e potente',
+        'hero.subtitle': 'Simulatore professionale di Modbus Slave (Server) con supporto dei protocolli Modbus-TCP e Modbus-RTU',
+        'hero.btn.download': 'Scarica',
+        'hero.btn.github': 'Vedi su GitHub',
+        'features.title': 'Funzionalità',
+        'feature1.title': 'Funzioni Modbus',
+        'feature1.desc': 'Supporto di tutte le funzioni Modbus standard: lettura di Coil e Discrete Input, scrittura di Coil singole/multiple, lettura/scrittura di Holding Register',
+        'feature2.title': 'Simulazione dei dati',
+        'feature2.desc': 'Simulazione dei valori di coil/flag in modalità Casuale e Alternanza. Simulazione dei valori dei registri in modalità Casuale, Incremento e Decremento con limiti e passo configurabili',
+        'feature3.title': 'Registrazione dei messaggi',
+        'feature3.desc': 'Registrazione completa di tutto il traffico Modbus con Message Parser integrato per analizzare e decodificare i frame del protocollo',
+        'feature4.title': 'Simulazione degli errori',
+        'feature4.desc': 'Simulazione di risposte di errore e codici di eccezione Modbus per verificare a fondo la gestione degli errori del dispositivo master (client)',
+        'feature5.title': 'Scripting',
+        'feature5.desc': 'Supporto di script ECMAScript/JavaScript per scenari di simulazione avanzati. Esecuzione degli script una sola volta o periodicamente con pieno accesso ai valori di registri e coil',
+        'feature6.title': 'Multipiattaforma',
+        'feature6.desc': 'Disponibile per Windows 7+, macOS 11+ e le principali distribuzioni Linux (Debian, Ubuntu, Fedora, Rocky, OpenSUSE, Alt Linux, Astra Linux, RedOS) con prestazioni native',
+        'screenshots.title': 'Screenshot',
+        'download.title': 'Scarica OpenModSim',
+        'download.subtitle': 'Ottieni l\'ultima versione per la tua piattaforma',
+        'download.subtitle.version': 'Ottieni l\'ultima versione ({version}) per la tua piattaforma',
+        'tab.windows': 'Windows',
+        'tab.macos': 'macOS',
+        'tab.deb': 'Linux DEB',
+        'tab.rpm': 'Linux RPM',
+        'tab.flatpak': 'Flatpak',
+        'card.windows.title': 'Programma di installazione per Windows',
+        'card.sysreq.title': 'Requisiti di sistema',
+        'card.macos.title': 'Pacchetto DMG per macOS',
+        'card.deb.title': 'Pacchetti DEB per Linux',
+        'card.rpm.title': 'Pacchetti RPM per Linux',
+        'card.flatpak.title': 'Pacchetti Flatpak',
+        'btn.download.win': 'Scarica il programma di installazione',
+        'btn.download.macos': 'Scarica il DMG per macOS',
+        'btn.download.deb': 'Scarica il pacchetto DEB',
+        'btn.download.rpm': 'Scarica il pacchetto RPM',
+        'btn.download.pubkey': 'Scarica la chiave pubblica RPM',
+        'btn.download.flatpak': 'Scarica il bundle Flatpak',
+        'subtab.install': 'Installazione',
+        'subtab.remove': 'Rimozione',
+        'sysreq.win7': 'Windows 7 o successivo per i pacchetti Qt5',
+        'sysreq.win10': 'Windows 10 o successivo per i pacchetti Qt6',
+        'sysreq.arch': 'Processore a 32 bit (x86) o 64 bit (x64)',
+        'install.qt6': 'Pacchetto Qt6',
+        'install.qt5': 'Pacchetto Qt5',
+        'suse.import': 'Importa la chiave pubblica e installa',
+        'altlinux.root': 'Esegui come utente root',
+        'flatpak.tip': 'Per le connessioni su porta seriale, aggiungi l\'utente al gruppo <code>dialout</code>, quindi effettua di nuovo l\'accesso o riavvia',
+        'macos.open.dmg': 'Apri il pacchetto DMG',
+        'macos.drag': 'Trascina Open ModSim 2.app nella cartella Applicazioni',
+        'macos.quarantine.tip': 'Prima del primo avvio, consenti l\'esecuzione dell\'applicazione in <code>System Settings</code> &gt; <code>Privacy &amp; Security</code>, oppure rimuovi l\'attributo di quarantena',
+        'macos.run': 'Avvia l\'applicazione',
+        'macos.remove': 'Sposta Open ModSim 2.app nel Cestino oppure esegui',
+        'build.title': 'Compilazione dai sorgenti',
+        'build.desc': 'OpenModSim è open source e può essere compilato dal codice sorgente. Visita il <a href="https://github.com/sanny32/OpenModSim#building">repository GitHub</a> per le istruzioni di compilazione.',
+        'footer.brand.desc': 'Simulatore Modbus Slave gratuito e open source',
+        'footer.links': 'Link',
+        'footer.github': 'Repository GitHub',
+        'footer.releases': 'Release',
+        'footer.issues': 'Segnala un problema',
+        'footer.license': 'Licenza',
+        'footer.license.text': 'Distribuito con licenza MIT',
+        'footer.license.free': 'Libero da usare, modificare e distribuire',
+        'footer.signing': 'Firma del codice',
+        'footer.signing.desc': 'Binari Windows firmati da',
+        'footer.signing.provider': 'SignPath Foundation'
     }
 };
 
@@ -289,7 +360,8 @@ const langMeta = {
     en:    { flag: 'https://flagcdn.com/w20/us.png', name: 'English' },
     ru:    { flag: 'https://flagcdn.com/w20/ru.png', name: 'Русский' },
     zh_CN: { flag: 'https://flagcdn.com/w20/cn.png', name: '简体中文' },
-    zh_TW: { flag: 'https://flagcdn.com/w20/tw.png', name: '繁體中文' }
+    zh_TW: { flag: 'https://flagcdn.com/w20/tw.png', name: '繁體中文' },
+    it:    { flag: 'https://flagcdn.com/w20/it.png', name: 'Italiano' }
 };
 
 function detectBrowserLang() {
@@ -297,6 +369,7 @@ function detectBrowserLang() {
     if (lang.startsWith('zh-TW') || lang.startsWith('zh-HK') || lang.startsWith('zh-MO')) return 'zh_TW';
     if (lang.startsWith('zh')) return 'zh_CN';
     if (lang.startsWith('ru')) return 'ru';
+    if (lang.startsWith('it')) return 'it';
     return 'en';
 }
 
