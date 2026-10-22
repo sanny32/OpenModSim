@@ -5,6 +5,7 @@
         <file>res/omodsim-mac.png</file>
         <file>res/omodsim.png</file>
         <file>res/fonts/firacode.ttf</file>
+        <file>res/translations/omodsim_it.qm</file>
         <file>res/translations/omodsim_ru.qm</file>
         <file>res/translations/omodsim_zh_CN.qm</file>
         <file>res/translations/omodsim_zh_TW.qm</file>

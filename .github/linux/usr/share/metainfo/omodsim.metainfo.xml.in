@@ -10,12 +10,14 @@
   <summary xml:lang="zh_TW">一个开源的 Modbus 从站（服务器）实用程序</summary>
   <summary xml:lang="zh_CN">一個開源的 Modbus 從站（伺服器）實用程序</summary>
   <summary xml:lang="ru">Программа Modbus Slave (сервер) с открытым исходным кодом</summary>
+  <summary xml:lang="it">Utility open source Modbus Slave (server)</summary>
 
   <description>
    <p>Open ModSim is an open source Modbus slave (server) utility for testing and debugging Modbus TCP and RTU clients.</p>
    <p xml:lang="zh_TW">Open ModSim 是一個開源的 Modbus 從站（伺服器）實用程序，用於測試和調試 Modbus TCP 和 RTU 用戶端。</p>
    <p xml:lang="zh_CN">Open ModSim 是一个开源的 Modbus 从站（服务器）实用程序，用于测试和调试 Modbus TCP 和 RTU 客户端。</p>
    <p xml:lang="ru">Open ModSim — это программа с открытым исходным кодом для имитации устройств по протоколу Modbus, предназначенная для тестирования и отладки клиентов Modbus TCP и RTU.</p>
+   <p xml:lang="it">Open ModSim è una utility open source Modbus slave (server) per il test e il debug di client Modbus TCP e RTU.</p>
   </description>
 
   <developer id="sanny32">
@@ -30,6 +32,7 @@
       <caption xml:lang="zh_TW">數據視窗</caption>
       <caption xml:lang="zh_CN">数据窗口</caption>
       <caption xml:lang="ru">Окно данных</caption>
+      <caption xml:lang="it">Finestra dati</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-mapview.png</image>
@@ -37,6 +40,7 @@
       <caption xml:lang="zh_TW">寄存器地圖視窗</caption>
       <caption xml:lang="zh_CN">寄存器地图窗口</caption>
       <caption xml:lang="ru">Окно карты адресов</caption>
+      <caption xml:lang="it">Finestra mappa registri</caption>
     </screenshot>
      <screenshot>
       <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-trafficview.png</image>
@@ -44,6 +48,7 @@
       <caption xml:lang="zh_TW">流量視窗</caption>
       <caption xml:lang="zh_CN">流量窗口</caption>
       <caption xml:lang="ru">Окно трафика</caption>
+      <caption xml:lang="it">Finestra traffico</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-script.png</image>
@@ -51,6 +56,7 @@
       <caption xml:lang="zh_TW">腳本視窗</caption>
       <caption xml:lang="zh_CN">脚本窗口</caption>
       <caption xml:lang="ru">Окно скриптов</caption>
+      <caption xml:lang="it">Finestra script</caption>
     </screenshot>
   </screenshots>
 

@@ -34,6 +34,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
 
     ui->comboBoxLanguage->addItem(tr("System", "language"), "system");
     ui->comboBoxLanguage->addItem("English", "en");
+    ui->comboBoxLanguage->addItem("Italiano", "it");
     ui->comboBoxLanguage->addItem("Русский", "ru");
     ui->comboBoxLanguage->addItem("简体中文", "zh_CN");
     ui->comboBoxLanguage->addItem("繁體中文", "zh_TW");
