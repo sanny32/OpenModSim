@@ -159,6 +159,7 @@ protected:
     virtual bool writeData(const QModbusDataUnit &unit, int serverAddress);
     virtual bool readData(QModbusDataUnit *newData, int serverAddress) const;
     bool ensureAutoAddRange(QModbusDataUnit::RegisterType table, quint16 address, quint16 count, int serverAddress) const;
+    bool isRequestRangeMapped(const QModbusDataUnit& data, int serverAddress) const;
 
     virtual bool matchingServerAddress(quint8 unitId) const;
 

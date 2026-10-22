@@ -803,8 +803,10 @@ void DataMapDataModel::removeEntries(QList<int> sourceRows)
         endRemoveRows();
 
         if (!hasAnyRowWithKey(key)) {
+            const auto count = static_cast<quint16>(registersCount(_data.value(key).type));
             unregisterEntry(key);
             _data.remove(key);
+            _server.clearUnmappedData(key.DeviceId, key.Type, key.Address, count);
         }
     }
 }
@@ -997,9 +999,11 @@ bool DataMapDataModel::hasAnyRowWithKey(const ItemMapKey& key, int exceptRow) co
 ///
 void DataMapDataModel::registerEntry(const ItemMapKey& key, const DataMapEntry& entry)
 {
-    if (!_uuids.contains(key))
+    if (!_uuids.contains(key)) {
         _uuids[key] = QUuid::createUuid();
-    _server.addDeviceId(key.DeviceId);
+        // Device IDs are reference counted: one count per registered key, released in unregisterEntry().
+        _server.addDeviceId(key.DeviceId);
+    }
     _server.addUnitMap(_uuids[key], key.DeviceId, key.Type,
                        key.Address, registersCount(entry.type));
 }

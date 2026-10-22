@@ -50,6 +50,12 @@ public:
     void removeUnitMap(QUuid id, quint8 deviceId);
     QList<int> registeredDeviceIds() const;
 
+    ///
+    /// \brief Resets the stored data of every address in the range that no unit map covers any more,
+    /// so a deleted register does not bring its old value back when it is added again.
+    ///
+    void clearUnmappedData(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+
     void setRequestHandler(const RequestHandlerPtr& handler);
 
     ///

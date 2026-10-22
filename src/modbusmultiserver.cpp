@@ -212,6 +212,25 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
 }
 
 ///
+/// \brief Resets the stored data of every address in the range that no unit map covers any more,
+/// so a deleted register does not bring its old value back when it is added again.
+///
+void ModbusMultiServer::clearUnmappedData(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, deviceId, pointType, pointAddress, length]() {
+            clearUnmappedData(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    auto it = _modbusDataUnitMaps.find(deviceId);
+    if(it != _modbusDataUnitMaps.end())
+        it->clearUnmappedData(pointType, pointAddress, length);
+}
+
+///
 /// \brief ModbusMultiServer::registeredDeviceIds
 /// \return
 ///

@@ -3729,12 +3729,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1099"/>
+        <location filename="../../modbusmultiserver.cpp" line="1118"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1673"/>
+        <location filename="../../modbusmultiserver.cpp" line="1692"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
