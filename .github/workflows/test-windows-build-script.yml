@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/test-windows-build-script.yml'
+      - '.github/actions/**'
       - 'build.ps1'
       - 'src/**'
       
