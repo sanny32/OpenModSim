@@ -28,6 +28,13 @@
             ]
         },
         {
+            "name": "bovirus",
+            "languages": [
+                "italian"
+            ],
+            "url": "https://github.com/bovirus"
+        },
+        {
             "name": "CWZ7605",
             "languages": [
                 "simplified_chinese",
