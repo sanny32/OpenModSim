@@ -258,6 +258,9 @@ jobs:
         with:
           name: ${{ needs.build-omodsim.outputs.artifact-name }}
 
+      - name: Trust RED SOFT registry
+        uses: ./.github/actions/trust-redsoft-registry
+
       - name: Verify the package installs
         uses: ./.github/actions/verify-linux-package
         with:
