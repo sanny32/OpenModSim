@@ -35,6 +35,7 @@ private:
     void updateDeviceIdsInfo();
     void updateConnectionInfo(QLabel* label, const ConnectionDetails& cd);
     void updateErrorSimInfo();
+    void updateSnifferModeInfo(bool on);
     void updateClientCountInfo();
     void updateRequestCountInfo();
     void promptDownloadNewVersion();
@@ -46,6 +47,7 @@ private:
     QLabel* _deviceIdsLabel;
     QLabel* _clientCountLabel;
     QLabel* _errorSimLabel;
+    QLabel* _snifferModeLabel;
     QLabel* _requestCountLabel;
     QList<int> _deviceIds;
     ModbusErrorSimulations _errorSimulations;

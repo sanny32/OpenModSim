@@ -212,6 +212,25 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
 }
 
 ///
+/// \brief Resets the stored data of every address in the range that no unit map covers any more,
+/// so a deleted register does not bring its old value back when it is added again.
+///
+void ModbusMultiServer::clearUnmappedData(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, deviceId, pointType, pointAddress, length]() {
+            clearUnmappedData(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    auto it = _modbusDataUnitMaps.find(deviceId);
+    if(it != _modbusDataUnitMaps.end())
+        it->clearUnmappedData(pointType, pointAddress, length);
+}
+
+///
 /// \brief ModbusMultiServer::registeredDeviceIds
 /// \return
 ///
@@ -320,6 +339,8 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
                 modbusServer->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
                 qobject_cast<QSerialPort*>(modbusServer->device())->setFlowControl(cd.SerialParams.FlowControl);
+                connect(qobject_cast<ModbusRtuSerialServer*>(modbusServer.get()), &ModbusRtuSerialServer::sniffedFrame,
+                        this, &ModbusMultiServer::on_sniffedFrame);
 
             }
             break;
@@ -533,6 +554,40 @@ void ModbusMultiServer::setRequestHandler(const RequestHandlerPtr& handler)
 }
 
 ///
+/// \brief Returns true when serial RTU ports passively capture bus traffic instead of serving requests.
+///
+bool ModbusMultiServer::snifferMode() const
+{
+    return _snifferMode;
+}
+
+///
+/// \brief Switches every current and future serial RTU port into or out of sniffer mode.
+/// \param on True to stop responding and report every frame seen on the bus.
+///
+void ModbusMultiServer::setSnifferMode(bool on)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, on]() {
+            setSnifferMode(on);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    if(_snifferMode == on)
+        return;
+
+    _snifferMode = on;
+    for(auto&& s : _modbusServerList) {
+        if(auto serialServer = qobject_cast<ModbusRtuSerialServer*>(s.get()))
+            serialServer->setSnifferMode(on);
+    }
+
+    emit snifferModeChanged(on);
+}
+
+///
 /// \brief ModbusMultiServer::addModbusServer
 /// \param server
 ///
@@ -540,6 +595,8 @@ void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 {
     if(server && !_modbusServerList.contains(server)) {
         server->setRequestHandler(_requestHandler);
+        if(auto serialServer = qobject_cast<ModbusRtuSerialServer*>(server.get()))
+            serialServer->setSnifferMode(_snifferMode);
         _modbusServerList.push_back(server);
     }
 }
@@ -1570,6 +1627,17 @@ void ModbusMultiServer::on_rawDataSended(const QDateTime& time, const QByteArray
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
 
     emit rawDataSended(cd, time, data);
+}
+
+///
+/// \brief Forwards a frame captured in sniffer mode together with the port it was seen on.
+///
+void ModbusMultiServer::on_sniffedFrame(QSharedPointer<const ModbusMessage> msg)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+
+    emit sniffedFrameOnConnection(cd, msg);
 }
 
 ///

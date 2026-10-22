@@ -1,0 +1,4411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="it_IT">
+<context>
+    <name>AddressBaseComboBox</name>
+    <message>
+        <location filename="../../controls/addressbasecombobox.cpp" line="21"/>
+        <location filename="../../controls/addressbasecombobox.cpp" line="40"/>
+        <source>0-based</source>
+        <translation>base 0</translation>
+    </message>
+    <message>
+        <location filename="../../controls/addressbasecombobox.cpp" line="22"/>
+        <location filename="../../controls/addressbasecombobox.cpp" line="44"/>
+        <source>1-based</source>
+        <translation>base 1</translation>
+    </message>
+</context>
+<context>
+    <name>AddressSpaceComboBox</name>
+    <message>
+        <location filename="../../controls/addressspacecombobox.cpp" line="21"/>
+        <location filename="../../controls/addressspacecombobox.cpp" line="40"/>
+        <source>5-digits</source>
+        <translation>5 cifre</translation>
+    </message>
+    <message>
+        <location filename="../../controls/addressspacecombobox.cpp" line="22"/>
+        <location filename="../../controls/addressspacecombobox.cpp" line="44"/>
+        <source>6-digits</source>
+        <translation>6 cifre</translation>
+    </message>
+</context>
+<context>
+    <name>AnsiMenu</name>
+    <message>
+        <location filename="../../ansimenu.cpp" line="20"/>
+        <location filename="../../ansimenu.cpp" line="61"/>
+        <source>Arabic</source>
+        <translation>Arabo</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="21"/>
+        <location filename="../../ansimenu.cpp" line="62"/>
+        <source>Baltic</source>
+        <translation>Baltico</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="22"/>
+        <location filename="../../ansimenu.cpp" line="63"/>
+        <source>Celtic</source>
+        <translation>Celtico</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="23"/>
+        <location filename="../../ansimenu.cpp" line="64"/>
+        <source>Cyrillic</source>
+        <translation>Cirillico</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="24"/>
+        <location filename="../../ansimenu.cpp" line="65"/>
+        <source>Central European</source>
+        <translation>Europa Centrale</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="25"/>
+        <location filename="../../ansimenu.cpp" line="66"/>
+        <source>Chinese</source>
+        <translation>Cinese</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="26"/>
+        <location filename="../../ansimenu.cpp" line="67"/>
+        <source>Eastern European</source>
+        <translation>Europa Orientale</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="27"/>
+        <location filename="../../ansimenu.cpp" line="68"/>
+        <source>Greek</source>
+        <translation>Greco</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="28"/>
+        <location filename="../../ansimenu.cpp" line="69"/>
+        <source>Hebrew</source>
+        <translation>Ebraico</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="29"/>
+        <location filename="../../ansimenu.cpp" line="70"/>
+        <source>Japanese</source>
+        <translation>Giapponese</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="30"/>
+        <location filename="../../ansimenu.cpp" line="71"/>
+        <source>Korean</source>
+        <translation>Coreano</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="31"/>
+        <location filename="../../ansimenu.cpp" line="72"/>
+        <source>Thai</source>
+        <translation>Tailandese</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="32"/>
+        <location filename="../../ansimenu.cpp" line="73"/>
+        <source>Turkish</source>
+        <translation>Turco</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="33"/>
+        <location filename="../../ansimenu.cpp" line="74"/>
+        <source>Western European</source>
+        <translation>Europa Occidentale</translation>
+    </message>
+    <message>
+        <location filename="../../ansimenu.cpp" line="34"/>
+        <location filename="../../ansimenu.cpp" line="75"/>
+        <source>Vietnamese</source>
+        <translation>Vietnamita</translation>
+    </message>
+</context>
+<context>
+    <name>AppLogOutput</name>
+    <message>
+        <location filename="../../controls/applogoutput.ui" line="97"/>
+        <source>Export log</source>
+        <translation>Esporta registro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.ui" line="106"/>
+        <source>Clear log</source>
+        <translation>Cancella registro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="223"/>
+        <location filename="../../controls/applogoutput.cpp" line="398"/>
+        <source>Copy All</source>
+        <translation>Copia tutto</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="389"/>
+        <source>Copy</source>
+        <translation>Copia</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="405"/>
+        <source>Export...</source>
+        <translation>Esporta...</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="411"/>
+        <source>Clear</source>
+        <translation>Azzera</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="425"/>
+        <source>Clear Log</source>
+        <translation>Cancella registro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="426"/>
+        <source>Clear all events from the log?</source>
+        <translation>Vuoi cancellare tutti gli eventi nel registro?</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="453"/>
+        <source>Text files (*.txt)</source>
+        <translation>File testo (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="458"/>
+        <source>Export</source>
+        <translation>Esporta</translation>
+    </message>
+    <message>
+        <location filename="../../controls/applogoutput.cpp" line="458"/>
+        <source>Cannot open file for writing:
+%1</source>
+        <translation>Impossibile aprire in scrittura il file:
+%1</translation>
+    </message>
+</context>
+<context>
+    <name>AppProject</name>
+    <message>
+        <location filename="../../appproject.cpp" line="759"/>
+        <source>Failed to store the window layout: %1</source>
+        <translation>Impossibile memorizzare il layout della finestra: %1</translation>
+    </message>
+</context>
+<context>
+    <name>BitPatternControl</name>
+    <message>
+        <location filename="../../controls/bitpatterncontrol.ui" line="14"/>
+        <source>Bit Pattern</source>
+        <translation>Modello bit</translation>
+    </message>
+</context>
+<context>
+    <name>BooleanComboBox</name>
+    <message>
+        <location filename="../../controls/booleancombobox.cpp" line="18"/>
+        <source>Disable</source>
+        <translation>Disabilita</translation>
+    </message>
+    <message>
+        <location filename="../../controls/booleancombobox.cpp" line="19"/>
+        <source>Enable</source>
+        <translation>Abilita</translation>
+    </message>
+</context>
+<context>
+    <name>ByteOrder</name>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="139"/>
+        <location filename="../../datamapdatamodel.cpp" line="151"/>
+        <source>Direct</source>
+        <translation>Diretto</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="141"/>
+        <location filename="../../datamapdatamodel.cpp" line="153"/>
+        <source>Swapped</source>
+        <translation>Scambiato</translation>
+    </message>
+</context>
+<context>
+    <name>ByteOrderItemDelegate</name>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="343"/>
+        <source>Use bytes in register order</source>
+        <translation>Usa i byte nell&apos;ordine del registro</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="344"/>
+        <source>Swap bytes inside each 16-bit register</source>
+        <translation>Scambia byte all&apos;interno di ciascun registro a 16 bit</translation>
+    </message>
+</context>
+<context>
+    <name>CmdLineParser</name>
+    <message>
+        <location filename="../../cmdlineparser.cpp" line="17"/>
+        <source>Displays this help.</source>
+        <translation>Visualizza questa guida.</translation>
+    </message>
+    <message>
+        <location filename="../../cmdlineparser.cpp" line="20"/>
+        <source>Displays version information.</source>
+        <translation>Visualizza le informazioni sulla versione.</translation>
+    </message>
+    <message>
+        <location filename="../../cmdlineparser.cpp" line="23"/>
+        <source>Load settings profile from ini file.</source>
+        <translation>Carica il profilo delle impostazioni dal file ini.</translation>
+    </message>
+    <message>
+        <location filename="../../cmdlineparser.cpp" line="29"/>
+        <source>Project file to open.</source>
+        <translation>File progetto da aprire.</translation>
+    </message>
+    <message>
+        <location filename="../../cmdlineparser.cpp" line="29"/>
+        <source>[project]</source>
+        <translation>[progetto]</translation>
+    </message>
+    <message>
+        <location filename="../../cmdlineparser.cpp" line="23"/>
+        <source>file path</source>
+        <translation>percorso file</translation>
+    </message>
+    <message>
+        <location filename="../../cmdlineparser.cpp" line="26"/>
+        <source>Do not use program session.</source>
+        <translation>Non usare la sessione del programma.</translation>
+    </message>
+</context>
+<context>
+    <name>ConsoleOutput</name>
+    <message>
+        <location filename="../../controls/consoleoutput.ui" line="97"/>
+        <source>Clear console</source>
+        <translation>Azzera console</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.ui" line="106"/>
+        <source>Export console</source>
+        <translation>Console esportazione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="195"/>
+        <location filename="../../controls/consoleoutput.cpp" line="413"/>
+        <source>Copy All</source>
+        <translation>Copia tutto</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="404"/>
+        <source>Copy</source>
+        <translation>Copia</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="420"/>
+        <source>Export...</source>
+        <translation>Esporta...</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="426"/>
+        <source>Clear</source>
+        <translation>Azzera</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="440"/>
+        <source>Clear Console</source>
+        <translation>Azzera console</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="441"/>
+        <source>Clear all messages from the console?</source>
+        <translation>Vuoi cancellare tutti i messaggi dalla console?</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="473"/>
+        <source>Text files (*.txt)</source>
+        <translation>File testo (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="478"/>
+        <source>Export</source>
+        <translation>Esporta</translation>
+    </message>
+    <message>
+        <location filename="../../controls/consoleoutput.cpp" line="478"/>
+        <source>Cannot open file for writing:
+%1</source>
+        <translation>Impossibile aprire in scrittura il file:
+%1</translation>
+    </message>
+</context>
+<context>
+    <name>DataMapDataModel</name>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="24"/>
+        <location filename="../../datamapdatamodel.cpp" line="37"/>
+        <source>Coils</source>
+        <translation>Bobine</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="25"/>
+        <location filename="../../datamapdatamodel.cpp" line="38"/>
+        <source>Discrete Inputs</source>
+        <translation>Ingressi discreti</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="26"/>
+        <location filename="../../datamapdatamodel.cpp" line="39"/>
+        <source>Input Registers</source>
+        <translation>Registri ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="27"/>
+        <source>Holding Registers</source>
+        <translation>Registri blocco</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="560"/>
+        <source>Unit</source>
+        <translation>Unità</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="561"/>
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="562"/>
+        <source>Address</source>
+        <translation>Indirizzo</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="563"/>
+        <source>Data Type</source>
+        <translation>Tipo di dati</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="564"/>
+        <source>Register Order</source>
+        <translation>Ordine registro</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="565"/>
+        <source>Byte Order</source>
+        <translation>Ordine byte</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="566"/>
+        <source>Comment</source>
+        <translation>Commento</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="567"/>
+        <source>Value</source>
+        <translation>Valore</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="568"/>
+        <source>Timestamp</source>
+        <translation>Data/ora</translation>
+    </message>
+</context>
+<context>
+    <name>DataTypeItemDelegate</name>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="199"/>
+        <source>1-bit value (Coils / Discrete Inputs)</source>
+        <translation>Valore a 1 bit (bobine/ingressi discreti)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="200"/>
+        <source>16-bit register value shown as 16 binary digits</source>
+        <translation>Valore del registro a 16 bit visualizzato come 16 cifre binarie</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="201"/>
+        <source>Unsigned 16-bit integer  (0 … 65535)</source>
+        <translation>Intero a 16 bit senza segno (0...65535)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="202"/>
+        <source>Signed 16-bit integer  (−32768 … 32767)</source>
+        <translation>Intero a 16 bit con segno (−32768 … 32767)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="203"/>
+        <source>16-bit value displayed as hexadecimal</source>
+        <translation>Valore a 16 bit visualizzato come esadecimale</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="204"/>
+        <source>16-bit value displayed as ANSI character</source>
+        <translation>Valore a 16 bit visualizzato come carattere ANSI</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="205"/>
+        <source>IEEE 754 single-precision float  (2 registers)</source>
+        <translation>IEEE 754 virgola mobile precisione singola (2 registri)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="206"/>
+        <source>IEEE 754 double-precision float  (4 registers)</source>
+        <translation>IEEE 754 virgola mobile doppia precisione (4 registri)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="207"/>
+        <source>Signed 32-bit integer  (2 registers)</source>
+        <translation>Intero a 32 bit con segno (2 registri)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="208"/>
+        <source>Unsigned 32-bit integer  (2 registers)</source>
+        <translation>Intero a 32 bit senza segno (2 registri)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="209"/>
+        <source>Signed 64-bit integer  (4 registers)</source>
+        <translation>Intero a 64 bit con segno (4 registri)</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="210"/>
+        <source>Unsigned 64-bit integer  (4 registers)</source>
+        <translation>Intero a 64 bit senza segno (4 registri)</translation>
+    </message>
+</context>
+<context>
+    <name>DialogAbout</name>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="26"/>
+        <source>About...</source>
+        <translation>Info...</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="95"/>
+        <source>Open Modsim</source>
+        <translation>Apri ModSim</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="102"/>
+        <source>Version: 1.0.0</source>
+        <translation>Versione: 1.0.0</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="133"/>
+        <source>About</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="139"/>
+        <source>An Open Source Modbus Slave (Server) Utility</source>
+        <translation>Un&apos;utilità Modbus Slave (server) open source</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="201"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;#&quot;&gt;License: The MIT License&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;#&quot;&gt;Licenza: la licenza MIT&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="238"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="495"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="496"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="506"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="508"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="520"/>
+        <source>Check for updates</source>
+        <translation>Controlla aggiornamenti</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="274"/>
+        <source>Components</source>
+        <translation>Componenti</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="316"/>
+        <source>Authors</source>
+        <translation>Autori</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.ui" line="358"/>
+        <source>Translation</source>
+        <translation>Traduzione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="84"/>
+        <source>Unknown</source>
+        <translation>Sconosciuto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="129"/>
+        <source>Simplified Chinese</source>
+        <translation>Cinese semplificato</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="131"/>
+        <source>Traditional Chinese</source>
+        <translation>Cinese tradizionale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="151"/>
+        <source>%1 and %2</source>
+        <translation>%1 e %2</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="166"/>
+        <source>About %1...</source>
+        <translation>Info su %1...</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="196"/>
+        <source>Using %1 and built against %2</source>
+        <translation>Usando %1 e compilato con %2</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="197"/>
+        <source>Cross-platform application development framework.</source>
+        <translation>Framework di sviluppo di applicazioni multipiattaforma.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="114"/>
+        <source>Author and Maintainer</source>
+        <translation>Autore e manutentore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="398"/>
+        <source>Visit component&apos;s homepage
+%1</source>
+        <translation>Visita la pagina web del componente
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="419"/>
+        <source>Email contributer: %1</source>
+        <translation>Email collaboratore: %1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="428"/>
+        <source>Visit user&apos;s homepage
+%1</source>
+        <translation>Visita la pagina web dell&apos;utente
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="203"/>
+        <source>Free monospaced font with programming ligatures.</source>
+        <translation>Font a spaziatura fissa gratuito con legature di programmazione.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="225"/>
+        <source>Modern Qt Widgets style.</source>
+        <translation>Stile moderno dei widget Qt.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="65"/>
+        <source>%1 build %2</source>
+        <translation>%1 build %2</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="180"/>
+        <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
+        <translation>Versione: &lt;b&gt;%1&lt;/b&gt; %2</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="210"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="217"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="240"/>
+        <source>Underlying platform.</source>
+        <translation>Piattaforma sottostante.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="116"/>
+        <source>Contributor</source>
+        <translation>Contriburore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="127"/>
+        <source>Russian</source>
+        <translation>Russo</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="231"/>
+        <source>Modern Qt Widgets icon theme.</source>
+        <translation>Tema moderno delle icone Qt Widget.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="424"/>
+        <source>Visit github user&apos;s homepage
+%1</source>
+        <translation>Visita la pagina web dell&apos;utente github
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="452"/>
+        <source>License Agreement - %1</source>
+        <translation>Contratto di licenza - %1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="486"/>
+        <source>Checking...</source>
+        <translation>Controllo...</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="496"/>
+        <source>No updates available.</source>
+        <translation>Nessun aggiornamento disponibile.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="509"/>
+        <source>Failed to check for updates.
+
+%1</source>
+        <translation>Impossibile controllare gli aggiornamenti.
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="523"/>
+        <source>New version available</source>
+        <translation>Disponibile nuova versione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogabout.cpp" line="524"/>
+        <source>A new version %1 is available.
+
+Open the download page?</source>
+        <translation>È disponibile una nuova versione %1.
+
+Vuoi aprire la pagina di download?</translation>
+    </message>
+</context>
+<context>
+    <name>DialogAutoSimulation</name>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="14"/>
+        <source>Auto Simulation</source>
+        <translation>Simulazione automatica</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="20"/>
+        <source>Enabled</source>
+        <translation>Abilitato</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="32"/>
+        <source>Simulation Type:</source>
+        <translation>Tipo di simulazione:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="61"/>
+        <source>Change Interval (msecs):</source>
+        <translation>Intervallo modifica (msec):</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="68"/>
+        <source>Step Value: </source>
+        <translation>Valore step: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="87"/>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="96"/>
+        <source>Simulation Range</source>
+        <translation>Intervallo simulazione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="102"/>
+        <source>Low Limit: </source>
+        <translation>Limite basso: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogautosimulation.ui" line="125"/>
+        <source>High Limit: </source>
+        <translation>Limite alto: </translation>
+    </message>
+</context>
+<context>
+    <name>DialogCoilSimulation</name>
+    <message>
+        <location filename="../../dialogs/dialogcoilsimulation.ui" line="14"/>
+        <source>Coil Simulation</source>
+        <translation>Simulazione bobina</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogcoilsimulation.ui" line="20"/>
+        <source>Enabled</source>
+        <translation>Abilitato</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogcoilsimulation.ui" line="29"/>
+        <source>Simulation Type:</source>
+        <translation>Tipo di simulazione:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogcoilsimulation.ui" line="51"/>
+        <source>5</source>
+        <translation>5</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogcoilsimulation.ui" line="58"/>
+        <source>Change Interval (secs):</source>
+        <translation>Intervallo modifica (secondi):</translation>
+    </message>
+</context>
+<context>
+    <name>DialogForceMultipleRegisters</name>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="20"/>
+        <source>PRESET MULTIPLE REGISTERS</source>
+        <translation>PRESELEZIONE REGISTRI MULTIPLI</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="34"/>
+        <source>Range</source>
+        <translation>Intervallo</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="40"/>
+        <source>Unit Identifier:</source>
+        <translation>Identificatore unità:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="66"/>
+        <source>Starting Address:</source>
+        <translation>Indirizzo iniziale:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="92"/>
+        <source>Length:</source>
+        <translation>Lunghezza:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="127"/>
+        <source>Representation</source>
+        <translation>Rappresentazione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="133"/>
+        <source>Display Format:</source>
+        <translation>Formato visualizzazione:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="156"/>
+        <source>Register Order:</source>
+        <translation>Ordine registro:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="189"/>
+        <source>Bytes Order:</source>
+        <translation>Ordine byte:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="209"/>
+        <source>Direct</source>
+        <translation>Diretto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="214"/>
+        <source>Swapped</source>
+        <translation>Scambiato</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="231"/>
+        <source>Preset</source>
+        <translation>Preimpostazione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="393"/>
+        <source>Apply</source>
+        <translation>Applica</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="451"/>
+        <source>Import</source>
+        <translation>Importa</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="470"/>
+        <source>Export</source>
+        <translation>Esporta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="333"/>
+        <source>Random</source>
+        <translation>Casuale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="295"/>
+        <source>From:</source>
+        <translation>Da:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.ui" line="322"/>
+        <source>Step:</source>
+        <translation>Step:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="84"/>
+        <source>PRESET INPUT REGISTERS (3x)</source>
+        <translation>REGISTRI PRESELEZIONE INGRESSO (3x)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="87"/>
+        <source>PRESET HOLDING REGISTERS (4x)</source>
+        <translation>REGISTRI PRESELEZIONE (4x)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="289"/>
+        <source>Starting Address: </source>
+        <translation>Indirizzo iniziale: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="289"/>
+        <source>Ending Address: </source>
+        <translation>Indirizzo finale: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="332"/>
+        <source>Constant</source>
+        <translation>Costante</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="334"/>
+        <source>Increment</source>
+        <translation>Incremento</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="335"/>
+        <source>Zero</source>
+        <translation>Zero</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="865"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="946"/>
+        <source>CSV files (*.csv)</source>
+        <translation>File CSV (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="872"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="957"/>
+        <source>Error</source>
+        <translation>Errore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="913"/>
+        <source>Import error</source>
+        <translation>Errore di importazione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="913"/>
+        <source>Invalid value: %1</source>
+        <translation>Valore non valido: %1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="922"/>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="928"/>
+        <source>Warning</source>
+        <translation>Avviso</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="922"/>
+        <source>No data found in file.</source>
+        <translation>Nessun dato trovato nel file.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcemultipleregisters.cpp" line="928"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation>La dimensione dei dati importati (%1) non corrisponde alla dimensione corrente (%2).</translation>
+    </message>
+</context>
+<context>
+    <name>DialogForceStatusRegisters</name>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="20"/>
+        <source>FORCE MULTIPLE COILS</source>
+        <translation>FORZA BOBINE MULTIPLE</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="34"/>
+        <source>Range</source>
+        <translation>Intervallo</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="40"/>
+        <source>Unit Identifier:</source>
+        <translation>Identificatore unità:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="66"/>
+        <source>Starting Address:</source>
+        <translation>Indirizzo iniziale:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="92"/>
+        <source>Length:</source>
+        <translation>Lunghezza:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="127"/>
+        <source>Preset</source>
+        <translation>Preimpostazione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="139"/>
+        <source>Random</source>
+        <translation>Casuale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="156"/>
+        <source>Set</source>
+        <translation>Imposta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="169"/>
+        <source>Reset</source>
+        <translation>Ripristina</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="222"/>
+        <source>Import</source>
+        <translation>Importa</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.ui" line="241"/>
+        <source>Export</source>
+        <translation>Esporta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="57"/>
+        <source>FORCE MULTIPLE COILS (0x)</source>
+        <translation>FORZA BOBINE MULTIPLE (0x)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="60"/>
+        <source>FORCE DISCRETE INPUTS (1x)</source>
+        <translation>FORZA INGRESSI DISCRETI (1x)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="178"/>
+        <source>Starting Address: </source>
+        <translation>Indirizzo iniziale: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="178"/>
+        <source>Ending Address: </source>
+        <translation>Indirizzo finale: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="264"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="338"/>
+        <source>CSV files (*.csv)</source>
+        <translation>File CSV (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="271"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="349"/>
+        <source>Error</source>
+        <translation>Errore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="305"/>
+        <source>Import error</source>
+        <translation>Errore di importazione</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="305"/>
+        <source>Invalid value: %1</source>
+        <translation>Valore non valido: %1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="314"/>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="320"/>
+        <source>Warning</source>
+        <translation>Avviso</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="314"/>
+        <source>No data found in file.</source>
+        <translation>Nessun dato trovato nel file.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogforcestatusregisters.cpp" line="320"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation>La dimensione dei dati importati (%1) non corrisponde alla dimensione corrente (%2).</translation>
+    </message>
+</context>
+<context>
+    <name>DialogModbusDefinitions</name>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="14"/>
+        <source>Modbus Definitions</source>
+        <translation>Definizioni Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="24"/>
+        <source>General</source>
+        <translation>Generale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="33"/>
+        <source>Address Space: </source>
+        <translation>Spazio indirizzo: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="50"/>
+        <source>Use Global Address Map (Unallocated registers will be zero)</source>
+        <translation>Usa la mappa indirizzi globale (i registri non allocati saranno zero)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="57"/>
+        <source>Automatically add registers on request</source>
+        <translation>Aggiungi automaticamente registri su richiesta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="65"/>
+        <source>Error Simulations</source>
+        <translation>Simulazioni di errori</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="77"/>
+        <source>Response with incorrect IDs</source>
+        <translation>Risposta con ID errati</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="90"/>
+        <source>Response with ILLEGAL FUNCTION</source>
+        <translation>Risposta con FUNZIONE ILLEGALE</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="103"/>
+        <source>Response with DEVICE BUSY</source>
+        <translation>Risposta con DISPOSITIVO OCCUPATO</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="116"/>
+        <source>Response with incorrect CRC (Serial Line only)</source>
+        <translation>Risposta con CRC errato (solo linea seriale)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="128"/>
+        <source>Response with delay</source>
+        <translation>Risposta con ritardo</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="164"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="230"/>
+        <source>ms</source>
+        <translation>ms</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="191"/>
+        <source>Response with random delay from 0 to</source>
+        <translation>Risposta con ritardo casuale da 0 a</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="258"/>
+        <source>No response</source>
+        <translation>Nessuna risposta</translation>
+    </message>
+</context>
+<context>
+    <name>DialogMsgParser</name>
+    <message>
+        <location filename="../../dialogs/dialogmsgparser.ui" line="14"/>
+        <source>Modbus Message Parser</source>
+        <translation>Analisi messaggi Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmsgparser.ui" line="22"/>
+        <source>RTU Message</source>
+        <translation>Messaggio RTU</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmsgparser.ui" line="58"/>
+        <source>TCP Message</source>
+        <translation>Messaggio TCP</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmsgparser.ui" line="97"/>
+        <source>Hex View</source>
+        <translation>Vista esadecimale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmsgparser.ui" line="117"/>
+        <source>Request</source>
+        <translation>Richiesta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmsgparser.ui" line="136"/>
+        <source>Enter bytes value  separated by spaces</source>
+        <translation>Inserisci il valore in byte separato da spazi</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmsgparser.ui" line="185"/>
+        <source>Parse</source>
+        <translation>Analisi</translation>
+    </message>
+</context>
+<context>
+    <name>DialogPreferences</name>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="14"/>
+        <source>Preferences</source>
+        <translation>Preferenze</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="66"/>
+        <source>Interface</source>
+        <translation>Interfaccia</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="144"/>
+        <source>User Interface</source>
+        <translation>Interfaccia utente</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="182"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="206"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="213"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="294"/>
+        <source>Reset</source>
+        <translation>Ripristina</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="227"/>
+        <source>Background Color:</source>
+        <translation>Colore sfondo:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="281"/>
+        <source>Foreground Color:</source>
+        <translation>Colore primo piano:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="241"/>
+        <source>Address Color:</source>
+        <translation>Colore indirizzo:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="248"/>
+        <source>Comment Color:</source>
+        <translation>Colore commento:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="199"/>
+        <source>Language:</source>
+        <translation>Lingua:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="189"/>
+        <source>Theme:</source>
+        <translation>Tema:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="234"/>
+        <source>Show Welcome dialog on startup</source>
+        <translation>Visualizza all&apos;avvio la finestra di benvenuto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="320"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="693"/>
+        <source>Font</source>
+        <translation>Font</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="357"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="730"/>
+        <source>Size:</source>
+        <translation>Dimensione:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="389"/>
+        <source>Zoom:</source>
+        <translation>Zoom:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="486"/>
+        <source>Leading Zeros for Unsigned</source>
+        <translation>Zeri iniziali per senza segno</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="531"/>
+        <source>Project File</source>
+        <translation>File progetto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="537"/>
+        <source>Save all modified registers</source>
+        <translation>Salva tutti i registri modificati</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="544"/>
+        <source>Write the last change time of each register into the project file.</source>
+        <translation>Scrivi nel file di progetto l&apos;ora dell&apos;ultima modifica di ciascun registro.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
+        <source>Save register timestamps</source>
+        <translation>Salva data/ora registro</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="554"/>
+        <source>Write current register values. When disabled, the values loaded with the project and those edited by hand are saved instead, so a running simulation does not change the file.</source>
+        <translation>Scrivi i valori correnti del registro. Quando disabilitato, vengono invece salvati i valori caricati con il progetto e quelli modificati manualmente, quindi una simulazione in esecuzione non modifica il file.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="557"/>
+        <source>Save runtime register values</source>
+        <translation>Salva valori registro runtime</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="796"/>
+        <source>Console</source>
+        <translation>Console</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="808"/>
+        <source>Console Output Limit:</source>
+        <translation>Limite output console:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="846"/>
+        <source>Automatically show output console</source>
+        <translation>Visualizza automaticamente console output</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="335"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="708"/>
+        <source>Family:</source>
+        <translation>Famiglia:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="71"/>
+        <source>Defaults</source>
+        <translation>Predefiniti</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="220"/>
+        <source>Check for updates</source>
+        <translation>Controlla aggiornamenti</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="411"/>
+        <source>%</source>
+        <translation>%</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="432"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="764"/>
+        <source>Antialias</source>
+        <translation>Antialias</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="493"/>
+        <source>Columns Distance:</source>
+        <translation>Distanza colonne:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="579"/>
+        <source>Autoscroll</source>
+        <translation>Scorrimento automatico</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="586"/>
+        <source>Log View Limit:</source>
+        <translation>Limite visualizzazione registro:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="76"/>
+        <source>Script</source>
+        <translation>Script</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="474"/>
+        <source>Data View</source>
+        <translation>Visualizzazione dati</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="567"/>
+        <source>Traffic View</source>
+        <translation>Visualizzazione traffico</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="661"/>
+        <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
+        <translation>&lt;b&gt;Nota:&lt;/b&gt; queste impostazioni si applicano solo alle finestre appena aperte.</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="774"/>
+        <source>Editor</source>
+        <translation>Editore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="786"/>
+        <source>Enable code auto-complete</source>
+        <translation>Abilita il completamento automatico del codice</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="35"/>
+        <source>System</source>
+        <comment>language</comment>
+        <translation>Sistema</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
+        <source>System</source>
+        <comment>theme</comment>
+        <translation>Sistema</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="44"/>
+        <source>Light</source>
+        <translation>Chiaro</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="45"/>
+        <source>Dark</source>
+        <translation>Scuro</translation>
+    </message>
+</context>
+<context>
+    <name>DialogPrintSettings</name>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="14"/>
+        <source>Print Setup</source>
+        <translation>Impostazione stampa</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="23"/>
+        <source>Printer</source>
+        <translation>Stampante</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="41"/>
+        <source>Name: </source>
+        <translation>Nome: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="70"/>
+        <source>Status: </source>
+        <translation>Stato: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="84"/>
+        <source>Type: </source>
+        <translation>Tipo: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="94"/>
+        <source>Location: </source>
+        <translation>Posizione: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="109"/>
+        <source>Paper</source>
+        <translation>Carta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="124"/>
+        <source>Size: </source>
+        <translation>Dimensione: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="147"/>
+        <source>Source: </source>
+        <translation>Sorgente: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="176"/>
+        <source>Orientation</source>
+        <translation>Orientamento</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="212"/>
+        <source>Portrait</source>
+        <translation>Verticale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.ui" line="228"/>
+        <source>Landscape</source>
+        <translation>Orizzontale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="97"/>
+        <source>Ready</source>
+        <translation>Pronto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="100"/>
+        <source>Printing</source>
+        <translation>Stampa</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="103"/>
+        <source>Aborted</source>
+        <translation>Abortito</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="106"/>
+        <source>Error</source>
+        <translation>Errore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="173"/>
+        <source>Only One</source>
+        <translation>Solo uno</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="177"/>
+        <source>Lower</source>
+        <translation>Inferiore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="181"/>
+        <source>Middle</source>
+        <translation>Al centro</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="185"/>
+        <source>Manual</source>
+        <translation>Manuale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="189"/>
+        <source>Envelope</source>
+        <translation>Busta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="193"/>
+        <source>Envelope Manual</source>
+        <translation>Manuale busta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="197"/>
+        <source>Auto</source>
+        <translation>Auto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="201"/>
+        <source>Tractor</source>
+        <translation>Trattore</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="205"/>
+        <source>Small Format</source>
+        <translation>Piccolo formato</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="209"/>
+        <source>Large Format</source>
+        <translation>Grande formato</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="213"/>
+        <source>Large Capacity</source>
+        <translation>Grande capacità</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="217"/>
+        <source>Cassette</source>
+        <translation>Cassetta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogprintsettings.cpp" line="221"/>
+        <source>Custom Source</source>
+        <translation>Sorgente personalizzata</translation>
+    </message>
+</context>
+<context>
+    <name>DialogSelectServicePort</name>
+    <message>
+        <location filename="../../dialogs/dialogselectserviceport.ui" line="14"/>
+        <source>Select Service IP Address and Port</source>
+        <translation>Seleziona indirizzo IP e porta del servizio</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogselectserviceport.ui" line="44"/>
+        <source>Service Port</source>
+        <translation>Porta servizio</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogselectserviceport.ui" line="57"/>
+        <source>Service IP Address</source>
+        <translation>Indirizzo IP servizio</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogselectserviceport.ui" line="37"/>
+        <source>502</source>
+        <translation>502</translation>
+    </message>
+</context>
+<context>
+    <name>DialogSetupSerialPort</name>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="14"/>
+        <source>Setup Serial Port</source>
+        <translation>Imposta porta seriale</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="26"/>
+        <source>Port Settings</source>
+        <translation>Impostazioni porta</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="35"/>
+        <source>Baud Rate: </source>
+        <translation>Velocità (baud): </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="61"/>
+        <source>1200</source>
+        <translation>1200</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="66"/>
+        <source>2400</source>
+        <translation>2400</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="71"/>
+        <source>4800</source>
+        <translation>4800</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="76"/>
+        <source>9600</source>
+        <translation>9600</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="81"/>
+        <source>19200</source>
+        <translation>19200</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="86"/>
+        <source>38400</source>
+        <translation>38400</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="91"/>
+        <source>57600</source>
+        <translation>57600</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="96"/>
+        <source>115200</source>
+        <translation>115200</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="104"/>
+        <source>Word Length: </source>
+        <translation>Lunghezza parola: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="127"/>
+        <source>7</source>
+        <translation>7</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="132"/>
+        <source>8</source>
+        <translation>8</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="140"/>
+        <source>Parity: </source>
+        <translation>Parità: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="166"/>
+        <source>Stop Bits: </source>
+        <translation>Bit di stop: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="186"/>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="191"/>
+        <source>2</source>
+        <translation>2</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="208"/>
+        <source>Hardware Flow Control</source>
+        <translation>Controllo flusso hardware</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="217"/>
+        <source>Flow Control Mode: </source>
+        <translation>Modalità controllo flusso: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="237"/>
+        <source>DTR Control: </source>
+        <translation>Controllo DTR: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogsetupserialport.ui" line="260"/>
+        <source>RTS Control: </source>
+        <translation>Controllo RTS: </translation>
+    </message>
+</context>
+<context>
+    <name>DialogWelcome</name>
+    <message>
+        <location filename="../../dialogs/dialogwelcome.ui" line="14"/>
+        <source>Welcome</source>
+        <translation>Benvenuto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwelcome.ui" line="89"/>
+        <source>Modbus Slave Simulator</source>
+        <translation>Simulatore slave Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwelcome.ui" line="138"/>
+        <source>Open:</source>
+        <translation>Apertura:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwelcome.ui" line="176"/>
+        <source>New Project</source>
+        <translation>Nuovo progetto</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwelcome.ui" line="201"/>
+        <source>Don&apos;t show this dialog again</source>
+        <translation>Non visualizzare più questa finestra di dialogo</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwelcome.cpp" line="58"/>
+        <source>Welcome to %1</source>
+        <translation>Benvenuto in %1</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwelcome.ui" line="192"/>
+        <source>Open Project</source>
+        <translation>Apri progetto</translation>
+    </message>
+</context>
+<context>
+    <name>DialogWindowsManager</name>
+    <message>
+        <location filename="../../dialogs/dialogwindowsmanager.ui" line="14"/>
+        <source>Windows</source>
+        <translation>Windows</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwindowsmanager.ui" line="29"/>
+        <source>Activate</source>
+        <translation>Attiva</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwindowsmanager.ui" line="36"/>
+        <source>Save</source>
+        <translation>Salva</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwindowsmanager.ui" line="43"/>
+        <source>Close</source>
+        <translation>Chiudi</translation>
+    </message>
+</context>
+<context>
+    <name>DialogWriteRegister</name>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.ui" line="14"/>
+        <source>Write Register</source>
+        <translation>Registro scrittura</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.ui" line="23"/>
+        <source>Unit Identifier:</source>
+        <translation>Identificatore unità:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.ui" line="52"/>
+        <source>Address: </source>
+        <translation>Indirizzo: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.ui" line="84"/>
+        <source>Value: </source>
+        <translation>Valore: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.ui" line="118"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="229"/>
+        <source>Auto Simulation: OFF</source>
+        <translation>Simulazione automatica: OFF</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.ui" line="140"/>
+        <source>Bit Pattern: </source>
+        <translation>Modello bit: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="101"/>
+        <source>Value, (HEX): </source>
+        <translation>Valore, (ESA): </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="108"/>
+        <source>Value, (ANSI): </source>
+        <translation>Valore, (ANSI): </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="223"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="235"/>
+        <source>Auto Simulation: ON</source>
+        <translation>Simulazione automatica: ON</translation>
+    </message>
+</context>
+<context>
+    <name>DialogWriteStatusRegister</name>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.ui" line="14"/>
+        <source>Write Status Register</source>
+        <translation>Registro stato scrittura</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.ui" line="23"/>
+        <source>Unit Identifier:</source>
+        <translation>Identificatore unità:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.ui" line="52"/>
+        <source>Address: </source>
+        <translation>Indirizzo: </translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.ui" line="84"/>
+        <source>Value:</source>
+        <translation>Valore:</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.ui" line="108"/>
+        <source>Off</source>
+        <translation>OFF</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.ui" line="115"/>
+        <source>On</source>
+        <translation>ON</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.ui" line="134"/>
+        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="108"/>
+        <source>Auto Simulation: OFF</source>
+        <translation>Simulazione automatica: OFF</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="102"/>
+        <location filename="../../dialogs/dialogwritestatusregister.cpp" line="114"/>
+        <source>Auto Simulation: ON</source>
+        <translation>Simulazione automatica: ON</translation>
+    </message>
+</context>
+<context>
+    <name>FindReplaceBar</name>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="67"/>
+        <source>Toggle Replace</source>
+        <translation>Attiva/disattiva sostituisci</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="80"/>
+        <source>Find...</source>
+        <translation>Trova...</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="296"/>
+        <source>Match Case</source>
+        <translation>Corrispondenza</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="327"/>
+        <source>Match Whole Word</source>
+        <translation>Corrisponde all&apos;intera parola</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="102"/>
+        <source>Next (Enter)</source>
+        <translation>Avanti (Invio)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="133"/>
+        <source>Close (Escape)</source>
+        <translation>Chiudi (Esc)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="194"/>
+        <source>Replace...</source>
+        <translation>Sostituisci...</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="216"/>
+        <source>Replace</source>
+        <translation>Sostituisci</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.ui" line="244"/>
+        <source>Replace All</source>
+        <translation>Sostituisci tutto</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.cpp" line="237"/>
+        <source>Find Next</source>
+        <translation>Trova successivo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.cpp" line="238"/>
+        <source>Find Previous</source>
+        <translation>Trova precedente</translation>
+    </message>
+    <message>
+        <location filename="../../controls/findreplacebar.cpp" line="572"/>
+        <source>Find</source>
+        <translation>Trova</translation>
+    </message>
+</context>
+<context>
+    <name>FlowControlTypeComboBox</name>
+    <message>
+        <location filename="../../controls/flowcontroltypecombobox.cpp" line="18"/>
+        <source>NO CONTROL</source>
+        <translation>NESSUN CONTROLLO</translation>
+    </message>
+    <message>
+        <location filename="../../controls/flowcontroltypecombobox.cpp" line="19"/>
+        <source>HARDWARE (RTS/CTS)</source>
+        <translation>HARDWARE (RTS/CTS)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/flowcontroltypecombobox.cpp" line="20"/>
+        <source>SOFTWARE (XON/XOFF)</source>
+        <translation>SOFTWARE (XON/XOFF)</translation>
+    </message>
+</context>
+<context>
+    <name>FormDataMapView</name>
+    <message>
+        <location filename="../../formdatamapview.ui" line="65"/>
+        <source>Add Row</source>
+        <translation>Aggiungi riga</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.ui" line="70"/>
+        <source>Insert Row</source>
+        <translation>Inserisci riga</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.ui" line="79"/>
+        <source>Delete Row</source>
+        <translation>Elimina riga</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.ui" line="88"/>
+        <location filename="../../formdatamapview.cpp" line="1491"/>
+        <source>Clear Table</source>
+        <translation>Cancella tabella</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1492"/>
+        <source>Clear all visible rows from the table?</source>
+        <translation>Vuoi cancellare tutte le righe visibili dalla tabella?</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1016"/>
+        <source>1-based</source>
+        <translation>base 1</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1016"/>
+        <source>0-based</source>
+        <translation>base 0</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="945"/>
+        <source>Remove Color</source>
+        <translation>Rimuovi colore</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="956"/>
+        <source>Yellow</source>
+        <translation>Giallo</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="957"/>
+        <source>Cyan</source>
+        <translation>Ciano</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="958"/>
+        <source>Magenta</source>
+        <translation>Magenta</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="959"/>
+        <source>LightGreen</source>
+        <translation>Verde chiaro</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="960"/>
+        <source>Orange</source>
+        <translation>Arancio</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="961"/>
+        <source>LightBlue</source>
+        <translation>Azzurro</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="962"/>
+        <source>LightGray</source>
+        <translation>Grigio chiaro</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1029"/>
+        <location filename="../../formdatamapview.cpp" line="1253"/>
+        <location filename="../../formdatamapview.cpp" line="1594"/>
+        <source>All Types</source>
+        <translation>Tutti i tipi</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1031"/>
+        <source>Address Base: %1
+Unit Filter: %2
+Type Filter: %3</source>
+        <translation>Base indirizzo: %1
+Filtro unità: %2
+Tipo filtro: %3</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1254"/>
+        <location filename="../../formdatamapview.cpp" line="1595"/>
+        <source>Coils</source>
+        <translation>Bobine</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1255"/>
+        <location filename="../../formdatamapview.cpp" line="1596"/>
+        <source>Discrete Inputs</source>
+        <translation>Ingressi discreti</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1256"/>
+        <location filename="../../formdatamapview.cpp" line="1597"/>
+        <source>Input Registers</source>
+        <translation>Registri ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1257"/>
+        <location filename="../../formdatamapview.cpp" line="1598"/>
+        <source>Holding Registers</source>
+        <translation>Registri blocco</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1245"/>
+        <location filename="../../formdatamapview.cpp" line="1605"/>
+        <source>Unit:</source>
+        <translation>Unità:</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1246"/>
+        <location filename="../../formdatamapview.cpp" line="1606"/>
+        <source>Data Type:</source>
+        <translation>Tipo di dati:</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1018"/>
+        <location filename="../../formdatamapview.cpp" line="1247"/>
+        <location filename="../../formdatamapview.cpp" line="1590"/>
+        <source>All</source>
+        <translation>Tutto</translation>
+    </message>
+</context>
+<context>
+    <name>FormDataView</name>
+    <message>
+        <location filename="../../formdataview.ui" line="128"/>
+        <source>Starting Address:</source>
+        <translation>Indirizzo iniziale:</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="135"/>
+        <source>Length:</source>
+        <translation>Lunghezza:</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="223"/>
+        <source>Unit Identifier:</source>
+        <translation>Identificatore unità:</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="318"/>
+        <source>Column Distance:</source>
+        <translation>Distanza colonna:</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="258"/>
+        <source>Data Type:</source>
+        <translation>Tipo di dati:</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="350"/>
+        <source>Leading Zeros for Unsigned</source>
+        <translation>Zeri iniziali per senza segno</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="410"/>
+        <location filename="../../formdataview.ui" line="413"/>
+        <source>Binary</source>
+        <translation>Binario</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="431"/>
+        <location filename="../../formdataview.ui" line="434"/>
+        <source>Hex</source>
+        <translation>Esadecimale</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="452"/>
+        <location filename="../../formdataview.ui" line="455"/>
+        <source>Ansi</source>
+        <translation>Ansi</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="467"/>
+        <location filename="../../formdataview.ui" line="470"/>
+        <source>16-bit Integer</source>
+        <translation>Intero a 16 bit</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="488"/>
+        <location filename="../../formdataview.ui" line="491"/>
+        <source>Unsigned 16-bit Integer</source>
+        <translation>Intero a 16 bit senza segno</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="509"/>
+        <location filename="../../formdataview.ui" line="512"/>
+        <source>32-bit Integer (MSRF)</source>
+        <translation>Intero a 32 bit (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="530"/>
+        <location filename="../../formdataview.ui" line="533"/>
+        <source>32-bit Integer (LSRF)</source>
+        <translation>Intero a 32 bit (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="551"/>
+        <location filename="../../formdataview.ui" line="554"/>
+        <source>Unsigned 32-bit Integer (MSRF)</source>
+        <translation>Intero a 32 bit senza segno (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="572"/>
+        <location filename="../../formdataview.ui" line="575"/>
+        <source>Unsigned 32-bit Integer (LSRF)</source>
+        <translation>Intero a 32 bit senza segno (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="593"/>
+        <location filename="../../formdataview.ui" line="596"/>
+        <source>64-bit Integer (MSRF)</source>
+        <translation>Intero a 64 bit (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="614"/>
+        <location filename="../../formdataview.ui" line="617"/>
+        <source>64-bit Integer (LSRF)</source>
+        <translation>Intero a 64 bit (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="635"/>
+        <location filename="../../formdataview.ui" line="638"/>
+        <source>Unsigned 64-bit Integer (MSRF)</source>
+        <translation>Intero a 64 bit senza segno (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="656"/>
+        <location filename="../../formdataview.ui" line="659"/>
+        <source>Unsigned 64-bit Integer (LSRF)</source>
+        <translation>Intero a 64 bit senza segno (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="677"/>
+        <source>Float (MSRF)</source>
+        <translation>Virgola mobile (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="680"/>
+        <source>32-bit Float (MSRF)</source>
+        <translation>Virgola mobile a 32 bit (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="698"/>
+        <source>Float (LSRF)</source>
+        <translation>Virgola mobile (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="701"/>
+        <source>32-bit Float (LSRF)</source>
+        <translation>Virgola mobile a 32 bit (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="719"/>
+        <source>Double (MSRF)</source>
+        <translation>Doppio (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="722"/>
+        <source>64-bit Float (MSRF)</source>
+        <translation>Virgola mobile a 64 bit (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="740"/>
+        <source>Double (LSRF)</source>
+        <translation>Doppio (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="743"/>
+        <source>64-bit Float (LSRF)</source>
+        <translation>Virgola mobile a 64 bit (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.ui" line="761"/>
+        <location filename="../../formdataview.ui" line="764"/>
+        <source>Swap Bytes (0xAB → 0xBA)</source>
+        <translation>Scambia byte (0xAB → 0xBA)</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="614"/>
+        <source>0-based</source>
+        <translation>base 0</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="614"/>
+        <source>1-based</source>
+        <translation>base 1</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="615"/>
+        <source>Address Base: %1
+Starting Address: %2
+Length: %3</source>
+        <translation>Base indirizzo: %1
+Indirizzo iniziale: %2
+Lunghezza: %3</translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="617"/>
+        <source>Unit Identifier: %1
+Data Type:
+%2</source>
+        <translation>Identificatore unità: %1
+Tipo di dati:
+%2</translation>
+    </message>
+</context>
+<context>
+    <name>FormScriptView</name>
+    <message>
+        <location filename="../../formscriptview.cpp" line="137"/>
+        <location filename="../../formscriptview.cpp" line="520"/>
+        <source> ms</source>
+        <translation> ms</translation>
+    </message>
+    <message>
+        <location filename="../../formscriptview.cpp" line="139"/>
+        <location filename="../../formscriptview.cpp" line="529"/>
+        <source>Run on startup</source>
+        <translation>Esegui all&apos;avvio</translation>
+    </message>
+    <message>
+        <location filename="../../formscriptview.cpp" line="627"/>
+        <source>Script run mode</source>
+        <translation>Modalità esecuzione script</translation>
+    </message>
+    <message>
+        <location filename="../../formscriptview.cpp" line="629"/>
+        <source>Script run interval</source>
+        <translation>Intervallo esecuzione script</translation>
+    </message>
+    <message>
+        <location filename="../../formscriptview.ui" line="52"/>
+        <source>Run Script</source>
+        <translation>Esegui script</translation>
+    </message>
+    <message>
+        <location filename="../../formscriptview.ui" line="61"/>
+        <source>Stop Script</source>
+        <translation>Interrompi script</translation>
+    </message>
+</context>
+<context>
+    <name>FormTrafficView</name>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="109"/>
+        <source>Unit: %1
+Function: %2
+Source: %3</source>
+        <translation>Unità: %1
+Funzione: %2
+Sorgente: %3</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="112"/>
+        <location filename="../../formtrafficview.cpp" line="750"/>
+        <location filename="../../formtrafficview.cpp" line="903"/>
+        <source>Exceptions Only</source>
+        <translation>Solo eccezioni</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="517"/>
+        <source>Modbus/TCP Srv %1:%2</source>
+        <translation>Srv. Modbus/TCP %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="519"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>RTU Serv. Modbus su TCP/IP %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="522"/>
+        <source>Port %1:%2:%3:%4:%5</source>
+        <translation>Porta %1:%2:%3:%4:%5</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="656"/>
+        <source>Clear Traffic</source>
+        <translation>Cancella traffico</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="657"/>
+        <source>Clear all messages from the traffic log?</source>
+        <translation>Vuoi cancellare tutti i messaggi dal registro del traffico?</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="671"/>
+        <source>Text files (*.txt)</source>
+        <translation>File testo (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="678"/>
+        <source>Log exported successfully to file %1</source>
+        <translation>Registro esportato correttamente nel file %1</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="680"/>
+        <source>Export log error!</source>
+        <translation>Errore di esportazione del registro!</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="713"/>
+        <location filename="../../formtrafficview.cpp" line="887"/>
+        <source>Unit:</source>
+        <translation>Unità:</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="719"/>
+        <location filename="../../formtrafficview.cpp" line="891"/>
+        <source>-1 = all unit ids</source>
+        <translation>-1 = tutti gli ID unità</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="740"/>
+        <location filename="../../formtrafficview.cpp" line="898"/>
+        <source>Source:</source>
+        <translation>Sorgente:</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="751"/>
+        <location filename="../../formtrafficview.cpp" line="904"/>
+        <source>Show only responses with Modbus exception</source>
+        <translation>Visualizza solo le risposte con eccezione Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="758"/>
+        <location filename="../../formtrafficview.cpp" line="908"/>
+        <source>Autoscroll</source>
+        <translation>Scorrimento automatico</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="759"/>
+        <location filename="../../formtrafficview.cpp" line="909"/>
+        <source>Automatically scroll to the latest entry</source>
+        <translation>Scorri automaticamente fino all&apos;ultima voce</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="97"/>
+        <location filename="../../formtrafficview.cpp" line="101"/>
+        <location filename="../../formtrafficview.cpp" line="105"/>
+        <location filename="../../formtrafficview.cpp" line="541"/>
+        <location filename="../../formtrafficview.cpp" line="718"/>
+        <location filename="../../formtrafficview.cpp" line="743"/>
+        <location filename="../../formtrafficview.cpp" line="890"/>
+        <source>All</source>
+        <translation>Tutto</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="767"/>
+        <location filename="../../formtrafficview.cpp" line="913"/>
+        <source>Rows:</source>
+        <translation>Righe:</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="728"/>
+        <location filename="../../formtrafficview.cpp" line="895"/>
+        <source>Function:</source>
+        <translation>Funzione:</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.ui" line="60"/>
+        <source>Clear</source>
+        <translation>Azzera</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.ui" line="65"/>
+        <source>Export</source>
+        <translation>Esporta</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.ui" line="55"/>
+        <source>Pause</source>
+        <translation>Pausa</translation>
+    </message>
+</context>
+<context>
+    <name>FuncCodeFilterComboBox</name>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="81"/>
+        <source>All</source>
+        <translation>Tutto</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="82"/>
+        <source>01 Read Coils</source>
+        <translation>01 Lettura bobine</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="83"/>
+        <source>02 Read Discrete Inputs</source>
+        <translation>02 Lettura ingressi discreti</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="84"/>
+        <source>03 Read Holding Registers</source>
+        <translation>03 Lettura d registri blocco</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="85"/>
+        <source>04 Read Input Registers</source>
+        <translation>04 Lettura registri ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="86"/>
+        <source>05 Write Single Coil</source>
+        <translation>05 Scrittura bobina singola</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="87"/>
+        <source>06 Write Single Register</source>
+        <translation>06 Scrittura registro singolo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="88"/>
+        <source>15 Write Multiple Coils</source>
+        <translation>15 Scrittura bobine multiple</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="89"/>
+        <source>16 Write Multiple Registers</source>
+        <translation>16 Scrittura registri multipli</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="90"/>
+        <source>22 Mask Write Register</source>
+        <translation>22 Registro scrittura maschera</translation>
+    </message>
+    <message>
+        <location filename="../../controls/funccodefiltercombobox.cpp" line="91"/>
+        <source>23 Read/Write Multiple Registers</source>
+        <translation>23 Lettura/scrittura registri multipli</translation>
+    </message>
+</context>
+<context>
+    <name>HelpBrowser</name>
+    <message>
+        <location filename="../../controls/helpbrowser.cpp" line="35"/>
+        <location filename="../../controls/helpbrowser.cpp" line="82"/>
+        <source>qthelp://omodsim/doc/index.html</source>
+        <translation>qthelp://omodsim/doc/index.html</translation>
+    </message>
+    <message>
+        <location filename="../../controls/helpbrowser.cpp" line="62"/>
+        <source>qthelp://omodsim/doc/index.html#%1</source>
+        <translation>qthelp://omodsim/doc/index.html#%1</translation>
+    </message>
+</context>
+<context>
+    <name>HelpWidget</name>
+    <message>
+        <location filename="../../controls/helpwidget.cpp" line="39"/>
+        <location filename="../../controls/helpwidget.cpp" line="93"/>
+        <source>Find</source>
+        <translation>Trova</translation>
+    </message>
+    <message>
+        <location filename="../../controls/helpwidget.cpp" line="45"/>
+        <location filename="../../controls/helpwidget.cpp" line="94"/>
+        <source>Previous (Shift+Enter)</source>
+        <translation>Precedente (Maiusc+Invio)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/helpwidget.cpp" line="51"/>
+        <location filename="../../controls/helpwidget.cpp" line="95"/>
+        <source>Next (Enter)</source>
+        <translation>Avanti (Invio)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/helpwidget.cpp" line="61"/>
+        <location filename="../../controls/helpwidget.cpp" line="96"/>
+        <source>Close (Escape)</source>
+        <translation>Chiudi (Esc)</translation>
+    </message>
+</context>
+<context>
+    <name>HexViewButton</name>
+    <message>
+        <location filename="../../controls/numericlineedit.cpp" line="42"/>
+        <source>Hex View</source>
+        <translation>Vista esadecimale</translation>
+    </message>
+</context>
+<context>
+    <name>JScriptControl</name>
+    <message>
+        <location filename="../../controls/jscriptcontrol.ui" line="44"/>
+        <source>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</source>
+        <translation>Server.addressBase = IndirizzoBase.Base1;
+
+lascia che deviceId = 1;
+lascia indirizzo = 1;
+
+Script.onInit(()=&gt;{
+Server.onChange(deviceId, Register.Holding, indirizzo, (valore)=&gt;
+{
+/* scrivi il codice alla modifica del valore del registro */
+});
+
+/* scrivi qui il codice di inizializzazione */
+});</translation>
+    </message>
+</context>
+<context>
+    <name>MainStatusBar</name>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="78"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="192"/>
+        <source>No updates available</source>
+        <translation>Nessun aggiornamento disponibile</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="350"/>
+        <source>New version %1 is available. Click to download.</source>
+        <translation>È disponibile la nuova versione %1. Fare clic per scaricare.</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="220"/>
+        <source>Unit Identifiers: %1</source>
+        <translation>Identificatori unità: %1</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="285"/>
+        <source>Modbus/TCP Srv %1:%2</source>
+        <translation>Srv. Modbus/TCP %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="295"/>
+        <source>Port %1:%2:%3:%4:%5</source>
+        <translation>Porta %1:%2:%3:%4:%5</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="231"/>
+        <source>No Resp</source>
+        <translation>Nessun risposta</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="190"/>
+        <source>New version %1 is available.</source>
+        <translation>È disponibile la nuova versione %1.</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="233"/>
+        <source>Bad ID</source>
+        <translation>ID errato</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="235"/>
+        <source>Ill Func</source>
+        <translation>Funz III</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="237"/>
+        <source>Dev Busy</source>
+        <translation>Sviluppatore occupato</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="239"/>
+        <source>Bad CRC</source>
+        <translation>CRC errato</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="241"/>
+        <source>Delay %1ms</source>
+        <translation>Ritardo %1ms</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="243"/>
+        <source>Rnd Delay %1ms</source>
+        <translation>Ritardo Rnd %1ms</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="261"/>
+        <source>Sniffer Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="262"/>
+        <source>Serial RTU ports only listen to the bus and do not respond</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="271"/>
+        <source>Clients: %1</source>
+        <translation>Client: %1</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="289"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>RTU Serv. Modbus su TCP/IP %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="319"/>
+        <source>Req: %1  Resp: %2</source>
+        <translation>Richiesta: %1 risposta: %2</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="331"/>
+        <source>New version available</source>
+        <translation>Disponibile nuova versione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="332"/>
+        <source>A new version %1 is available.
+
+Open the download page?</source>
+        <translation>È disponibile una nuova versione %1.
+
+Vuoi aprire la pagina di download?</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../../mainwindow.ui" line="17"/>
+        <source>Open ModSim</source>
+        <translation>Apri ModSim</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="171"/>
+        <source>File</source>
+        <translation>File</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="201"/>
+        <source>Edit</source>
+        <translation>Modifica</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="219"/>
+        <source>Connection</source>
+        <translation>Connessione</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="228"/>
+        <source>Setup</source>
+        <translation>Imposta</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="109"/>
+        <source>Script</source>
+        <translation>Script</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="239"/>
+        <source>Window</source>
+        <translation>Finestra</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="246"/>
+        <source>Help</source>
+        <translation>Aiuto</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="252"/>
+        <source>View</source>
+        <translation>Visualizzazione</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="175"/>
+        <location filename="../../mainwindow.ui" line="320"/>
+        <source>New</source>
+        <translation>Nuovo</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="625"/>
+        <source>Modbus Definitions</source>
+        <translation>Definizioni Modbus</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="636"/>
+        <source>Tabbed View</source>
+        <translation>Visualizzazione a schede</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="644"/>
+        <source>Close All Windows</source>
+        <translation>Chiudi tutte le finestre</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="607"/>
+        <source>Msg Parser</source>
+        <translation>Analisi msg</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="328"/>
+        <source>Close</source>
+        <translation>Chiudi</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="371"/>
+        <source>Print...</source>
+        <translation>Stampa...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="379"/>
+        <source>Print Setup...</source>
+        <translation>Impostazione stampa...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="384"/>
+        <source>Recent File</source>
+        <translation>File recente</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="389"/>
+        <source>Exit</source>
+        <translation>Uscita</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="340"/>
+        <source>Open Project...</source>
+        <translation>Apri progetto...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="343"/>
+        <source>Ctrl+O</source>
+        <translation>CTRL+O</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="352"/>
+        <location filename="../../mainwindow.cpp" line="1920"/>
+        <source>Save Project</source>
+        <translation>Salva progetto</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="357"/>
+        <source>Save Project As...</source>
+        <translation>Salva progetto con nome...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="362"/>
+        <source>Close Project</source>
+        <translation>Chiudi progetto</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="401"/>
+        <source>Connect</source>
+        <translation>Connetti</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="410"/>
+        <source>Disconnect</source>
+        <translation>Disconnetti</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="685"/>
+        <source>Preferences</source>
+        <translation>Preferenze</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="700"/>
+        <source>New Data View</source>
+        <translation>Nuova visualizzazione dati</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="709"/>
+        <source>New Traffic View</source>
+        <translation>Nuova visualizzazione del traffico</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="718"/>
+        <source>New Script</source>
+        <translation>Nuovo script</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="727"/>
+        <location filename="../../mainwindow.ui" line="730"/>
+        <source>New Map View</source>
+        <translation>Nuova visualizzazione mappa</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="735"/>
+        <source>Import Script...</source>
+        <translation>Importa script...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="747"/>
+        <source>Split View</source>
+        <translation>Vista divisione</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="445"/>
+        <source>Cascade</source>
+        <translation>Cascata</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="437"/>
+        <source>Sniffer Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="440"/>
+        <source>Sniffer mode: show all Modbus RTU traffic on serial ports without responding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="450"/>
+        <source>Tile</source>
+        <translation>Piastrella</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="459"/>
+        <source>About Open ModSim...</source>
+        <translation>Info OpenModSim...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="487"/>
+        <source>Force Coils</source>
+        <translation>Bobine di forza</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="496"/>
+        <source>Preset Holding Regs</source>
+        <translation>Registri preselezione</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="505"/>
+        <source>Preset Input Regs</source>
+        <translation>Registro preseelzione ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="514"/>
+        <source>Force Discretes</source>
+        <translation>Forza discreti</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="523"/>
+        <source>Undo</source>
+        <translation>Annulla operazione</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="535"/>
+        <source>Redo</source>
+        <translation>Ripeti operazione</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="547"/>
+        <source>Cut</source>
+        <translation>Taglia</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="559"/>
+        <source>Copy</source>
+        <translation>Copia</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="571"/>
+        <source>Paste</source>
+        <translation>Incolla</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="579"/>
+        <source>Select All</source>
+        <translation>Seleziona tutto</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="587"/>
+        <source>Find...</source>
+        <translation>Trova...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="595"/>
+        <source>Replace...</source>
+        <translation>Sostituisci...</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="598"/>
+        <source>Ctrl+H</source>
+        <translation>CTRL+H</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="641"/>
+        <source>Close All</source>
+        <translation>Chiudi tutto</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="669"/>
+        <location filename="../../mainwindow.ui" line="672"/>
+        <source>Output Window</source>
+        <translation>Finestra di output</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="680"/>
+        <source>Project Tree</source>
+        <translation>Struttura progetto</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="102"/>
+        <location filename="../../mainwindow.ui" line="655"/>
+        <location filename="../../mainwindow.ui" line="658"/>
+        <source>Script Help</source>
+        <translation>Aiuto per la scripts</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="661"/>
+        <source>F1</source>
+        <translation>F1</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="276"/>
+        <location filename="../../mainwindow.ui" line="470"/>
+        <source>Toolbar</source>
+        <translation>Barra strumenti</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="478"/>
+        <source>Status Bar</source>
+        <translation>Barra di stato</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="985"/>
+        <source>All files (*)</source>
+        <translation>Tutti i file (*)</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="303"/>
+        <location filename="../../mainwindow.cpp" line="688"/>
+        <source>Open Recent</source>
+        <translation>Apri recenti</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="304"/>
+        <location filename="../../mainwindow.cpp" line="2054"/>
+        <source>Clear List</source>
+        <translation>Cancella elenco</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="2065"/>
+        <source>Clear Recent Projects</source>
+        <translation>Cancella progetti recenti</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="2066"/>
+        <source>Clear the list of recent projects?</source>
+        <translation>Vuoi cancellare l&apos;elenco dei progetti recenti?</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="57"/>
+        <source>Project</source>
+        <translation>Progetto</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="135"/>
+        <source>Output</source>
+        <translation>Output</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="776"/>
+        <source>Would you like to combine the file(s) with the project?
+
+The global settings part of the merging file(s) will be ignored.
+Please verify the merge result carefully.</source>
+        <translation>Vuoi unire i file con il progetto?
+
+La parte delle impostazioni globali dei file uniti verrà ignorata.
+Verifica attentamente il risultato dell&apos;unione.</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="983"/>
+        <location filename="../../mainwindow.cpp" line="1949"/>
+        <source>Project files (*.omsim)</source>
+        <translation>File progetto (*.omsim)</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="984"/>
+        <source>Project 1.x files (*.xml)</source>
+        <translation>File progetto 1.x (*.xml)</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="1561"/>
+        <location filename="../../mainwindow.cpp" line="1975"/>
+        <source>Untitled</source>
+        <translation>Senza titolo</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="157"/>
+        <location filename="../../mainwindow.cpp" line="691"/>
+        <location filename="../../mainwindow.cpp" line="1752"/>
+        <source>Address Base</source>
+        <translation>Base indirizzo</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="250"/>
+        <source>Server connected: %1</source>
+        <translation>Server connesso: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="256"/>
+        <source>Server disconnected: %1</source>
+        <translation>Server disconnesso: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="267"/>
+        <source>Modbus client connected: %1 -&gt; %2</source>
+        <translation>Client Modbus connesso: %1 -&gt; %2</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="274"/>
+        <source>Modbus client disconnected: %1 -&gt; %2</source>
+        <translation>Client Modbus disconnesso: %1 -&gt; %2</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="281"/>
+        <source>[Unit %1] %2</source>
+        <translation>[Unità %1] %2</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="300"/>
+        <source>Address space added: unit %1, %2, starting address %3, length %4</source>
+        <translation>Spazio indirizzi aggiunto: unità %1, %2, indirizzo iniziale %3, lunghezza %4</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="322"/>
+        <source>&lt;empty&gt;</source>
+        <translation>&lt;vuoto&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="338"/>
+        <source>Manual write: unit %1, %2, starting address %3, value %4</source>
+        <translation>Scrittura manuale: unità %1, %2, indirizzo iniziale %3, valore %4</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="351"/>
+        <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
+        <translation>Scrittura client: %1 -&gt; unità %2, %3, indirizzo iniziale %4, valore %5</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="348"/>
+        <source>unknown client</source>
+        <translation>client sconosciuto</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="324"/>
+        <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
+        <translation>Commento all&apos;indirizzo modificato: unità %1, %2, indirizzo %3: &apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="382"/>
+        <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
+        <translation>Simulazione automatica abilitata (%1): unità %2, %3, indirizzo %4</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="396"/>
+        <source>Auto simulation disabled: unit %1, %2, address %3</source>
+        <translation>Simulazione automatica disabilitata: unità %1, %2, indirizzo %3</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="91"/>
+        <source>[%1 values: %2%3]</source>
+        <translation>[%1 valori: %2%3]</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="50"/>
+        <source>Modbus RTU over TCP/IP</source>
+        <translation>RTU Modbus su TCP/IP</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="107"/>
+        <source>Traffic</source>
+        <translation>Traffico</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="111"/>
+        <source>Map</source>
+        <translation>Mappa</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="112"/>
+        <source>Form</source>
+        <translation>Modulo</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="123"/>
+        <source>&lt;null&gt;</source>
+        <translation>&lt;null&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="126"/>
+        <source>&lt;untitled&gt;</source>
+        <translation>&lt;senza titolo&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="129"/>
+        <source>%1 &apos;%2&apos;</source>
+        <translation>%1 &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="140"/>
+        <source>Font</source>
+        <translation>Font</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="141"/>
+        <source>FontZoom</source>
+        <translation>FontZoom</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="142"/>
+        <source>BackgroundColor</source>
+        <translation>ColoreSfondo</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="143"/>
+        <source>ForegroundColor</source>
+        <translation>Colore primo piano</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="144"/>
+        <source>AddressColor</source>
+        <translation>IndirizzoColore</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="145"/>
+        <source>CommentColor</source>
+        <translation>ColoreCommento</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="146"/>
+        <source>CheckForUpdates</source>
+        <translation>ControllaAggiornamentiu</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="147"/>
+        <source>ShowWelcomeDialog</source>
+        <translation>Visualizza finestra di benvenuto</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="148"/>
+        <source>Language</source>
+        <translation>Lingua</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="149"/>
+        <source>ScriptFont</source>
+        <translation>Font script</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="150"/>
+        <source>CodeAutoComplete</source>
+        <translation>CodiceCompletamentoAutomatico</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="151"/>
+        <source>AutoShowConsoleOutput</source>
+        <translation>VisualizzaAutomaticamenteOutputConsole</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="152"/>
+        <source>ConsoleMaxLines</source>
+        <translation>LineeMaxConsole</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="153"/>
+        <source>DataView.ColumnsDistance</source>
+        <translation>DataView.ColumnsDistance</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="154"/>
+        <source>DataView.LeadingZeros</source>
+        <translation>DataView.LeadingZeros</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="155"/>
+        <source>TrafficView.LogLimit</source>
+        <translation>TrafficView.LogLimit</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="156"/>
+        <source>TrafficView.AutoScroll</source>
+        <translation>TrafficView.AutoScroll</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="159"/>
+        <source>ThemeMode</source>
+        <translation>Modalità tema</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="171"/>
+        <source>true</source>
+        <translation>vero</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="173"/>
+        <source>false</source>
+        <translation>falso</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="199"/>
+        <source>enabled</source>
+        <translation>abilitato</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="201"/>
+        <source>disabled</source>
+        <translation>disabilitato</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="287"/>
+        <source>Unit ID added: %1</source>
+        <translation>ID unità aggiunto: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="293"/>
+        <source>Unit ID removed: %1</source>
+        <translation>ID unità rimosso: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="309"/>
+        <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
+        <translation>Spazio indirizzi rimosso: unità %1, %2, indirizzo iniziale %3, lunghezza %4</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="415"/>
+        <source>Project opened: %1</source>
+        <translation>Progetto aperto: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="422"/>
+        <source>&lt;unsaved&gt;</source>
+        <translation>&lt;non salvato&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="425"/>
+        <source>Project closed: %1</source>
+        <translation>Progetto chiuso: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="431"/>
+        <source>Project saved: %1</source>
+        <translation>Progetto salvato: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="437"/>
+        <source>Project save failed: %1 (%2)</source>
+        <translation>Salvataggio del progetto non riuscito: %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="444"/>
+        <source>Project load failed: %1 (%2)</source>
+        <translation>Caricamento del progetto non riuscito: %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="451"/>
+        <source>Form created: %1</source>
+        <translation>Modulo creato: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="457"/>
+        <source>Form opened: %1</source>
+        <translation>Modulo aperto: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="463"/>
+        <source>Form closed: %1</source>
+        <translation>Modulo chiuso: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="469"/>
+        <source>Form deleted: %1</source>
+        <translation>Modulo eliminato: %1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="488"/>
+        <source>Preference changed: %1: %2 -&gt; %3</source>
+        <translation>La preferenza è stata modificata: %1: %2 -&gt; %3</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="497"/>
+        <source>%1 changed: %2 -&gt; %3</source>
+        <translation>%1 modificato: %2 -&gt; %3</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="515"/>
+        <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
+        <translation>Script avviato: %1 (modalità: %2, intervallo: %3 ms)</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="520"/>
+        <source>Script started: %1 (mode: %2)</source>
+        <translation>Script avviato: %1 (modalità: %2)</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="550"/>
+        <source>Form renamed: &apos;%1&apos; -&gt; &apos;%2&apos;</source>
+        <translation>Modulo rinominato: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="1394"/>
+        <source>Move to Other Panel</source>
+        <translation>Passa ad un altro pannello</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="187"/>
+        <source>1-based</source>
+        <translation>base 1</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="185"/>
+        <source>0-based</source>
+        <translation>base 0</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="422"/>
+        <location filename="../../mainwindow.ui" line="425"/>
+        <location filename="../../applogger.cpp" line="158"/>
+        <source>Hex View</source>
+        <translation>Vista esadecimale</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="1921"/>
+        <source>Save project before closing?</source>
+        <translation>Vuoi salvare il progetto prima della chiusura?</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="2042"/>
+        <source>No Recent Projects</source>
+        <translation>Nessun progetto recente</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="105"/>
+        <source>Data</source>
+        <translation>Dati</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="1352"/>
+        <source>JavaScript files (*.js);;All files (*)</source>
+        <translation>File JavaScript (*.js);;Tutti i file (*)</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="534"/>
+        <source>Script stopped: %1</source>
+        <translation>Script interrotto: %1</translation>
+    </message>
+</context>
+<context>
+    <name>MdiAreaEx</name>
+    <message>
+        <location filename="../../controls/mdiareaex.cpp" line="718"/>
+        <location filename="../../controls/mdiareaex.cpp" line="961"/>
+        <source>Split view</source>
+        <translation>Vista divisione</translation>
+    </message>
+</context>
+<context>
+    <name>MenuConnect</name>
+    <message>
+        <location filename="../../menuconnect.cpp" line="26"/>
+        <location filename="../../menuconnect.cpp" line="123"/>
+        <source>Modbus/TCP Srv</source>
+        <translation>Srv Modbus/TCP</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="27"/>
+        <location filename="../../menuconnect.cpp" line="129"/>
+        <source>Modbus RTU over TCP/IP Srv</source>
+        <translation>RTU Modbus su TCP/IP Srv</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="32"/>
+        <location filename="../../menuconnect.cpp" line="113"/>
+        <source>Modbus/RTU Srv</source>
+        <translation>Srv Modbus/RTU</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="34"/>
+        <location filename="../../menuconnect.cpp" line="63"/>
+        <location filename="../../menuconnect.cpp" line="134"/>
+        <source>Port %1</source>
+        <translation>Porta %1</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="53"/>
+        <location filename="../../menuconnect.cpp" line="131"/>
+        <source>Modbus RTU over TCP/IP Srv %1</source>
+        <translation>RTU Serv. Modbus su TCP/IP %1</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="54"/>
+        <location filename="../../menuconnect.cpp" line="125"/>
+        <source>Modbus/TCP Srv %1</source>
+        <translation>Srv. Modbus/TCP %1</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusLogWidget</name>
+    <message>
+        <location filename="../../controls/modbuslogwidget.cpp" line="337"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="380"/>
+        <source>Copy Text</source>
+        <translation>Copia testo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbuslogwidget.cpp" line="349"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="381"/>
+        <source>Copy Bytes</source>
+        <translation>Copia byte</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusMessageWidget</name>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="43"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="99"/>
+        <source>Copy Text</source>
+        <translation>Copia testo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="59"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="100"/>
+        <source>Copy Values</source>
+        <translation>Copia valori</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="247"/>
+        <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS REQUEST ***&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** RICHIESTA MODBUS NON VALIDA ***&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="249"/>
+        <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS RESPONSE ***&lt;/span&gt;</source>
+        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** RISPOSTA MODBUS NON VALIDA ***&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="265"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="270"/>
+        <source>Checksum</source>
+        <translation>Checksum</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="275"/>
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="275"/>
+        <source>Request (Rx)</source>
+        <translation>Richiesta (Rx)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="275"/>
+        <source>Response (Tx)</source>
+        <translation>Risposta (Tx)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="276"/>
+        <source>Time</source>
+        <translation>Tempo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="284"/>
+        <source>Transaction ID</source>
+        <translation>ID transazione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="285"/>
+        <source>Protocol ID</source>
+        <translation>ID protocollo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="286"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="316"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="335"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="354"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="373"/>
+        <source>Length</source>
+        <translation>Lunghezza</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="289"/>
+        <source>Unit Identifier</source>
+        <translation>Identificatore unità</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="294"/>
+        <source>Error Code</source>
+        <translation>Codice errore</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="295"/>
+        <source>Exception Code</source>
+        <translation>Codice eccezione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="304"/>
+        <source>Function Code</source>
+        <translation>Codice funzione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="315"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="334"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="353"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="372"/>
+        <source>Start Address</source>
+        <translation>Indirizzo iniziale</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="323"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="342"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="361"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="380"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="471"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="489"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="512"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="531"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="542"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="550"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="619"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="637"/>
+        <source>Byte Count</source>
+        <translation>Conteggio byte</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="324"/>
+        <source>Coil Status</source>
+        <translation>Stato bobina</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="343"/>
+        <source>Input Status</source>
+        <translation>Stato ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="362"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="411"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="419"/>
+        <source>Register Value</source>
+        <translation>Valore registro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="381"/>
+        <source>Input Registers</source>
+        <translation>Registri ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="391"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="399"/>
+        <source>Output Address</source>
+        <translation>Indirizzo output</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="392"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="400"/>
+        <source>Output Value</source>
+        <translation>Valore output</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="410"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="418"/>
+        <source>Register Address</source>
+        <translation>Indirizzo registro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="428"/>
+        <source>Output Data</source>
+        <translation>Dati output</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="438"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="446"/>
+        <source>Sub-function</source>
+        <translation>Sotto-funzione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="439"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="447"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="532"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="543"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="551"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="562"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="570"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="647"/>
+        <source>Data</source>
+        <translation>Dati</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="457"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="472"/>
+        <source>Status</source>
+        <translation>Stato</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="458"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="473"/>
+        <source>Event Count</source>
+        <translation>Conteggio eventi</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="474"/>
+        <source>Message Count</source>
+        <translation>Conteggio messaggi</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="475"/>
+        <source>Events</source>
+        <translation>Eventi</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="487"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="497"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="510"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="520"/>
+        <source>Starting Address</source>
+        <translation>Indirizzo iniziale</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="488"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="498"/>
+        <source>Quantity of Outputs</source>
+        <translation>Quantità di output</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="490"/>
+        <source>Outputs Value</source>
+        <translation>Valore output</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="511"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="521"/>
+        <source>Quantity of Registers</source>
+        <translation>Quantità di registri</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="513"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="620"/>
+        <source>Registers Value</source>
+        <translation>Valore registro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="561"/>
+        <source>Request Data Length</source>
+        <translation>Lunghezza dati richiesta</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="569"/>
+        <source>Response Data Length</source>
+        <translation>Lunghezza dati risposta</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="581"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="591"/>
+        <source>Address</source>
+        <translation>Indirizzo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="582"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="592"/>
+        <source>And Mask</source>
+        <translation>E maschera</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="583"/>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="593"/>
+        <source>Or Mask</source>
+        <translation>O maschera</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="607"/>
+        <source>Read Starting Address</source>
+        <translation>Indirizzo iniziale lettura</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="608"/>
+        <source>Quantity to Read</source>
+        <translation>Quantità da leggere</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="609"/>
+        <source>Write Starting Address</source>
+        <translation>Indirizzo iniziale scrittura</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="610"/>
+        <source>Quantity to Write</source>
+        <translation>Quantità da scrivere</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="611"/>
+        <source>Write Byte Count</source>
+        <translation>Conteggio byte scrittura</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="612"/>
+        <source>Write Registers Value</source>
+        <translation>Valore registri scrittura</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="629"/>
+        <source>FIFO Point Address</source>
+        <translation>Indirizzo punto FIFO</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="638"/>
+        <source>FIFO Count</source>
+        <translation>Conteggio FIFO</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="639"/>
+        <source>FIFO Value Register</source>
+        <translation>Registro valori FIFO</translation>
+    </message>
+    <message>
+        <location filename="../../controls/modbusmessagewidget.cpp" line="305"/>
+        <source>(0-based)</source>
+        <translation>(base 0)</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusMultiServer</name>
+    <message>
+        <location filename="../../modbusmultiserver.cpp" line="1118"/>
+        <source>An incorrect device ID was specified (%1)</source>
+        <translation>È stato specificato un ID dispositivo errato (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../modbusmultiserver.cpp" line="1692"/>
+        <source>Connection error. %1</source>
+        <translation>Errore di connessione.%1</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusRegisterType</name>
+    <message>
+        <location filename="../../enums.h" line="428"/>
+        <source>Coils</source>
+        <translation>Bobine</translation>
+    </message>
+    <message>
+        <location filename="../../enums.h" line="429"/>
+        <source>Discrete Inputs</source>
+        <translation>Ingressi discreti</translation>
+    </message>
+    <message>
+        <location filename="../../enums.h" line="430"/>
+        <source>Input Registers</source>
+        <translation>Registri ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../enums.h" line="431"/>
+        <source>Holding Registers</source>
+        <translation>Registri blocco</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusRtuTcpServer</name>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <source>Could not write response to client</source>
+        <translation>Impossibile scrivere la risposta nel client</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
+        <translation>Per la comunicazione RTU su TCP/IP sono state specificate impostazioni di connessione non valide.</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusTcpServer</name>
+    <message>
+        <location filename="../../modbustcpserver.cpp" line="358"/>
+        <source>Invalid connection settings for TCP communication specified.</source>
+        <translation>Per la comunicazione TCP sono state specificate impostazioni di connessione non valide.</translation>
+    </message>
+</context>
+<context>
+    <name>OutputDataWidget</name>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1332"/>
+        <source>Set Value of %1</source>
+        <translation>Imposta il valore di %1</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
+        <source>Add Description</source>
+        <translation>Aggiungi descrizione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
+        <source>Edit Description</source>
+        <translation>Modifica descrizione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1344"/>
+        <source>%1: Enter Description</source>
+        <translation>%1: inserisci la descrizione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1353"/>
+        <source>Remove Color</source>
+        <translation>Rimuovi colore</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1365"/>
+        <source>Yellow</source>
+        <translation>Giallo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1366"/>
+        <source>Cyan</source>
+        <translation>Ciano</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1367"/>
+        <source>Magenta</source>
+        <translation>Magenta</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1368"/>
+        <source>LightGreen</source>
+        <translation>Verde chiaro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1369"/>
+        <source>Orange</source>
+        <translation>Arancio</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1370"/>
+        <source>LightBlue</source>
+        <translation>Azzurro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1371"/>
+        <source>LightGray</source>
+        <translation>Grigio chiaro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputdatawidget.cpp" line="1447"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+</context>
+<context>
+    <name>OutputPanel</name>
+    <message>
+        <location filename="../../controls/outputpanel.ui" line="42"/>
+        <source>Log</source>
+        <translation>Registro</translation>
+    </message>
+    <message>
+        <location filename="../../controls/outputpanel.ui" line="47"/>
+        <source>Console</source>
+        <translation>Console</translation>
+    </message>
+</context>
+<context>
+    <name>ParityTypeComboBox</name>
+    <message>
+        <location filename="../../controls/paritytypecombobox.cpp" line="62"/>
+        <source>ODD</source>
+        <translation>PARI</translation>
+    </message>
+    <message>
+        <location filename="../../controls/paritytypecombobox.cpp" line="63"/>
+        <source>EVEN</source>
+        <translation>DISPARI</translation>
+    </message>
+    <message>
+        <location filename="../../controls/paritytypecombobox.cpp" line="64"/>
+        <source>NONE</source>
+        <translation>NESSUNO</translation>
+    </message>
+</context>
+<context>
+    <name>PointTypeComboBox</name>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="21"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
+        <source>Coils (Read-Write)</source>
+        <translation>Bobine (lettura-scrittura)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="22"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="46"/>
+        <source>Discrete Inputs (Read Only)</source>
+        <translation>Ingressi discreti (sola lettura)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="23"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="50"/>
+        <source>Holding Registers (Read-Write)</source>
+        <translation>Registri blocco (lettura-scrittura)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="24"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="54"/>
+        <source>Input Registers (Read Only)</source>
+        <translation>Registri ingresso (sola lettura)</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectTreeWidget</name>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="72"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="355"/>
+        <source>Data</source>
+        <translation>Dati</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="80"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="356"/>
+        <source>Traffic</source>
+        <translation>Traffico</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="76"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="358"/>
+        <source>Maps</source>
+        <translation>Mappe</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="84"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="357"/>
+        <source>Scripts</source>
+        <translation>Script</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="397"/>
+        <source>New Data View</source>
+        <translation>Nuova visualizzazione dati</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="398"/>
+        <source>New Map View</source>
+        <translation>Nuova visualizzazione mappa</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="399"/>
+        <source>New Traffic View</source>
+        <translation>Nuova visualizzazione del traffico</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="400"/>
+        <source>New Script</source>
+        <translation>Nuovo script</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="422"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="507"/>
+        <source>Delete All</source>
+        <translation>Elimina tutto</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="443"/>
+        <source>Run All Scripts</source>
+        <translation>Esegui tutti gli script</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="444"/>
+        <source>Stop All Scripts</source>
+        <translation>Interrompi tutti gli script</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="462"/>
+        <source>Run Script</source>
+        <translation>Esegui script</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="463"/>
+        <source>Stop Script</source>
+        <translation>Interrompi script</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="469"/>
+        <location filename="../../controls/projecttreewidget.cpp" line="534"/>
+        <source>Rename</source>
+        <translation>Rinomina</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="472"/>
+        <source>Delete</source>
+        <translation>Elimina</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="508"/>
+        <source>Delete all in &quot;%1&quot;?</source>
+        <translation>Vuoi eliminare tutto in &apos;%1&apos;?</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="534"/>
+        <source>New name:</source>
+        <translation>Nuovo nome:</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="542"/>
+        <source>Delete Form</source>
+        <translation>Elimina modulo</translation>
+    </message>
+    <message>
+        <location filename="../../controls/projecttreewidget.cpp" line="543"/>
+        <source>Delete &quot;%1&quot; from the project?</source>
+        <translation>Vuoi eliminare &apos;%1&apos; dal progetto?</translation>
+    </message>
+</context>
+<context>
+    <name>QMdiArea</name>
+    <message>
+        <location filename="../../controls/mditabbar.cpp" line="117"/>
+        <source>(Untitled)</source>
+        <translation>(Senza titolo)</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusDevice</name>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="542"/>
+        <source>Referenced serial device does not exist.</source>
+        <translation>Il dispositivo seriale di riferimento non esiste.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="545"/>
+        <source>Cannot open serial device due to permissions.</source>
+        <translation>Impossibile aprire il dispositivo seriale a causa delle autorizzazioni.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="549"/>
+        <source>Cannot open serial device.</source>
+        <translation>Impossibile aprire il dispositivo seriale.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="552"/>
+        <source>Write error.</source>
+        <translation>Errore di scrittura.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="555"/>
+        <source>Read error.</source>
+        <translation>Errore di lettura.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="558"/>
+        <source>Resource error.</source>
+        <translation>Errore di risorsa.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="561"/>
+        <source>Device operation is not supported error.</source>
+        <translation>Il funzionamento del dispositivo non è supportato errore.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="565"/>
+        <source>Timeout error.</source>
+        <translation>Errore timeout.</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="568"/>
+        <source>Unknown error.</source>
+        <translation>Errore sconosciuto.</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusRtuSerialServer</name>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="368"/>
+        <source>Requesting serial port is closed</source>
+        <translation>La richiesta della porta seriale è chiusa</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtuserialserver.cpp" line="392"/>
+        <source>Could not write response to client</source>
+        <translation>Impossibile scrivere la risposta nel client</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusTcpServer</name>
+    <message>
+        <location filename="../../modbustcpserver.cpp" line="240"/>
+        <source>Requesting socket is closed</source>
+        <translation>Il socket richiedente è chiuso</translation>
+    </message>
+    <message>
+        <location filename="../../modbustcpserver.cpp" line="247"/>
+        <source>Could not write response to client</source>
+        <translation>Impossibile scrivere la risposta nel client</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../appproject.cpp" line="677"/>
+        <source>Failed to write project XML.</source>
+        <translation>Impossibile scrivere l&apos;XML del progetto.</translation>
+    </message>
+    <message>
+        <location filename="../../projectserializer.cpp" line="317"/>
+        <source>The project document is empty.</source>
+        <translation>Il documento del progetto è vuoto.</translation>
+    </message>
+    <message>
+        <location filename="../../projectserializer.cpp" line="324"/>
+        <source>Unsupported project document root: %1</source>
+        <translation>Radice documento del progetto non supportata: %1</translation>
+    </message>
+</context>
+<context>
+    <name>QSerialPort</name>
+    <message>
+        <location filename="../../serialportutils.h" line="27"/>
+        <source>NONE</source>
+        <translation>NESSUNO</translation>
+    </message>
+    <message>
+        <location filename="../../serialportutils.h" line="30"/>
+        <source>EVEN</source>
+        <translation>DISPARI</translation>
+    </message>
+    <message>
+        <location filename="../../serialportutils.h" line="33"/>
+        <source>ODD</source>
+        <translation>PARI</translation>
+    </message>
+    <message>
+        <location filename="../../serialportutils.h" line="36"/>
+        <source>SPACE</source>
+        <translation>SPAZIO</translation>
+    </message>
+    <message>
+        <location filename="../../serialportutils.h" line="39"/>
+        <source>MARK</source>
+        <translation>SEGNO</translation>
+    </message>
+</context>
+<context>
+    <name>QWidget</name>
+    <message>
+        <location filename="../../controls/mditabbar.cpp" line="90"/>
+        <source>*</source>
+        <translation>*</translation>
+    </message>
+</context>
+<context>
+    <name>RegistryOrderItemDelegate</name>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="278"/>
+        <source>Most Significant Register First - big-endian word order</source>
+        <translation>Primo registro più significativo: ordine delle parole big-endian</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="279"/>
+        <source>Least Significant Register First - little-endian word order</source>
+        <translation>Primo registro meno significativo: ordine delle parole little-endian</translation>
+    </message>
+</context>
+<context>
+    <name>RunModeComboBox</name>
+    <message>
+        <location filename="../../applogger.cpp" line="229"/>
+        <location filename="../../controls/runmodecombobox.cpp" line="19"/>
+        <location filename="../../controls/runmodecombobox.cpp" line="39"/>
+        <source>Once</source>
+        <translation>Una volta</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="231"/>
+        <location filename="../../controls/runmodecombobox.cpp" line="20"/>
+        <location filename="../../controls/runmodecombobox.cpp" line="43"/>
+        <source>Periodically</source>
+        <translation>Periodicamente</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptEditorWindow</name>
+    <message>
+        <location filename="../../controls/scripteditorwindow.cpp" line="126"/>
+        <source> ms</source>
+        <translation> ms</translation>
+    </message>
+    <message>
+        <location filename="../../controls/scripteditorwindow.cpp" line="139"/>
+        <source>Run on startup</source>
+        <translation>Esegui all&apos;avvio</translation>
+    </message>
+    <message>
+        <location filename="../../controls/scripteditorwindow.cpp" line="160"/>
+        <source>Run Script</source>
+        <translation>Esegui script</translation>
+    </message>
+    <message>
+        <location filename="../../controls/scripteditorwindow.cpp" line="167"/>
+        <source>Stop Script</source>
+        <translation>Interrompi script</translation>
+    </message>
+</context>
+<context>
+    <name>SearchLineEdit</name>
+    <message>
+        <location filename="../../controls/searchlineedit.cpp" line="19"/>
+        <location filename="../../controls/searchlineedit.cpp" line="35"/>
+        <source>Type text to search...</source>
+        <translation>Digita il testo da cercare...</translation>
+    </message>
+</context>
+<context>
+    <name>Server</name>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="86"/>
+        <source>An incorrect device ID was specified (%1)</source>
+        <translation>È stato specificato un ID dispositivo errato (%1)</translation>
+    </message>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="509"/>
+        <source>An array of values is expected</source>
+        <translation>È prevista una serie di valori</translation>
+    </message>
+    <message>
+        <location filename="../../jsobjects/server.cpp" line="1012"/>
+        <source>A callback function is expected</source>
+        <translation>È prevista una funzione di callback</translation>
+    </message>
+</context>
+<context>
+    <name>SimulationModeComboBox</name>
+    <message>
+        <location filename="../../controls/simulationmodecombobox.cpp" line="50"/>
+        <location filename="../../controls/simulationmodecombobox.cpp" line="56"/>
+        <source>Random</source>
+        <translation>Casuale</translation>
+    </message>
+    <message>
+        <location filename="../../controls/simulationmodecombobox.cpp" line="51"/>
+        <source>Toggle</source>
+        <translation>Attiva/disattiva</translation>
+    </message>
+    <message>
+        <location filename="../../controls/simulationmodecombobox.cpp" line="57"/>
+        <source>Increment</source>
+        <translation>Incremento</translation>
+    </message>
+    <message>
+        <location filename="../../controls/simulationmodecombobox.cpp" line="58"/>
+        <source>Decrement</source>
+        <translation>Decremento</translation>
+    </message>
+</context>
+<context>
+    <name>StatisticWidget</name>
+    <message>
+        <location filename="../../controls/statisticwidget.ui" line="40"/>
+        <source>Requests: 0</source>
+        <translation>Richieste: 0</translation>
+    </message>
+    <message>
+        <location filename="../../controls/statisticwidget.ui" line="47"/>
+        <source>Responses: 0</source>
+        <translation>Risposte: 0</translation>
+    </message>
+    <message>
+        <location filename="../../controls/statisticwidget.ui" line="69"/>
+        <source>Clear</source>
+        <translation>Azzera</translation>
+    </message>
+    <message>
+        <location filename="../../controls/statisticwidget.ui" line="104"/>
+        <source>Pause</source>
+        <translation>Pausa</translation>
+    </message>
+    <message>
+        <location filename="../../controls/statisticwidget.cpp" line="116"/>
+        <location filename="../../controls/statisticwidget.cpp" line="120"/>
+        <source>Pause Logging</source>
+        <translation>Sospendi la registrazione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/statisticwidget.cpp" line="124"/>
+        <source>Resume Logging</source>
+        <translation>Riprendi registrazione</translation>
+    </message>
+    <message>
+        <location filename="../../controls/statisticwidget.cpp" line="157"/>
+        <source>Requests: %1</source>
+        <translation>Richieste: %1</translation>
+    </message>
+    <message>
+        <location filename="../../controls/statisticwidget.cpp" line="158"/>
+        <source>Responses: %1</source>
+        <translation>Risposte: %1</translation>
+    </message>
+</context>
+<context>
+    <name>TrafficLogWindow</name>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="24"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="220"/>
+        <source>Traffic</source>
+        <translation>Traffico</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="122"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="221"/>
+        <source>Unit ID:</source>
+        <translation>ID unità:</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="126"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="133"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="222"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="230"/>
+        <source>All</source>
+        <translation>Tutto</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="127"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="223"/>
+        <source>Filter by Unit Identifier (0 = all)</source>
+        <translation>Filtra per identificatore unità (0 = tutti)</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="131"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="224"/>
+        <source>Function:</source>
+        <translation>Funzione:</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="145"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="225"/>
+        <source>Limit:</source>
+        <translation>Limite:</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="157"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="199"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="226"/>
+        <source>Pause</source>
+        <translation>Pausa</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="162"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="227"/>
+        <source>Clear</source>
+        <translation>Azzera</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="199"/>
+        <location filename="../../controls/trafficlogwindow.cpp" line="226"/>
+        <source>Resume</source>
+        <translation>Riprendi</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="206"/>
+        <source>Clear Traffic</source>
+        <translation>Cancella traffico</translation>
+    </message>
+    <message>
+        <location filename="../../controls/trafficlogwindow.cpp" line="207"/>
+        <source>Clear all messages from the traffic log?</source>
+        <translation>Vuoi cancellare tutti i messaggi dal registro del traffico?</translation>
+    </message>
+</context>
+<context>
+    <name>TypeItemDelegate</name>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="150"/>
+        <source>Coils</source>
+        <translation>Bobine</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="151"/>
+        <source>Discrete Inputs</source>
+        <translation>Ingressi discreti</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="152"/>
+        <source>Input Registers</source>
+        <translation>Registri ingresso</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="153"/>
+        <source>Holding Registers</source>
+        <translation>Registri blocco</translation>
+    </message>
+</context>
+<context>
+    <name>UpdateChecker</name>
+    <message>
+        <location filename="../../updatechecker.cpp" line="115"/>
+        <source>SSL is not supported in this build.</source>
+        <translation>In questa build SSL non è supportato.</translation>
+    </message>
+    <message>
+        <location filename="../../updatechecker.cpp" line="147"/>
+        <source>Failed to parse update information.</source>
+        <translation>Impossibile analizzare le informazioni sull&apos;aggiornamento.</translation>
+    </message>
+    <message>
+        <location filename="../../updatechecker.cpp" line="157"/>
+        <source>Update information is incomplete.</source>
+        <translation>Le informazioni sull&apos;aggiornamento non sono complete.</translation>
+    </message>
+</context>
+</TS>

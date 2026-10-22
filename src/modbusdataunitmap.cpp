@@ -6,6 +6,7 @@
 /// \brief Implements the modbusdataunitmap functionality.
 ///
 
+#include <algorithm>
 #include "modbusdataunitmap.h"
 
 static bool unitMapsEqual(const QModbusDataUnitMap& a, const QModbusDataUnitMap& b)
@@ -139,27 +140,81 @@ bool ModbusDataUnitMap::ensureRange(QModbusDataUnit::RegisterType pointType, qui
     if (_isGlobal || length == 0)
         return false;
 
-    if (containsRange(pointType, pointAddress, length))
+    if (coveredByUnits(pointType, pointAddress, length))
         return false;
 
-    const auto it = _modbusDataUnitMap.constFind(pointType);
-    quint32 startAddress = pointAddress;
-    quint32 endAddress = static_cast<quint32>(pointAddress) + length;
-
-    if (it != _modbusDataUnitMap.constEnd()) {
-        startAddress = qMin<quint32>(startAddress, it.value().startAddress());
-        endAddress = qMax<quint32>(endAddress, static_cast<quint32>(it.value().startAddress()) + it.value().valueCount());
-    }
-
-    QModbusDataUnit expanded(pointType, static_cast<quint16>(startAddress),
-                             static_cast<quint16>(endAddress - startAddress));
-    for (quint32 address = startAddress; address < endAddress; ++address) {
-        expanded.setValue(static_cast<int>(address - startAddress),
-                          getDataValue(_modbusDataUnitGlobalMap, pointType, static_cast<quint16>(address)));
-    }
-
-    _modbusDataUnitMap.insert(pointType, expanded);
+    _autoRanges.append(QModbusDataUnit(pointType, pointAddress, length));
+    updateDataUnitMap();
     return true;
+}
+
+///
+/// \brief Checks that every address of the range belongs to a registered unit map or an auto-added range,
+/// unlike containsRange() which also accepts the gaps of the merged per-type range.
+/// \return True when the whole range may be served to a Modbus client.
+///
+bool ModbusDataUnitMap::isMapped(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    return _isGlobal ? containsRange(pointType, pointAddress, length)
+                     : coveredByUnits(pointType, pointAddress, length);
+}
+
+///
+/// \brief ModbusDataUnitMap::coveredByUnits checks the range against the individual unit maps and
+/// auto-added ranges, ignoring the global map mode.
+///
+bool ModbusDataUnitMap::coveredByUnits(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    if (length == 0)
+        return false;
+
+    QList<QModbusDataUnit> ranges;
+    for (const auto& unit : _dataUnits)
+        if (unit.registerType() == pointType)
+            ranges.append(unit);
+    for (const auto& unit : _autoRanges)
+        if (unit.registerType() == pointType)
+            ranges.append(unit);
+
+    std::sort(ranges.begin(), ranges.end(), [](const QModbusDataUnit& a, const QModbusDataUnit& b) {
+        return a.startAddress() < b.startAddress();
+    });
+
+    quint32 next = pointAddress;
+    const quint32 end = next + length;
+    for (const auto& unit : ranges) {
+        if (static_cast<quint32>(unit.startAddress()) > next)
+            break;
+        next = qMax<quint32>(next, static_cast<quint32>(unit.startAddress()) + unit.valueCount());
+        if (next >= end)
+            return true;
+    }
+    return false;
+}
+
+///
+/// \brief Resets value, timestamp, description and configured value of every address in the range
+/// that is no longer covered by any unit map.
+/// \return True when at least one address was reset.
+///
+bool ModbusDataUnitMap::clearUnmappedData(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+{
+    bool cleared = false;
+    const quint32 end = static_cast<quint32>(pointAddress) + length;
+    for (quint32 address = pointAddress; address < end; ++address) {
+        const auto addr = static_cast<quint16>(address);
+        if (coveredByUnits(pointType, addr, 1))
+            continue;
+
+        const auto key = makeLocalKey(pointType, addr);
+        setDataValue(_modbusDataUnitMap, pointType, addr, 0);
+        setDataValue(_modbusDataUnitGlobalMap, pointType, addr, 0);
+        _timestamps.remove(key);
+        _descriptions.remove(key);
+        _configuredValues.remove(key);
+        cleared = true;
+    }
+    return cleared;
 }
 
 
@@ -522,26 +577,30 @@ void ModbusDataUnitMap::updateDataUnitMap()
     {
         multimap.insert(unit.registerType(), unit);
     }
+    for(auto&& unit : _autoRanges)
+    {
+        multimap.insert(unit.registerType(), unit);
+    }
 
     QModbusDataUnitMap modbusMap;
     for(auto&& type: multimap.uniqueKeys())
     {
-        quint16 startAddress = 65535;
-        quint16 endAddress = 0;
+        quint32 startAddress = 65535;
+        quint32 endAddress = 0;
         for(auto&& unit : multimap.values(type))
         {
-            startAddress = qMin<quint16>(startAddress, unit.startAddress());
-            endAddress = qMax<quint16>(endAddress, unit.startAddress() + unit.valueCount());
+            startAddress = qMin<quint32>(startAddress, unit.startAddress());
+            endAddress = qMax<quint32>(endAddress, static_cast<quint32>(unit.startAddress()) + unit.valueCount());
         }
 
-        const quint16 length = endAddress - startAddress;
+        const auto length = static_cast<quint16>(endAddress - startAddress);
         if(length > 0)
-            modbusMap.insert(type, {type, startAddress, length});
+            modbusMap.insert(type, {type, static_cast<int>(startAddress), length});
 
         for(int i = 0; i < length; i++)
         {
-            const auto value = getDataValue(_modbusDataUnitGlobalMap, type, startAddress + i);
-            setDataValue(modbusMap, type, startAddress + i, value);
+            const auto address = static_cast<quint16>(startAddress + i);
+            setDataValue(modbusMap, type, address, getDataValue(_modbusDataUnitGlobalMap, type, address));
         }
     }
     _modbusDataUnitMap = modbusMap;

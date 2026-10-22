@@ -188,7 +188,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../../appproject.cpp" line="758"/>
+        <location filename="../../appproject.cpp" line="759"/>
         <source>Failed to store the window layout: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1355,18 +1355,18 @@ Open the download page?</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="42"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
         <source>System</source>
         <comment>theme</comment>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="44"/>
         <source>Light</source>
         <translation>浅色</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="44"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="45"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
@@ -2263,8 +2263,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="741"/>
-        <location filename="../../formtrafficview.cpp" line="893"/>
+        <location filename="../../formtrafficview.cpp" line="750"/>
+        <location filename="../../formtrafficview.cpp" line="903"/>
         <source>Exceptions Only</source>
         <translation>仅异常</translation>
     </message>
@@ -2284,63 +2284,63 @@ Source: %3</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="647"/>
+        <location filename="../../formtrafficview.cpp" line="656"/>
         <source>Clear Traffic</source>
         <translation>清除通信记录</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="648"/>
+        <location filename="../../formtrafficview.cpp" line="657"/>
         <source>Clear all messages from the traffic log?</source>
         <translation>确定要清除通信记录中的所有消息吗？</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="662"/>
+        <location filename="../../formtrafficview.cpp" line="671"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="669"/>
+        <location filename="../../formtrafficview.cpp" line="678"/>
         <source>Log exported successfully to file %1</source>
         <translation>日志成功导出至 %1</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="671"/>
+        <location filename="../../formtrafficview.cpp" line="680"/>
         <source>Export log error!</source>
         <translation>导出日志错误！</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="704"/>
-        <location filename="../../formtrafficview.cpp" line="877"/>
+        <location filename="../../formtrafficview.cpp" line="713"/>
+        <location filename="../../formtrafficview.cpp" line="887"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="710"/>
-        <location filename="../../formtrafficview.cpp" line="881"/>
+        <location filename="../../formtrafficview.cpp" line="719"/>
+        <location filename="../../formtrafficview.cpp" line="891"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = 所有单元ID</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="731"/>
-        <location filename="../../formtrafficview.cpp" line="888"/>
+        <location filename="../../formtrafficview.cpp" line="740"/>
+        <location filename="../../formtrafficview.cpp" line="898"/>
         <source>Source:</source>
         <translation>来源：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="742"/>
-        <location filename="../../formtrafficview.cpp" line="894"/>
+        <location filename="../../formtrafficview.cpp" line="751"/>
+        <location filename="../../formtrafficview.cpp" line="904"/>
         <source>Show only responses with Modbus exception</source>
         <translation>仅显示带有Modbus异常的响应</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="749"/>
-        <location filename="../../formtrafficview.cpp" line="898"/>
+        <location filename="../../formtrafficview.cpp" line="758"/>
+        <location filename="../../formtrafficview.cpp" line="908"/>
         <source>Autoscroll</source>
         <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="750"/>
-        <location filename="../../formtrafficview.cpp" line="899"/>
+        <location filename="../../formtrafficview.cpp" line="759"/>
+        <location filename="../../formtrafficview.cpp" line="909"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>自动滚动到最新条目</translation>
     </message>
@@ -2349,21 +2349,21 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
         <location filename="../../formtrafficview.cpp" line="541"/>
-        <location filename="../../formtrafficview.cpp" line="709"/>
-        <location filename="../../formtrafficview.cpp" line="734"/>
-        <location filename="../../formtrafficview.cpp" line="880"/>
+        <location filename="../../formtrafficview.cpp" line="718"/>
+        <location filename="../../formtrafficview.cpp" line="743"/>
+        <location filename="../../formtrafficview.cpp" line="890"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="758"/>
-        <location filename="../../formtrafficview.cpp" line="903"/>
+        <location filename="../../formtrafficview.cpp" line="767"/>
+        <location filename="../../formtrafficview.cpp" line="913"/>
         <source>Rows:</source>
         <translation>行数：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="719"/>
-        <location filename="../../formtrafficview.cpp" line="885"/>
+        <location filename="../../formtrafficview.cpp" line="728"/>
+        <location filename="../../formtrafficview.cpp" line="895"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>
@@ -2525,93 +2525,103 @@ Script.onInit(()=&gt;{
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="59"/>
-        <location filename="../../controls/mainstatusbar.cpp" line="173"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="78"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="192"/>
         <source>No updates available</source>
         <translation>无可用更新</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="321"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="350"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>新版本 %1 可用。点击下载。</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="200"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="220"/>
         <source>Unit Identifiers: %1</source>
         <translation>单元标识符：%1</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="256"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="285"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP服务器%1:%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="266"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="295"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="212"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="231"/>
         <source>No Resp</source>
         <translation>无响应</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="171"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="190"/>
         <source>New version %1 is available.</source>
         <translation>新版本 %1 已发布。</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="214"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="233"/>
         <source>Bad ID</source>
         <translation>错误ID</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="216"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="235"/>
         <source>Ill Func</source>
         <translation>非法功能</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="218"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="237"/>
         <source>Dev Busy</source>
         <translation>设备忙</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="220"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="239"/>
         <source>Bad CRC</source>
         <translation>错误CRC</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="222"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="241"/>
         <source>Delay %1ms</source>
         <translation>延迟 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="224"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="243"/>
         <source>Rnd Delay %1ms</source>
         <translation>随机延迟 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="242"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="261"/>
+        <source>Sniffer Mode</source>
+        <translation>嗅探模式</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="262"/>
+        <source>Serial RTU ports only listen to the bus and do not respond</source>
+        <translation>RTU 串口仅监听总线，不进行响应</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="271"/>
         <source>Clients: %1</source>
         <translation>客户端：%1</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="260"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="289"/>
         <source>Modbus RTU over TCP/IP Srv %1:%2</source>
         <translation>Modbus RTU over TCP/IP 服务器 %1:%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="290"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="319"/>
         <source>Req: %1  Resp: %2</source>
         <translation>请求：%1  响应：%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="302"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="331"/>
         <source>New version available</source>
         <translation>发现新版本</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="303"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="332"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -2643,7 +2653,7 @@ Open the download page?</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="226"/>
+        <location filename="../../mainwindow.ui" line="228"/>
         <source>Setup</source>
         <translation>设置</translation>
     </message>
@@ -2653,286 +2663,296 @@ Open the download page?</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="237"/>
+        <location filename="../../mainwindow.ui" line="239"/>
         <source>Window</source>
         <translation>窗口</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="244"/>
+        <location filename="../../mainwindow.ui" line="246"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="250"/>
+        <location filename="../../mainwindow.ui" line="252"/>
         <source>View</source>
         <translation>视图</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="175"/>
-        <location filename="../../mainwindow.ui" line="316"/>
+        <location filename="../../mainwindow.ui" line="320"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="606"/>
+        <location filename="../../mainwindow.ui" line="625"/>
         <source>Modbus Definitions</source>
         <translation>Modbus定义</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="617"/>
+        <location filename="../../mainwindow.ui" line="636"/>
         <source>Tabbed View</source>
         <translation>标签页视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="625"/>
+        <location filename="../../mainwindow.ui" line="644"/>
         <source>Close All Windows</source>
         <translation>关闭所有窗口</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="588"/>
+        <location filename="../../mainwindow.ui" line="607"/>
         <source>Msg Parser</source>
         <translation>报文解析</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="324"/>
+        <location filename="../../mainwindow.ui" line="328"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="336"/>
+        <location filename="../../mainwindow.ui" line="340"/>
         <source>Open Project...</source>
         <translation>打开项目...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="339"/>
+        <location filename="../../mainwindow.ui" line="343"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1900"/>
+        <location filename="../../mainwindow.ui" line="352"/>
+        <location filename="../../mainwindow.cpp" line="1920"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="353"/>
+        <location filename="../../mainwindow.ui" line="357"/>
         <source>Save Project As...</source>
         <translation>项目另存为...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="358"/>
+        <location filename="../../mainwindow.ui" line="362"/>
         <source>Close Project</source>
         <translation>关闭项目</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="367"/>
+        <location filename="../../mainwindow.ui" line="371"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="375"/>
+        <location filename="../../mainwindow.ui" line="379"/>
         <source>Print Setup...</source>
         <translation>打印设置...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="380"/>
+        <location filename="../../mainwindow.ui" line="384"/>
         <source>Recent File</source>
         <translation>最近文件</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="385"/>
+        <location filename="../../mainwindow.ui" line="389"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="397"/>
+        <location filename="../../mainwindow.ui" line="401"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="406"/>
+        <location filename="../../mainwindow.ui" line="410"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="622"/>
+        <location filename="../../mainwindow.ui" line="437"/>
+        <source>Sniffer Mode</source>
+        <translation>嗅探模式</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="440"/>
+        <source>Sniffer mode: show all Modbus RTU traffic on serial ports without responding</source>
+        <translation>嗅探模式：显示串口上的全部 Modbus RTU 流量，不进行响应</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.ui" line="641"/>
         <source>Close All</source>
         <translation>全部复制</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="650"/>
-        <location filename="../../mainwindow.ui" line="653"/>
+        <location filename="../../mainwindow.ui" line="669"/>
+        <location filename="../../mainwindow.ui" line="672"/>
         <source>Output Window</source>
         <translation>输出窗口</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="661"/>
+        <location filename="../../mainwindow.ui" line="680"/>
         <source>Project Tree</source>
         <translation>项目树</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="666"/>
+        <location filename="../../mainwindow.ui" line="685"/>
         <source>Preferences</source>
         <translation>首选项</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="681"/>
+        <location filename="../../mainwindow.ui" line="700"/>
         <source>New Data View</source>
         <translation>新建数据视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="690"/>
+        <location filename="../../mainwindow.ui" line="709"/>
         <source>New Traffic View</source>
         <translation>新建流量视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="699"/>
+        <location filename="../../mainwindow.ui" line="718"/>
         <source>New Script</source>
         <translation>新建脚本</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="708"/>
-        <location filename="../../mainwindow.ui" line="711"/>
+        <location filename="../../mainwindow.ui" line="727"/>
+        <location filename="../../mainwindow.ui" line="730"/>
         <source>New Map View</source>
         <translation>新建映射视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="716"/>
+        <location filename="../../mainwindow.ui" line="735"/>
         <source>Import Script...</source>
         <translation>导入脚本...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="728"/>
+        <location filename="../../mainwindow.ui" line="747"/>
         <source>Split View</source>
         <translation>分割视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="426"/>
+        <location filename="../../mainwindow.ui" line="445"/>
         <source>Cascade</source>
         <translation>层叠</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="431"/>
+        <location filename="../../mainwindow.ui" line="450"/>
         <source>Tile</source>
         <translation>平铺</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="440"/>
+        <location filename="../../mainwindow.ui" line="459"/>
         <source>About Open ModSim...</source>
         <translation>关于Open ModSim...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="468"/>
+        <location filename="../../mainwindow.ui" line="487"/>
         <source>Force Coils</source>
         <translation>强制线圈</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="477"/>
+        <location filename="../../mainwindow.ui" line="496"/>
         <source>Preset Holding Regs</source>
         <translation>预设保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="486"/>
+        <location filename="../../mainwindow.ui" line="505"/>
         <source>Preset Input Regs</source>
         <translation>预设输入寄存器</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="495"/>
+        <location filename="../../mainwindow.ui" line="514"/>
         <source>Force Discretes</source>
         <translation>强制离散值</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="504"/>
+        <location filename="../../mainwindow.ui" line="523"/>
         <source>Undo</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="516"/>
+        <location filename="../../mainwindow.ui" line="535"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="528"/>
+        <location filename="../../mainwindow.ui" line="547"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="540"/>
+        <location filename="../../mainwindow.ui" line="559"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="552"/>
+        <location filename="../../mainwindow.ui" line="571"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="560"/>
+        <location filename="../../mainwindow.ui" line="579"/>
         <source>Select All</source>
         <translation>选择所有</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="568"/>
+        <location filename="../../mainwindow.ui" line="587"/>
         <source>Find...</source>
         <translation>查找...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="576"/>
+        <location filename="../../mainwindow.ui" line="595"/>
         <source>Replace...</source>
         <translation>替换...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="579"/>
+        <location filename="../../mainwindow.ui" line="598"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="102"/>
-        <location filename="../../mainwindow.ui" line="636"/>
-        <location filename="../../mainwindow.ui" line="639"/>
+        <location filename="../../mainwindow.ui" line="655"/>
+        <location filename="../../mainwindow.ui" line="658"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="642"/>
+        <location filename="../../mainwindow.ui" line="661"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="274"/>
-        <location filename="../../mainwindow.ui" line="451"/>
+        <location filename="../../mainwindow.ui" line="276"/>
+        <location filename="../../mainwindow.ui" line="470"/>
         <source>Toolbar</source>
         <translation>工具栏</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="459"/>
+        <location filename="../../mainwindow.ui" line="478"/>
         <source>Status Bar</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="983"/>
+        <location filename="../../mainwindow.cpp" line="985"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="686"/>
+        <location filename="../../mainwindow.cpp" line="303"/>
+        <location filename="../../mainwindow.cpp" line="688"/>
         <source>Open Recent</source>
         <translation>最近打开</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="303"/>
-        <location filename="../../mainwindow.cpp" line="2034"/>
+        <location filename="../../mainwindow.cpp" line="304"/>
+        <location filename="../../mainwindow.cpp" line="2054"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2045"/>
+        <location filename="../../mainwindow.cpp" line="2065"/>
         <source>Clear Recent Projects</source>
         <translation>清除最近使用的项目</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2046"/>
+        <location filename="../../mainwindow.cpp" line="2066"/>
         <source>Clear the list of recent projects?</source>
         <translation>是否清除最近使用的项目列表？</translation>
     </message>
@@ -2947,7 +2967,7 @@ Open the download page?</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="774"/>
+        <location filename="../../mainwindow.cpp" line="776"/>
         <source>Would you like to combine the file(s) with the project?
 
 The global settings part of the merging file(s) will be ignored.
@@ -2959,26 +2979,26 @@ Please verify the merge result carefully.</source>
 请仔细核对合并结果。</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="981"/>
-        <location filename="../../mainwindow.cpp" line="1929"/>
+        <location filename="../../mainwindow.cpp" line="983"/>
+        <location filename="../../mainwindow.cpp" line="1949"/>
         <source>Project files (*.omsim)</source>
         <translation>项目文件 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="982"/>
+        <location filename="../../mainwindow.cpp" line="984"/>
         <source>Project 1.x files (*.xml)</source>
         <translation>项目 1.x 文件 (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1542"/>
-        <location filename="../../mainwindow.cpp" line="1955"/>
+        <location filename="../../mainwindow.cpp" line="1561"/>
+        <location filename="../../mainwindow.cpp" line="1975"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="157"/>
-        <location filename="../../mainwindow.cpp" line="689"/>
-        <location filename="../../mainwindow.cpp" line="1733"/>
+        <location filename="../../mainwindow.cpp" line="691"/>
+        <location filename="../../mainwindow.cpp" line="1752"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3288,7 +3308,7 @@ Please verify the merge result carefully.</source>
         <translation>窗体已重命名：&apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1375"/>
+        <location filename="../../mainwindow.cpp" line="1394"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3303,19 +3323,19 @@ Please verify the merge result carefully.</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="418"/>
-        <location filename="../../mainwindow.ui" line="421"/>
+        <location filename="../../mainwindow.ui" line="422"/>
+        <location filename="../../mainwindow.ui" line="425"/>
         <location filename="../../applogger.cpp" line="158"/>
         <source>Hex View</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1901"/>
+        <location filename="../../mainwindow.cpp" line="1921"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2022"/>
+        <location filename="../../mainwindow.cpp" line="2042"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
@@ -3325,7 +3345,7 @@ Please verify the merge result carefully.</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1333"/>
+        <location filename="../../mainwindow.cpp" line="1352"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
@@ -3710,12 +3730,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1061"/>
+        <location filename="../../modbusmultiserver.cpp" line="1118"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了错误的设备地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1624"/>
+        <location filename="../../modbusmultiserver.cpp" line="1692"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
@@ -4005,47 +4025,47 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="476"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="542"/>
         <source>Referenced serial device does not exist.</source>
         <translation>指定的串行设备不存在。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="479"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="545"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由于权限问题，无法打开串行设备。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="483"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="549"/>
         <source>Cannot open serial device.</source>
         <translation>无法打开串行设备。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="486"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="552"/>
         <source>Write error.</source>
         <translation>写入错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="489"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="555"/>
         <source>Read error.</source>
         <translation>读取错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="492"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="558"/>
         <source>Resource error.</source>
         <translation>资源错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="495"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="561"/>
         <source>Device operation is not supported error.</source>
         <translation>设备操作不支持。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="499"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="565"/>
         <source>Timeout error.</source>
         <translation>超时错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="502"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="568"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>
@@ -4053,12 +4073,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusRtuSerialServer</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="359"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="368"/>
         <source>Requesting serial port is closed</source>
         <translation>请求的串口已关闭</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="379"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="392"/>
         <source>Could not write response to client</source>
         <translation>无法写入对客户端的响应</translation>
     </message>
@@ -4079,7 +4099,7 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="676"/>
+        <location filename="../../appproject.cpp" line="677"/>
         <source>Failed to write project XML.</source>
         <translation>项目 XML 写入失败。</translation>
     </message>

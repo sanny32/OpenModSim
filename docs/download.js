@@ -69,6 +69,7 @@ function updateDownloadLinks(release) {
         debQt5: assets.find(a => a.name.match(/qt5-omodsim\d+_.*_amd64\.deb$/i)),
         rpmQt6: assets.find(a => a.name.match(/qt6-omodsim\d+-.*\.x86_64\.rpm$/i)),
         rpmPubkey: assets.find(a => a.name.match(/qt6-omodsim\d+\.rpm\.pubkey$/i)),
+        appimage: assets.find(a => a.name.match(/^OpenModSim-.*-x86_64\.AppImage$/i)),
         flatpak: assets.find(a => a.name.match(/io\.github\.sanny32\.omodsim\d+.*\.flatpak$/i))
     };
 
@@ -91,6 +92,7 @@ function updateDownloadLinks(release) {
     updateLink('deb-qt5-link', files.debQt5, 'DEB Qt5');
     updateLink('rpm-qt6-link', files.rpmQt6, 'RPM Qt6');
     updateLink('rpm-pubkey-link', files.rpmPubkey, 'RPM Public Key');
+    updateLink('appimage-link', files.appimage, 'AppImage');
     updateLink('flatpak-link', files.flatpak, 'Flatpak');
 
     // Update all install commands with actual file names
@@ -129,6 +131,13 @@ function updateInstallCommands(files) {
         const dmgName = files.macosQt6.name;
         document.querySelectorAll('.qt6-macos-package-name').forEach(el => {
             el.textContent = dmgName;
+        });
+    }
+
+    if (files.appimage) {
+        const appImageName = files.appimage.name;
+        document.querySelectorAll('.appimage-package-name').forEach(el => {
+            el.textContent = appImageName;
         });
     }
 

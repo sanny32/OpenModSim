@@ -50,7 +50,7 @@ case "$ID" in
         INSTALL_CMD="zypper install -y"
         SEARCH_CMD="zypper search"
         ;;
-    arch|endeavouros|manjaro)
+    arch|endeavouros|manjaro|cachyos)
         DISTRO="arch-based"
         CHECK_CMD="pacman -Qq"
         INSTALL_CMD="pacman -S --needed --noconfirm"

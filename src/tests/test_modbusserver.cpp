@@ -96,6 +96,7 @@ private slots:
     void processesDiagnosticsAndIdentification();
     void rejectsInvalidRequests();
     void autoAddsRequestedRanges();
+    void rejectsRequestsToGapsBetweenUnitMaps();
     void invokesCustomHandler();
     void exercisesHeaderUtilities();
 };
@@ -404,6 +405,38 @@ void TestModbusServer::autoAddsRequestedRanges()
     quint16 value = 1;
     QVERIFY(server.data(QModbusDataUnit::HoldingRegisters, 11, &value, 77));
     QCOMPARE(value, quint16(0));
+}
+
+void TestModbusServer::rejectsRequestsToGapsBetweenUnitMaps()
+{
+    TestableModbusServer server;
+    ModbusDataUnitMap map;
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 0, 1);
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 10, 1);
+    server.addServerAddress(1);
+    server.setMap(map, 1);
+
+    QModbusResponse response = server.processRequest(
+        QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(10), quint16(1)), 1);
+    QVERIFY(!isException(response));
+
+    response = server.processRequest(
+        QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(5), quint16(1)), 1);
+    QVERIFY(isException(response));
+    QCOMPARE(QModbusExceptionResponse(response).exceptionCode(), QModbusExceptionResponse::IllegalDataAddress);
+
+    response = server.processRequest(
+        QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(0), quint16(11)), 1);
+    QCOMPARE(QModbusExceptionResponse(response).exceptionCode(), QModbusExceptionResponse::IllegalDataAddress);
+
+    response = server.processRequest(
+        QModbusRequest(QModbusRequest::WriteSingleRegister, quint16(5), quint16(42)), 1);
+    QCOMPARE(QModbusExceptionResponse(response).exceptionCode(), QModbusExceptionResponse::IllegalDataAddress);
+
+    QVERIFY(server.setData(QModbusDataUnit::HoldingRegisters, 5, 42, 1));
+    quint16 value = 0;
+    QVERIFY(server.data(QModbusDataUnit::HoldingRegisters, 5, &value, 1));
+    QCOMPARE(value, quint16(42));
 }
 
 void TestModbusServer::invokesCustomHandler()

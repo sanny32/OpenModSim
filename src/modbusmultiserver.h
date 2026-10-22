@@ -9,6 +9,7 @@
 #ifndef MODBUSMULTISERVER_H
 #define MODBUSMULTISERVER_H
 
+#include <atomic>
 #include <QThread>
 #include <QModbusServer>
 #include <QUuid>
@@ -49,7 +50,24 @@ public:
     void removeUnitMap(QUuid id, quint8 deviceId);
     QList<int> registeredDeviceIds() const;
 
+    ///
+    /// \brief Resets the stored data of every address in the range that no unit map covers any more,
+    /// so a deleted register does not bring its old value back when it is added again.
+    ///
+    void clearUnmappedData(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+
     void setRequestHandler(const RequestHandlerPtr& handler);
+
+    ///
+    /// \brief Returns true when serial RTU ports passively capture bus traffic instead of serving requests.
+    ///
+    bool snifferMode() const;
+
+    ///
+    /// \brief Switches every current and future serial RTU port into or out of sniffer mode.
+    /// \param on True to stop responding and report every frame seen on the bus.
+    ///
+    void setSnifferMode(bool on);
 
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice(ConnectionType type, const QString& port);
@@ -123,6 +141,9 @@ signals:
     void requestOnConnection(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void responseOnConnection(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
 
+    void snifferModeChanged(bool on);
+    void sniffedFrameOnConnection(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
+
     void rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
 
@@ -147,6 +168,7 @@ private slots:
     void on_clientDisconnected(const QString& clientAddress, quint16 clientPort);
     void on_rawDataReceived(const QDateTime& time, const QByteArray& data);
     void on_rawDataSended(const QDateTime& time, const QByteArray& data);
+    void on_sniffedFrame(QSharedPointer<const ModbusMessage> msg);
     void on_stateChanged(QModbusDevice::State state);
     void on_errorOccurred(QModbusDevice::Error error, int deviceId);
     void on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size, const QString& clientAddress, quint16 clientPort);
@@ -165,6 +187,7 @@ private:
     QThread* _workerThread;
     ModbusDefinitions _definitions;
     RequestHandlerPtr _requestHandler;
+    std::atomic<bool> _snifferMode{false};
     QMap<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };

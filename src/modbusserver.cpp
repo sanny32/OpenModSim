@@ -432,6 +432,9 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
     if (rangeEndAddress < current.startAddress() || rangeEndAddress > internalRangeEndAddress)
         return false;
 
+    if (!isRequestRangeMapped(newData, serverAddress))
+        return false;
+
     bool changeRequired = false;
     for (qsizetype i = 0; i < newData.valueCount(); i++) {
         const quint16 newValue = newData.value(i);
@@ -484,8 +487,25 @@ bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
     if (rangeEndAddress < current.startAddress() || rangeEndAddress > internalRangeEndAddress)
         return false;
 
+    if (!isRequestRangeMapped(*newData, serverAddress))
+        return false;
+
     newData->setValues(current.values().mid(newData->startAddress() - current.startAddress(), newData->valueCount()));
     return true;
+}
+
+///
+/// \brief Rejects client requests that touch gaps between unit maps merged into one per-type range;
+/// internal synchronization outside a request may still access the whole merged range.
+///
+bool ModbusServer::isRequestRangeMapped(const QModbusDataUnit& data, int serverAddress) const
+{
+    if (!_processingRequest)
+        return true;
+
+    return _modbusDataUnitMaps[serverAddress].isMapped(data.registerType(),
+                                                       static_cast<quint16>(data.startAddress()),
+                                                       static_cast<quint16>(data.valueCount()));
 }
 
 ///

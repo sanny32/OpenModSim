@@ -10,6 +10,7 @@ function(omodsim_configure_tests)
     add_library(omodsim_testable STATIC
         modbuserrorsimulations.cpp
         modbusdataunitmap.cpp
+        datamapdatamodel.cpp
         projectaddressspacexml.cpp
         projectcomments.cpp
         projectuserstate.cpp
@@ -19,6 +20,7 @@ function(omodsim_configure_tests)
         modbusrtutcpserver.cpp
         modbusserver.cpp
         modbustcpserver.cpp
+        rtusnifferparser.cpp
         datasimulator.cpp
         legacyprojectparser.cpp
         projectaddressspacefilter.cpp
@@ -100,6 +102,7 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_validators           test_validators.cpp)
     omodsim_add_test(omodsim_tests_dataunitmap          test_modbusdataunitmap.cpp)
     omodsim_add_test(omodsim_tests_multiserver          test_modbusmultiserver.cpp)
+    omodsim_add_test(omodsim_tests_datamapdatamodel     test_datamapdatamodel.cpp)
     omodsim_add_test(omodsim_tests_datasimulator        test_datasimulator.cpp)
     omodsim_add_test(omodsim_tests_modbusmessage        test_modbusmessage.cpp)
     omodsim_add_test(omodsim_tests_modbusmessages       test_modbusmessages.cpp)
@@ -120,6 +123,7 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)
     omodsim_add_test(omodsim_tests_modbustransports      test_modbustransports.cpp)
+    omodsim_add_test(omodsim_tests_rtusnifferparser      test_rtusnifferparser.cpp)
 
     set(omodsim_app_test_sources ${SOURCES})
     list(REMOVE_ITEM omodsim_app_test_sources main.cpp)

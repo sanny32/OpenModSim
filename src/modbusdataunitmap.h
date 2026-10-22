@@ -33,6 +33,21 @@ public:
 
     bool contains(QModbusDataUnit::RegisterType pointType) const;
     bool containsRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+
+    ///
+    /// \brief Checks that every address of the range belongs to a registered unit map or an auto-added range,
+    /// unlike containsRange() which also accepts the gaps of the merged per-type range.
+    /// \return True when the whole range may be served to a Modbus client.
+    ///
+    bool isMapped(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+
+    ///
+    /// \brief Resets value, timestamp, description and configured value of every address in the range
+    /// that is no longer covered by any unit map.
+    /// \return True when at least one address was reset.
+    ///
+    bool clearUnmappedData(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+
     QModbusDataUnit value(QModbusDataUnit::RegisterType pointType) const;
 
     bool isGlobalMap() const;
@@ -68,11 +83,13 @@ public:
 
 private:
     void updateDataUnitMap();
+    bool coveredByUnits(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
 
 private:
     bool _isGlobal;
     AddressSpace _addressSpace;
     QMap<QUuid, QModbusDataUnit> _dataUnits;
+    QList<QModbusDataUnit> _autoRanges;
     QModbusDataUnitMap _modbusDataUnitMap;
     QModbusDataUnitMap _modbusDataUnitGlobalMap;
     AddressDescriptionMap _descriptions;

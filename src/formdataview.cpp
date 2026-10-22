@@ -1448,7 +1448,7 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                         bool okLeft, okTop;
                         const int left = windowAttrs.value("Left").toInt(&okLeft);
                         const int top = windowAttrs.value("Top").toInt(&okTop);
-                        if(okLeft && okTop) {
+                        if(okLeft && okTop && !wnd->isMaximized() && !wnd->isMinimized()) {
                             wnd->move(left, top);
                         }
                     }

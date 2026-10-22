@@ -219,7 +219,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
                 if (attrs.hasAttribute("Left") && attrs.hasAttribute("Top")) {
                     const int left = attrs.value("Left").toInt(&ok);
                     const int top  = attrs.value("Top").toInt();
-                    if (ok) wnd->move(left, top);
+                    if (ok && !wnd->isMaximized() && !wnd->isMinimized())
+                        wnd->move(left, top);
                 }
                 if (attrs.hasAttribute("Width") && attrs.hasAttribute("Height")) {
                     const int w = attrs.value("Width").toInt(&ok);

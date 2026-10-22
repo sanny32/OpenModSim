@@ -122,6 +122,7 @@ set(SOURCES
     qfixedsizedialog.cpp
     quintvalidator.cpp
     recentprojectsprompt.cpp
+    rtusnifferparser.cpp
     scriptdocument.cpp
 
     styles/appstyle.cpp
@@ -304,6 +305,7 @@ set(HEADERS
     qrange.h
     quintvalidator.h
     recentprojectsprompt.h
+    rtusnifferparser.h
     scriptdocument.h
     scriptsettings.h
     serialportutils.h
