@@ -1355,18 +1355,18 @@ Open the download page?</source>
         <translation>系統</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="42"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
         <source>System</source>
         <comment>theme</comment>
         <translation>系統</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="44"/>
         <source>Light</source>
         <translation>淺色</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="44"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="45"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
