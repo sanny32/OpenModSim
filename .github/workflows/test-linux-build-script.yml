@@ -37,12 +37,6 @@ jobs:
 
           entries = [
               {
-                  "name": "Debian 11",
-                  "image": "debian:11",
-                  "family": "apt",
-                  "qt_modes": ["qt5"],
-              },
-              {
                   "name": "Debian 12",
                   "image": "debian:12",
                   "family": "apt",
