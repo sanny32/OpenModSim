@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/test-macos-build-script.yml'
+      - '.github/actions/**'
       - 'build-macos.sh'
       - 'src/**'
       
