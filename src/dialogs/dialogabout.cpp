@@ -125,6 +125,8 @@ QString languageName(const QString& language)
 {
     if (language == "russian")
         return DialogAbout::tr("Russian");
+    if (language == "italian")
+        return DialogAbout::tr("Italian");
     if (language == "simplified_chinese")
         return DialogAbout::tr("Simplified Chinese");
     if (language == "traditional_chinese")
