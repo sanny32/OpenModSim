@@ -44,6 +44,7 @@ private slots:
     void omitsTimestampsWhenPreferenceDisabled();
     void splitsUserStateIntoSeparateFile();
     void restoresWindowGeometryFromUserStateFile();
+    void keepsTabbedWindowsMaximizedWhenLoadingIntoVisibleArea();
     void opensProjectWithoutUserStateFile();
     void removesStaleUserStateFile();
     void roundTripsSeveralFormsOfTheSameKind();
@@ -96,6 +97,26 @@ const char* kAnnotatedProject =
     "    </Forms>\n"
     "</OpenModSim>\n"
     "<!-- end of project -->\n";
+
+///
+/// \brief A tabbed project whose forms carry a restored, offset window geometry.
+///
+const char* kTabbedProjectWithOffsetWindows =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    "<OpenModSim Version=\"2.0-dev\">\n"
+    "    <ModbusDefinitions AddrSpace=\"6-Digits\"/>\n"
+    "    <ViewSettings ViewMode=\"1\" SplitView=\"0\"/>\n"
+    "    <Forms>\n"
+    "        <FormDataView Panel=\"L\" Title=\"Data1\" DataType=\"UInt16\" RegisterOrder=\"MSRF\" Codepage=\"\" ByteOrder=\"Direct\">\n"
+    "            <Window Maximized=\"false\" Minimized=\"false\" Left=\"320\" Top=\"125\" Width=\"400\" Height=\"300\"/>\n"
+    "            <DataViewDefinitions DeviceId=\"1\" PointType=\"HoldingRegisters\" PointAddress=\"1\" Length=\"8\" DataViewColumnsDistance=\"1\"/>\n"
+    "        </FormDataView>\n"
+    "        <FormDataMapView Panel=\"L\" Title=\"Map1\">\n"
+    "            <Window Maximized=\"false\" Minimized=\"false\" Left=\"320\" Top=\"125\" Width=\"400\" Height=\"300\"/>\n"
+    "            <DataMapViewDefinitions ZeroBasedAddress=\"false\" HexView=\"false\"/>\n"
+    "        </FormDataMapView>\n"
+    "    </Forms>\n"
+    "</OpenModSim>\n";
 
 ///
 /// \brief The demo projects shipped with the application, with the number of forms each
@@ -586,6 +607,31 @@ void TestAppProject::restoresWindowGeometryFromUserStateFile()
     QFile resavedUser(projectUserStatePath(resaved));
     QVERIFY(resavedUser.open(QIODevice::ReadOnly));
     QVERIFY(resavedUser.readAll().contains("<Window"));
+}
+
+/// \brief Verifies that loading into an already visible tabbed area does not move maximized
+/// windows to the stored Left/Top, which left the last tab drawn over the others.
+void TestAppProject::keepsTabbedWindowsMaximizedWhenLoadingIntoVisibleArea()
+{
+    QTemporaryDir files;
+    const QString source = files.filePath(QStringLiteral("tabbed.omsim"));
+    writeProjectFile(source, kTabbedProjectWithOffsetWindows);
+
+    ProjectFixture fixture;
+    fixture.Mdi.resize(900, 600);
+    fixture.Mdi.show();
+    QVERIFY(QTest::qWaitForWindowExposed(&fixture.Mdi));
+
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    QCoreApplication::processEvents();
+
+    auto* area = fixture.Mdi.primaryArea();
+    const auto windows = area->localSubWindowList();
+    QCOMPARE(windows.size(), 2);
+    for (auto* wnd : windows) {
+        QVERIFY2(wnd->isMaximized(), qPrintable(wnd->windowTitle()));
+        QCOMPARE(wnd->geometry(), area->viewport()->rect());
+    }
 }
 
 /// \brief Verifies a project checked out without its user-state file still opens.
