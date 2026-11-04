@@ -33,7 +33,10 @@ struct DataViewDefinitions
     void normalize()
     {
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
-        PointAddress = qMax<quint16>(1, PointAddress);
+        // PointAddress is deliberately not clamped here: 0 is a valid address for
+        // 0-based projects, and the lower bound for 1-based ones depends on the
+        // address base, which this struct does not know. FormDataView clamps it
+        // against the current base when the definition is applied.
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
         Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length,
                                  static_cast<quint16>(ModbusLimits::lengthRange().to()));

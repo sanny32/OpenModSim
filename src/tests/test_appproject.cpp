@@ -35,6 +35,8 @@ private slots:
     void createsAndRemovesSplitClone();
     void roundTripsOpenAndClosedForms();
     void preservesZeroBasedStartingAddressAcrossReopen();
+    void preservesZeroBasedStartingAddressZeroAcrossReopen();
+    void clampsZeroStartingAddressForOneBasedProject();
     void opensProjectBeforeRestoringServerState();
     void rejectsMalformedProjectWithoutChangingState();
     void loadsProjectWithChildlessDefinitionsAndConnection();
@@ -378,6 +380,100 @@ void TestAppProject::preservesZeroBasedStartingAddressAcrossReopen()
         QCOMPARE(form->displayDefinition().PointAddress, quint16(10));
         QCOMPARE(fixture.Server.data(1, QModbusDataUnit::HoldingRegisters, 10, 3).values(), expectedValues);
     }
+}
+
+/// \brief Verifies a 0-based data view starting at address 0 keeps that address across reopen
+/// (issue #142).
+void TestAppProject::preservesZeroBasedStartingAddressZeroAcrossReopen()
+{
+    QTemporaryDir files;
+    const QString first = files.filePath(QStringLiteral("issue142-first.omsim"));
+    const QString second = files.filePath(QStringLiteral("issue142-second.omsim"));
+    const auto expectedValues = QVector<quint16>{100, 200, 300};
+
+    auto& prefs = AppPreferences::instance();
+    const AddressBase previousBase = prefs.globalAddressBase();
+    const auto restoreBase = qScopeGuard([&prefs, previousBase] {
+        prefs.setGlobalAddressBase(previousBase);
+    });
+
+    {
+        ProjectFixture fixture;
+        prefs.setGlobalAddressBase(AddressBase::Base0);
+        auto* form = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
+        QVERIFY(form);
+        form->setAddressBase(AddressBase::Base0);
+
+        auto definition = form->displayDefinition();
+        definition.PointType = QModbusDataUnit::HoldingRegisters;
+        definition.PointAddress = 0;
+        definition.Length = static_cast<quint16>(expectedValues.size());
+        form->setDisplayDefinition(definition);
+        QCOMPARE(form->displayDefinition().PointAddress, quint16(0));
+
+        QModbusDataUnit data(definition.PointType, 0, definition.Length);
+        data.setValues(expectedValues);
+        fixture.Server.setData(definition.DeviceId, data, WriteSource::User);
+        QVERIFY(fixture.Project.saveProject(first));
+    }
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(first).Success);
+        QCOMPARE(prefs.globalAddressBase(), AddressBase::Base0);
+        auto* form = qobject_cast<FormDataView*>(fixture.Project.forms(ProjectFormKind::Data).constFirst());
+        QVERIFY(form);
+        form->setAddressBase(prefs.globalAddressBase());
+        QCOMPARE(form->displayDefinition().PointAddress, quint16(0));
+        QCOMPARE(fixture.Server.data(1, QModbusDataUnit::HoldingRegisters, 0, 3).values(), expectedValues);
+        QVERIFY(fixture.Project.saveProject(second));
+    }
+
+    {
+        ProjectFixture fixture;
+        QVERIFY(fixture.Project.loadProject(second).Success);
+        QCOMPARE(prefs.globalAddressBase(), AddressBase::Base0);
+        auto* form = qobject_cast<FormDataView*>(fixture.Project.forms(ProjectFormKind::Data).constFirst());
+        QVERIFY(form);
+        form->setAddressBase(prefs.globalAddressBase());
+        QCOMPARE(form->displayDefinition().PointAddress, quint16(0));
+        QCOMPARE(fixture.Server.data(1, QModbusDataUnit::HoldingRegisters, 0, 3).values(), expectedValues);
+    }
+}
+
+/// \brief Verifies a 1-based project still falls back to address 1 when a project file
+/// stores the invalid address 0.
+void TestAppProject::clampsZeroStartingAddressForOneBasedProject()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const QString path = files.filePath(QStringLiteral("one-based-zero.omsim"));
+
+    auto& prefs = AppPreferences::instance();
+    const AddressBase previousBase = prefs.globalAddressBase();
+    prefs.setGlobalAddressBase(AddressBase::Base1);
+    const auto restoreBase = qScopeGuard([&prefs, previousBase] {
+        prefs.setGlobalAddressBase(previousBase);
+    });
+
+    writeProjectFile(path,
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<OpenModSim Version=\"2.0-dev\">\n"
+        "    <ModbusDefinitions AddrSpace=\"6-Digits\"/>\n"
+        "    <ViewSettings ViewMode=\"1\" SplitView=\"0\" GlobalZeroBasedAddress=\"0\"/>\n"
+        "    <Forms>\n"
+        "        <FormDataView Panel=\"L\" Title=\"Data1\" DataType=\"UInt16\" RegisterOrder=\"MSRF\" Codepage=\"\" ByteOrder=\"Direct\">\n"
+        "            <Window Maximized=\"true\" Minimized=\"false\" Left=\"0\" Top=\"0\" Width=\"610\" Height=\"331\"/>\n"
+        "            <DataViewDefinitions DeviceId=\"1\" PointType=\"HoldingRegisters\" PointAddress=\"0\" Length=\"8\" DataViewColumnsDistance=\"25\" LeadingZeros=\"true\"/>\n"
+        "        </FormDataView>\n"
+        "    </Forms>\n"
+        "</OpenModSim>\n");
+
+    const auto result = fixture.Project.loadProject(path);
+    QVERIFY2(result.Success, qPrintable(result.Error));
+    auto* form = qobject_cast<FormDataView*>(fixture.Project.forms(ProjectFormKind::Data).constFirst());
+    QVERIFY(form);
+    QCOMPARE(form->displayDefinition().PointAddress, quint16(1));
 }
 
 /// \brief Verifies the project-opened notification precedes restored devices and maps.
