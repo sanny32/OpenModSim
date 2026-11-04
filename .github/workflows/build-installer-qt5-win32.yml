@@ -42,6 +42,7 @@ jobs:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Extract version from CMakeLists.txt
+        id: version
         uses: ./.github/actions/extract-version
         with:
           package-prefix: ${{ env.EXE_PACKAGE_PREFIX }}
@@ -196,27 +197,11 @@ jobs:
           choco install nsis -y
         shell: cmd
 
-      - name: Resolve numeric file version
-        id: fileversion
-        shell: pwsh
-        run: |
-          # VIProductVersion/VIFileVersion only accept X.X.X.X, but APP_VERSION can be a
-          # development version such as "2.1-dev.g0abc123". Use the numeric project
-          # version from CMakeLists.txt for the PE version resources.
-          $cmakeLists = Join-Path $env:GITHUB_WORKSPACE "src/CMakeLists.txt"
-          $match = Select-String -Path $cmakeLists -Pattern '^\s*VERSION\s+(\d+)\.(\d+)\.(\d+)' | Select-Object -First 1
-          if (-not $match) {
-            throw "Failed to detect project version in $cmakeLists"
-          }
-          $fileVersion = "$($match.Matches[0].Groups[1].Value).$($match.Matches[0].Groups[2].Value).$($match.Matches[0].Groups[3].Value).0"
-          "FILEVERSION=$fileVersion" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-          Write-Host "Installer file version: $fileVersion"
-
       - name: Build NSIS installer
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ env.APP_VERSION }}" ^
-           /DFILEVERSION=${{ steps.fileversion.outputs.FILEVERSION }} ^
+           /DFILEVERSION=${{ steps.version.outputs.file-version }} ^
            /DMIN_WINDOWS_VERSION=7 ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\Release" ^
            /DICON_FILE="%CD%\src\res\omodsim.ico" ^

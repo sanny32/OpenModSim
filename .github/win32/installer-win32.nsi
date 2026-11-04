@@ -23,9 +23,7 @@
     !undef VERSIONPATCH
     !define VERSIONPATCH "${VERSIONPATCH_NUMERIC}"
   !endif
-  # VIProductVersion/VIFileVersion accept only X.X.X.X, but VERSION may be a development
-  # version such as "2.1-dev.g0abc123". The workflows pass the numeric project version
-  # separately as FILEVERSION; fall back to the parsed VERSION when it is absent.
+  # PE version resources require numeric X.X.X.X even for development builds.
   !ifndef FILEVERSION
     !define FILEVERSION "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
   !endif
