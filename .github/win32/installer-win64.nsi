@@ -23,6 +23,12 @@
     !undef VERSIONPATCH
     !define VERSIONPATCH "${VERSIONPATCH_NUMERIC}"
   !endif
+  # VIProductVersion/VIFileVersion accept only X.X.X.X, but VERSION may be a development
+  # version such as "2.1-dev.g0abc123". The workflows pass the numeric project version
+  # separately as FILEVERSION; fall back to the parsed VERSION when it is absent.
+  !ifndef FILEVERSION
+    !define FILEVERSION "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  !endif
   !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
 
   !define MUI_ICON ${ICON_FILE}
@@ -69,8 +75,8 @@ FunctionEnd
   #ManifestDPIAwareness "PerMonitorV2,System"
   SetCompressor /SOLID lzma
   SetCompressorDictSize 64
-  VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
-  VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIProductVersion "${FILEVERSION}"
+  VIFileVersion    "${FILEVERSION}"
   VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
   VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
   VIAddVersionKey /LANG=0 "ProductName"      "${PROJECTNAME}"
