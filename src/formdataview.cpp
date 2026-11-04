@@ -291,6 +291,8 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
         setWindowTitle(dd.FormName);
 
     const auto defs = _mbMultiServer.getModbusDefinitions();
+    const auto addressRange = ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress());
+    const auto pointAddress = static_cast<quint16>(qBound(addressRange.from(), static_cast<int>(dd.PointAddress), addressRange.to()));
 
     ui->lineEditDeviceId->setLeadingZeroes(false);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
@@ -298,13 +300,13 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     {
         QSignalBlocker b(ui->lineEditAddress);
         ui->lineEditAddress->setLeadingZeroes(false);
-        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress()));
-        ui->lineEditAddress->setValue(dd.PointAddress);
+        ui->lineEditAddress->setInputRange(addressRange);
+        ui->lineEditAddress->setValue(pointAddress);
     }
     {
         QSignalBlocker b(ui->lineEditLength);
         ui->lineEditLength->setLeadingZeroes(false);
-        ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
+        ui->lineEditLength->setInputRange(lengthRangeForPointType(pointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
         ui->lineEditLength->setValue(dd.Length);
     }
     {
@@ -797,6 +799,8 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
         setWindowTitle(dd.FormName);
 
     const auto defs = _mbMultiServer.getModbusDefinitions();
+    const auto addressRange = ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress());
+    const auto pointAddress = static_cast<quint16>(qBound(addressRange.from(), static_cast<int>(dd.PointAddress), addressRange.to()));
 
     // Handle device ID change (reference counting in server).
     {
@@ -815,13 +819,13 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
     {
         QSignalBlocker b(ui->lineEditAddress);
         ui->lineEditAddress->setLeadingZeroes(false);
-        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress()));
-        ui->lineEditAddress->setValue(dd.PointAddress);
+        ui->lineEditAddress->setInputRange(addressRange);
+        ui->lineEditAddress->setValue(pointAddress);
     }
     {
         QSignalBlocker b(ui->lineEditLength);
         ui->lineEditLength->setLeadingZeroes(false);
-        ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
+        ui->lineEditLength->setInputRange(lengthRangeForPointType(pointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
         ui->lineEditLength->setValue(dd.Length);
     }
     {
