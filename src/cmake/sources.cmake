@@ -136,6 +136,7 @@ set(SOURCES
 
 # Header files
 set(HEADERS
+    enronmodbus.h
     ansimenu.h
     ansiutils.h
     application.h

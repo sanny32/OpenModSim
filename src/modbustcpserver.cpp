@@ -156,7 +156,14 @@ void ModbusTcpServer::on_newConnection()
             }
 
             QModbusRequest request;
-            input >> request;
+            if (mbDef.EnronModbus && bytesPdu > 0
+                && quint8(buffer->at(mbpaHeaderSize)) == QModbusPdu::WriteSingleRegister) {
+                // Qt's PDU stream decoder assumes a two-byte FC06 value.
+                request = QModbusRequest(QModbusPdu::WriteSingleRegister,
+                    buffer->mid(mbpaHeaderSize + 1, bytesPdu - 1));
+            } else {
+                input >> request;
+            }
 
             buffer->remove(0, current);
 

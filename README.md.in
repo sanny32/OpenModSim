@@ -47,6 +47,31 @@ The following simulations are available:
     Decrement - simulate register from High Limit to Low Limit with a given Step
 ```
 
+# Enron Modbus
+
+Enable **Enron Modbus (32-bit registers)** in **Modbus Definitions → General**.
+The setting applies to all server transports and is saved with the project.
+Standard Modbus remains the default for existing projects.
+
+Enron protocol addresses are used directly: 5001–5999 contain 32-bit integers,
+and 7001–7999 contain IEEE 754 floats. Other register addresses retain 16-bit
+values within the selected 5/6-digit address space. Requests exceeding that
+capacity or crossing a 16/32-bit range boundary are rejected. The address-space
+setting does not shift or scale the Enron ranges.
+Coils and discrete inputs retain their usual addressing.
+
+The existing tables and script API store 16-bit words. For either 32-bit range,
+Enron address `A` uses table words `B + 2 * (A - B)` and the next word, where
+`B` is 5001 or 7001. Select zero-based table addresses. For example, Enron float
+7002 uses table words 7003–7004; set them to `0x3F80` and `0x0000` for 1.0.
+Use a 32-bit table display format with the high word and high byte first.
+
+Functions 03, 04, 06, 16 and 23 support these register widths. A single read can
+return up to 62 32-bit values; function 16 can write up to 61, and function 23
+can write up to 60. Mask writes and FIFO reads are unavailable for 32-bit
+addresses. Enron event logs, historical records and device-specific extensions
+are outside this implementation.
+
 # Modbus Logging
 
 <img width="1292" height="759" alt="image" src=".github/assets/omodsim-trafficview.png" />

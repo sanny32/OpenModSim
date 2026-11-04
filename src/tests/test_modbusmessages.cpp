@@ -248,6 +248,17 @@ void TestModbusMessages::writeSingleRegister()
 
     WriteSingleRegisterResponse badResp(response(QModbusPdu::WriteSingleRegister, be16(7)), kProto, 1, 0, kTs);
     QVERIFY(!badResp.isValid());
+
+    const auto payload = QByteArray::fromHex("1b593f800000");
+    WriteSingleRegisterRequest enronReq(request(QModbusPdu::WriteSingleRegister, payload), kProto, 1, 0, kTs);
+    WriteSingleRegisterResponse enronResp(response(QModbusPdu::WriteSingleRegister, payload), kProto, 1, 0, kTs);
+    QVERIFY(enronReq.isValid());
+    QVERIFY(enronResp.isValid());
+    QCOMPARE(enronReq.value(), quint32(0x3f800000));
+    QCOMPARE(enronResp.value(), quint32(0x3f800000));
+    const auto invalidPayload = QByteArray::fromHex("00073f800000");
+    QVERIFY(!WriteSingleRegisterRequest(request(QModbusPdu::WriteSingleRegister, invalidPayload), kProto, 1, 0, kTs).isValid());
+    QVERIFY(!WriteSingleRegisterResponse(response(QModbusPdu::WriteSingleRegister, invalidPayload), kProto, 1, 0, kTs).isValid());
 }
 
 void TestModbusMessages::writeMultipleCoils()

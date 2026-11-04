@@ -1070,48 +1070,58 @@ Open the download page?</source>
         <translation>依請求自動新增暫存器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="65"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="64"/>
+        <source>Enron addresses 5001–5999 and 7001–7999 are 32-bit; other addresses are 16-bit. The selected 5/6-digit address space limits the available addresses. Each 32-bit value uses two table words: base + 2 × (address − base), high word first. Use zero-based table addresses.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="67"/>
+        <source>Enable Enron Modbus (32-bit registers)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="75"/>
         <source>Error Simulations</source>
         <translation>錯誤模擬</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="77"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="87"/>
         <source>Response with incorrect IDs</source>
         <translation>帶有錯誤 ID 的響應</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="90"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="100"/>
         <source>Response with ILLEGAL FUNCTION</source>
         <translation>響應非法功能</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="103"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="113"/>
         <source>Response with DEVICE BUSY</source>
         <translation>響應 DEVICE BUSY</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="116"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="126"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
         <translation>響應帶有錯誤的 CRC（僅限序列線路）</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="128"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="138"/>
         <source>Response with delay</source>
         <translation>延遲響應</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="164"/>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="230"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="174"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="240"/>
         <source>ms</source>
         <translation>毫秒</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="191"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="201"/>
         <source>Response with random delay from 0 to</source>
         <translation>響應隨機延遲從 0 到</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="258"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="268"/>
         <source>No response</source>
         <translation>沒有響應</translation>
     </message>
@@ -2192,17 +2202,17 @@ Type Filter: %3</source>
         <translation>交換位元組（0xAB → 0xBA）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="616"/>
         <source>0-based</source>
         <translation>基地址為-0</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="616"/>
         <source>1-based</source>
         <translation>基地址為-1</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="615"/>
+        <location filename="../../formdataview.cpp" line="617"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2211,7 +2221,7 @@ Length: %3</source>
 長度：%3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="617"/>
+        <location filename="../../formdataview.cpp" line="619"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -3771,12 +3781,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusRtuTcpServer</name>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="509"/>
         <source>Could not write response to client</source>
         <translation>無法寫入對客戶端的響應</translation>
     </message>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="579"/>
         <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
         <translation>指定的 RTU over TCP/IP 通訊連線設定無效。</translation>
     </message>
@@ -3784,7 +3794,7 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="358"/>
+        <location filename="../../modbustcpserver.cpp" line="365"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的 TCP 通訊連線設定無效。</translation>
     </message>
@@ -4030,47 +4040,47 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="542"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="550"/>
         <source>Referenced serial device does not exist.</source>
         <translation>指定的序列裝置不存在。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="545"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="553"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由於許可權問題，無法開啟序列裝置。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="549"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="557"/>
         <source>Cannot open serial device.</source>
         <translation>無法開啟序列裝置。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="552"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="560"/>
         <source>Write error.</source>
         <translation>寫入錯誤。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="555"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="563"/>
         <source>Read error.</source>
         <translation>讀取錯誤。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="558"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="566"/>
         <source>Resource error.</source>
         <translation>資源錯誤。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="561"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="569"/>
         <source>Device operation is not supported error.</source>
         <translation>裝置操作不支援。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="565"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="573"/>
         <source>Timeout error.</source>
         <translation>超時錯誤。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="568"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="576"/>
         <source>Unknown error.</source>
         <translation>未知錯誤。</translation>
     </message>
@@ -4078,12 +4088,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusRtuSerialServer</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="368"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="376"/>
         <source>Requesting serial port is closed</source>
         <translation>請求的序列埠已關閉</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="392"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="400"/>
         <source>Could not write response to client</source>
         <translation>無法寫入對客戶端的響應</translation>
     </message>
@@ -4091,12 +4101,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="240"/>
+        <location filename="../../modbustcpserver.cpp" line="247"/>
         <source>Requesting socket is closed</source>
         <translation>請求的套接字已關閉</translation>
     </message>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="247"/>
+        <location filename="../../modbustcpserver.cpp" line="254"/>
         <source>Could not write response to client</source>
         <translation>無法寫入對客戶端的響應</translation>
     </message>

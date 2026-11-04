@@ -168,6 +168,8 @@ protected:
     virtual QModbusResponse processRequest(const QModbusPdu &request, int serverAddress);
     virtual QModbusResponse processPrivateRequest(const QModbusPdu &request, int serverAddress);
 
+    QModbusDataUnit requestRegisters(QModbusDataUnit::RegisterType type, quint16 address, quint16 count) const;
+
     void resetCommunicationCounters(int serverAddress) { _counters[serverAddress].fill(0u); }
     void incrementCounter(ModbusServer::Counter counter, int serverAddress) { _counters[serverAddress][counter]++; }
 

@@ -7,6 +7,9 @@
 ///
 
 #include <QFile>
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QPushButton>
 #include <QPointer>
 #include <QSignalSpy>
 #include <QTemporaryDir>
@@ -18,6 +21,7 @@
 #include "controls/mdiareaex.h"
 #include "controls/projecttreewidget.h"
 #include "datasimulator.h"
+#include "dialogs/dialogmodbusdefinitions.h"
 #include "formdataview.h"
 #include "mainwindow.h"
 #include "modbusmultiserver.h"
@@ -28,6 +32,8 @@ class TestAppProject : public QObject
     Q_OBJECT
 
 private slots:
+    void configuresEnronMode();
+    void roundTripsEnronMode();
     void createsAndNumbersEveryFormKind();
     void closesReopensAndDeletesCanonicalForm();
     void respectsDeletionLock();
@@ -195,6 +201,54 @@ QStringList commentPlacements(const QString& path)
 }
 
 /// \brief Verifies creation, UUID assignment and per-kind display counters.
+/// \brief Applies Enron mode through server settings and preserves it when edits are cancelled.
+void TestAppProject::configuresEnronMode()
+{
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    auto* checkbox = dialog.findChild<QCheckBox*>("checkBoxEnronModbus");
+    auto* buttons = dialog.findChild<QDialogButtonBox*>("buttonBox");
+    QVERIFY(checkbox);
+    QVERIFY(buttons);
+    QVERIFY(!checkbox->isChecked());
+    checkbox->setChecked(true);
+    QVERIFY(buttons->button(QDialogButtonBox::Apply)->isEnabled());
+    buttons->button(QDialogButtonBox::Apply)->click();
+    QVERIFY(server.getModbusDefinitions().EnronModbus);
+    QVERIFY(!buttons->button(QDialogButtonBox::Apply)->isEnabled());
+
+    DialogModbusDefinitions cancelled(server);
+    auto* restored = cancelled.findChild<QCheckBox*>("checkBoxEnronModbus");
+    QVERIFY(restored->isChecked());
+    restored->setChecked(false);
+    cancelled.reject();
+    QVERIFY(server.getModbusDefinitions().EnronModbus);
+
+    checkbox->setChecked(false);
+    dialog.accept();
+    QVERIFY(!server.getModbusDefinitions().EnronModbus);
+}
+
+/// \brief Restores the Enron server setting when reopening a project.
+void TestAppProject::roundTripsEnronMode()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const auto source = files.filePath("source.omsim");
+    const auto saved = files.filePath("enron.omsim");
+    writeProjectFile(source, kAnnotatedProject);
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    QVERIFY(fixture.Project.saveProject(saved));
+    fixture.Project.closeProject();
+    definitions.EnronModbus = false;
+    fixture.Host.mbMultiServer().setModbusDefinitions(definitions);
+    QVERIFY(fixture.Project.loadProject(saved).Success);
+    QVERIFY(fixture.Host.mbMultiServer().getModbusDefinitions().EnronModbus);
+}
+
 void TestAppProject::createsAndNumbersEveryFormKind()
 {
     ProjectFixture fixture;

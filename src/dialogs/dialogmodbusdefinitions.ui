@@ -58,6 +58,16 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBoxEnronModbus">
+         <property name="toolTip">
+          <string>Enron addresses 5001–5999 and 7001–7999 are 32-bit; other addresses are 16-bit. The selected 5/6-digit address space limits the available addresses. Each 32-bit value uses two table words: base + 2 × (address − base), high word first. Use zero-based table addresses.</string>
+         </property>
+         <property name="text">
+          <string>Enable Enron Modbus (32-bit registers)</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabErrSimulations">

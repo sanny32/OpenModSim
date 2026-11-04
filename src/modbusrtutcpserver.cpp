@@ -17,6 +17,7 @@
 #include <QUrl>
 #include "qmodbusadurtu.h"
 #include "modbusrtutcpserver.h"
+#include "enronmodbus.h"
 
 namespace {
 
@@ -28,7 +29,7 @@ constexpr int MaxRtuAduSize = 256;
 /// \param data
 /// \return
 ///
-int expectedRequestSize(const QByteArray& data)
+int expectedRequestSize(const QByteArray& data, bool enron)
 {
     if (data.size() < 2)
         return 0;
@@ -41,9 +42,14 @@ int expectedRequestSize(const QByteArray& data)
         case 0x03:
         case 0x04:
         case 0x05:
-        case 0x06:
         case 0x08:
             return 8;
+
+        case 0x06:
+            if (data.size() < 4)
+                return 0;
+            return enron && EnronModbus::is32BitAddress(
+                (quint16(quint8(data.at(2))) << 8) | quint8(data.at(3))) ? 10 : 8;
 
         case 0x07:
         case 0x0b:
@@ -88,7 +94,7 @@ int expectedRequestSize(const QByteArray& data)
 /// \param offset
 /// \return
 ///
-int validFrameSizeAt(const QByteArray& buffer, int offset)
+int validFrameSizeAt(const QByteArray& buffer, int offset, bool enron)
 {
     const QByteArray data = buffer.mid(offset);
     if (data.size() < QModbusAduRtu::MinRtuFrameSize || quint8(data.at(0)) > 247
@@ -96,7 +102,7 @@ int validFrameSizeAt(const QByteArray& buffer, int offset)
         return 0;
     }
 
-    const int expectedSize = expectedRequestSize(data);
+    const int expectedSize = expectedRequestSize(data, enron);
     if (expectedSize > 0)
     {
         if (expectedSize > MaxRtuAduSize || data.size() < expectedSize)
@@ -124,12 +130,12 @@ int validFrameSizeAt(const QByteArray& buffer, int offset)
 /// \param frameSize
 /// \return
 ///
-int findValidFrame(const QByteArray& buffer, int firstOffset, int& frameSize)
+int findValidFrame(const QByteArray& buffer, int firstOffset, int& frameSize, bool enron)
 {
     for (int offset = firstOffset;
          offset + QModbusAduRtu::MinRtuFrameSize <= buffer.size();
          ++offset) {
-        frameSize = validFrameSizeAt(buffer, offset);
+        frameSize = validFrameSizeAt(buffer, offset, enron);
         if (frameSize > 0)
             return offset;
     }
@@ -278,7 +284,7 @@ bool ModbusRtuTcpServer::takeNextFrame(QByteArray& buffer, QByteArray& frame)
             continue;
         }
 
-        const int expectedSize = expectedRequestSize(buffer);
+        const int expectedSize = expectedRequestSize(buffer, getDefinitions().EnronModbus);
         if (expectedSize == 0)
             return false;
 
@@ -302,7 +308,7 @@ bool ModbusRtuTcpServer::takeNextFrame(QByteArray& buffer, QByteArray& frame)
             }
 
             int recoveredSize = 0;
-            const int recoveredOffset = findValidFrame(buffer, 1, recoveredSize);
+            const int recoveredOffset = findValidFrame(buffer, 1, recoveredSize, getDefinitions().EnronModbus);
             if (recoveredOffset >= 0)
             {
                 buffer.remove(0, recoveredOffset);
@@ -313,7 +319,7 @@ bool ModbusRtuTcpServer::takeNextFrame(QByteArray& buffer, QByteArray& frame)
             continue;
         }
 
-        const int unknownFrameSize = validFrameSizeAt(buffer, 0);
+        const int unknownFrameSize = validFrameSizeAt(buffer, 0, getDefinitions().EnronModbus);
         if (unknownFrameSize > 0)
         {
             frame = buffer.left(unknownFrameSize);
@@ -322,7 +328,7 @@ bool ModbusRtuTcpServer::takeNextFrame(QByteArray& buffer, QByteArray& frame)
         }
 
         int recoveredSize = 0;
-        const int recoveredOffset = findValidFrame(buffer, 1, recoveredSize);
+        const int recoveredOffset = findValidFrame(buffer, 1, recoveredSize, getDefinitions().EnronModbus);
         if (recoveredOffset >= 0)
         {
             buffer.remove(0, recoveredOffset);

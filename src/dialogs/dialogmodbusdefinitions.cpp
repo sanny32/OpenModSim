@@ -133,6 +133,7 @@ void DialogModbusDefinitions::apply()
 {
     ModbusDefinitions defs;
     defs.AddrSpace = ui->comboBoxAddrSpace->currentAddressSpace();
+    defs.EnronModbus = ui->checkBoxEnronModbus->isChecked();
     defs.UseGlobalUnitMap = ui->checkBoxGlobalMap->isChecked();
     defs.AutoAddRegistersOnRequest = ui->checkBoxAutoAddRegistersOnRequest->isChecked();
     defs.ErrorSimulations.setResponseIncorrectId(ui->checkBoxErrIncorrentId->isChecked());
@@ -156,6 +157,7 @@ void DialogModbusDefinitions::apply()
 ///
 void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& defs)
 {
+    ui->checkBoxEnronModbus->setChecked(defs.EnronModbus);
     ui->checkBoxGlobalMap->setChecked(defs.UseGlobalUnitMap);
     ui->checkBoxAutoAddRegistersOnRequest->setChecked(defs.AutoAddRegistersOnRequest);
     ui->comboBoxAddrSpace->setCurrentAddressSpace(defs.AddrSpace);

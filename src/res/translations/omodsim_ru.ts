@@ -1045,6 +1045,16 @@ Open the download page?</source>
 <context>
     <name>DialogModbusDefinitions</name>
     <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="67"/>
+        <source>Enable Enron Modbus (32-bit registers)</source>
+        <translation>Включить Enron Modbus (32-битные регистры)</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="64"/>
+        <source>Enron addresses 5001–5999 and 7001–7999 are 32-bit; other addresses are 16-bit. The selected 5/6-digit address space limits the available addresses. Each 32-bit value uses two table words: base + 2 × (address − base), high word first. Use zero-based table addresses.</source>
+        <translation>Адреса Enron 5001–5999 и 7001–7999 — 32-битные, остальные — 16-битные. Доступные адреса ограничены выбранным 5/6-значным адресным пространством. Каждое 32-битное значение занимает два слова таблицы: база + 2 × (адрес − база), старшее слово первым. Используйте адреса таблицы с нуля.</translation>
+    </message>
+    <message>
         <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="14"/>
         <source>Modbus Definitions</source>
         <translation>Настройки MODBUS</translation>
@@ -1070,48 +1080,48 @@ Open the download page?</source>
         <translation>Автоматически добавлять регистры по запросу</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="65"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="75"/>
         <source>Error Simulations</source>
         <translation>Симуляция ошибок</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="77"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="87"/>
         <source>Response with incorrect IDs</source>
         <translation>Отвечать некорректным ID</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="90"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="100"/>
         <source>Response with ILLEGAL FUNCTION</source>
         <translation>Отвечать ошибкой ILLEGAL FUNCTION</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="103"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="113"/>
         <source>Response with DEVICE BUSY</source>
         <translation>Отвечать ошибкой DEVICE BUSY</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="116"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="126"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
         <translation>Отвечать с некорректной CRC (только для последовательного интерфейса)</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="128"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="138"/>
         <source>Response with delay</source>
         <translation>Отвечать с задержкой</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="164"/>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="230"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="174"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="240"/>
         <source>ms</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="191"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="201"/>
         <source>Response with random delay from 0 to</source>
         <translation>Отвечать со случайной задержкой от 0 до</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="258"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="268"/>
         <source>No response</source>
         <translation>Не отвечать на запросы</translation>
     </message>
@@ -2192,17 +2202,17 @@ Type Filter: %3</source>
         <translation>Перестановка байт (0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="616"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="616"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="615"/>
+        <location filename="../../formdataview.cpp" line="617"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2211,7 +2221,7 @@ Length: %3</source>
 Длина: %3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="617"/>
+        <location filename="../../formdataview.cpp" line="619"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -3770,12 +3780,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusRtuTcpServer</name>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="509"/>
         <source>Could not write response to client</source>
         <translation>Не удалось создать ответ клиенту</translation>
     </message>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="579"/>
         <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
         <translation>Указаны неверные параметры подключения RTU через TCP/IP.</translation>
     </message>
@@ -3783,7 +3793,7 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="358"/>
+        <location filename="../../modbustcpserver.cpp" line="365"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>Указаны некорректные настройки для TCP соединения.</translation>
     </message>
@@ -4029,47 +4039,47 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="542"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="550"/>
         <source>Referenced serial device does not exist.</source>
         <translation>Указанное устройство не существует.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="545"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="553"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>Невозможно открыть устройство из-за разрешений доступа.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="549"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="557"/>
         <source>Cannot open serial device.</source>
         <translation>Невозможно открыть устройство.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="552"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="560"/>
         <source>Write error.</source>
         <translation>Ошибка записи.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="555"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="563"/>
         <source>Read error.</source>
         <translation>Ошибка чтения.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="558"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="566"/>
         <source>Resource error.</source>
         <translation>Ошибка ресурса.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="561"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="569"/>
         <source>Device operation is not supported error.</source>
         <translation>Работа устройства не поддерживается.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="565"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="573"/>
         <source>Timeout error.</source>
         <translation>Время ожидания истекло.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="568"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="576"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
@@ -4077,12 +4087,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusRtuSerialServer</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="368"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="376"/>
         <source>Requesting serial port is closed</source>
         <translation>Запрашиваемый последовательный порт закрыт</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="392"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="400"/>
         <source>Could not write response to client</source>
         <translation>Не удалось создать ответ клиенту</translation>
     </message>
@@ -4090,12 +4100,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="240"/>
+        <location filename="../../modbustcpserver.cpp" line="247"/>
         <source>Requesting socket is closed</source>
         <translation>Запрашивающий сокет закрыт</translation>
     </message>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="247"/>
+        <location filename="../../modbustcpserver.cpp" line="254"/>
         <source>Could not write response to client</source>
         <translation>Не удалось создать ответ клиенту</translation>
     </message>

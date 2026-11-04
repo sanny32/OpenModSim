@@ -1070,48 +1070,58 @@ Vuoi aprire la pagina di download?</translation>
         <translation>Aggiungi automaticamente registri su richiesta</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="65"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="64"/>
+        <source>Enron addresses 5001–5999 and 7001–7999 are 32-bit; other addresses are 16-bit. The selected 5/6-digit address space limits the available addresses. Each 32-bit value uses two table words: base + 2 × (address − base), high word first. Use zero-based table addresses.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="67"/>
+        <source>Enable Enron Modbus (32-bit registers)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="75"/>
         <source>Error Simulations</source>
         <translation>Simulazioni di errori</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="77"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="87"/>
         <source>Response with incorrect IDs</source>
         <translation>Risposta con ID errati</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="90"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="100"/>
         <source>Response with ILLEGAL FUNCTION</source>
         <translation>Risposta con FUNZIONE ILLEGALE</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="103"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="113"/>
         <source>Response with DEVICE BUSY</source>
         <translation>Risposta con DISPOSITIVO OCCUPATO</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="116"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="126"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
         <translation>Risposta con CRC errato (solo linea seriale)</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="128"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="138"/>
         <source>Response with delay</source>
         <translation>Risposta con ritardo</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="164"/>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="230"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="174"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="240"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="191"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="201"/>
         <source>Response with random delay from 0 to</source>
         <translation>Risposta con ritardo casuale da 0 a</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="258"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="268"/>
         <source>No response</source>
         <translation>Nessuna risposta</translation>
     </message>
@@ -2192,17 +2202,17 @@ Tipo filtro: %3</translation>
         <translation>Scambia byte (0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="616"/>
         <source>0-based</source>
         <translation>base 0</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="616"/>
         <source>1-based</source>
         <translation>base 1</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="615"/>
+        <location filename="../../formdataview.cpp" line="617"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2211,7 +2221,7 @@ Indirizzo iniziale: %2
 Lunghezza: %3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="617"/>
+        <location filename="../../formdataview.cpp" line="619"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -3770,12 +3780,12 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
 <context>
     <name>ModbusRtuTcpServer</name>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="509"/>
         <source>Could not write response to client</source>
         <translation>Impossibile scrivere la risposta nel client</translation>
     </message>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="579"/>
         <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
         <translation>Per la comunicazione RTU su TCP/IP sono state specificate impostazioni di connessione non valide.</translation>
     </message>
@@ -3783,7 +3793,7 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="358"/>
+        <location filename="../../modbustcpserver.cpp" line="365"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>Per la comunicazione TCP sono state specificate impostazioni di connessione non valide.</translation>
     </message>
@@ -4029,47 +4039,47 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="542"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="550"/>
         <source>Referenced serial device does not exist.</source>
         <translation>Il dispositivo seriale di riferimento non esiste.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="545"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="553"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>Impossibile aprire il dispositivo seriale a causa delle autorizzazioni.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="549"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="557"/>
         <source>Cannot open serial device.</source>
         <translation>Impossibile aprire il dispositivo seriale.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="552"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="560"/>
         <source>Write error.</source>
         <translation>Errore di scrittura.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="555"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="563"/>
         <source>Read error.</source>
         <translation>Errore di lettura.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="558"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="566"/>
         <source>Resource error.</source>
         <translation>Errore di risorsa.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="561"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="569"/>
         <source>Device operation is not supported error.</source>
         <translation>Il funzionamento del dispositivo non è supportato errore.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="565"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="573"/>
         <source>Timeout error.</source>
         <translation>Errore timeout.</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="568"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="576"/>
         <source>Unknown error.</source>
         <translation>Errore sconosciuto.</translation>
     </message>
@@ -4077,12 +4087,12 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
 <context>
     <name>QModbusRtuSerialServer</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="368"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="376"/>
         <source>Requesting serial port is closed</source>
         <translation>La richiesta della porta seriale è chiusa</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="392"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="400"/>
         <source>Could not write response to client</source>
         <translation>Impossibile scrivere la risposta nel client</translation>
     </message>
@@ -4090,12 +4100,12 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="240"/>
+        <location filename="../../modbustcpserver.cpp" line="247"/>
         <source>Requesting socket is closed</source>
         <translation>Il socket richiedente è chiuso</translation>
     </message>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="247"/>
+        <location filename="../../modbustcpserver.cpp" line="254"/>
         <source>Could not write response to client</source>
         <translation>Impossibile scrivere la risposta nel client</translation>
     </message>
