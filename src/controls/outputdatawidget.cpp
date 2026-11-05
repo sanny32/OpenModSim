@@ -10,6 +10,8 @@
 #include <QGuiApplication>
 #include <QPainter>
 #include <QInputDialog>
+#include <QSortFilterProxyModel>
+#include <QSignalBlocker>
 #include <climits>
 #include "../styles/appcolors.h"
 #include "apppreferences.h"
@@ -59,6 +61,26 @@ int OutputDataListModel::rowCount(const QModelIndex&) const
 }
 
 ///
+/// \brief Formats Enron labels as protocol addresses without changing internal item keys.
+///
+QString OutputDataListModel::displayAddress(quint32 address) const
+{
+    const auto& dd = _parentWidget->_displayDefinition;
+    const bool hex = AppPreferences::instance().globalHexView();
+    if (dd.EnronType != EnronModbus::RegisterType::None) {
+        const int word = int(address) - (_parentWidget->_zeroBasedAddress ? 0 : 1);
+        const int logical = EnronModbus::registerAddress(dd.EnronType, word);
+        QString label = hex ? QStringLiteral("0x%1").arg(logical, 4, 16, QLatin1Char('0')).toUpper()
+                            : QString::number(logical);
+        if (registersCount(_parentWidget->dataType()) == 1)
+            label += (word - EnronModbus::baseAddress(dd.EnronType)) % 2 ? QStringLiteral(".L") : QStringLiteral(".H");
+        return label;
+    }
+    return formatAddress(dd.PointType, address, _parentWidget->_addrSpace, hex,
+        _parentWidget->_zeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+}
+
+///
 /// \brief OutputDataListModel::data
 /// \param index
 /// \param role
@@ -72,9 +94,6 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
     }
 
     const auto row = index.row();
-    const auto pointType = _parentWidget->_displayDefinition.PointType;
-    const auto addrSpace = _parentWidget->_addrSpace;
-    const auto hexAddresses = AppPreferences::instance().globalHexView();
 
     const auto itemData = _mapItems.find(row);
     if (itemData == _mapItems.end())
@@ -108,17 +127,19 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
                 }
             }
             const auto pad = _columnsDistance - descr.length();
-            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses,
-                _parentWidget->_zeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1) +
+            return displayAddress(itemData->Address) +
                 QStringLiteral(": ") + itemData->ValueStr + descr + QStringLiteral(" ").repeated(pad);
         }
+
+        case ValueStartRole:
+            return int(_parentWidget->_displayDefinition.EnronType == EnronModbus::RegisterType::None
+                || row % registersCount(_parentWidget->dataType()) == 0);
 
         case CaptureRole:
             return QString(itemData->ValueStr).remove('<').remove('>');
 
         case AddressStringRole:
-            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses,
-                _parentWidget->_zeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+            return displayAddress(itemData->Address);
 
         case AddressRole:
             return itemData->Address;
@@ -248,8 +269,13 @@ QVector<quint16> OutputDataListModel::values() const
 ///
 void OutputDataListModel::clear()
 {
-    _mapItems.clear();
-    updateData(QModbusDataUnit());
+    beginResetModel();
+    {
+        QSignalBlocker blocker(this);
+        _mapItems.clear();
+        updateData(QModbusDataUnit());
+    }
+    endResetModel();
 }
 
 ///
@@ -390,7 +416,7 @@ void OutputDataListModel::updateData(const QModbusDataUnit& data)
         // Notify changed data only
         if (first_changed != -1)
         {
-            emit dataChanged(index(first_changed), index(last_changed), QVector<int>() << Qt::DisplayRole);
+            emit dataChanged(index(first_changed), index(last_changed), QVector<int>() << Qt::DisplayRole << ValueStartRole);
         }
     }
 }
@@ -457,7 +483,11 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
     ui->listView->setMovement(QListView::Free);
     ui->listView->setWrapping(true);
     ui->listView->setFlow(QListView::TopToBottom);
-    ui->listView->setModel(_listModel.get());
+    _visibleModel = new QSortFilterProxyModel(this);
+    _visibleModel->setSourceModel(_listModel.get());
+    _visibleModel->setFilterRole(ValueStartRole);
+    _visibleModel->setFilterFixedString(QStringLiteral("1"));
+    ui->listView->setModel(_visibleModel);
     ui->listView->setItemDelegate(new DataDelegate( this ));
     setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
@@ -773,7 +803,7 @@ void OutputDataWidget::setDataViewColumnsDistance(int value)
 ///
 int OutputDataWidget::rowCount() const
 {
-    return _listModel->rowCount();
+    return _visibleModel->rowCount();
 }
 
 ///
@@ -793,11 +823,11 @@ int OutputDataWidget::paint(const QRect& rc, QPainter& painter, int startRow)
 
     int cx = rc.left();
     int maxWidth = 0;
-    const int total = _listModel->rowCount();
+    const int total = _visibleModel->rowCount();
 
     for (int i = startRow; i < total; ++i)
     {
-        const auto text = _listModel->data(_listModel->index(i), Qt::DisplayRole).toString().trimmed();
+        const auto text = _visibleModel->data(_visibleModel->index(i, 0), Qt::DisplayRole).toString().trimmed();
 
         auto rcItem = painter.boundingRect(cx, cy, rc.right() - cx, rc.bottom() - cy, Qt::TextSingleLine, text);
         maxWidth = qMax(maxWidth, rcItem.width());
@@ -1072,7 +1102,8 @@ void OutputDataWidget::rebuildFindMatches(const QString& text)
     for (int row = 0; row < rows; ++row)
     {
         const QModelIndex idx = _listModel->index(row, 0);
-        if (_listModel->data(idx, ValueRole).toUInt() == targetValue)
+        if (_visibleModel->mapFromSource(idx).isValid()
+            && _listModel->data(idx, ValueRole).toUInt() == targetValue)
             _findRows.append(row);
     }
 
@@ -1118,8 +1149,9 @@ void OutputDataWidget::focusCurrentFindMatch()
     if (!idx.isValid())
         return;
 
-    ui->listView->setCurrentIndex(idx);
-    ui->listView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
+    const auto visibleIndex = _visibleModel->mapFromSource(idx);
+    ui->listView->setCurrentIndex(visibleIndex);
+    ui->listView->scrollTo(visibleIndex, QAbstractItemView::PositionAtCenter);
 }
 
 ///
@@ -1320,18 +1352,19 @@ static QIcon drawRemoveColorIcon(int size = 16)
 ///
 void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 {
-    QModelIndex index = ui->listView->indexAt(pos);
-    if (!index.isValid())
+    const auto visibleIndex = ui->listView->indexAt(pos);
+    if (!visibleIndex.isValid())
         return;
 
+    const auto index = _visibleModel->mapToSource(visibleIndex);
     QMenu menu(this);
 
     const auto idx = getValueIndex(index);
     const auto address = _listModel->data(idx, AddressStringRole).toString();
 
     QAction* writeValueAction = menu.addAction(tr("Set Value of %1").arg(address));
-    connect(writeValueAction, &QAction::triggered, this, [this, index](){
-        emit ui->listView->doubleClicked(index);
+    connect(writeValueAction, &QAction::triggered, this, [this, visibleIndex](){
+        emit ui->listView->doubleClicked(visibleIndex);
     });
 
     const quint16 addrKey = static_cast<quint16>(
@@ -1405,7 +1438,8 @@ void OutputDataWidget::on_listView_doubleClicked(const QModelIndex& index)
 ///
 QModelIndex OutputDataWidget::getValueIndex(const QModelIndex& index) const
 {
-    QModelIndex idx = index;
+    const auto sourceIndex = index.model() == _visibleModel ? _visibleModel->mapToSource(index) : index;
+    QModelIndex idx = sourceIndex;
     switch(_displayDefinition.PointType)
     {
         case QModbusDataUnit::HoldingRegisters:
@@ -1416,15 +1450,15 @@ QModelIndex OutputDataWidget::getValueIndex(const QModelIndex& index) const
                 case DataType::Float32:
                 case DataType::Int32:
                 case DataType::UInt32:
-                    if(index.row() % 2)
-                        idx = _listModel->index(index.row() - 1);
+                    if(sourceIndex.row() % 2)
+                        idx = _listModel->index(sourceIndex.row() - 1);
                     break;
 
                 case DataType::Float64:
                 case DataType::Int64:
                 case DataType::UInt64:
-                    if(index.row() % 4)
-                        idx = _listModel->index(index.row() - index.row() % 4);
+                    if(sourceIndex.row() % 4)
+                        idx = _listModel->index(sourceIndex.row() - sourceIndex.row() % 4);
                     break;
 
                 default:

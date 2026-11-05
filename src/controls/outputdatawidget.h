@@ -22,6 +22,7 @@
 class QLabel;
 class QPainter;
 class QTimer;
+class QSortFilterProxyModel;
 
 namespace Ui {
 class OutputDataWidget;
@@ -37,7 +38,8 @@ enum OutputDataRole
     ValueRole = Qt::UserRole + 6,
     ColorRole = Qt::UserRole + 7,
     FindMatchRole = Qt::UserRole + 8,
-    FindCurrentRole = Qt::UserRole + 9
+    FindCurrentRole = Qt::UserRole + 9,
+    ValueStartRole = Qt::UserRole + 10
 };
 
 class OutputDataWidget;
@@ -90,6 +92,7 @@ public:
 
 private:
     SimulationIconType simulationIcon(int row) const;
+    QString displayAddress(quint32 address) const;
 
 private:
     struct ItemData
@@ -237,6 +240,7 @@ private:
     AddressSpace _addrSpace = AddressSpace::Addr6Digits;
     AddressColorMap _colorMap;
     QSharedPointer<OutputDataListModel> _listModel;
+    QSortFilterProxyModel* _visibleModel = nullptr;
     QString _findText;
     QVector<int> _findRows;
     int _currentFindIndex = -1;

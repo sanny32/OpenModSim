@@ -406,7 +406,7 @@ void ModbusMessageWidget::update()
             {
                 auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(_mm.get());
                 const auto registerAddress = req->isValid() ? formatUInt16Value(_dataType, _showLeadingZeros, req->address()) + QString(" %1").arg(addrBase): "??";
-                const auto registerValue = req->isValid() ? formatUInt16Value(_dataType, _showLeadingZeros, req->value()) : "??";
+                const auto registerValue = req->isValid() ? formatUInt16Array(_dataType, _showLeadingZeros, req->adu()->pdu().data().mid(2), _byteOrder) : "??";
                 addField(tr("Register Address"), registerAddress, dataColor);
                 addField(tr("Register Value"), registerValue, dataColor);
             }
@@ -414,7 +414,7 @@ void ModbusMessageWidget::update()
             {
                 auto resp = reinterpret_cast<const WriteSingleRegisterResponse*>(_mm.get());
                 const auto registerAddress = resp->isValid() ? formatUInt16Value(_dataType, _showLeadingZeros, resp->address()) + QString(" %1").arg(addrBase) : "??";
-                const auto registerValue = resp->isValid() ? formatUInt16Value(_dataType, _showLeadingZeros, resp->value()) : "??";
+                const auto registerValue = resp->isValid() ? formatUInt16Array(_dataType, _showLeadingZeros, resp->adu()->pdu().data().mid(2), _byteOrder) : "??";
                 addField(tr("Register Address"), registerAddress, dataColor);
                 addField(tr("Register Value"), registerValue, dataColor);
             }

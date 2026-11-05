@@ -21,6 +21,7 @@
 #include "modbusmultiserver.h"
 #include "controls/outputtypes.h"
 #include "enums.h"
+#include "enronmodbus.h"
 
 ///
 /// \brief Column indices for the DataMap table (shared between model and delegates)
@@ -47,6 +48,8 @@ namespace DataMapRole {
     constexpr int Address   = Qt::UserRole + 2;   // ColUnit: Address as int
     constexpr int TypeValue = Qt::UserRole + 3;   // ColType: RegisterType as int
     constexpr int RowColor  = Qt::UserRole + 4;   // any column: row highlight color as QColor
+    constexpr int EnronType = Qt::UserRole + 5;
+    constexpr int EnronEnabled = Qt::UserRole + 6;
     // Qt::UserRole on ColValue: raw quint16 value
 }
 
@@ -62,6 +65,14 @@ struct DataMapEntry
     ByteOrder     byteOrder = ByteOrder::Direct;
     QDateTime     timestamp;
     QColor        color;
+    EnronModbus::RegisterType EnronType = EnronModbus::RegisterType::None;
+
+    ///
+    /// \brief Keeps both words of an Enron register mapped even in a 16-bit display format.
+    ///
+    int registerCount() const {
+        return qMax(EnronType == EnronModbus::RegisterType::None ? 1 : 2, registersCount(type));
+    }
 };
 
 ///
@@ -117,7 +128,16 @@ public:
     // Refresh Unit and Address column display
     void refreshUnitAndAddressColumns();
 
+signals:
+    ///
+    /// \brief Refreshes protocol-dependent register choices in map editors and filters.
+    ///
+    void enronEnabledChanged(bool enabled);
+
 private:
+    void onDefinitionsChanged(const ModbusDefinitions& definitions);
+    bool changeRegisterType(ItemMapKey& key, DataMapEntry& entry, const QVariant& value, int role) const;
+    EnronModbus::RegisterType effectiveEnronType(const DataMapEntry& entry) const;
     int  rowForKey(const ItemMapKey& key) const;
     bool hasAnyRowWithKey(const ItemMapKey& key, int exceptRow = -1) const;
     void registerEntry(const ItemMapKey& key, const DataMapEntry& entry);
@@ -127,6 +147,7 @@ private:
     QList<ItemMapKey>                _keys;
     QMap<ItemMapKey, DataMapEntry> _data;
     QMap<ItemMapKey, QUuid>          _uuids;
+    bool                             _enronEnabled = false;
     bool                             _inSetData  = false;
     bool                             _zeroBased  = false;
     bool                             _hexView    = false;
@@ -143,7 +164,10 @@ public:
     explicit DataMapFilterProxy(QObject* parent = nullptr);
 
     void setFilterUnit(int unit);       // 0 = show all
-    void setFilterTypeIndex(int index); // 0 = show all, 1-4 = Coils/Discrete/Input/Holding
+    ///
+    /// \brief Selects all rows (0), ordinary tables (1–4), or Enron groups (5–6).
+    ///
+    void setFilterTypeIndex(int index);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;

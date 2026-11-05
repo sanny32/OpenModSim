@@ -53,6 +53,14 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_workerThread(new QThread(this))
 {
+    qRegisterMetaType<QModbusRequest>();
+    qRegisterMetaType<QModbusResponse>();
+    qRegisterMetaType<QModbusDataUnit>();
+    qRegisterMetaType<ModbusMessage::ProtocolType>();
+    qRegisterMetaType<QSharedPointer<const ModbusMessage>>();
+    qRegisterMetaType<ModbusDefinitions>();
+    qRegisterMetaType<QList<int>>();
+    qRegisterMetaType<EnronModbus::RegisterType>("EnronModbus::RegisterType");
     qRegisterMetaType<WriteSource>("WriteSource");
     qRegisterMetaType<ModbusClientInfo>("ModbusClientInfo");
 
@@ -159,18 +167,21 @@ void ModbusMultiServer::setUseGlobalUnitMap(bool use)
 }
 
 ///
-/// \brief ModbusMultiServer::addUnitMap
-/// \param id
-/// \param pointType
-/// \param pointAddress
-/// \param length
+/// \brief Registers backing words while preserving the logical Enron group for notifications.
+/// \param id Identifier of the owning view or map entry.
+/// \param deviceId Modbus device identifier.
+/// \param pointType Backing Modbus table.
+/// \param pointAddress Starting backing-word address.
+/// \param length Number of backing words.
+/// \param enronType Logical Enron group, or None for an ordinary table.
 ///
-void ModbusMultiServer::addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+void ModbusMultiServer::addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType,
+                                  quint16 pointAddress, quint16 length, EnronModbus::RegisterType enronType)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, id, deviceId, pointType, pointAddress, length]() {
-            addUnitMap(id, deviceId, pointType, pointAddress, length);
+        QMetaObject::invokeMethod(this, [this, id, deviceId, pointType, pointAddress, length, enronType]() {
+            addUnitMap(id, deviceId, pointType, pointAddress, length, enronType);
         }, Qt::BlockingQueuedConnection);
         return;
     }
@@ -180,10 +191,16 @@ void ModbusMultiServer::addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::R
         _modbusDataUnitMaps[deviceId].setAddressSpace(_definitions.AddrSpace);
     }
 
+    const auto key = qMakePair(deviceId, id);
+    const bool groupChanged = _unitMapEnronTypes.value(key) != enronType;
+    if (enronType == EnronModbus::RegisterType::None)
+        _unitMapEnronTypes.remove(key);
+    else
+        _unitMapEnronTypes.insert(key, enronType);
     const bool changed = _modbusDataUnitMaps[deviceId].addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
-    if (changed)
-        emit unitMapAdded(id, deviceId, pointType, pointAddress, length);
+    if (changed || groupChanged)
+        emit unitMapAdded(id, deviceId, pointType, pointAddress, length, enronType);
 }
 
 ///
@@ -200,6 +217,7 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
         return;
     }
 
+    const auto enronType = _unitMapEnronTypes.take(qMakePair(deviceId, id));
     QModbusDataUnit removedUnit;
     const bool hasRemovedUnit = _modbusDataUnitMaps[deviceId].unitMap(id, removedUnit);
     const bool changed = _modbusDataUnitMaps[deviceId].removeUnitMap(id);
@@ -207,7 +225,7 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
     if (changed && hasRemovedUnit) {
         emit unitMapRemoved(id, deviceId, removedUnit.registerType(),
                             static_cast<quint16>(removedUnit.startAddress()),
-                            static_cast<quint16>(removedUnit.valueCount()));
+                            static_cast<quint16>(removedUnit.valueCount()), enronType);
     }
 }
 
@@ -1206,6 +1224,7 @@ void ModbusMultiServer::clearAddressSpace()
     }
 
     _modbusDataUnitMaps.clear();
+    _unitMapEnronTypes.clear();
 }
 
 ///

@@ -47,6 +47,17 @@ The following simulations are available:
     Decrement - simulate register from High Limit to Low Limit with a given Step
 ```
 
+# Enron Modbus
+
+Enable **Enron Modbus (32-bit registers)** in **Modbus Definitions → General**.
+The setting is saved with the project.
+
+Select **Enron Registers Int32** or **Enron Registers Float32** and enter the full protocol address
+and a count. For example, address **7001**, count **2** exposes **7001–7002**.
+
+Supported 32-bit ranges are **5001–5999** and **7001–7999**. Choose the display
+format separately in the toolbar. Event and history logs are not supported.
+
 # Modbus Logging
 
 <img width="1292" height="759" alt="image" src=".github/assets/omodsim-trafficview.png" />
@@ -247,14 +258,14 @@ Below are the methods for installing the OpenModSim for different OS
 ## <img src="docs/icons/logo_windows.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim2-2.1-dev.gd72e3cb3_x86.exe`
-- For 64-bit Windows: `qt5-omodsim2-2.1-dev.gd72e3cb3_x64.exe` or `qt6-omodsim2-2.1-dev.gd72e3cb3_x64.exe`
+- For 32-bit Windows: `qt5-omodsim2-2.2.0_x86.exe`
+- For 64-bit Windows: `qt5-omodsim2-2.2.0_x64.exe` or `qt6-omodsim2-2.2.0_x64.exe`
 
 ## <img src="docs/icons/logo_apple.svg" width="16" height="16"> macOS
 ### Install
 Open the DMG package:
 ```bash
-open qt6-omodsim2-2.1-dev.gd72e3cb3_arm64.dmg
+open qt6-omodsim2-2.2.0_arm64.dmg
 ```
 Then drag `Open ModSim 2.app` to the `Applications` folder.
 
@@ -278,11 +289,11 @@ rm -rf "/Applications/Open ModSim 2.app"
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim2_2.1-dev.gd72e3cb3-1_amd64.deb
+sudo apt install ./qt6-omodsim2_2.2.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim2_2.1-dev.gd72e3cb3-1_amd64.deb
+sudo apt install ./qt5-omodsim2_2.2.0-1_amd64.deb
 ```
 
 ### Remove
@@ -299,7 +310,7 @@ sudo apt remove qt5-omodsim2
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim2-2.1-dev.gd72e3cb3-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim2-2.2.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -312,7 +323,7 @@ sudo dnf remove qt6-omodsim2
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim2-2.1-dev.gd72e3cb3-1.x86_64.rpm
+apt-get install ./qt6-omodsim2-2.2.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -329,7 +340,7 @@ sudo rpm --import qt6-omodsim2.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim2-2.1-dev.gd72e3cb3-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim2-2.2.0-1.x86_64.rpm
 ```
 
 ### Remove

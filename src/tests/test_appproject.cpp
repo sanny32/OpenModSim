@@ -7,18 +7,34 @@
 ///
 
 #include <QFile>
+#include <QRegularExpression>
+#include <QListView>
+#include <QTableView>
+#include <QAbstractItemDelegate>
+#include <QImage>
+#include <QPainter>
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QPushButton>
 #include <QPointer>
 #include <QSignalSpy>
 #include <QTemporaryDir>
 #include <QTest>
 
 #include "appproject.h"
+#include "applogger.h"
 #include "apppreferences.h"
 #include "application.h"
 #include "controls/mdiareaex.h"
+#include "controls/pointtypecombobox.h"
+#include "controls/numericlineedit.h"
+#include "controls/outputdatawidget.h"
+#include "dialogs/dialogwriteregister.h"
 #include "controls/projecttreewidget.h"
 #include "datasimulator.h"
+#include "dialogs/dialogmodbusdefinitions.h"
 #include "formdataview.h"
+#include "formdatamapview.h"
 #include "mainwindow.h"
 #include "modbusmultiserver.h"
 #include "projectformmetadata.h"
@@ -28,6 +44,21 @@ class TestAppProject : public QObject
     Q_OBJECT
 
 private slots:
+    void logsEnronAddressSpaces_data();
+    void logsEnronAddressSpaces();
+    void mapsEnronRequests_data();
+    void mapsEnronRequests();
+    void editsAndRestoresEnronDataMap();
+    void togglesEnronRegisterChoices();
+    void compactsEnronRowsAcrossFormatChanges();
+    void enronDisplayFormats_data();
+    void enronDisplayFormats();
+    void enronRegisterChoices_data();
+    void enronRegisterChoices();
+    void roundTripsEnronRegisterChoices();
+    void editsEnronRegisterByLogicalAddress();
+    void configuresEnronMode();
+    void roundTripsEnronMode();
     void createsAndNumbersEveryFormKind();
     void closesReopensAndDeletesCanonicalForm();
     void respectsDeletionLock();
@@ -194,7 +225,596 @@ QStringList commentPlacements(const QString& path)
 
 }
 
-/// \brief Verifies creation, UUID assignment and per-kind display counters.
+/// \brief Keeps ordinary tables distinguishable from Enron maps at the same backing addresses.
+void TestAppProject::logsEnronAddressSpaces_data()
+{
+    QTest::addColumn<int>("group");
+    QTest::newRow("holding") << 0;
+    QTest::newRow("Int32") << 1;
+    QTest::newRow("Float32") << 2;
+}
+
+/// \brief Logs logical groups, addresses and counts on both registration and removal.
+void TestAppProject::logsEnronAddressSpaces()
+{
+    QFETCH(int, group);
+    ModbusMultiServer server;
+    QObject context;
+    AppLogger::setupModbusMultiServerLogging(server, &context);
+    auto definitions = server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    server.setModbusDefinitions(definitions);
+    const auto enron = static_cast<EnronModbus::RegisterType>(group);
+    const int address = group == 2 ? 7003 : 5003;
+    const int logicalAddress = group ? address - 1 : address;
+    const int count = group ? 2 : 4;
+    const QString name = group
+        ? QCoreApplication::translate("DataMapDataModel", group == 1 ? "Enron Registers Int32" : "Enron Registers Float32")
+        : registerTypeName(QModbusDataUnit::HoldingRegisters);
+    const auto id = QUuid::createUuid();
+    const QString added = QCoreApplication::translate("MainWindow",
+        "Address space added: unit %1, %2, starting address %3, length %4")
+        .arg(1).arg(name).arg(logicalAddress).arg(count);
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(added)));
+    server.addUnitMap(id, 1, QModbusDataUnit::HoldingRegisters, address, 4, enron);
+    QVERIFY(server.data(1, QModbusDataUnit::HoldingRegisters, address, 4).isValid());
+    const QString removed = QCoreApplication::translate("MainWindow",
+        "Address space removed: unit %1, %2, starting address %3, length %4")
+        .arg(1).arg(name).arg(logicalAddress).arg(count);
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(removed)));
+    server.removeUnitMap(id, 1);
+    const QString ordinaryAdded = QCoreApplication::translate("MainWindow",
+        "Address space added: unit %1, %2, starting address %3, length %4")
+        .arg(1).arg(registerTypeName(QModbusDataUnit::HoldingRegisters)).arg(address).arg(4);
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(ordinaryAdded)));
+    server.addUnitMap(id, 1, QModbusDataUnit::HoldingRegisters, address, 4);
+    server.clearAddressSpace();
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(ordinaryAdded)));
+    server.addUnitMap(id, 1, QModbusDataUnit::HoldingRegisters, address, 4);
+    server.removeUnitMap(id, 1);
+}
+
+/// \brief Covers request mapping for both Enron ranges and ordinary Modbus.
+void TestAppProject::mapsEnronRequests_data()
+{
+    QTest::addColumn<bool>("enabled");
+    QTest::addColumn<int>("base");
+    QTest::addColumn<int>("group");
+    QTest::newRow("ordinary") << false << 7001 << 0;
+    QTest::newRow("5x") << true << 5001 << 1;
+    QTest::newRow("7x") << true << 7001 << 2;
+}
+
+/// \brief Maps consecutive protocol addresses and appends the next native register.
+void TestAppProject::mapsEnronRequests()
+{
+    QFETCH(bool, enabled);
+    QFETCH(int, base);
+    QFETCH(int, group);
+    ProjectFixture fixture;
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = enabled;
+    fixture.Server.setModbusDefinitions(definitions);
+    auto* form = qobject_cast<FormDataMapView*>(fixture.Project.createMdiChild(ProjectFormKind::DataMap));
+    QVERIFY(form);
+    form->setAutoAddOnRequest(true);
+    auto* model = form->findChild<DataMapDataModel*>();
+    auto* table = form->findChild<QTableView*>("tableView");
+    QVERIFY(model);
+    QVERIFY(table);
+    fixture.Server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, base, 6);
+    const QModbusDataUnit unit(QModbusDataUnit::HoldingRegisters, base,
+                              QVector<quint16>{0x1234, 0x5678, 0x2345, 0x6789, 0, 0});
+    fixture.Server.setData(1, unit, WriteSource::User);
+    const auto request = ModbusMessage::create(QModbusRequest(QModbusPdu::ReadHoldingRegisters,
+        quint16(base), quint16(2)), ModbusMessage::Tcp, 1, 1, QDateTime::currentDateTime(), true);
+    fixture.Server.requestOnConnection({}, request);
+    QCOMPARE(model->rowCount(), 2);
+    QCOMPARE(model->keyForRow(0).Address, base);
+    QCOMPARE(model->keyForRow(1).Address, base + (enabled ? 2 : 1));
+    QCOMPARE(model->index(1, ColType).data(DataMapRole::EnronType).toInt(), group);
+    QCOMPARE(model->index(1, ColAddress).data().toInt(), base + 1 + (enabled || form->zeroBasedAddress() ? 0 : 1));
+    table->setCurrentIndex(table->model()->index(1, ColType));
+    QVERIFY(QMetaObject::invokeMethod(form, "on_actionAdd_triggered", Qt::DirectConnection));
+    QCOMPARE(model->rowCount(), 3);
+    QCOMPARE(model->keyForRow(2).Address, base + (enabled ? 4 : 2));
+    QCOMPARE(model->index(2, ColType).data(DataMapRole::EnronType).toInt(), group);
+    fixture.Server.requestOnConnection({}, request);
+    QCOMPARE(model->rowCount(), 3);
+}
+
+/// \brief Preserves Enron groups and protocol addresses through table editing and project reload.
+void TestAppProject::editsAndRestoresEnronDataMap()
+{
+    ProjectFixture fixture;
+    auto* form = qobject_cast<FormDataMapView*>(fixture.Project.createMdiChild(ProjectFormKind::DataMap));
+    QVERIFY(form);
+    auto* model = form->findChild<DataMapDataModel*>();
+    auto* table = form->findChild<QTableView*>("tableView");
+    auto* filter = form->findChild<QComboBox*>("filterTypeCombo");
+    QVERIFY(model);
+    QVERIFY(table);
+    QVERIFY(filter);
+    model->addEntry({1, QModbusDataUnit::HoldingRegisters, 0}, {});
+    const auto typeIndex = table->model()->index(0, ColType);
+    auto* delegate = table->itemDelegateForColumn(ColType);
+    QScopedPointer<QWidget> editor(delegate->createEditor(table, {}, typeIndex));
+    auto* types = qobject_cast<PointTypeComboBox*>(editor.data());
+    QVERIFY(types);
+    QCOMPARE(types->count(), 4);
+    QCOMPARE(filter->count(), 5);
+
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_COMPARE(types->count(), 6);
+    QCOMPARE(filter->count(), 7);
+    QCOMPARE(filter->itemText(5), QCoreApplication::translate("FormDataMapView", "Enron Registers Int32"));
+    QCOMPARE(filter->itemText(6), QCoreApplication::translate("FormDataMapView", "Enron Registers Float32"));
+    types->setCurrentEnronType(EnronModbus::RegisterType::Group7x);
+    delegate->setModelData(types, table->model(), typeIndex);
+    QCOMPARE(model->index(0, ColType).data(DataMapRole::EnronType).toInt(), 2);
+    QCOMPARE(model->index(0, ColAddress).data().toInt(), 7001);
+
+    const auto addressIndex = table->model()->index(0, ColAddress);
+    auto* addressDelegate = table->itemDelegateForColumn(ColAddress);
+    QScopedPointer<QWidget> addressEditor(addressDelegate->createEditor(table, {}, addressIndex));
+    auto* address = qobject_cast<NumericLineEdit*>(addressEditor.data());
+    QVERIFY(address);
+    addressDelegate->setEditorData(address, addressIndex);
+    QCOMPARE(address->range<int>().from(), 7001);
+    QCOMPARE(address->range<int>().to(), 7999);
+    QCOMPARE(address->value<int>(), 7001);
+    address->setValue(7002);
+    addressDelegate->setModelData(address, table->model(), addressIndex);
+    QCOMPARE(model->keyForRow(0).Address, 7003);
+    QCOMPARE(model->index(0, ColAddress).data().toInt(), 7002);
+    QVERIFY(model->setData(model->index(0, ColDataType), "UInt32"));
+    QVERIFY(model->setData(model->index(0, ColValue), "305419896"));
+
+    QTemporaryDir files;
+    const auto saved = files.filePath("enron-map.omsim");
+    QVERIFY(fixture.Project.saveProject(saved));
+    filter->setCurrentIndex(6);
+    QCOMPARE(table->model()->rowCount(), 1);
+    definitions.EnronModbus = false;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_COMPARE(types->count(), 4);
+    QCOMPARE(filter->count(), 5);
+    QCOMPARE(filter->currentIndex(), 0);
+    QCOMPARE(table->model()->rowCount(), 1);
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_COMPARE(types->count(), 6);
+    QCOMPARE(model->index(0, ColAddress).data().toInt(), 7002);
+    editor.reset();
+    addressEditor.reset();
+
+    fixture.Project.closeProject();
+    QVERIFY(fixture.Project.loadProject(saved).Success);
+    auto* restored = fixture.Mdi.findChild<FormDataMapView*>();
+    QVERIFY(restored);
+    auto* restoredModel = restored->findChild<DataMapDataModel*>();
+    QVERIFY(restoredModel);
+    QCOMPARE(restoredModel->rowCount(), 1);
+    QCOMPARE(restoredModel->index(0, ColType).data(DataMapRole::EnronType).toInt(), 2);
+    QCOMPARE(restoredModel->index(0, ColAddress).data().toInt(), 7002);
+    QCOMPARE(restoredModel->keyForRow(0).Address, 7003);
+    QCOMPARE(restoredModel->index(0, ColDataType).data().toString(), QString("UInt32"));
+    const auto words = fixture.Server.data(1, QModbusDataUnit::HoldingRegisters, 7003, 2);
+    QCOMPARE(words.value(0), quint16(0x1234));
+    QCOMPARE(words.value(1), quint16(0x5678));
+}
+
+/// \brief Changes the available choices without duplicates or losing ordinary selections.
+void TestAppProject::togglesEnronRegisterChoices()
+{
+    PointTypeComboBox combo;
+    QCOMPARE(combo.count(), 4);
+    combo.setCurrentPointType(QModbusDataUnit::InputRegisters);
+    combo.setCurrentEnronType(EnronModbus::RegisterType::Group7x);
+    QCOMPARE(combo.currentPointType(), QModbusDataUnit::InputRegisters);
+    QCOMPARE(combo.currentEnronType(), EnronModbus::RegisterType::None);
+    combo.setEnronEnabled(false);
+    QCOMPARE(combo.count(), 4);
+
+    for (auto mode : {EnronModbus::RegisterType::Group5x, EnronModbus::RegisterType::Group7x}) {
+        combo.setCurrentPointType(QModbusDataUnit::InputRegisters);
+        combo.setEnronEnabled(true);
+        combo.setEnronEnabled(true);
+        QCOMPARE(combo.count(), 6);
+        QCOMPARE(combo.currentPointType(), QModbusDataUnit::InputRegisters);
+        combo.setCurrentEnronType(mode);
+        QCOMPARE(combo.currentEnronType(), mode);
+        QCOMPARE(combo.currentText(), mode == EnronModbus::RegisterType::Group5x
+            ? QCoreApplication::translate("PointTypeComboBox", "Enron Registers Int32 (Read-Write)")
+            : QCoreApplication::translate("PointTypeComboBox", "Enron Registers Float32 (Read-Write)"));
+        combo.setEnronEnabled(false);
+        combo.setEnronEnabled(false);
+        QCOMPARE(combo.count(), 4);
+        QCOMPARE(combo.currentPointType(), QModbusDataUnit::HoldingRegisters);
+        QCOMPARE(combo.currentEnronType(), EnronModbus::RegisterType::None);
+        QCOMPARE(combo.findData(int(mode), Qt::UserRole + 1), -1);
+    }
+}
+
+/// \brief Rebuilds visible rows across display widths without changing the stored range.
+void TestAppProject::compactsEnronRowsAcrossFormatChanges()
+{
+    ProjectFixture fixture;
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    auto* form = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
+    QVERIFY(form);
+    form->findChild<PointTypeComboBox*>("comboBoxModbusPointType")->setCurrentEnronType(EnronModbus::RegisterType::Group5x);
+    form->findChild<NumericLineEdit*>("lineEditLength")->setValue(3);
+    auto* output = form->findChild<OutputDataWidget*>("outputWidget");
+    auto* view = output->findChild<QListView*>("listView");
+    QCOMPARE(form->displayDefinition().Length, quint16(6));
+    QCOMPARE(view->model()->rowCount(), 3);
+    form->setDataType(DataType::UInt64);
+    QCOMPARE(view->model()->rowCount(), 2);
+    QVERIFY(view->model()->data(view->model()->index(1, 0), CaptureRole).toString().trimmed().isEmpty());
+    form->setDataType(DataType::UInt16);
+    QCOMPARE(view->model()->rowCount(), 6);
+    form->setDataType(DataType::UInt32);
+    QCOMPARE(view->model()->rowCount(), 3);
+    QCOMPARE(form->displayDefinition().Length, quint16(6));
+    QCOMPARE(form->data().size(), 6);
+    definitions.EnronModbus = false;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_COMPARE(form->displayDefinition().EnronType, EnronModbus::RegisterType::None);
+    QCOMPARE(view->model()->rowCount(), 6);
+}
+
+/// \brief Covers every display action independently of the selected Enron group.
+void TestAppProject::enronDisplayFormats_data()
+{
+    QTest::addColumn<int>("group");
+    QTest::addColumn<DataType>("type");
+    QTest::addColumn<QString>("action");
+    const QList<QPair<DataType, QString>> formats = {
+        {DataType::Binary, "actionDisplayBinary"}, {DataType::Hex, "actionDisplayHex"},
+        {DataType::Ansi, "actionDisplayAnsi"}, {DataType::Int16, "actionDisplayInt16"},
+        {DataType::UInt16, "actionDisplayUInt16"}, {DataType::Int32, "actionDisplayInt32"},
+        {DataType::UInt32, "actionDisplayUInt32"}, {DataType::Int64, "actionDisplayInt64"},
+        {DataType::UInt64, "actionDisplayUInt64"}, {DataType::Float32, "actionDisplayFloat32"},
+        {DataType::Float64, "actionDisplayFloat64"}
+    };
+    for (int group : {1, 2}) {
+        for (const auto& format : formats) {
+            const auto name = QString("%1-%2").arg(group).arg(format.second);
+            QTest::newRow(qPrintable(name)) << group << format.first << format.second;
+        }
+    }
+}
+
+/// \brief Reinterprets shared register bits without changing their group, address or storage.
+void TestAppProject::enronDisplayFormats()
+{
+    QFETCH(int, group);
+    QFETCH(DataType, type);
+    QFETCH(QString, action);
+    auto& prefs = AppPreferences::instance();
+    const bool previousHex = prefs.globalHexView();
+    const auto restoreHex = qScopeGuard([&prefs, previousHex] { prefs.setGlobalHexView(previousHex); });
+    prefs.setGlobalHexView(false);
+    ProjectFixture fixture;
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    auto* form = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
+    QVERIFY(form);
+    form->setAddressBase(AddressBase::Base0);
+    auto* combo = form->findChild<PointTypeComboBox*>("comboBoxModbusPointType");
+    const auto enron = static_cast<EnronModbus::RegisterType>(group);
+    combo->setCurrentEnronType(enron);
+    form->findChild<NumericLineEdit*>("lineEditLength")->setValue(2);
+    auto* displayAction = form->findChild<QAction*>(action);
+    QVERIFY(displayAction);
+    QVERIFY(displayAction->isEnabled());
+    displayAction->trigger();
+    QCOMPARE(form->dataType(), type);
+    QCOMPARE(form->displayDefinition().EnronType, enron);
+    QCOMPARE(form->findChild<NumericLineEdit*>("lineEditAddress")->value<int>(), int(EnronModbus::baseAddress(enron)));
+    const QVector<quint16> words{0x3f80, 0, 0x4000, 0};
+    fixture.Server.setData(1, QModbusDataUnit(QModbusDataUnit::HoldingRegisters,
+        EnronModbus::baseAddress(enron), words), WriteSource::User);
+    auto* model = form->findChild<OutputDataListModel*>();
+    QVERIFY(model);
+    QTRY_COMPARE(form->data(), words);
+    auto* output = form->findChild<OutputDataWidget*>("outputWidget");
+    auto* view = output->findChild<QListView*>("listView");
+    QVERIFY(view);
+    const int visibleRows = 4 / registersCount(type);
+    QCOMPARE(view->model()->rowCount(), visibleRows);
+    QCOMPARE(output->rowCount(), visibleRows);
+    QSet<QString> visibleAddresses;
+    for (int row = 0; row < visibleRows; ++row)
+        visibleAddresses.insert(view->model()->data(view->model()->index(row, 0), AddressStringRole).toString());
+    QCOMPARE(visibleAddresses.size(), visibleRows);
+    QImage page(1000, 1000, QImage::Format_ARGB32);
+    QPainter painter(&page);
+    QCOMPARE(output->paint(page.rect(), painter, 0), visibleRows);
+    const auto index = model->index(0);
+    QVERIFY(!model->data(index, CaptureRole).toString().trimmed().isEmpty());
+    const QString protocolAddress = QString::number(EnronModbus::baseAddress(enron));
+    const bool wordFormat = registersCount(type) == 1;
+    QCOMPARE(model->data(index, AddressStringRole).toString(), protocolAddress
+             + (wordFormat ? QStringLiteral(".H") : QString()));
+    if (wordFormat) {
+        QCOMPARE(model->data(model->index(1), AddressStringRole).toString(), protocolAddress + QStringLiteral(".L"));
+        QCOMPARE(model->data(index, ValueRole).toUInt(), uint(0x3f80));
+    } else if (type == DataType::Float32) {
+        QCOMPARE(model->data(index, ValueRole).toFloat(), 1.0f);
+        QCOMPARE(model->data(model->index(2), ValueRole).toFloat(), 2.0f);
+    } else if (type == DataType::Float64) {
+        QCOMPARE(model->data(index, ValueRole).toDouble(), 0x1.000004p-7);
+    } else if (registersCount(type) == 2) {
+        QCOMPARE(model->data(index, ValueRole).toUInt(), uint(0x3f800000));
+    } else {
+        QCOMPARE(model->data(index, ValueRole).toULongLong(), qulonglong(0x3f80000040000000));
+    }
+    if (type == DataType::Float32) {
+        output->applyFindByValue(QStringLiteral("2"));
+        QVERIFY(output->findNextByValue(QStringLiteral("2")));
+        QCOMPARE(view->currentIndex().row(), 1);
+        output->clearFindByValue();
+    }
+    QObject::disconnect(output, &OutputDataWidget::itemDoubleClicked, nullptr, nullptr);
+    QSignalSpy editSpy(output, &OutputDataWidget::itemDoubleClicked);
+    QVERIFY(QMetaObject::invokeMethod(output, "on_listView_doubleClicked", Qt::DirectConnection,
+        Q_ARG(QModelIndex, view->model()->index(visibleRows - 1, 0))));
+    QCOMPARE(editSpy.count(), 1);
+    QCOMPARE(editSpy.first().at(0).toUInt(), uint(EnronModbus::baseAddress(enron)
+        + (visibleRows - 1) * registersCount(type)));
+    if (type == DataType::Float32)
+        QCOMPARE(editSpy.first().at(1).toFloat(), 2.0f);
+    form->setRegisterOrder(RegisterOrder::LSRF);
+    QCOMPARE(form->registerOrder(), RegisterOrder::LSRF);
+    form->setByteOrder(ByteOrder::Swapped);
+    QCOMPARE(form->byteOrder(), ByteOrder::Swapped);
+    prefs.setGlobalHexView(true);
+    QTRY_COMPARE(model->data(index, AddressStringRole).toString(), QStringLiteral("0x%1").arg(EnronModbus::baseAddress(enron), 4, 16, QLatin1Char('0')).toUpper()
+                 + (wordFormat ? QStringLiteral(".H") : QString()));
+    QCOMPARE(form->findChild<NumericLineEdit*>("lineEditAddress")->value<int>(), int(EnronModbus::baseAddress(enron)));
+}
+
+/// \brief Exercises logical register input for both Enron groups and address bases.
+void TestAppProject::enronRegisterChoices_data()
+{
+    QTest::addColumn<int>("mode");
+    QTest::addColumn<bool>("zeroBased");
+    for (int mode : {1, 2}) {
+        QTest::newRow(mode == 1 ? "int-base0" : "float-base0") << mode << true;
+        QTest::newRow(mode == 1 ? "int-base1" : "float-base1") << mode << false;
+    }
+}
+
+/// \brief Keeps UI counts and labels logical while editing the correct backing words.
+void TestAppProject::enronRegisterChoices()
+{
+    QFETCH(int, mode);
+    QFETCH(bool, zeroBased);
+    auto& prefs = AppPreferences::instance();
+    const bool previousHex = prefs.globalHexView();
+    const auto restoreHex = qScopeGuard([&prefs, previousHex] { prefs.setGlobalHexView(previousHex); });
+    prefs.setGlobalHexView(false);
+    ProjectFixture fixture;
+    auto* form = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
+    QVERIFY(form);
+    form->setAddressBase(zeroBased ? AddressBase::Base0 : AddressBase::Base1);
+    auto* combo = form->findChild<PointTypeComboBox*>("comboBoxModbusPointType");
+    auto* address = form->findChild<NumericLineEdit*>("lineEditAddress");
+    auto* length = form->findChild<NumericLineEdit*>("lineEditLength");
+    QVERIFY(combo);
+    const auto enron = static_cast<EnronModbus::RegisterType>(mode);
+    QCOMPARE(combo->count(), 4);
+    QCOMPARE(combo->findData(mode, Qt::UserRole + 1), -1);
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_COMPARE(combo->count(), 6);
+    QVERIFY(combo->findData(mode, Qt::UserRole + 1) >= 0);
+    QSignalSpy maps(&fixture.Server, &ModbusMultiServer::unitMapAdded);
+    combo->setCurrentEnronType(enron);
+    QTRY_VERIFY(!maps.isEmpty());
+    QCOMPARE(maps.last().last().value<EnronModbus::RegisterType>(), enron);
+    const int base = EnronModbus::baseAddress(enron);
+    QCOMPARE(address->value<int>(), base);
+    QCOMPARE(address->range<int>().from(), base);
+    address->setValue(base + 1);
+    length->setValue(2);
+    const auto dd = form->displayDefinition();
+    QCOMPARE(dd.EnronType, enron);
+    QCOMPARE(dd.PointAddress, quint16(base + 2 + (zeroBased ? 0 : 1)));
+    QCOMPARE(dd.Length, quint16(4));
+    QCOMPARE(form->dataType(), mode == 1 ? DataType::Int32 : DataType::Float32);
+    form->setDataType(DataType::UInt16);
+    QCOMPARE(form->dataType(), DataType::UInt16);
+    form->setByteOrder(ByteOrder::Swapped);
+    QCOMPARE(form->byteOrder(), ByteOrder::Swapped);
+    form->setRegisterOrder(RegisterOrder::LSRF);
+    QCOMPARE(form->registerOrder(), RegisterOrder::LSRF);
+    form->setDataType(DataType::UInt32);
+    auto* model = form->findChild<OutputDataListModel*>();
+    QVERIFY(model);
+    QCOMPARE(model->data(model->index(0), AddressStringRole).toString(), QString::number(base + 1));
+    QCOMPARE(model->data(model->index(2), AddressStringRole).toString(), QString::number(base + 2));
+    QSignalSpy definitionSpy(form, &FormDataView::definitionChanged);
+    definitions.AddrSpace = AddressSpace::Addr5Digits;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_VERIFY(!definitionSpy.isEmpty());
+    QCOMPARE(model->data(model->index(0), AddressStringRole).toString(), QString::number(base + 1));
+    QCOMPARE(form->dataType(), DataType::UInt32);
+    QCOMPARE(form->byteOrder(), ByteOrder::Swapped);
+    QCOMPARE(form->registerOrder(), RegisterOrder::LSRF);
+    QCOMPARE(model->data(model->index(2), AddressRole).toUInt(), uint(base + 4 + (zeroBased ? 0 : 1)));
+
+    form->setAddressBase(zeroBased ? AddressBase::Base1 : AddressBase::Base0);
+    QCOMPARE(address->value<int>(), base + 1);
+    form->setAddressBase(zeroBased ? AddressBase::Base0 : AddressBase::Base1);
+    address->setValue(base + EnronModbus::RangeLength - 1);
+    QCOMPARE(length->range<int>().to(), 1);
+    QCOMPARE(length->value<int>(), 1);
+    QCOMPARE(form->displayDefinition().Length, quint16(2));
+
+    definitions.EnronModbus = false;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_COMPARE(form->displayDefinition().EnronType, EnronModbus::RegisterType::None);
+    QCOMPARE(combo->count(), 4);
+    QCOMPARE(combo->findData(mode, Qt::UserRole + 1), -1);
+    QCOMPARE(form->displayDefinition().Length, quint16(2));
+    QCOMPARE(combo->currentPointType(), QModbusDataUnit::HoldingRegisters);
+}
+
+/// \brief Preserves the Enron selection and logical range in project and settings serialization.
+void TestAppProject::roundTripsEnronRegisterChoices()
+{
+    ProjectFixture fixture;
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    auto* form = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
+    QVERIFY(form);
+    form->setAddressBase(AddressBase::Base0);
+    form->findChild<PointTypeComboBox*>("comboBoxModbusPointType")->setCurrentEnronType(EnronModbus::RegisterType::Group7x);
+    form->findChild<NumericLineEdit*>("lineEditAddress")->setValue(7002);
+    form->findChild<NumericLineEdit*>("lineEditLength")->setValue(2);
+    form->setDataType(DataType::UInt32);
+    form->setRegisterOrder(RegisterOrder::LSRF);
+    form->setByteOrder(ByteOrder::Swapped);
+    const auto expected = form->displayDefinition();
+    QTemporaryDir files;
+    QSettings settings(files.filePath("view.ini"), QSettings::IniFormat);
+    settings << expected;
+    DataViewDefinitions restored;
+    settings >> restored;
+    QCOMPARE(restored, expected);
+    QSettings viewSettings(files.filePath("form.ini"), QSettings::IniFormat);
+    form->saveSettings(viewSettings);
+    auto* settingsView = qobject_cast<FormDataView*>(fixture.Project.createMdiChild(ProjectFormKind::Data));
+    QVERIFY(settingsView);
+    settingsView->loadSettings(viewSettings);
+    QCOMPARE(settingsView->dataType(), DataType::UInt32);
+    QCOMPARE(settingsView->registerOrder(), RegisterOrder::LSRF);
+    QCOMPARE(settingsView->byteOrder(), ByteOrder::Swapped);
+    fixture.Project.deleteForm(settingsView);
+    const auto saved = files.filePath("enron-view.omsim");
+    QVERIFY(fixture.Project.saveProject(saved));
+    fixture.Project.closeProject();
+    definitions.EnronModbus = false;
+    fixture.Server.setModbusDefinitions(definitions);
+    QVERIFY(fixture.Project.loadProject(saved).Success);
+    const auto forms = fixture.Project.forms(ProjectFormKind::Data);
+    QCOMPARE(forms.size(), 1);
+    auto* loaded = qobject_cast<FormDataView*>(forms.first());
+    QVERIFY(loaded);
+    QCOMPARE(loaded->displayDefinition().EnronType, EnronModbus::RegisterType::Group7x);
+    QCOMPARE(loaded->displayDefinition().Length, quint16(4));
+    QCOMPARE(loaded->findChild<NumericLineEdit*>("lineEditAddress")->value<int>(), 7002);
+    QCOMPARE(loaded->findChild<NumericLineEdit*>("lineEditLength")->value<int>(), 2);
+    QCOMPARE(loaded->dataType(), DataType::UInt32);
+    QCOMPARE(loaded->registerOrder(), RegisterOrder::LSRF);
+    QCOMPARE(loaded->byteOrder(), ByteOrder::Swapped);
+    auto* combo = loaded->findChild<PointTypeComboBox*>("comboBoxModbusPointType");
+    QCOMPARE(combo->count(), 4);
+    // Project settings are applied after the data views have been constructed.
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    QTRY_COMPARE(combo->currentEnronType(), EnronModbus::RegisterType::Group7x);
+    QCOMPARE(combo->count(), 6);
+    QCOMPARE(loaded->findChild<NumericLineEdit*>("lineEditAddress")->value<int>(), 7002);
+}
+
+/// \brief Converts a logical address edited in the write dialog back to an independent word pair.
+void TestAppProject::editsEnronRegisterByLogicalAddress()
+{
+    ModbusMultiServer server;
+    server.addUnitMap(QUuid::createUuid(), 1, QModbusDataUnit::HoldingRegisters, 7001, 6);
+    ModbusWriteParams params;
+    params.DeviceId = 1;
+    params.Address = 7004;
+    params.ZeroBasedAddress = false;
+    params.DataMode = DataType::Float32;
+    params.Value = 1.0f;
+    params.Order = ByteOrder::Direct;
+    params.EnronType = EnronModbus::RegisterType::Group7x;
+    params.Server = &server;
+    DialogWriteRegister dialog(params, QModbusDataUnit::HoldingRegisters, false, nullptr, nullptr);
+    auto* address = dialog.findChild<NumericLineEdit*>("lineEditAddress");
+    QCOMPARE(address->value<int>(), 7002);
+    address->setValue(7003);
+    dialog.findChild<NumericLineEdit*>("lineEditValue")->setValue(2.0f);
+    dialog.accept();
+    QCOMPARE(params.Address, quint16(7006));
+    server.writeRegister(QModbusDataUnit::HoldingRegisters, params);
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 7001, 6).values(),
+             QVector<quint16>({0, 0, 0, 0, 0x4000, 0}));
+    params.DataMode = DataType::UInt16;
+    params.Address = 7003;
+    params.Value = 0;
+    DialogWriteRegister lowWord(params, QModbusDataUnit::HoldingRegisters, false, nullptr, nullptr);
+    auto* lowAddress = lowWord.findChild<NumericLineEdit*>("lineEditAddress");
+    QCOMPARE(lowAddress->value<int>(), 7001);
+    lowAddress->setValue(7002);
+    lowWord.findChild<NumericLineEdit*>("lineEditValue")->setValue(0xabcd);
+    lowWord.accept();
+    QCOMPARE(params.Address, quint16(7005));
+    server.writeRegister(QModbusDataUnit::HoldingRegisters, params);
+    QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, 7001, 6).values(),
+             QVector<quint16>({0, 0, 0, 0xabcd, 0x4000, 0}));
+}
+
+/// \brief Applies Enron mode through server settings and preserves it when edits are cancelled.
+void TestAppProject::configuresEnronMode()
+{
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    auto* checkbox = dialog.findChild<QCheckBox*>("checkBoxEnronModbus");
+    auto* buttons = dialog.findChild<QDialogButtonBox*>("buttonBox");
+    QVERIFY(checkbox);
+    QVERIFY(buttons);
+    QVERIFY(!checkbox->isChecked());
+    checkbox->setChecked(true);
+    QVERIFY(buttons->button(QDialogButtonBox::Apply)->isEnabled());
+    buttons->button(QDialogButtonBox::Apply)->click();
+    QVERIFY(server.getModbusDefinitions().EnronModbus);
+    QVERIFY(!buttons->button(QDialogButtonBox::Apply)->isEnabled());
+
+    DialogModbusDefinitions cancelled(server);
+    auto* restored = cancelled.findChild<QCheckBox*>("checkBoxEnronModbus");
+    QVERIFY(restored->isChecked());
+    restored->setChecked(false);
+    cancelled.reject();
+    QVERIFY(server.getModbusDefinitions().EnronModbus);
+
+    checkbox->setChecked(false);
+    dialog.accept();
+    QVERIFY(!server.getModbusDefinitions().EnronModbus);
+}
+
+/// \brief Restores the Enron server setting when reopening a project.
+void TestAppProject::roundTripsEnronMode()
+{
+    ProjectFixture fixture;
+    QTemporaryDir files;
+    const auto source = files.filePath("source.omsim");
+    const auto saved = files.filePath("enron.omsim");
+    writeProjectFile(source, kAnnotatedProject);
+    QVERIFY(fixture.Project.loadProject(source).Success);
+    auto definitions = fixture.Server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    fixture.Server.setModbusDefinitions(definitions);
+    QVERIFY(fixture.Project.saveProject(saved));
+    fixture.Project.closeProject();
+    definitions.EnronModbus = false;
+    fixture.Host.mbMultiServer().setModbusDefinitions(definitions);
+    QVERIFY(fixture.Project.loadProject(saved).Success);
+    QVERIFY(fixture.Host.mbMultiServer().getModbusDefinitions().EnronModbus);
+}
+
 void TestAppProject::createsAndNumbersEveryFormKind()
 {
     ProjectFixture fixture;

@@ -71,7 +71,17 @@ DialogWriteRegister::DialogWriteRegister(ModbusWriteParams& params, QModbusDataU
     ui->lineEditAddress->setLeadingZeroes(hexView || params.LeadingZeros);
     ui->lineEditAddress->setInputMode(hexView ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.AddrSpace, params.ZeroBasedAddress));
-    ui->lineEditAddress->setValue(params.Address);
+    if (params.EnronType == EnronModbus::RegisterType::None) {
+        ui->lineEditAddress->setValue(params.Address);
+    } else {
+        const int word = params.Address - (params.ZeroBasedAddress ? 0 : 1);
+        _enronWordOffset = (word - EnronModbus::baseAddress(params.EnronType)) % 2;
+        const int base = EnronModbus::baseAddress(params.EnronType);
+        ui->lineEditAddress->setInputRange(base, base + EnronModbus::RangeLength - 1);
+        ui->lineEditAddress->setValue(EnronModbus::registerAddress(params.EnronType, word));
+        if (registersCount(params.DataMode) == 1)
+            ui->labelAddress->setText(_enronWordOffset ? tr("Address (low word):") : tr("Address (high word):"));
+    }
 
     if(_dataSimulator != nullptr)
     {
@@ -204,7 +214,7 @@ void DialogWriteRegister::changeEvent(QEvent* event)
 ///
 void DialogWriteRegister::accept()
 {
-    _writeParams.Address = ui->lineEditAddress->value<int>();
+    _writeParams.Address = registerAddress() + (_writeParams.ZeroBasedAddress ? 0 : 1);
     _writeParams.Value = ui->lineEditValue->value<QVariant>();
     _writeParams.DeviceId = ui->lineEditNode->value<int>();
 
@@ -247,7 +257,7 @@ void DialogWriteRegister::updateValue()
     if(srv == nullptr) return;
 
     const quint8 deviceId = ui->lineEditNode->value<int>();
-    const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+    const int simAddr = registerAddress();
     const int count = registersCount(_writeParams.DataMode);
     const auto regs = srv->data(deviceId, _type, simAddr, count).values();
     const auto value = makeValue(regs, _writeParams.DataMode, _writeParams.RegOrder, _writeParams.Order);
@@ -256,14 +266,13 @@ void DialogWriteRegister::updateValue()
 
 ///
 /// \brief DialogWriteRegister::on_lineEditAddress_valueChanged
-/// \param value
 ///
-void DialogWriteRegister::on_lineEditAddress_valueChanged(const QVariant& value)
+void DialogWriteRegister::on_lineEditAddress_valueChanged(const QVariant&)
 {
     if(_dataSimulator != nullptr)
     {
         const quint8 deviceId = ui->lineEditNode->value<int>();
-        const int simAddr = value.toInt() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        const int simAddr = registerAddress();
         _simParams = _dataSimulator->simulationParams(deviceId, _type, simAddr);
         if(!_dataSimulator->canStartSimulation(_writeParams.DataMode, deviceId, _type, simAddr)) {
             _simParams.Mode = SimulationMode::Disabled;
@@ -282,7 +291,7 @@ void DialogWriteRegister::on_lineEditNode_valueChanged(const QVariant& value)
     if(_dataSimulator != nullptr)
     {
         const quint8 deviceId = value.toUInt();
-        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        const int simAddr = registerAddress();
         _simParams = _dataSimulator->simulationParams(deviceId, _type, simAddr);
         if(!_dataSimulator->canStartSimulation(_writeParams.DataMode, deviceId, _type, simAddr)) {
             _simParams.Mode = SimulationMode::Disabled;
@@ -303,7 +312,7 @@ void DialogWriteRegister::on_pushButtonSimulation_clicked()
     if(dlg.exec() == QDialog::Accepted)
     {
         const quint8 deviceId = ui->lineEditNode->value<int>();
-        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        const int simAddr = registerAddress();
         if(_simParams.Mode == SimulationMode::Off)
             _dataSimulator->stopSimulation(deviceId, _type, simAddr);
         else
@@ -312,3 +321,14 @@ void DialogWriteRegister::on_pushButtonSimulation_clicked()
     }
 }
 
+
+///
+/// \brief Resolves the address editor to the word address used by writes and simulation.
+///
+int DialogWriteRegister::registerAddress() const
+{
+    const int address = ui->lineEditAddress->value<int>();
+    if (_writeParams.EnronType != EnronModbus::RegisterType::None)
+        return EnronModbus::wordAddress(_writeParams.EnronType, address) + _enronWordOffset;
+    return address - (_writeParams.ZeroBasedAddress ? 0 : 1);
+}

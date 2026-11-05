@@ -36,6 +36,12 @@ void PointTypeComboBox::changeEvent(QEvent* event)
     {
         for(int i = 0; i < count(); i++)
         {
+            const auto enron = static_cast<EnronModbus::RegisterType>(itemData(i, Qt::UserRole + 1).toInt());
+            if (enron != EnronModbus::RegisterType::None) {
+                setItemText(i, enron == EnronModbus::RegisterType::Group5x
+                    ? tr("Enron Registers Int32 (Read-Write)") : tr("Enron Registers Float32 (Read-Write)"));
+                continue;
+            }
             switch(itemData(i).value<QModbusDataUnit::RegisterType>())
             {
                 case QModbusDataUnit::Coils:
@@ -90,3 +96,51 @@ void PointTypeComboBox::on_currentIndexChanged(int index)
     emit pointTypeChanged(itemData(index).value<QModbusDataUnit::RegisterType>());
 }
 
+
+///
+/// \brief Returns the Enron group selected for the holding-register table.
+///
+EnronModbus::RegisterType PointTypeComboBox::currentEnronType() const
+{
+    return static_cast<EnronModbus::RegisterType>(currentData(Qt::UserRole + 1).toInt());
+}
+
+///
+/// \brief Selects an Enron group without introducing a separate Modbus table.
+///
+void PointTypeComboBox::setCurrentEnronType(EnronModbus::RegisterType type)
+{
+    if (type == EnronModbus::RegisterType::None) {
+        if (currentEnronType() != EnronModbus::RegisterType::None)
+            setCurrentPointType(currentPointType());
+        return;
+    }
+    const int index = findData(int(type), Qt::UserRole + 1);
+    if (index >= 0)
+        setCurrentIndex(index);
+}
+
+///
+/// \brief Adds or removes Enron choices to match the server protocol.
+///
+void PointTypeComboBox::setEnronEnabled(bool enabled)
+{
+    const bool present = findData(int(EnronModbus::RegisterType::Group5x), Qt::UserRole + 1) >= 0;
+    if (enabled == present)
+        return;
+
+    if (enabled) {
+        addItem(tr("Enron Registers Int32 (Read-Write)"), QModbusDataUnit::HoldingRegisters);
+        setItemData(count() - 1, int(EnronModbus::RegisterType::Group5x), Qt::UserRole + 1);
+        addItem(tr("Enron Registers Float32 (Read-Write)"), QModbusDataUnit::HoldingRegisters);
+        setItemData(count() - 1, int(EnronModbus::RegisterType::Group7x), Qt::UserRole + 1);
+        return;
+    }
+
+    if (currentEnronType() != EnronModbus::RegisterType::None)
+        setCurrentPointType(QModbusDataUnit::HoldingRegisters);
+    for (int i = count() - 1; i >= 0; --i) {
+        if (itemData(i, Qt::UserRole + 1).toInt() != 0)
+            removeItem(i);
+    }
+}

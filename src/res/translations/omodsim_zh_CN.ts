@@ -217,14 +217,14 @@
 <context>
     <name>ByteOrder</name>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="139"/>
-        <location filename="../../datamapdatamodel.cpp" line="151"/>
+        <location filename="../../datamapdatamodel.cpp" line="138"/>
+        <location filename="../../datamapdatamodel.cpp" line="150"/>
         <source>Direct</source>
         <translation>直接</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="141"/>
-        <location filename="../../datamapdatamodel.cpp" line="153"/>
+        <location filename="../../datamapdatamodel.cpp" line="140"/>
+        <location filename="../../datamapdatamodel.cpp" line="152"/>
         <source>Swapped</source>
         <translation>交换</translation>
     </message>
@@ -232,12 +232,12 @@
 <context>
     <name>ByteOrderItemDelegate</name>
     <message>
-        <location filename="../../formdatamapview.cpp" line="343"/>
+        <location filename="../../formdatamapview.cpp" line="359"/>
         <source>Use bytes in register order</source>
         <translation>按寄存器顺序使用字节</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="344"/>
+        <location filename="../../formdatamapview.cpp" line="360"/>
         <source>Swap bytes inside each 16-bit register</source>
         <translation>交换每个 16 位寄存器内的字节</translation>
     </message>
@@ -367,47 +367,61 @@
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="560"/>
+        <location filename="../../applogger.cpp" line="34"/>
+        <location filename="../../datamapdatamodel.cpp" line="244"/>
+        <location filename="../../datamapdatamodel.cpp" line="337"/>
+        <source>Enron Registers Int32</source>
+        <translation>Enron Int32 寄存器</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="35"/>
+        <location filename="../../datamapdatamodel.cpp" line="246"/>
+        <location filename="../../datamapdatamodel.cpp" line="337"/>
+        <source>Enron Registers Float32</source>
+        <translation>Enron Float32 寄存器</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="639"/>
         <source>Unit</source>
         <translation>单元</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="561"/>
+        <location filename="../../datamapdatamodel.cpp" line="640"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="562"/>
+        <location filename="../../datamapdatamodel.cpp" line="641"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="563"/>
+        <location filename="../../datamapdatamodel.cpp" line="642"/>
         <source>Data Type</source>
         <translation>数据类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="564"/>
+        <location filename="../../datamapdatamodel.cpp" line="643"/>
         <source>Register Order</source>
         <translation>寄存器顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="565"/>
+        <location filename="../../datamapdatamodel.cpp" line="644"/>
         <source>Byte Order</source>
         <translation>字节顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="566"/>
+        <location filename="../../datamapdatamodel.cpp" line="645"/>
         <source>Comment</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="567"/>
+        <location filename="../../datamapdatamodel.cpp" line="646"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="568"/>
+        <location filename="../../datamapdatamodel.cpp" line="647"/>
         <source>Timestamp</source>
         <translation>时间戳</translation>
     </message>
@@ -415,62 +429,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../../formdatamapview.cpp" line="199"/>
+        <location filename="../../formdatamapview.cpp" line="215"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation>1位值（线圈/离散输入）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="200"/>
+        <location filename="../../formdatamapview.cpp" line="216"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation>16位寄存器值，显示为16位二进制数字</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="201"/>
+        <location filename="../../formdatamapview.cpp" line="217"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation>无符号16位整数（0 … 65535）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="202"/>
+        <location filename="../../formdatamapview.cpp" line="218"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation>有符号16位整数（-32768 … 32767）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="203"/>
+        <location filename="../../formdatamapview.cpp" line="219"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation>16位值，以十六进制显示</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="204"/>
+        <location filename="../../formdatamapview.cpp" line="220"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation>16位值，以ANSI字符显示</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="205"/>
+        <location filename="../../formdatamapview.cpp" line="221"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation>IEEE 754单精度浮点数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="206"/>
+        <location filename="../../formdatamapview.cpp" line="222"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation>IEEE 754双精度浮点数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="207"/>
+        <location filename="../../formdatamapview.cpp" line="223"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation>有符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="208"/>
+        <location filename="../../formdatamapview.cpp" line="224"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation>无符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="209"/>
+        <location filename="../../formdatamapview.cpp" line="225"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation>有符号64位整数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="210"/>
+        <location filename="../../formdatamapview.cpp" line="226"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation>无符号64位整数（4个寄存器）</translation>
     </message>
@@ -1070,48 +1084,58 @@ Open the download page?</source>
         <translation>根据请求自动添加寄存器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="65"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="64"/>
+        <source>Select Enron Int32 or Float32 registers and enter the full protocol address, starting at 5001 or 7001. Select the display format separately in the toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="67"/>
+        <source>Enable Enron Modbus (32-bit registers)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="75"/>
         <source>Error Simulations</source>
         <translation>错误模拟</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="77"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="87"/>
         <source>Response with incorrect IDs</source>
         <translation>带有错误 ID 的响应</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="90"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="100"/>
         <source>Response with ILLEGAL FUNCTION</source>
         <translation>响应非法功能</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="103"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="113"/>
         <source>Response with DEVICE BUSY</source>
         <translation>响应 DEVICE BUSY</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="116"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="126"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
         <translation>响应带有错误的 CRC（仅限串行线路）</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="128"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="138"/>
         <source>Response with delay</source>
         <translation>延迟响应</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="164"/>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="230"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="174"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="240"/>
         <source>ms</source>
         <translation>毫秒</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="191"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="201"/>
         <source>Response with random delay from 0 to</source>
         <translation>响应随机延迟从 0 到</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="258"/>
+        <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="268"/>
         <source>No response</source>
         <translation>没有响应</translation>
     </message>
@@ -1724,6 +1748,16 @@ Open the download page?</source>
 <context>
     <name>DialogWriteRegister</name>
     <message>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="83"/>
+        <source>Address (low word):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="83"/>
+        <source>Address (high word):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../dialogs/dialogwriteregister.ui" line="14"/>
         <source>Write Register</source>
         <translation>写寄存器</translation>
@@ -1745,7 +1779,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="229"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="239"/>
         <source>Auto Simulation: OFF</source>
         <translation>自动模拟：关闭</translation>
     </message>
@@ -1755,18 +1789,18 @@ Open the download page?</source>
         <translation>位模式： </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="101"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="111"/>
         <source>Value, (HEX): </source>
         <translation>值（十六进制）： </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="108"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="118"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="223"/>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="235"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="233"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="245"/>
         <source>Auto Simulation: ON</source>
         <translation>自动模拟：开启</translation>
     </message>
@@ -1916,74 +1950,73 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../formdatamapview.ui" line="88"/>
-        <location filename="../../formdatamapview.cpp" line="1491"/>
+        <location filename="../../formdatamapview.cpp" line="1509"/>
         <source>Clear Table</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1492"/>
+        <location filename="../../formdatamapview.cpp" line="1510"/>
         <source>Clear all visible rows from the table?</source>
         <translation>是否清除表格中所有可见行？</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1016"/>
+        <location filename="../../formdatamapview.cpp" line="1034"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1016"/>
+        <location filename="../../formdatamapview.cpp" line="1034"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="945"/>
+        <location filename="../../formdatamapview.cpp" line="963"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="956"/>
+        <location filename="../../formdatamapview.cpp" line="974"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="957"/>
+        <location filename="../../formdatamapview.cpp" line="975"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="958"/>
+        <location filename="../../formdatamapview.cpp" line="976"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="959"/>
+        <location filename="../../formdatamapview.cpp" line="977"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="960"/>
+        <location filename="../../formdatamapview.cpp" line="978"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="961"/>
+        <location filename="../../formdatamapview.cpp" line="979"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="962"/>
+        <location filename="../../formdatamapview.cpp" line="980"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1029"/>
-        <location filename="../../formdatamapview.cpp" line="1253"/>
-        <location filename="../../formdatamapview.cpp" line="1594"/>
+        <location filename="../../formdatamapview.cpp" line="1047"/>
+        <location filename="../../formdatamapview.cpp" line="1655"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1031"/>
+        <location filename="../../formdatamapview.cpp" line="1049"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1992,45 +2025,51 @@ Type Filter: %3</source>
 类型过滤器：%3</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1254"/>
-        <location filename="../../formdatamapview.cpp" line="1595"/>
+        <location filename="../../formdatamapview.cpp" line="1656"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1255"/>
-        <location filename="../../formdatamapview.cpp" line="1596"/>
+        <location filename="../../formdatamapview.cpp" line="1657"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1256"/>
-        <location filename="../../formdatamapview.cpp" line="1597"/>
+        <location filename="../../formdatamapview.cpp" line="1658"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1257"/>
-        <location filename="../../formdatamapview.cpp" line="1598"/>
+        <location filename="../../formdatamapview.cpp" line="1659"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1245"/>
-        <location filename="../../formdatamapview.cpp" line="1605"/>
+        <location filename="../../formdatamapview.cpp" line="1661"/>
+        <source>Enron Registers Int32</source>
+        <translation>Enron Int32 寄存器</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1662"/>
+        <source>Enron Registers Float32</source>
+        <translation>Enron Float32 寄存器</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1263"/>
+        <location filename="../../formdatamapview.cpp" line="1631"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1246"/>
-        <location filename="../../formdatamapview.cpp" line="1606"/>
+        <location filename="../../formdatamapview.cpp" line="1264"/>
+        <location filename="../../formdatamapview.cpp" line="1632"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1018"/>
-        <location filename="../../formdatamapview.cpp" line="1247"/>
-        <location filename="../../formdatamapview.cpp" line="1590"/>
+        <location filename="../../formdatamapview.cpp" line="1036"/>
+        <location filename="../../formdatamapview.cpp" line="1265"/>
+        <location filename="../../formdatamapview.cpp" line="1619"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -2038,12 +2077,29 @@ Type Filter: %3</source>
 <context>
     <name>FormDataView</name>
     <message>
+        <location filename="../../formdataview.ui" line="258"/>
+        <source>Register Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="1326"/>
+        <source>Enron Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="1327"/>
+        <source>Register Count:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../formdataview.ui" line="128"/>
+        <location filename="../../formdataview.cpp" line="1326"/>
         <source>Starting Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
         <location filename="../../formdataview.ui" line="135"/>
+        <location filename="../../formdataview.cpp" line="1327"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
@@ -2056,11 +2112,6 @@ Type Filter: %3</source>
         <location filename="../../formdataview.ui" line="318"/>
         <source>Column Distance:</source>
         <translation>列距：</translation>
-    </message>
-    <message>
-        <location filename="../../formdataview.ui" line="258"/>
-        <source>Data Type:</source>
-        <translation>数据类型：</translation>
     </message>
     <message>
         <location filename="../../formdataview.ui" line="350"/>
@@ -2192,17 +2243,17 @@ Type Filter: %3</source>
         <translation>交换字节（0xAB → 0xBA）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="656"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="614"/>
+        <location filename="../../formdataview.cpp" line="656"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="615"/>
+        <location filename="../../formdataview.cpp" line="657"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2211,7 +2262,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="617"/>
+        <location filename="../../formdataview.cpp" line="659"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2663,7 +2714,7 @@ Open the download page?</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="109"/>
+        <location filename="../../applogger.cpp" line="129"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
@@ -3001,314 +3052,314 @@ Please verify the merge result carefully.</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="157"/>
+        <location filename="../../applogger.cpp" line="177"/>
         <location filename="../../mainwindow.cpp" line="691"/>
         <location filename="../../mainwindow.cpp" line="1752"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="250"/>
+        <location filename="../../applogger.cpp" line="270"/>
         <source>Server connected: %1</source>
         <translation>服务器已连接：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="256"/>
+        <location filename="../../applogger.cpp" line="276"/>
         <source>Server disconnected: %1</source>
         <translation>服务器已断开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="267"/>
+        <location filename="../../applogger.cpp" line="287"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation>Modbus客户端已连接：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="274"/>
+        <location filename="../../applogger.cpp" line="294"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation>Modbus客户端已断开：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="281"/>
+        <location filename="../../applogger.cpp" line="301"/>
         <source>[Unit %1] %2</source>
         <translation>[单元 %1] %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="300"/>
+        <location filename="../../applogger.cpp" line="40"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已添加：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="322"/>
+        <location filename="../../applogger.cpp" line="336"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;空&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="338"/>
+        <location filename="../../applogger.cpp" line="352"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation>手动写入：单元 %1, %2, 起始地址 %3, 值 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="351"/>
+        <location filename="../../applogger.cpp" line="365"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation>客户端写入：%1 → 单元 %2, %3, 起始地址 %4, 值 %5</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="348"/>
+        <location filename="../../applogger.cpp" line="362"/>
         <source>unknown client</source>
         <translation>未知客户端</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="324"/>
+        <location filename="../../applogger.cpp" line="338"/>
         <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
         <translation>地址注释已更改：单元 %1, %2, 地址 %3: &apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="382"/>
+        <location filename="../../applogger.cpp" line="396"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation>自动仿真已启用（%1）：单元 %2, %3, 地址 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="396"/>
+        <location filename="../../applogger.cpp" line="410"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation>自动仿真已禁用：单元 %1, %2, 地址 %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="91"/>
+        <location filename="../../applogger.cpp" line="111"/>
         <source>[%1 values: %2%3]</source>
         <translation>[%1 values: %2%3]</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="50"/>
+        <location filename="../../applogger.cpp" line="70"/>
         <source>Modbus RTU over TCP/IP</source>
         <translation>通过 TCP/IP 的 Modbus RTU</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="107"/>
+        <location filename="../../applogger.cpp" line="127"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="111"/>
+        <location filename="../../applogger.cpp" line="131"/>
         <source>Map</source>
         <translation>映射</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="112"/>
+        <location filename="../../applogger.cpp" line="132"/>
         <source>Form</source>
         <translation>窗体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="123"/>
+        <location filename="../../applogger.cpp" line="143"/>
         <source>&lt;null&gt;</source>
         <translation>&lt;null&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="126"/>
+        <location filename="../../applogger.cpp" line="146"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;未命名&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="129"/>
+        <location filename="../../applogger.cpp" line="149"/>
         <source>%1 &apos;%2&apos;</source>
         <translation>%1 &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="140"/>
+        <location filename="../../applogger.cpp" line="160"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="141"/>
+        <location filename="../../applogger.cpp" line="161"/>
         <source>FontZoom</source>
         <translation>字体缩放</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="142"/>
+        <location filename="../../applogger.cpp" line="162"/>
         <source>BackgroundColor</source>
         <translation>背景颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="143"/>
+        <location filename="../../applogger.cpp" line="163"/>
         <source>ForegroundColor</source>
         <translation>前景颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="144"/>
+        <location filename="../../applogger.cpp" line="164"/>
         <source>AddressColor</source>
         <translation>地址颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="145"/>
+        <location filename="../../applogger.cpp" line="165"/>
         <source>CommentColor</source>
         <translation>注释颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="146"/>
+        <location filename="../../applogger.cpp" line="166"/>
         <source>CheckForUpdates</source>
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="147"/>
+        <location filename="../../applogger.cpp" line="167"/>
         <source>ShowWelcomeDialog</source>
         <translation>显示欢迎对话框</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="148"/>
+        <location filename="../../applogger.cpp" line="168"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="149"/>
+        <location filename="../../applogger.cpp" line="169"/>
         <source>ScriptFont</source>
         <translation>脚本字体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="150"/>
+        <location filename="../../applogger.cpp" line="170"/>
         <source>CodeAutoComplete</source>
         <translation>代码自动补全</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="151"/>
+        <location filename="../../applogger.cpp" line="171"/>
         <source>AutoShowConsoleOutput</source>
         <translation>自动显示控制台输出</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="152"/>
+        <location filename="../../applogger.cpp" line="172"/>
         <source>ConsoleMaxLines</source>
         <translation>控制台最大行数</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="153"/>
+        <location filename="../../applogger.cpp" line="173"/>
         <source>DataView.ColumnsDistance</source>
         <translation>数据视图.列距</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="154"/>
+        <location filename="../../applogger.cpp" line="174"/>
         <source>DataView.LeadingZeros</source>
         <translation>数据视图.前导零</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="155"/>
+        <location filename="../../applogger.cpp" line="175"/>
         <source>TrafficView.LogLimit</source>
         <translation>流量视图.日志限制</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="156"/>
+        <location filename="../../applogger.cpp" line="176"/>
         <source>TrafficView.AutoScroll</source>
         <translation>流量视图.自动滚动</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="159"/>
+        <location filename="../../applogger.cpp" line="179"/>
         <source>ThemeMode</source>
         <translation>主题模式</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="171"/>
+        <location filename="../../applogger.cpp" line="191"/>
         <source>true</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="173"/>
+        <location filename="../../applogger.cpp" line="193"/>
         <source>false</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="199"/>
+        <location filename="../../applogger.cpp" line="219"/>
         <source>enabled</source>
         <translation>已启用</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="201"/>
+        <location filename="../../applogger.cpp" line="221"/>
         <source>disabled</source>
         <translation>已禁用</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="287"/>
+        <location filename="../../applogger.cpp" line="307"/>
         <source>Unit ID added: %1</source>
         <translation>单元ID已添加：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="293"/>
+        <location filename="../../applogger.cpp" line="313"/>
         <source>Unit ID removed: %1</source>
         <translation>单元ID已删除：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="309"/>
+        <location filename="../../applogger.cpp" line="41"/>
         <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已删除：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="415"/>
+        <location filename="../../applogger.cpp" line="429"/>
         <source>Project opened: %1</source>
         <translation>项目已打开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="422"/>
+        <location filename="../../applogger.cpp" line="436"/>
         <source>&lt;unsaved&gt;</source>
         <translation>&lt;未保存&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="425"/>
+        <location filename="../../applogger.cpp" line="439"/>
         <source>Project closed: %1</source>
         <translation>项目已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="431"/>
+        <location filename="../../applogger.cpp" line="445"/>
         <source>Project saved: %1</source>
         <translation>项目已保存：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="437"/>
+        <location filename="../../applogger.cpp" line="451"/>
         <source>Project save failed: %1 (%2)</source>
         <translation>项目保存失败：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="444"/>
+        <location filename="../../applogger.cpp" line="458"/>
         <source>Project load failed: %1 (%2)</source>
         <translation>项目加载失败：%1（%2）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="451"/>
+        <location filename="../../applogger.cpp" line="465"/>
         <source>Form created: %1</source>
         <translation>窗体已创建：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="457"/>
+        <location filename="../../applogger.cpp" line="471"/>
         <source>Form opened: %1</source>
         <translation>窗体已打开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="463"/>
+        <location filename="../../applogger.cpp" line="477"/>
         <source>Form closed: %1</source>
         <translation>窗体已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="469"/>
+        <location filename="../../applogger.cpp" line="483"/>
         <source>Form deleted: %1</source>
         <translation>窗体已删除：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="488"/>
+        <location filename="../../applogger.cpp" line="502"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>首选项已更改：%1：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="497"/>
+        <location filename="../../applogger.cpp" line="511"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="515"/>
+        <location filename="../../applogger.cpp" line="529"/>
         <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
         <translation>脚本已启动：%1（模式：%2，间隔：%3 毫秒）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="520"/>
+        <location filename="../../applogger.cpp" line="534"/>
         <source>Script started: %1 (mode: %2)</source>
         <translation>脚本已启动：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="550"/>
+        <location filename="../../applogger.cpp" line="564"/>
         <source>Form renamed: &apos;%1&apos; -&gt; &apos;%2&apos;</source>
         <translation>窗体已重命名：&apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
@@ -3318,19 +3369,19 @@ Please verify the merge result carefully.</source>
         <translation>移至其他面板</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="187"/>
+        <location filename="../../applogger.cpp" line="207"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="185"/>
+        <location filename="../../applogger.cpp" line="205"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="422"/>
         <location filename="../../mainwindow.ui" line="425"/>
-        <location filename="../../applogger.cpp" line="158"/>
+        <location filename="../../applogger.cpp" line="178"/>
         <source>Hex View</source>
         <translation>十六进制视图</translation>
     </message>
@@ -3345,7 +3396,7 @@ Please verify the merge result carefully.</source>
         <translation>没有最近项目</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="105"/>
+        <location filename="../../applogger.cpp" line="125"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
@@ -3355,7 +3406,7 @@ Please verify the merge result carefully.</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="534"/>
+        <location filename="../../applogger.cpp" line="548"/>
         <source>Script stopped: %1</source>
         <translation>脚本已停止：%1</translation>
     </message>
@@ -3735,12 +3786,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1118"/>
+        <location filename="../../modbusmultiserver.cpp" line="1129"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了错误的设备地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1692"/>
+        <location filename="../../modbusmultiserver.cpp" line="1704"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
@@ -3771,12 +3822,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusRtuTcpServer</name>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="509"/>
         <source>Could not write response to client</source>
         <translation>无法写入对客户端的响应</translation>
     </message>
     <message>
-        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <location filename="../../modbusrtutcpserver.cpp" line="579"/>
         <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
         <translation>指定的 RTU over TCP/IP 通信连接设置无效。</translation>
     </message>
@@ -3784,7 +3835,7 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="358"/>
+        <location filename="../../modbustcpserver.cpp" line="365"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的 TCP 通讯连接设定无效。</translation>
     </message>
@@ -3792,67 +3843,67 @@ Please verify the merge result carefully.</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1332"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1365"/>
         <source>Set Value of %1</source>
         <translation>将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1374"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1374"/>
         <source>Edit Description</source>
         <translation>编辑描述</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1344"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1377"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1353"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1386"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1365"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1398"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1366"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1399"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1367"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1400"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1368"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1401"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1369"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1402"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1370"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1403"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1371"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1404"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1447"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1481"/>
         <source>Zoom: %1%</source>
         <translation>缩放：%1%</translation>
     </message>
@@ -3891,26 +3942,38 @@ Please verify the merge result carefully.</source>
 <context>
     <name>PointTypeComboBox</name>
     <message>
-        <location filename="../../controls/pointtypecombobox.cpp" line="21"/>
         <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="133"/>
+        <source>Enron Registers Int32 (Read-Write)</source>
+        <translation>Enron Int32 寄存器（读写）</translation>
+    </message>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="135"/>
+        <source>Enron Registers Float32 (Read-Write)</source>
+        <translation>Enron Float32 寄存器（读写）</translation>
+    </message>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="21"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="48"/>
         <source>Coils (Read-Write)</source>
         <translation>线圈（读写）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="22"/>
-        <location filename="../../controls/pointtypecombobox.cpp" line="46"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="52"/>
         <source>Discrete Inputs (Read Only)</source>
         <translation>离散输入（只读）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="23"/>
-        <location filename="../../controls/pointtypecombobox.cpp" line="50"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="56"/>
         <source>Holding Registers (Read-Write)</source>
         <translation>保持寄存器（读写）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="24"/>
-        <location filename="../../controls/pointtypecombobox.cpp" line="54"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="60"/>
         <source>Input Registers (Read Only)</source>
         <translation>输入寄存器（只读）</translation>
     </message>
@@ -4030,47 +4093,47 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="542"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="550"/>
         <source>Referenced serial device does not exist.</source>
         <translation>指定的串行设备不存在。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="545"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="553"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由于权限问题，无法打开串行设备。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="549"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="557"/>
         <source>Cannot open serial device.</source>
         <translation>无法打开串行设备。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="552"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="560"/>
         <source>Write error.</source>
         <translation>写入错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="555"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="563"/>
         <source>Read error.</source>
         <translation>读取错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="558"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="566"/>
         <source>Resource error.</source>
         <translation>资源错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="561"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="569"/>
         <source>Device operation is not supported error.</source>
         <translation>设备操作不支持。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="565"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="573"/>
         <source>Timeout error.</source>
         <translation>超时错误。</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="568"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="576"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>
@@ -4078,12 +4141,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusRtuSerialServer</name>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="368"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="376"/>
         <source>Requesting serial port is closed</source>
         <translation>请求的串口已关闭</translation>
     </message>
     <message>
-        <location filename="../../modbusrtuserialserver.cpp" line="392"/>
+        <location filename="../../modbusrtuserialserver.cpp" line="400"/>
         <source>Could not write response to client</source>
         <translation>无法写入对客户端的响应</translation>
     </message>
@@ -4091,12 +4154,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="240"/>
+        <location filename="../../modbustcpserver.cpp" line="247"/>
         <source>Requesting socket is closed</source>
         <translation>请求的套接字已关闭</translation>
     </message>
     <message>
-        <location filename="../../modbustcpserver.cpp" line="247"/>
+        <location filename="../../modbustcpserver.cpp" line="254"/>
         <source>Could not write response to client</source>
         <translation>无法写入对客户端的响应</translation>
     </message>
@@ -4158,12 +4221,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>RegistryOrderItemDelegate</name>
     <message>
-        <location filename="../../formdatamapview.cpp" line="278"/>
+        <location filename="../../formdatamapview.cpp" line="294"/>
         <source>Most Significant Register First - big-endian word order</source>
         <translation>高位寄存器优先 - 大端字节序</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="279"/>
+        <location filename="../../formdatamapview.cpp" line="295"/>
         <source>Least Significant Register First - little-endian word order</source>
         <translation>低位寄存器优先 - 小端字节序</translation>
     </message>
@@ -4171,14 +4234,14 @@ Please verify the merge result carefully.</source>
 <context>
     <name>RunModeComboBox</name>
     <message>
-        <location filename="../../applogger.cpp" line="229"/>
+        <location filename="../../applogger.cpp" line="249"/>
         <location filename="../../controls/runmodecombobox.cpp" line="19"/>
         <location filename="../../controls/runmodecombobox.cpp" line="39"/>
         <source>Once</source>
         <translation>一次</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="231"/>
+        <location filename="../../applogger.cpp" line="251"/>
         <location filename="../../controls/runmodecombobox.cpp" line="20"/>
         <location filename="../../controls/runmodecombobox.cpp" line="43"/>
         <source>Periodically</source>
@@ -4371,29 +4434,6 @@ Please verify the merge result carefully.</source>
         <location filename="../../controls/trafficlogwindow.cpp" line="207"/>
         <source>Clear all messages from the traffic log?</source>
         <translation>确定要清除通信记录中的所有消息吗？</translation>
-    </message>
-</context>
-<context>
-    <name>TypeItemDelegate</name>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="150"/>
-        <source>Coils</source>
-        <translation>线圈</translation>
-    </message>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="151"/>
-        <source>Discrete Inputs</source>
-        <translation>离散输入</translation>
-    </message>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="152"/>
-        <source>Input Registers</source>
-        <translation>输入寄存器</translation>
-    </message>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="153"/>
-        <source>Holding Registers</source>
-        <translation>保持寄存器</translation>
     </message>
 </context>
 <context>

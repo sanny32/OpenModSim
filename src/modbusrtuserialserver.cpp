@@ -10,6 +10,7 @@
 #include <QSerialPort>
 #include <QRandomGenerator>
 #include "modbusrtuserialserver.h"
+#include "enronmodbus.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtCore/qmath.h>
@@ -263,7 +264,14 @@ void ModbusRtuSerialServer::on_readyRead()
     if (processesBroadcast())
         event |= QModbusCommEvent::ReceiveFlag::BroadcastReceived;
 
-    const int pduSizeWithoutFcode = QModbusRequest::calculateDataSize(adu.pdu());
+    int pduSizeWithoutFcode = QModbusRequest::calculateDataSize(adu.pdu());
+    if (mbDef.EnronModbus && adu.pdu().functionCode() == QModbusPdu::WriteSingleRegister
+        && adu.pdu().dataSize() >= 2) {
+        quint16 address;
+        adu.pdu().decodeData(&address);
+        if (EnronModbus::is32BitAddress(address))
+            pduSizeWithoutFcode = 6;
+    }
 
     // server address byte + function code byte + PDU size + 2 bytes CRC
     if ((pduSizeWithoutFcode < 0) || ((2 + pduSizeWithoutFcode + 2) != adu.rawSize())) {

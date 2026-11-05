@@ -18,6 +18,7 @@
 struct ModbusDefinitions
 {
     AddressSpace AddrSpace = AddressSpace::Addr6Digits;
+    bool EnronModbus = false;
     bool UseGlobalUnitMap = false;
     bool AutoAddRegistersOnRequest = false;
     ModbusErrorSimulations ErrorSimulations;
@@ -42,6 +43,7 @@ inline QSettings& operator <<(QSettings& out, const ModbusDefinitions& defs)
 
     out << defs.ErrorSimulations;
     out << defs.AddrSpace;
+    out.setValue("EnronModbus", defs.EnronModbus);
     out.setValue("UseGlobalUnitMap", defs.UseGlobalUnitMap);
     out.setValue("AutoAddRegistersOnRequest", defs.AutoAddRegistersOnRequest);
 
@@ -62,6 +64,7 @@ inline QSettings& operator >>(QSettings& in, ModbusDefinitions& defs)
 
     in >> defs.ErrorSimulations;
     in >> defs.AddrSpace;
+    defs.EnronModbus = in.value("EnronModbus", false).toBool();
     defs.UseGlobalUnitMap = in.value("UseGlobalUnitMap", false).toBool();
     defs.AutoAddRegistersOnRequest = in.value("AutoAddRegistersOnRequest", false).toBool();
 
@@ -82,6 +85,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusDefiniti
     xml.writeStartElement("ModbusDefinitions");
 
     xml.writeAttribute("AddrSpace", enumToString(definitions.AddrSpace));
+    xml.writeAttribute("EnronModbus", boolToString(definitions.EnronModbus));
     xml.writeAttribute("UseGlobalUnitMap", boolToString(definitions.UseGlobalUnitMap));
     xml.writeAttribute("AutoAddRegistersOnRequest", boolToString(definitions.AutoAddRegistersOnRequest));
 
@@ -105,6 +109,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusDefinitions& d
         if (attributes.hasAttribute("AddrSpace")) {
             definitions.AddrSpace = enumFromString<AddressSpace>(attributes.value("AddrSpace").toString());
         }
+
+        definitions.EnronModbus = stringToBool(attributes.value("EnronModbus").toString());
 
         if (attributes.hasAttribute("UseGlobalUnitMap")) {
             definitions.UseGlobalUnitMap = stringToBool(attributes.value("UseGlobalUnitMap").toString());

@@ -11,6 +11,8 @@
 #include <QLoggingCategory>
 #include <QScopedValueRollback>
 #include "modbusserver.h"
+#include "enronmodbus.h"
+#include "modbuslimits.h"
 
 Q_LOGGING_CATEGORY(QT_MODBUS, "qt.modbus")
 Q_LOGGING_CATEGORY(QT_MODBUS_LOW, "qt.modbus.lowlevel")
@@ -740,6 +742,30 @@ QModbusResponse ModbusServer::processReadInputRegistersRequest(const QModbusRequ
 }
 
 ///
+/// \brief Maps Enron register addresses to pairs of words in the shared data store.
+///
+QModbusDataUnit ModbusServer::requestRegisters(QModbusDataUnit::RegisterType type,
+                                             quint16 address, quint16 count) const
+{
+    if (!_definitions.EnronModbus)
+        return QModbusDataUnit(type, address, count);
+
+    const quint32 end = quint32(address) + count;
+    if (end > quint32(ModbusLimits::addressSpaceSize(_definitions.AddrSpace)))
+        return {};
+
+    for (const quint16 base : {EnronModbus::LongBase, EnronModbus::FloatBase}) {
+        const quint32 limit = base + EnronModbus::RangeLength;
+        if (address < limit && end > base) {
+            if (address < base || end > limit)
+                return {};
+            return QModbusDataUnit(type, base + 2 * (address - base), 2 * count);
+        }
+    }
+    return QModbusDataUnit(type, address, count);
+}
+
+///
 /// \brief ModbusServer::readBytes
 /// \param request
 /// \param unitType
@@ -761,14 +787,16 @@ QModbusResponse ModbusServer::readBytes(const QModbusPdu &request, QModbusDataUn
                                         QModbusExceptionResponse::IllegalDataValue);
     }
 
-    // Get the requested range out of the registers.
-    QModbusDataUnit unit(unitType, address, count);
-    if (!data(&unit, serverAddress)) {
+    QModbusDataUnit unit = requestRegisters(unitType, address, count);
+    if (unit.valueCount() > 125)
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataValue);
+
+    if (!unit.isValid() || !data(&unit, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
 
-    return QModbusResponse(request.functionCode(), quint8(count * 2), unit.values());
+    return QModbusResponse(request.functionCode(), quint8(unit.valueCount() * 2), unit.values());
 }
 
 ///
@@ -790,7 +818,28 @@ QModbusResponse ModbusServer::processWriteSingleCoilRequest(const QModbusRequest
 ///
 QModbusResponse ModbusServer::processWriteSingleRegisterRequest(const QModbusRequest &request, int serverAddress)
 {
-    return writeSingle(request, QModbusDataUnit::HoldingRegisters, serverAddress);
+    if (!_definitions.EnronModbus || request.dataSize() < 2)
+        return writeSingle(request, QModbusDataUnit::HoldingRegisters, serverAddress);
+
+    quint16 address;
+    request.decodeData(&address);
+    QModbusDataUnit unit = requestRegisters(QModbusDataUnit::HoldingRegisters, address, 1);
+    if (!unit.isValid())
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
+    if (unit.valueCount() == 1)
+        return writeSingle(request, QModbusDataUnit::HoldingRegisters, serverAddress);
+
+    if (request.dataSize() != 6)
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataValue);
+    if (!data(&unit, serverAddress))
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
+
+    quint16 high, low;
+    request.decodeData(&address, &high, &low);
+    unit.setValues({high, low});
+    if (!setData(unit, serverAddress))
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::ServerDeviceFailure);
+    return QModbusResponse(request.functionCode(), request.data());
 }
 
 ///
@@ -1061,19 +1110,25 @@ QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbus
     quint8 byteCount;
     request.decodeData(&address, &numberOfRegisters, &byteCount);
 
-    // byte count does not match number of data bytes following or register count
-    if ((byteCount != (request.dataSize() - 5 )) || (byteCount != (numberOfRegisters * 2))) {
+    if (numberOfRegisters == 0)
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataValue);
+
+    QModbusDataUnit registers = requestRegisters(QModbusDataUnit::HoldingRegisters, address, numberOfRegisters);
+
+    if (!registers.isValid())
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
+
+    // Enron quantities count logical registers rather than backing words.
+    if ((byteCount != (request.dataSize() - 5 )) || (byteCount != (registers.valueCount() * 2))) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataValue);
     }
 
-    if ((numberOfRegisters < 0x0001) || (numberOfRegisters > 0x007B)) {
+    if ((numberOfRegisters < 0x0001) || (registers.valueCount() > 0x007B)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataValue);
     }
 
-    // Get the requested range out of the registers.
-    QModbusDataUnit registers(QModbusDataUnit::HoldingRegisters, address, numberOfRegisters);
     if (!data(&registers, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
@@ -1084,7 +1139,7 @@ QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbus
 
     QVector<quint16> values;
     quint16 tmp;
-    for (int i = 0; i < numberOfRegisters; i++) {
+    for (int i = 0; i < int(registers.valueCount()); i++) {
         stream >> tmp;
         values.append(tmp);
     }
@@ -1144,6 +1199,12 @@ QModbusResponse ModbusServer::processMaskWriteRegisterRequest(const QModbusReque
     quint16 address, andMask, orMask;
     request.decodeData(&address, &andMask, &orMask);
 
+    const auto unit = requestRegisters(QModbusDataUnit::HoldingRegisters, address, 1);
+    if (!unit.isValid())
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
+    if (unit.valueCount() != 1)
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalFunction);
+
     quint16 reg;
     if (!data(QModbusDataUnit::HoldingRegisters, address, &reg, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
@@ -1172,22 +1233,27 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
     request.decodeData(&readStartAddress, &readQuantity,
                        &writeStartAddress, &writeQuantity, &byteCount);
 
-    // byte count does not match number of data bytes following or register count
-    if ((byteCount != (request.dataSize() - 9 )) || (byteCount != (writeQuantity * 2))) {
+    if (readQuantity == 0 || writeQuantity == 0)
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataValue);
+
+    QModbusDataUnit writeRegisters = requestRegisters(QModbusDataUnit::HoldingRegisters, writeStartAddress, writeQuantity);
+    QModbusDataUnit readRegisters = requestRegisters(QModbusDataUnit::HoldingRegisters, readStartAddress, readQuantity);
+
+    if (!writeRegisters.isValid() || !readRegisters.isValid())
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
+
+    // Enron quantities count logical registers rather than backing words.
+    if ((byteCount != (request.dataSize() - 9 )) || (byteCount != (writeRegisters.valueCount() * 2))) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataValue);
     }
 
-    if ((readQuantity < 0x0001) || (readQuantity > 0x007B)
-        || (writeQuantity < 0x0001) || (writeQuantity > 0x0079)) {
+    if ((readQuantity < 0x0001) || (readRegisters.valueCount() > 125)
+        || (writeQuantity < 0x0001) || (writeRegisters.valueCount() > 121)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataValue);
     }
 
-    // According to spec, write operation is executed before the read operation
-    // Get the requested range out of the registers.
-    QModbusDataUnit writeRegisters(QModbusDataUnit::HoldingRegisters, writeStartAddress,
-                                   writeQuantity);
     if (!data(&writeRegisters, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
@@ -1198,7 +1264,7 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
 
     QVector<quint16> values;
     quint16 tmp;
-    for (int i = 0; i < writeQuantity; i++) {
+    for (int i = 0; i < int(writeRegisters.valueCount()); i++) {
         stream >> tmp;
         values.append(tmp);
     }
@@ -1210,15 +1276,12 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
 
-    // Get the requested range out of the registers.
-    QModbusDataUnit readRegisters(QModbusDataUnit::HoldingRegisters, readStartAddress,
-                                  readQuantity);
     if (!data(&readRegisters, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
 
-    return QModbusResponse(request.functionCode(), quint8(readQuantity * 2),
+    return QModbusResponse(request.functionCode(), quint8(readRegisters.valueCount() * 2),
                            readRegisters.values());
 }
 
@@ -1234,10 +1297,21 @@ QModbusResponse ModbusServer::processReadFifoQueueRequest(const QModbusRequest &
     quint16 address;
     request.decodeData(&address);
 
+    const auto unit = requestRegisters(QModbusDataUnit::HoldingRegisters, address, 1);
+    if (!unit.isValid())
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
+    if (unit.valueCount() != 1)
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalFunction);
+
     quint16 fifoCount;
     if (!data(QModbusDataUnit::HoldingRegisters, address, &fifoCount, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
+    }
+
+    if (_definitions.EnronModbus
+        && quint32(address) + 1 + fifoCount > quint32(ModbusLimits::addressSpaceSize(_definitions.AddrSpace))) {
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
     }
 
     if (fifoCount > 31u) {

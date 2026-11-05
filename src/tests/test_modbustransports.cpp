@@ -145,6 +145,8 @@ class TestModbusTransports : public QObject
     Q_OBJECT
 
 private slots:
+    void servesEnronRequests_data();
+    void servesEnronRequests();
     void servesModbusTcpRequests();
     void simulatesModbusTcpErrors();
     void rejectsOccupiedTcpPort();
@@ -158,6 +160,53 @@ private slots:
     void togglesSerialSnifferMode();
     void sniffsRtuSerialOnPseudoTerminal();
 };
+
+/// \brief Exercises Enron packet framing on both network transports.
+void TestModbusTransports::servesEnronRequests_data()
+{
+    QTest::addColumn<bool>("rtu");
+    QTest::newRow("tcp") << false;
+    QTest::newRow("rtu-over-tcp") << true;
+}
+
+/// \brief Verifies fragmented 32-bit writes followed by coalesced reads on the same connection.
+void TestModbusTransports::servesEnronRequests()
+{
+    QFETCH(bool, rtu);
+    ModbusTcpServer tcpServer;
+    ModbusRtuTcpServer rtuServer;
+    ModbusServer& server = rtu ? static_cast<ModbusServer&>(rtuServer) : static_cast<ModbusServer&>(tcpServer);
+    const quint16 port = startServer(server);
+    QVERIFY(port != 0);
+    ModbusDefinitions definitions;
+    definitions.EnronModbus = true;
+    server.setDefinitions(definitions);
+    ModbusDataUnitMap map;
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 7001, 4);
+    server.setMap(map, 1);
+    QTcpSocket socket;
+    socket.connectToHost(QHostAddress::LocalHost, port);
+    QVERIFY(socket.waitForConnected(1000));
+    QModbusRequest write(QModbusPdu::WriteSingleRegister, quint16(7002), quint16(0x3f80), quint16(0));
+    const QByteArray frame = rtu ? rtuFrame(1, write) : tcpFrame(1, 1, write);
+    socket.write(frame.left(frame.size() - 2));
+    QVERIFY(socket.waitForBytesWritten(1000));
+    QTest::qWait(10);
+    socket.write(frame.right(2));
+    const auto response = receive(socket);
+    QCOMPARE(response, frame);
+    QModbusDataUnit stored(QModbusDataUnit::HoldingRegisters, 7001, 4);
+    QVERIFY(server.data(&stored, 1));
+    QCOMPARE(stored.values(), QVector<quint16>({0, 0, 0x3f80, 0}));
+
+    const QModbusRequest read(QModbusPdu::ReadHoldingRegisters, quint16(7001), quint16(2));
+    const auto readFrame = rtu ? rtuFrame(1, read) : tcpFrame(2, 1, read);
+    socket.write(readFrame + readFrame);
+    const QByteArray values = QByteArray::fromHex("08000000003f800000");
+    const QModbusRequest expected(QModbusPdu::ReadHoldingRegisters, values);
+    const auto expectedFrame = rtu ? rtuFrame(1, expected) : tcpFrame(2, 1, expected);
+    QCOMPARE(receive(socket), expectedFrame + expectedFrame);
+}
 
 void TestModbusTransports::servesModbusTcpRequests()
 {
@@ -650,6 +699,22 @@ void TestModbusTransports::servesRtuSerialOnPseudoTerminal()
     QVERIFY(responseSpy.count() >= 3);
     QVERIFY(receivedSpy.count() >= 8);
     QVERIFY(sentSpy.count() >= 3);
+
+    server.setValue(ModbusServer::ListenOnlyMode, false, 1);
+    definitions.EnronModbus = true;
+    server.setDefinitions(definitions);
+    ModbusDataUnitMap enronMap;
+    enronMap.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 7001, 2);
+    server.setMap(enronMap, 1);
+    const auto enronWrite = rtuFrame(1, QModbusRequest(QModbusPdu::WriteSingleRegister,
+        quint16(7001), quint16(0x3f80), quint16(0)));
+    QVERIFY(send(masterFd, enronWrite));
+    QCOMPARE(receive(masterFd), enronWrite);
+    const auto enronRead = rtuFrame(1, QModbusRequest(QModbusPdu::ReadHoldingRegisters,
+        quint16(7001), quint16(1)));
+    QVERIFY(send(masterFd, enronRead));
+    QCOMPARE(receive(masterFd), rtuFrame(1, QModbusRequest(QModbusPdu::ReadHoldingRegisters,
+        QByteArray::fromHex("043f800000"))));
 
     server.disconnectDevice();
     QCOMPARE(server.state(), QModbusDevice::UnconnectedState);

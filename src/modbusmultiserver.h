@@ -14,6 +14,7 @@
 #include <QModbusServer>
 #include <QUuid>
 #include "modbusdataunitmap.h"
+#include "enronmodbus.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 #include "modbusmessage.h"
@@ -46,7 +47,18 @@ public:
     bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 
-    void addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    ///
+    /// \brief Registers backing words while preserving the logical Enron group for notifications.
+    /// \param id Identifier of the owning view or map entry.
+    /// \param deviceId Modbus device identifier.
+    /// \param pointType Backing Modbus table.
+    /// \param pointAddress Starting backing-word address.
+    /// \param length Number of backing words.
+    /// \param enronType Logical Enron group, or None for an ordinary table.
+    ///
+    void addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType,
+                    quint16 pointAddress, quint16 length,
+                    EnronModbus::RegisterType enronType = EnronModbus::RegisterType::None);
     void removeUnitMap(QUuid id, quint8 deviceId);
     QList<int> registeredDeviceIds() const;
 
@@ -160,8 +172,8 @@ signals:
     void deviceIdAdded(quint8 deviceId);
     void deviceIdRemoved(quint8 deviceId);
 
-    void unitMapAdded(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
-    void unitMapRemoved(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    void unitMapAdded(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length, EnronModbus::RegisterType enronType);
+    void unitMapRemoved(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length, EnronModbus::RegisterType enronType);
 
 private slots:
     void on_clientConnected(const QString& clientAddress, quint16 clientPort);
@@ -189,6 +201,7 @@ private:
     RequestHandlerPtr _requestHandler;
     std::atomic<bool> _snifferMode{false};
     QMap<int, ModbusDataUnitMap> _modbusDataUnitMaps;
+    QMap<QPair<quint8, QUuid>, EnronModbus::RegisterType> _unitMapEnronTypes;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };
 

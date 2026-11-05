@@ -47,6 +47,17 @@ The following simulations are available:
     Decrement - simulate register from High Limit to Low Limit with a given Step
 ```
 
+# Enron Modbus
+
+Enable **Enron Modbus (32-bit registers)** in **Modbus Definitions → General**.
+The setting is saved with the project.
+
+Select **Enron Registers Int32** or **Enron Registers Float32** and enter the full protocol address
+and a count. For example, address **7001**, count **2** exposes **7001–7002**.
+
+Supported 32-bit ranges are **5001–5999** and **7001–7999**. Choose the display
+format separately in the toolbar. Event and history logs are not supported.
+
 # Modbus Logging
 
 <img width="1292" height="759" alt="image" src=".github/assets/omodsim-trafficview.png" />

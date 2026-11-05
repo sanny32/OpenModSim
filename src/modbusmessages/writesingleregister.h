@@ -10,6 +10,7 @@
 #define WRITESINGLEREGISTER_H
 
 #include "modbusmessage.h"
+#include "enronmodbus.h"
 
 ///
 /// \brief The WriteSingleRegisterRequest class
@@ -48,7 +49,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && (isException() ? true : (dataSize() == 4));
+        return ModbusMessage::isValid() && (isException() || dataSize() == 4
+            || (dataSize() == 6 && EnronModbus::is32BitAddress(address())));
     }
 
     ///
@@ -60,11 +62,13 @@ public:
     }
 
     ///
-    /// \brief value
-    /// \return
+    /// \brief Returns the unsigned wire value, including both words of an Enron register.
     ///
-    quint16 value() const {
-        return makeUInt16(at(3), at(2), ByteOrder::Direct);
+    quint32 value() const {
+        const quint16 high = makeUInt16(at(3), at(2), ByteOrder::Direct);
+        if (dataSize() == 6)
+            return (quint32(high) << 16) | makeUInt16(at(5), at(4), ByteOrder::Direct);
+        return high;
     }
 };
 
@@ -105,7 +109,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() == 4;
+        return ModbusMessage::isValid() && (dataSize() == 4
+            || (dataSize() == 6 && EnronModbus::is32BitAddress(address())));
     }
 
     ///
@@ -117,11 +122,13 @@ public:
     }
 
     ///
-    /// \brief value
-    /// \return
+    /// \brief Returns the unsigned wire value, including both words of an Enron register.
     ///
-    quint16 value() const {
-        return makeUInt16(at(3), at(2), ByteOrder::Direct);
+    quint32 value() const {
+        const quint16 high = makeUInt16(at(3), at(2), ByteOrder::Direct);
+        if (dataSize() == 6)
+            return (quint32(high) << 16) | makeUInt16(at(5), at(4), ByteOrder::Direct);
+        return high;
     }
 };
 

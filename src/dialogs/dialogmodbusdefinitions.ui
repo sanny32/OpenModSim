@@ -58,6 +58,16 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBoxEnronModbus">
+         <property name="toolTip">
+          <string>Select Enron Int32 or Float32 registers and enter the full protocol address, starting at 5001 or 7001. Select the display format separately in the toolbar.</string>
+         </property>
+         <property name="text">
+          <string>Enable Enron Modbus (32-bit registers)</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabErrSimulations">

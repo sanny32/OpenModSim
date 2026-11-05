@@ -95,6 +95,7 @@ private:
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
     void refreshThemeDependentRowColors();
     void setupToolBar();
+    void updateTypeFilters(bool enronEnabled);
     void setupServerConnections();
     void updateWindowIcon();
     void ensureColumnHeadersFit();
@@ -179,6 +180,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
         xml.writeAttribute("Type",      QString::number(key.Type));
         xml.writeAttribute("Address",   QString::number(key.Address));
         xml.writeAttribute("DataType",  enumToString(e.type));
+        if (e.EnronType != EnronModbus::RegisterType::None)
+            xml.writeAttribute("EnronType", QString::number(int(e.EnronType)));
         if (isMultiRegisterType(e.type))
             xml.writeAttribute("Order", enumToString(e.order));
         if (key.Type == QModbusDataUnit::HoldingRegisters ||
@@ -273,6 +276,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
 
                     DataMapEntry entry;
                     entry.value     = attrs.value("Value").toUShort();
+                    entry.EnronType = static_cast<EnronModbus::RegisterType>(attrs.value("EnronType").toInt());
                     entry.type      = enumFromString<DataType>(attrs.value("DataType").toString(), DataType::Int16);
                     entry.order     = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
                     entry.byteOrder = enumFromString<ByteOrder>(attrs.value("ByteOrder").toString(), ByteOrder::Direct);
