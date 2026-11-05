@@ -53,6 +53,13 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_workerThread(new QThread(this))
 {
+    qRegisterMetaType<QModbusRequest>();
+    qRegisterMetaType<QModbusResponse>();
+    qRegisterMetaType<QModbusDataUnit>();
+    qRegisterMetaType<ModbusMessage::ProtocolType>();
+    qRegisterMetaType<QSharedPointer<const ModbusMessage>>();
+    qRegisterMetaType<ModbusDefinitions>();
+    qRegisterMetaType<QList<int>>();
     qRegisterMetaType<EnronModbus::RegisterType>("EnronModbus::RegisterType");
     qRegisterMetaType<WriteSource>("WriteSource");
     qRegisterMetaType<ModbusClientInfo>("ModbusClientInfo");

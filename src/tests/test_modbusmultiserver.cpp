@@ -79,6 +79,7 @@ class TestModbusMultiServer : public QObject
     Q_OBJECT
 
 private slots:
+    void deliversQueuedDefinitionsAndData();
     void mergesDescriptionMaps();
     void replacesDescriptionMaps();
     void mergesTimestampMaps();
@@ -114,6 +115,37 @@ private slots:
 private:
     static void prepare(ModbusMultiServer& server, quint8 deviceId, quint16 length = 300);
 };
+
+///
+/// \brief Delivers worker-thread updates without registrations supplied by the application entry point.
+///
+void TestModbusMultiServer::deliversQueuedDefinitionsAndData()
+{
+    ModbusMultiServer server;
+    QObject receiver;
+    ModbusDefinitions receivedDefinitions;
+    QPair<quint8, QModbusDataUnit> receivedData;
+    connect(&server, &ModbusMultiServer::definitionsChanged, &receiver,
+            [&receivedDefinitions](const ModbusDefinitions& defs) { receivedDefinitions = defs; });
+    connect(&server, &ModbusMultiServer::dataChanged, &receiver,
+            [&receivedData](quint8 deviceId, const QModbusDataUnit& data) { receivedData = qMakePair(deviceId, data); });
+
+    auto definitions = server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    server.setModbusDefinitions(definitions);
+    QTRY_VERIFY(receivedDefinitions.EnronModbus);
+    definitions.EnronModbus = false;
+    server.setModbusDefinitions(definitions);
+    QTRY_VERIFY(!receivedDefinitions.EnronModbus);
+
+    server.addUnitMap(QUuid::createUuid(), 3, QModbusDataUnit::HoldingRegisters, 5001, 2);
+    const auto data = unit(QModbusDataUnit::HoldingRegisters, 5001, {0x1234, 0x5678});
+    server.setData(3, data, WriteSource::User);
+    QTRY_COMPARE(receivedData.second.values(), data.values());
+    QCOMPARE(receivedData.first, quint8(3));
+    QCOMPARE(receivedData.second.registerType(), data.registerType());
+    QCOMPARE(receivedData.second.startAddress(), data.startAddress());
+}
 
 void TestModbusMultiServer::mergesDescriptionMaps()
 {
