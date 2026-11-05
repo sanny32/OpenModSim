@@ -84,9 +84,12 @@ void TestDataMapDataModel::editsEnronRegisters()
     model.addEntry(holdingKey(0), {});
     const auto enron = static_cast<EnronModbus::RegisterType>(group);
     const int base = EnronModbus::baseAddress(enron);
+    QSignalSpy mapAdded(&server, &ModbusMultiServer::unitMapAdded);
     const auto typeIndex = model.index(0, ColType);
     QVERIFY(model.setData(typeIndex, group, DataMapRole::EnronType));
     QCOMPARE(model.data(typeIndex, DataMapRole::EnronType).toInt(), group);
+    QTRY_COMPARE(mapAdded.last().last().value<EnronModbus::RegisterType>(), enron);
+    QCOMPARE(model.data(typeIndex).toString(), group == 1 ? QString("Enron Registers Int32") : QString("Enron Registers Float32"));
     QCOMPARE(model.keyForRow(0).Type, QModbusDataUnit::HoldingRegisters);
     QCOMPARE(model.keyForRow(0).Address, quint16(base));
     QCOMPARE(model.data(model.index(0, ColAddress)).toInt(), base);
@@ -111,10 +114,12 @@ void TestDataMapDataModel::editsEnronRegisters()
     server.setModbusDefinitions(definitions);
     QTRY_VERIFY(!model.data(typeIndex, DataMapRole::EnronEnabled).toBool());
     QCOMPARE(model.data(typeIndex, DataMapRole::EnronType).toInt(), 0);
+    QTRY_COMPARE(mapAdded.last().last().value<EnronModbus::RegisterType>(), EnronModbus::RegisterType::None);
     QVERIFY(!model.setData(typeIndex, group, DataMapRole::EnronType));
     definitions.EnronModbus = true;
     server.setModbusDefinitions(definitions);
     QTRY_COMPARE(model.data(typeIndex, DataMapRole::EnronType).toInt(), group);
+    QTRY_COMPARE(mapAdded.last().last().value<EnronModbus::RegisterType>(), enron);
     QCOMPARE(model.data(model.index(0, ColAddress)).toInt(), base + 1);
     QCOMPARE(model.data(model.index(0, ColDataType)).toString(), QStringLiteral("UInt16"));
     QCOMPARE(server.data(1, QModbusDataUnit::HoldingRegisters, base + 2, 2).values(),

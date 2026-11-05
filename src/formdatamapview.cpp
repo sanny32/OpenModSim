@@ -1658,8 +1658,8 @@ void FormDataMapView::updateTypeFilters(bool enronEnabled)
     _filterTypeCombo->addItem(tr("Input Registers"));
     _filterTypeCombo->addItem(tr("Holding Registers"));
     if (enronEnabled) {
-        _filterTypeCombo->addItem(tr("Enron Registers 5x"));
-        _filterTypeCombo->addItem(tr("Enron Registers 7x"));
+        _filterTypeCombo->addItem(tr("Enron Registers Int32"));
+        _filterTypeCombo->addItem(tr("Enron Registers Float32"));
     }
     const int selected = previous >= 0 && previous < _filterTypeCombo->count() ? previous : 0;
     _filterTypeCombo->setCurrentIndex(selected);

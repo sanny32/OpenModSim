@@ -10,6 +10,7 @@
 #define ENRONMODBUS_H
 
 #include <QtGlobal>
+#include <QMetaType>
 
 namespace EnronModbus {
 
@@ -55,5 +56,7 @@ inline bool is32BitAddress(quint16 address)
 }
 
 }
+
+Q_DECLARE_METATYPE(EnronModbus::RegisterType)
 
 #endif // ENRONMODBUS_H

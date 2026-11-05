@@ -367,59 +367,61 @@
         <translation>Registri blocco</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="242"/>
-        <location filename="../../datamapdatamodel.cpp" line="335"/>
-        <source>Enron Registers 5x</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../../applogger.cpp" line="34"/>
         <location filename="../../datamapdatamodel.cpp" line="244"/>
-        <location filename="../../datamapdatamodel.cpp" line="335"/>
-        <source>Enron Registers 7x</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../datamapdatamodel.cpp" line="337"/>
+        <source>Enron Registers Int32</source>
+        <translation>Registri Enron Int32</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="637"/>
+        <location filename="../../applogger.cpp" line="35"/>
+        <location filename="../../datamapdatamodel.cpp" line="246"/>
+        <location filename="../../datamapdatamodel.cpp" line="337"/>
+        <source>Enron Registers Float32</source>
+        <translation>Registri Enron Float32</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="639"/>
         <source>Unit</source>
         <translation>Unità</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="638"/>
+        <location filename="../../datamapdatamodel.cpp" line="640"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="639"/>
+        <location filename="../../datamapdatamodel.cpp" line="641"/>
         <source>Address</source>
         <translation>Indirizzo</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="640"/>
+        <location filename="../../datamapdatamodel.cpp" line="642"/>
         <source>Data Type</source>
         <translation>Tipo di dati</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="641"/>
+        <location filename="../../datamapdatamodel.cpp" line="643"/>
         <source>Register Order</source>
         <translation>Ordine registro</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="642"/>
+        <location filename="../../datamapdatamodel.cpp" line="644"/>
         <source>Byte Order</source>
         <translation>Ordine byte</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="643"/>
+        <location filename="../../datamapdatamodel.cpp" line="645"/>
         <source>Comment</source>
         <translation>Commento</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="644"/>
+        <location filename="../../datamapdatamodel.cpp" line="646"/>
         <source>Value</source>
         <translation>Valore</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="645"/>
+        <location filename="../../datamapdatamodel.cpp" line="647"/>
         <source>Timestamp</source>
         <translation>Data/ora</translation>
     </message>
@@ -1083,7 +1085,7 @@ Vuoi aprire la pagina di download?</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="64"/>
-        <source>Select Enron registers 5x or 7x and enter the full protocol address, starting at 5001 or 7001. Select the display format separately in the toolbar.</source>
+        <source>Select Enron Int32 or Float32 registers and enter the full protocol address, starting at 5001 or 7001. Select the display format separately in the toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2044,13 +2046,13 @@ Tipo filtro: %3</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1661"/>
-        <source>Enron Registers 5x</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Int32</source>
+        <translation>Registri Enron Int32</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1662"/>
-        <source>Enron Registers 7x</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Float32</source>
+        <translation>Registri Enron Float32</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1263"/>
@@ -2712,7 +2714,7 @@ Vuoi aprire la pagina di download?</translation>
         <translation>Imposta</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="109"/>
+        <location filename="../../applogger.cpp" line="129"/>
         <source>Script</source>
         <translation>Script</translation>
     </message>
@@ -3049,314 +3051,314 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
         <translation>Senza titolo</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="157"/>
+        <location filename="../../applogger.cpp" line="177"/>
         <location filename="../../mainwindow.cpp" line="691"/>
         <location filename="../../mainwindow.cpp" line="1752"/>
         <source>Address Base</source>
         <translation>Base indirizzo</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="250"/>
+        <location filename="../../applogger.cpp" line="270"/>
         <source>Server connected: %1</source>
         <translation>Server connesso: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="256"/>
+        <location filename="../../applogger.cpp" line="276"/>
         <source>Server disconnected: %1</source>
         <translation>Server disconnesso: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="267"/>
+        <location filename="../../applogger.cpp" line="287"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation>Client Modbus connesso: %1 -&gt; %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="274"/>
+        <location filename="../../applogger.cpp" line="294"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation>Client Modbus disconnesso: %1 -&gt; %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="281"/>
+        <location filename="../../applogger.cpp" line="301"/>
         <source>[Unit %1] %2</source>
         <translation>[Unità %1] %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="300"/>
+        <location filename="../../applogger.cpp" line="40"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation>Spazio indirizzi aggiunto: unità %1, %2, indirizzo iniziale %3, lunghezza %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="322"/>
+        <location filename="../../applogger.cpp" line="336"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;vuoto&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="338"/>
+        <location filename="../../applogger.cpp" line="352"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation>Scrittura manuale: unità %1, %2, indirizzo iniziale %3, valore %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="351"/>
+        <location filename="../../applogger.cpp" line="365"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation>Scrittura client: %1 -&gt; unità %2, %3, indirizzo iniziale %4, valore %5</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="348"/>
+        <location filename="../../applogger.cpp" line="362"/>
         <source>unknown client</source>
         <translation>client sconosciuto</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="324"/>
+        <location filename="../../applogger.cpp" line="338"/>
         <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
         <translation>Commento all&apos;indirizzo modificato: unità %1, %2, indirizzo %3: &apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="382"/>
+        <location filename="../../applogger.cpp" line="396"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation>Simulazione automatica abilitata (%1): unità %2, %3, indirizzo %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="396"/>
+        <location filename="../../applogger.cpp" line="410"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation>Simulazione automatica disabilitata: unità %1, %2, indirizzo %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="91"/>
+        <location filename="../../applogger.cpp" line="111"/>
         <source>[%1 values: %2%3]</source>
         <translation>[%1 valori: %2%3]</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="50"/>
+        <location filename="../../applogger.cpp" line="70"/>
         <source>Modbus RTU over TCP/IP</source>
         <translation>RTU Modbus su TCP/IP</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="107"/>
+        <location filename="../../applogger.cpp" line="127"/>
         <source>Traffic</source>
         <translation>Traffico</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="111"/>
+        <location filename="../../applogger.cpp" line="131"/>
         <source>Map</source>
         <translation>Mappa</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="112"/>
+        <location filename="../../applogger.cpp" line="132"/>
         <source>Form</source>
         <translation>Modulo</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="123"/>
+        <location filename="../../applogger.cpp" line="143"/>
         <source>&lt;null&gt;</source>
         <translation>&lt;null&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="126"/>
+        <location filename="../../applogger.cpp" line="146"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;senza titolo&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="129"/>
+        <location filename="../../applogger.cpp" line="149"/>
         <source>%1 &apos;%2&apos;</source>
         <translation>%1 &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="140"/>
+        <location filename="../../applogger.cpp" line="160"/>
         <source>Font</source>
         <translation>Font</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="141"/>
+        <location filename="../../applogger.cpp" line="161"/>
         <source>FontZoom</source>
         <translation>FontZoom</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="142"/>
+        <location filename="../../applogger.cpp" line="162"/>
         <source>BackgroundColor</source>
         <translation>ColoreSfondo</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="143"/>
+        <location filename="../../applogger.cpp" line="163"/>
         <source>ForegroundColor</source>
         <translation>Colore primo piano</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="144"/>
+        <location filename="../../applogger.cpp" line="164"/>
         <source>AddressColor</source>
         <translation>IndirizzoColore</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="145"/>
+        <location filename="../../applogger.cpp" line="165"/>
         <source>CommentColor</source>
         <translation>ColoreCommento</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="146"/>
+        <location filename="../../applogger.cpp" line="166"/>
         <source>CheckForUpdates</source>
         <translation>ControllaAggiornamentiu</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="147"/>
+        <location filename="../../applogger.cpp" line="167"/>
         <source>ShowWelcomeDialog</source>
         <translation>Visualizza finestra di benvenuto</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="148"/>
+        <location filename="../../applogger.cpp" line="168"/>
         <source>Language</source>
         <translation>Lingua</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="149"/>
+        <location filename="../../applogger.cpp" line="169"/>
         <source>ScriptFont</source>
         <translation>Font script</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="150"/>
+        <location filename="../../applogger.cpp" line="170"/>
         <source>CodeAutoComplete</source>
         <translation>CodiceCompletamentoAutomatico</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="151"/>
+        <location filename="../../applogger.cpp" line="171"/>
         <source>AutoShowConsoleOutput</source>
         <translation>VisualizzaAutomaticamenteOutputConsole</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="152"/>
+        <location filename="../../applogger.cpp" line="172"/>
         <source>ConsoleMaxLines</source>
         <translation>LineeMaxConsole</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="153"/>
+        <location filename="../../applogger.cpp" line="173"/>
         <source>DataView.ColumnsDistance</source>
         <translation>DataView.ColumnsDistance</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="154"/>
+        <location filename="../../applogger.cpp" line="174"/>
         <source>DataView.LeadingZeros</source>
         <translation>DataView.LeadingZeros</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="155"/>
+        <location filename="../../applogger.cpp" line="175"/>
         <source>TrafficView.LogLimit</source>
         <translation>TrafficView.LogLimit</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="156"/>
+        <location filename="../../applogger.cpp" line="176"/>
         <source>TrafficView.AutoScroll</source>
         <translation>TrafficView.AutoScroll</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="159"/>
+        <location filename="../../applogger.cpp" line="179"/>
         <source>ThemeMode</source>
         <translation>Modalità tema</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="171"/>
+        <location filename="../../applogger.cpp" line="191"/>
         <source>true</source>
         <translation>vero</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="173"/>
+        <location filename="../../applogger.cpp" line="193"/>
         <source>false</source>
         <translation>falso</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="199"/>
+        <location filename="../../applogger.cpp" line="219"/>
         <source>enabled</source>
         <translation>abilitato</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="201"/>
+        <location filename="../../applogger.cpp" line="221"/>
         <source>disabled</source>
         <translation>disabilitato</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="287"/>
+        <location filename="../../applogger.cpp" line="307"/>
         <source>Unit ID added: %1</source>
         <translation>ID unità aggiunto: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="293"/>
+        <location filename="../../applogger.cpp" line="313"/>
         <source>Unit ID removed: %1</source>
         <translation>ID unità rimosso: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="309"/>
+        <location filename="../../applogger.cpp" line="41"/>
         <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
         <translation>Spazio indirizzi rimosso: unità %1, %2, indirizzo iniziale %3, lunghezza %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="415"/>
+        <location filename="../../applogger.cpp" line="429"/>
         <source>Project opened: %1</source>
         <translation>Progetto aperto: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="422"/>
+        <location filename="../../applogger.cpp" line="436"/>
         <source>&lt;unsaved&gt;</source>
         <translation>&lt;non salvato&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="425"/>
+        <location filename="../../applogger.cpp" line="439"/>
         <source>Project closed: %1</source>
         <translation>Progetto chiuso: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="431"/>
+        <location filename="../../applogger.cpp" line="445"/>
         <source>Project saved: %1</source>
         <translation>Progetto salvato: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="437"/>
+        <location filename="../../applogger.cpp" line="451"/>
         <source>Project save failed: %1 (%2)</source>
         <translation>Salvataggio del progetto non riuscito: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="444"/>
+        <location filename="../../applogger.cpp" line="458"/>
         <source>Project load failed: %1 (%2)</source>
         <translation>Caricamento del progetto non riuscito: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="451"/>
+        <location filename="../../applogger.cpp" line="465"/>
         <source>Form created: %1</source>
         <translation>Modulo creato: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="457"/>
+        <location filename="../../applogger.cpp" line="471"/>
         <source>Form opened: %1</source>
         <translation>Modulo aperto: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="463"/>
+        <location filename="../../applogger.cpp" line="477"/>
         <source>Form closed: %1</source>
         <translation>Modulo chiuso: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="469"/>
+        <location filename="../../applogger.cpp" line="483"/>
         <source>Form deleted: %1</source>
         <translation>Modulo eliminato: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="488"/>
+        <location filename="../../applogger.cpp" line="502"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>La preferenza è stata modificata: %1: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="497"/>
+        <location filename="../../applogger.cpp" line="511"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 modificato: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="515"/>
+        <location filename="../../applogger.cpp" line="529"/>
         <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
         <translation>Script avviato: %1 (modalità: %2, intervallo: %3 ms)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="520"/>
+        <location filename="../../applogger.cpp" line="534"/>
         <source>Script started: %1 (mode: %2)</source>
         <translation>Script avviato: %1 (modalità: %2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="550"/>
+        <location filename="../../applogger.cpp" line="564"/>
         <source>Form renamed: &apos;%1&apos; -&gt; &apos;%2&apos;</source>
         <translation>Modulo rinominato: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
@@ -3366,19 +3368,19 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
         <translation>Passa ad un altro pannello</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="187"/>
+        <location filename="../../applogger.cpp" line="207"/>
         <source>1-based</source>
         <translation>base 1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="185"/>
+        <location filename="../../applogger.cpp" line="205"/>
         <source>0-based</source>
         <translation>base 0</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="422"/>
         <location filename="../../mainwindow.ui" line="425"/>
-        <location filename="../../applogger.cpp" line="158"/>
+        <location filename="../../applogger.cpp" line="178"/>
         <source>Hex View</source>
         <translation>Vista esadecimale</translation>
     </message>
@@ -3393,7 +3395,7 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
         <translation>Nessun progetto recente</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="105"/>
+        <location filename="../../applogger.cpp" line="125"/>
         <source>Data</source>
         <translation>Dati</translation>
     </message>
@@ -3403,7 +3405,7 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
         <translation>File JavaScript (*.js);;Tutti i file (*)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="534"/>
+        <location filename="../../applogger.cpp" line="548"/>
         <source>Script stopped: %1</source>
         <translation>Script interrotto: %1</translation>
     </message>
@@ -3783,12 +3785,12 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1118"/>
+        <location filename="../../modbusmultiserver.cpp" line="1129"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>È stato specificato un ID dispositivo errato (%1)</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1692"/>
+        <location filename="../../modbusmultiserver.cpp" line="1704"/>
         <source>Connection error. %1</source>
         <translation>Errore di connessione.%1</translation>
     </message>
@@ -3941,14 +3943,14 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
         <location filename="../../controls/pointtypecombobox.cpp" line="133"/>
-        <source>Enron Registers 5x (Read-Write)</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Int32 (Read-Write)</source>
+        <translation>Registri Enron Int32 (lettura-scrittura)</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
         <location filename="../../controls/pointtypecombobox.cpp" line="135"/>
-        <source>Enron Registers 7x (Read-Write)</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Float32 (Read-Write)</source>
+        <translation>Registri Enron Float32 (lettura-scrittura)</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="21"/>
@@ -4231,14 +4233,14 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
 <context>
     <name>RunModeComboBox</name>
     <message>
-        <location filename="../../applogger.cpp" line="229"/>
+        <location filename="../../applogger.cpp" line="249"/>
         <location filename="../../controls/runmodecombobox.cpp" line="19"/>
         <location filename="../../controls/runmodecombobox.cpp" line="39"/>
         <source>Once</source>
         <translation>Una volta</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="231"/>
+        <location filename="../../applogger.cpp" line="251"/>
         <location filename="../../controls/runmodecombobox.cpp" line="20"/>
         <location filename="../../controls/runmodecombobox.cpp" line="43"/>
         <source>Periodically</source>

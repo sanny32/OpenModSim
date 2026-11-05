@@ -218,6 +218,8 @@ void DataMapDataModel::onDefinitionsChanged(const ModbusDefinitions& definitions
     if (_enronEnabled == definitions.EnronModbus)
         return;
     _enronEnabled = definitions.EnronModbus;
+    for (auto it = _data.cbegin(); it != _data.cend(); ++it)
+        registerEntry(it.key(), it.value());
     if (!_keys.isEmpty())
         emit dataChanged(index(0, 0), index(_keys.size() - 1, ColCount - 1));
     emit enronEnabledChanged(_enronEnabled);
@@ -239,9 +241,9 @@ bool DataMapDataModel::changeRegisterType(ItemMapKey& key, DataMapEntry& entry, 
     auto enron = EnronModbus::RegisterType::None;
     if (role == DataMapRole::EnronType)
         enron = static_cast<EnronModbus::RegisterType>(value.toInt());
-    else if (value.toString() == tr("Enron Registers 5x"))
+    else if (value.toString() == tr("Enron Registers Int32"))
         enron = EnronModbus::RegisterType::Group5x;
-    else if (value.toString() == tr("Enron Registers 7x"))
+    else if (value.toString() == tr("Enron Registers Float32"))
         enron = EnronModbus::RegisterType::Group7x;
     if (role == DataMapRole::EnronType || enron != EnronModbus::RegisterType::None) {
         if (!_enronEnabled || (enron != EnronModbus::RegisterType::Group5x && enron != EnronModbus::RegisterType::Group7x))
@@ -332,7 +334,7 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
             if (role == Qt::DisplayRole || role == Qt::EditRole) {
                 const auto enron = effectiveEnronType(e);
                 if (enron != EnronModbus::RegisterType::None)
-                    return enron == EnronModbus::RegisterType::Group5x ? tr("Enron Registers 5x") : tr("Enron Registers 7x");
+                    return enron == EnronModbus::RegisterType::Group5x ? tr("Enron Registers Int32") : tr("Enron Registers Float32");
                 return registerTypeToString(key.Type);
             }
             if (role == DataMapRole::TypeValue) return static_cast<int>(key.Type);
@@ -1091,7 +1093,7 @@ void DataMapDataModel::registerEntry(const ItemMapKey& key, const DataMapEntry& 
         _server.addDeviceId(key.DeviceId);
     }
     _server.addUnitMap(_uuids[key], key.DeviceId, key.Type,
-                       key.Address, entry.registerCount());
+                       key.Address, entry.registerCount(), effectiveEnronType(entry));
 }
 
 ///

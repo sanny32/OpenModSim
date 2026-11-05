@@ -7,6 +7,7 @@
 ///
 
 #include <QFile>
+#include <QRegularExpression>
 #include <QListView>
 #include <QTableView>
 #include <QAbstractItemDelegate>
@@ -21,6 +22,7 @@
 #include <QTest>
 
 #include "appproject.h"
+#include "applogger.h"
 #include "apppreferences.h"
 #include "application.h"
 #include "controls/mdiareaex.h"
@@ -42,6 +44,8 @@ class TestAppProject : public QObject
     Q_OBJECT
 
 private slots:
+    void logsEnronAddressSpaces_data();
+    void logsEnronAddressSpaces();
     void mapsEnronRequests_data();
     void mapsEnronRequests();
     void editsAndRestoresEnronDataMap();
@@ -221,6 +225,55 @@ QStringList commentPlacements(const QString& path)
 
 }
 
+/// \brief Keeps ordinary tables distinguishable from Enron maps at the same backing addresses.
+void TestAppProject::logsEnronAddressSpaces_data()
+{
+    QTest::addColumn<int>("group");
+    QTest::newRow("holding") << 0;
+    QTest::newRow("Int32") << 1;
+    QTest::newRow("Float32") << 2;
+}
+
+/// \brief Logs logical groups, addresses and counts on both registration and removal.
+void TestAppProject::logsEnronAddressSpaces()
+{
+    QFETCH(int, group);
+    ModbusMultiServer server;
+    QObject context;
+    AppLogger::setupModbusMultiServerLogging(server, &context);
+    auto definitions = server.getModbusDefinitions();
+    definitions.EnronModbus = true;
+    server.setModbusDefinitions(definitions);
+    const auto enron = static_cast<EnronModbus::RegisterType>(group);
+    const int address = group == 2 ? 7003 : 5003;
+    const int logicalAddress = group ? address - 1 : address;
+    const int count = group ? 2 : 4;
+    const QString name = group
+        ? QCoreApplication::translate("DataMapDataModel", group == 1 ? "Enron Registers Int32" : "Enron Registers Float32")
+        : registerTypeName(QModbusDataUnit::HoldingRegisters);
+    const auto id = QUuid::createUuid();
+    const QString added = QCoreApplication::translate("MainWindow",
+        "Address space added: unit %1, %2, starting address %3, length %4")
+        .arg(1).arg(name).arg(logicalAddress).arg(count);
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(added)));
+    server.addUnitMap(id, 1, QModbusDataUnit::HoldingRegisters, address, 4, enron);
+    QVERIFY(server.data(1, QModbusDataUnit::HoldingRegisters, address, 4).isValid());
+    const QString removed = QCoreApplication::translate("MainWindow",
+        "Address space removed: unit %1, %2, starting address %3, length %4")
+        .arg(1).arg(name).arg(logicalAddress).arg(count);
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(removed)));
+    server.removeUnitMap(id, 1);
+    const QString ordinaryAdded = QCoreApplication::translate("MainWindow",
+        "Address space added: unit %1, %2, starting address %3, length %4")
+        .arg(1).arg(registerTypeName(QModbusDataUnit::HoldingRegisters)).arg(address).arg(4);
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(ordinaryAdded)));
+    server.addUnitMap(id, 1, QModbusDataUnit::HoldingRegisters, address, 4);
+    server.clearAddressSpace();
+    QTest::ignoreMessage(QtInfoMsg, QRegularExpression(QRegularExpression::escape(ordinaryAdded)));
+    server.addUnitMap(id, 1, QModbusDataUnit::HoldingRegisters, address, 4);
+    server.removeUnitMap(id, 1);
+}
+
 /// \brief Covers request mapping for both Enron ranges and ordinary Modbus.
 void TestAppProject::mapsEnronRequests_data()
 {
@@ -296,6 +349,8 @@ void TestAppProject::editsAndRestoresEnronDataMap()
     fixture.Server.setModbusDefinitions(definitions);
     QTRY_COMPARE(types->count(), 6);
     QCOMPARE(filter->count(), 7);
+    QCOMPARE(filter->itemText(5), QCoreApplication::translate("FormDataMapView", "Enron Registers Int32"));
+    QCOMPARE(filter->itemText(6), QCoreApplication::translate("FormDataMapView", "Enron Registers Float32"));
     types->setCurrentEnronType(EnronModbus::RegisterType::Group7x);
     delegate->setModelData(types, table->model(), typeIndex);
     QCOMPARE(model->index(0, ColType).data(DataMapRole::EnronType).toInt(), 2);
@@ -371,6 +426,9 @@ void TestAppProject::togglesEnronRegisterChoices()
         QCOMPARE(combo.currentPointType(), QModbusDataUnit::InputRegisters);
         combo.setCurrentEnronType(mode);
         QCOMPARE(combo.currentEnronType(), mode);
+        QCOMPARE(combo.currentText(), mode == EnronModbus::RegisterType::Group5x
+            ? QCoreApplication::translate("PointTypeComboBox", "Enron Registers Int32 (Read-Write)")
+            : QCoreApplication::translate("PointTypeComboBox", "Enron Registers Float32 (Read-Write)"));
         combo.setEnronEnabled(false);
         combo.setEnronEnabled(false);
         QCOMPARE(combo.count(), 4);
@@ -559,7 +617,10 @@ void TestAppProject::enronRegisterChoices()
     fixture.Server.setModbusDefinitions(definitions);
     QTRY_COMPARE(combo->count(), 6);
     QVERIFY(combo->findData(mode, Qt::UserRole + 1) >= 0);
+    QSignalSpy maps(&fixture.Server, &ModbusMultiServer::unitMapAdded);
     combo->setCurrentEnronType(enron);
+    QTRY_VERIFY(!maps.isEmpty());
+    QCOMPARE(maps.last().last().value<EnronModbus::RegisterType>(), enron);
     const int base = EnronModbus::baseAddress(enron);
     QCOMPARE(address->value<int>(), base);
     QCOMPARE(address->range<int>().from(), base);

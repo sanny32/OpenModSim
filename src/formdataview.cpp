@@ -1047,7 +1047,7 @@ void FormDataView::onDefinitionChanged()
     const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
     const auto formId = dataFormId(this);
     if(!formId.isNull()) {
-        _mbMultiServer.addUnitMap(formId, dd.DeviceId, dd.PointType, addr, dd.Length);
+        _mbMultiServer.addUnitMap(formId, dd.DeviceId, dd.PointType, addr, dd.Length, dd.EnronType);
         _initialMapSynced = true;
     }
 

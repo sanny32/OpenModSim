@@ -367,59 +367,61 @@
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="242"/>
-        <location filename="../../datamapdatamodel.cpp" line="335"/>
-        <source>Enron Registers 5x</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../../applogger.cpp" line="34"/>
         <location filename="../../datamapdatamodel.cpp" line="244"/>
-        <location filename="../../datamapdatamodel.cpp" line="335"/>
-        <source>Enron Registers 7x</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../datamapdatamodel.cpp" line="337"/>
+        <source>Enron Registers Int32</source>
+        <translation>Enron Int32 寄存器</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="637"/>
+        <location filename="../../applogger.cpp" line="35"/>
+        <location filename="../../datamapdatamodel.cpp" line="246"/>
+        <location filename="../../datamapdatamodel.cpp" line="337"/>
+        <source>Enron Registers Float32</source>
+        <translation>Enron Float32 寄存器</translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="639"/>
         <source>Unit</source>
         <translation>单元</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="638"/>
+        <location filename="../../datamapdatamodel.cpp" line="640"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="639"/>
+        <location filename="../../datamapdatamodel.cpp" line="641"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="640"/>
+        <location filename="../../datamapdatamodel.cpp" line="642"/>
         <source>Data Type</source>
         <translation>数据类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="641"/>
+        <location filename="../../datamapdatamodel.cpp" line="643"/>
         <source>Register Order</source>
         <translation>寄存器顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="642"/>
+        <location filename="../../datamapdatamodel.cpp" line="644"/>
         <source>Byte Order</source>
         <translation>字节顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="643"/>
+        <location filename="../../datamapdatamodel.cpp" line="645"/>
         <source>Comment</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="644"/>
+        <location filename="../../datamapdatamodel.cpp" line="646"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="645"/>
+        <location filename="../../datamapdatamodel.cpp" line="647"/>
         <source>Timestamp</source>
         <translation>时间戳</translation>
     </message>
@@ -1083,7 +1085,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="64"/>
-        <source>Select Enron registers 5x or 7x and enter the full protocol address, starting at 5001 or 7001. Select the display format separately in the toolbar.</source>
+        <source>Select Enron Int32 or Float32 registers and enter the full protocol address, starting at 5001 or 7001. Select the display format separately in the toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2044,13 +2046,13 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1661"/>
-        <source>Enron Registers 5x</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Int32</source>
+        <translation>Enron Int32 寄存器</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1662"/>
-        <source>Enron Registers 7x</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Float32</source>
+        <translation>Enron Float32 寄存器</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1263"/>
@@ -2712,7 +2714,7 @@ Open the download page?</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="109"/>
+        <location filename="../../applogger.cpp" line="129"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
@@ -3050,314 +3052,314 @@ Please verify the merge result carefully.</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="157"/>
+        <location filename="../../applogger.cpp" line="177"/>
         <location filename="../../mainwindow.cpp" line="691"/>
         <location filename="../../mainwindow.cpp" line="1752"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="250"/>
+        <location filename="../../applogger.cpp" line="270"/>
         <source>Server connected: %1</source>
         <translation>服务器已连接：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="256"/>
+        <location filename="../../applogger.cpp" line="276"/>
         <source>Server disconnected: %1</source>
         <translation>服务器已断开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="267"/>
+        <location filename="../../applogger.cpp" line="287"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation>Modbus客户端已连接：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="274"/>
+        <location filename="../../applogger.cpp" line="294"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation>Modbus客户端已断开：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="281"/>
+        <location filename="../../applogger.cpp" line="301"/>
         <source>[Unit %1] %2</source>
         <translation>[单元 %1] %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="300"/>
+        <location filename="../../applogger.cpp" line="40"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已添加：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="322"/>
+        <location filename="../../applogger.cpp" line="336"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;空&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="338"/>
+        <location filename="../../applogger.cpp" line="352"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation>手动写入：单元 %1, %2, 起始地址 %3, 值 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="351"/>
+        <location filename="../../applogger.cpp" line="365"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation>客户端写入：%1 → 单元 %2, %3, 起始地址 %4, 值 %5</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="348"/>
+        <location filename="../../applogger.cpp" line="362"/>
         <source>unknown client</source>
         <translation>未知客户端</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="324"/>
+        <location filename="../../applogger.cpp" line="338"/>
         <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
         <translation>地址注释已更改：单元 %1, %2, 地址 %3: &apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="382"/>
+        <location filename="../../applogger.cpp" line="396"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation>自动仿真已启用（%1）：单元 %2, %3, 地址 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="396"/>
+        <location filename="../../applogger.cpp" line="410"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation>自动仿真已禁用：单元 %1, %2, 地址 %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="91"/>
+        <location filename="../../applogger.cpp" line="111"/>
         <source>[%1 values: %2%3]</source>
         <translation>[%1 values: %2%3]</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="50"/>
+        <location filename="../../applogger.cpp" line="70"/>
         <source>Modbus RTU over TCP/IP</source>
         <translation>通过 TCP/IP 的 Modbus RTU</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="107"/>
+        <location filename="../../applogger.cpp" line="127"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="111"/>
+        <location filename="../../applogger.cpp" line="131"/>
         <source>Map</source>
         <translation>映射</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="112"/>
+        <location filename="../../applogger.cpp" line="132"/>
         <source>Form</source>
         <translation>窗体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="123"/>
+        <location filename="../../applogger.cpp" line="143"/>
         <source>&lt;null&gt;</source>
         <translation>&lt;null&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="126"/>
+        <location filename="../../applogger.cpp" line="146"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;未命名&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="129"/>
+        <location filename="../../applogger.cpp" line="149"/>
         <source>%1 &apos;%2&apos;</source>
         <translation>%1 &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="140"/>
+        <location filename="../../applogger.cpp" line="160"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="141"/>
+        <location filename="../../applogger.cpp" line="161"/>
         <source>FontZoom</source>
         <translation>字体缩放</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="142"/>
+        <location filename="../../applogger.cpp" line="162"/>
         <source>BackgroundColor</source>
         <translation>背景颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="143"/>
+        <location filename="../../applogger.cpp" line="163"/>
         <source>ForegroundColor</source>
         <translation>前景颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="144"/>
+        <location filename="../../applogger.cpp" line="164"/>
         <source>AddressColor</source>
         <translation>地址颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="145"/>
+        <location filename="../../applogger.cpp" line="165"/>
         <source>CommentColor</source>
         <translation>注释颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="146"/>
+        <location filename="../../applogger.cpp" line="166"/>
         <source>CheckForUpdates</source>
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="147"/>
+        <location filename="../../applogger.cpp" line="167"/>
         <source>ShowWelcomeDialog</source>
         <translation>显示欢迎对话框</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="148"/>
+        <location filename="../../applogger.cpp" line="168"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="149"/>
+        <location filename="../../applogger.cpp" line="169"/>
         <source>ScriptFont</source>
         <translation>脚本字体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="150"/>
+        <location filename="../../applogger.cpp" line="170"/>
         <source>CodeAutoComplete</source>
         <translation>代码自动补全</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="151"/>
+        <location filename="../../applogger.cpp" line="171"/>
         <source>AutoShowConsoleOutput</source>
         <translation>自动显示控制台输出</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="152"/>
+        <location filename="../../applogger.cpp" line="172"/>
         <source>ConsoleMaxLines</source>
         <translation>控制台最大行数</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="153"/>
+        <location filename="../../applogger.cpp" line="173"/>
         <source>DataView.ColumnsDistance</source>
         <translation>数据视图.列距</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="154"/>
+        <location filename="../../applogger.cpp" line="174"/>
         <source>DataView.LeadingZeros</source>
         <translation>数据视图.前导零</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="155"/>
+        <location filename="../../applogger.cpp" line="175"/>
         <source>TrafficView.LogLimit</source>
         <translation>流量视图.日志限制</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="156"/>
+        <location filename="../../applogger.cpp" line="176"/>
         <source>TrafficView.AutoScroll</source>
         <translation>流量视图.自动滚动</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="159"/>
+        <location filename="../../applogger.cpp" line="179"/>
         <source>ThemeMode</source>
         <translation>主题模式</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="171"/>
+        <location filename="../../applogger.cpp" line="191"/>
         <source>true</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="173"/>
+        <location filename="../../applogger.cpp" line="193"/>
         <source>false</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="199"/>
+        <location filename="../../applogger.cpp" line="219"/>
         <source>enabled</source>
         <translation>已启用</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="201"/>
+        <location filename="../../applogger.cpp" line="221"/>
         <source>disabled</source>
         <translation>已禁用</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="287"/>
+        <location filename="../../applogger.cpp" line="307"/>
         <source>Unit ID added: %1</source>
         <translation>单元ID已添加：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="293"/>
+        <location filename="../../applogger.cpp" line="313"/>
         <source>Unit ID removed: %1</source>
         <translation>单元ID已删除：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="309"/>
+        <location filename="../../applogger.cpp" line="41"/>
         <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已删除：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="415"/>
+        <location filename="../../applogger.cpp" line="429"/>
         <source>Project opened: %1</source>
         <translation>项目已打开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="422"/>
+        <location filename="../../applogger.cpp" line="436"/>
         <source>&lt;unsaved&gt;</source>
         <translation>&lt;未保存&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="425"/>
+        <location filename="../../applogger.cpp" line="439"/>
         <source>Project closed: %1</source>
         <translation>项目已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="431"/>
+        <location filename="../../applogger.cpp" line="445"/>
         <source>Project saved: %1</source>
         <translation>项目已保存：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="437"/>
+        <location filename="../../applogger.cpp" line="451"/>
         <source>Project save failed: %1 (%2)</source>
         <translation>项目保存失败：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="444"/>
+        <location filename="../../applogger.cpp" line="458"/>
         <source>Project load failed: %1 (%2)</source>
         <translation>项目加载失败：%1（%2）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="451"/>
+        <location filename="../../applogger.cpp" line="465"/>
         <source>Form created: %1</source>
         <translation>窗体已创建：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="457"/>
+        <location filename="../../applogger.cpp" line="471"/>
         <source>Form opened: %1</source>
         <translation>窗体已打开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="463"/>
+        <location filename="../../applogger.cpp" line="477"/>
         <source>Form closed: %1</source>
         <translation>窗体已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="469"/>
+        <location filename="../../applogger.cpp" line="483"/>
         <source>Form deleted: %1</source>
         <translation>窗体已删除：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="488"/>
+        <location filename="../../applogger.cpp" line="502"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>首选项已更改：%1：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="497"/>
+        <location filename="../../applogger.cpp" line="511"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="515"/>
+        <location filename="../../applogger.cpp" line="529"/>
         <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
         <translation>脚本已启动：%1（模式：%2，间隔：%3 毫秒）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="520"/>
+        <location filename="../../applogger.cpp" line="534"/>
         <source>Script started: %1 (mode: %2)</source>
         <translation>脚本已启动：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="550"/>
+        <location filename="../../applogger.cpp" line="564"/>
         <source>Form renamed: &apos;%1&apos; -&gt; &apos;%2&apos;</source>
         <translation>窗体已重命名：&apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
@@ -3367,19 +3369,19 @@ Please verify the merge result carefully.</source>
         <translation>移至其他面板</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="187"/>
+        <location filename="../../applogger.cpp" line="207"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="185"/>
+        <location filename="../../applogger.cpp" line="205"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="422"/>
         <location filename="../../mainwindow.ui" line="425"/>
-        <location filename="../../applogger.cpp" line="158"/>
+        <location filename="../../applogger.cpp" line="178"/>
         <source>Hex View</source>
         <translation>十六进制视图</translation>
     </message>
@@ -3394,7 +3396,7 @@ Please verify the merge result carefully.</source>
         <translation>没有最近项目</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="105"/>
+        <location filename="../../applogger.cpp" line="125"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
@@ -3404,7 +3406,7 @@ Please verify the merge result carefully.</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="534"/>
+        <location filename="../../applogger.cpp" line="548"/>
         <source>Script stopped: %1</source>
         <translation>脚本已停止：%1</translation>
     </message>
@@ -3784,12 +3786,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1118"/>
+        <location filename="../../modbusmultiserver.cpp" line="1129"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了错误的设备地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1692"/>
+        <location filename="../../modbusmultiserver.cpp" line="1704"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
@@ -3942,14 +3944,14 @@ Please verify the merge result carefully.</source>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
         <location filename="../../controls/pointtypecombobox.cpp" line="133"/>
-        <source>Enron Registers 5x (Read-Write)</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Int32 (Read-Write)</source>
+        <translation>Enron Int32 寄存器（读写）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
         <location filename="../../controls/pointtypecombobox.cpp" line="135"/>
-        <source>Enron Registers 7x (Read-Write)</source>
-        <translation type="unfinished"></translation>
+        <source>Enron Registers Float32 (Read-Write)</source>
+        <translation>Enron Float32 寄存器（读写）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="21"/>
@@ -4232,14 +4234,14 @@ Please verify the merge result carefully.</source>
 <context>
     <name>RunModeComboBox</name>
     <message>
-        <location filename="../../applogger.cpp" line="229"/>
+        <location filename="../../applogger.cpp" line="249"/>
         <location filename="../../controls/runmodecombobox.cpp" line="19"/>
         <location filename="../../controls/runmodecombobox.cpp" line="39"/>
         <source>Once</source>
         <translation>一次</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="231"/>
+        <location filename="../../applogger.cpp" line="251"/>
         <location filename="../../controls/runmodecombobox.cpp" line="20"/>
         <location filename="../../controls/runmodecombobox.cpp" line="43"/>
         <source>Periodically</source>

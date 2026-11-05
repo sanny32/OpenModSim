@@ -52,7 +52,7 @@ The following simulations are available:
 Enable **Enron Modbus (32-bit registers)** in **Modbus Definitions → General**.
 The setting is saved with the project.
 
-Select **Enron Registers 5x** or **7x** and enter the full protocol address
+Select **Enron Registers Int32** or **Enron Registers Float32** and enter the full protocol address
 and a count. For example, address **7001**, count **2** exposes **7001–7002**.
 
 Supported 32-bit ranges are **5001–5999** and **7001–7999**. Choose the display

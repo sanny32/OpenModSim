@@ -23,6 +23,26 @@
 namespace {
 
 ///
+/// \brief Logs logical Enron registers instead of their backing-word storage.
+///
+void logUnitMap(bool added, quint8 deviceId, QModbusDataUnit::RegisterType type,
+                quint16 address, quint16 length, EnronModbus::RegisterType enronType)
+{
+    QString name = registerTypeName(type);
+    if (enronType != EnronModbus::RegisterType::None) {
+        name = enronType == EnronModbus::RegisterType::Group5x
+            ? QCoreApplication::translate("DataMapDataModel", "Enron Registers Int32")
+            : QCoreApplication::translate("DataMapDataModel", "Enron Registers Float32");
+        address = EnronModbus::registerAddress(enronType, address);
+        length = (length + 1) / 2;
+    }
+    const QString text = added
+        ? QCoreApplication::translate("MainWindow", "Address space added: unit %1, %2, starting address %3, length %4")
+        : QCoreApplication::translate("MainWindow", "Address space removed: unit %1, %2, starting address %3, length %4");
+    qInfo(lcApp) << text.arg(deviceId).arg(name).arg(address).arg(length);
+}
+
+///
 /// \brief connectionAddress
 /// \param cd
 /// \return
@@ -295,21 +315,15 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::unitMapAdded, context,
-                     [](QUuid /*id*/, quint8 deviceId, QModbusDataUnit::RegisterType type,
-                        quint16 addr, quint16 len) {
-        qInfo(lcApp) << QCoreApplication::translate(
-                            "MainWindow",
-                            "Address space added: unit %1, %2, starting address %3, length %4")
-                            .arg(deviceId).arg(registerTypeName(type)).arg(addr).arg(len);
+                     [](QUuid, quint8 deviceId, QModbusDataUnit::RegisterType type,
+                        quint16 addr, quint16 len, EnronModbus::RegisterType enronType) {
+        logUnitMap(true, deviceId, type, addr, len, enronType);
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::unitMapRemoved, context,
-                     [](QUuid /*id*/, quint8 deviceId, QModbusDataUnit::RegisterType type,
-                        quint16 addr, quint16 len) {
-        qInfo(lcApp) << QCoreApplication::translate(
-                            "MainWindow",
-                            "Address space removed: unit %1, %2, starting address %3, length %4")
-                            .arg(deviceId).arg(registerTypeName(type)).arg(addr).arg(len);
+                     [](QUuid, quint8 deviceId, QModbusDataUnit::RegisterType type,
+                        quint16 addr, quint16 len, EnronModbus::RegisterType enronType) {
+        logUnitMap(false, deviceId, type, addr, len, enronType);
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::descriptionChanged, context,

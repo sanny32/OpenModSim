@@ -39,7 +39,7 @@ void PointTypeComboBox::changeEvent(QEvent* event)
             const auto enron = static_cast<EnronModbus::RegisterType>(itemData(i, Qt::UserRole + 1).toInt());
             if (enron != EnronModbus::RegisterType::None) {
                 setItemText(i, enron == EnronModbus::RegisterType::Group5x
-                    ? tr("Enron Registers 5x (Read-Write)") : tr("Enron Registers 7x (Read-Write)"));
+                    ? tr("Enron Registers Int32 (Read-Write)") : tr("Enron Registers Float32 (Read-Write)"));
                 continue;
             }
             switch(itemData(i).value<QModbusDataUnit::RegisterType>())
@@ -130,9 +130,9 @@ void PointTypeComboBox::setEnronEnabled(bool enabled)
         return;
 
     if (enabled) {
-        addItem(tr("Enron Registers 5x (Read-Write)"), QModbusDataUnit::HoldingRegisters);
+        addItem(tr("Enron Registers Int32 (Read-Write)"), QModbusDataUnit::HoldingRegisters);
         setItemData(count() - 1, int(EnronModbus::RegisterType::Group5x), Qt::UserRole + 1);
-        addItem(tr("Enron Registers 7x (Read-Write)"), QModbusDataUnit::HoldingRegisters);
+        addItem(tr("Enron Registers Float32 (Read-Write)"), QModbusDataUnit::HoldingRegisters);
         setItemData(count() - 1, int(EnronModbus::RegisterType::Group7x), Qt::UserRole + 1);
         return;
     }
