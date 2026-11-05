@@ -31,6 +31,7 @@ QIcon dimmedIcon(const QIcon& icon)
         return QIcon();
 
     QPixmap grayPixmap(srcPixmap.size());
+    grayPixmap.setDevicePixelRatio(srcPixmap.devicePixelRatio());
     grayPixmap.fill(Qt::transparent);
     QPainter painter(&grayPixmap);
     painter.setOpacity(0.4);

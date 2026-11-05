@@ -61,6 +61,17 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_modbustransports      test_modbustransports.cpp)
     omodsim_add_test(omodsim_tests_rtusnifferparser      test_rtusnifferparser.cpp)
 
+    add_executable(omodsim_tests_projecttreewidget
+        test_projecttreewidget.cpp
+        "${PROJECT_SOURCE_DIR}/app/resources.qrc"
+    )
+    target_link_libraries(omodsim_tests_projecttreewidget PRIVATE omodsim_ui Qt::Test)
+    omodsim_apply_coverage(omodsim_tests_projecttreewidget)
+    set_target_properties(omodsim_tests_projecttreewidget PROPERTIES FOLDER "Tests")
+    add_dependencies(omodsim_tests omodsim_tests_projecttreewidget)
+    add_test(NAME omodsim_tests_projecttreewidget COMMAND omodsim_tests_projecttreewidget)
+    set_tests_properties(omodsim_tests_projecttreewidget PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+
     add_executable(omodsim_tests_appproject
         test_appproject.cpp
         "${PROJECT_SOURCE_DIR}/app/resources.qrc"
