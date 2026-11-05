@@ -4,6 +4,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE omodsim_ui)
+omodsim_deploy_openssl(${PROJECT_NAME})
 omodsim_apply_coverage(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"

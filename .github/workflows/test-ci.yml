@@ -63,12 +63,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             ninja-build \
-            libgl1-mesa-dev \
+            libgl1-mesa-dev libssl-dev \
             libxkbcommon-x11-0
 
       - name: Install Ninja (macOS)
         if: runner.os == 'macOS'
-        run: brew install ninja
+        run: |
+          brew install ninja openssl@3
+          echo "OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)" >> "$GITHUB_ENV"
 
       - name: Set up MSVC environment (Windows)
         if: runner.os == 'Windows'
@@ -80,6 +82,10 @@ jobs:
           version: ${{ matrix.qt-version }}
           modules: ${{ matrix.qt-modules }}
           cache: true
+
+      - name: Install OpenSSL 3 (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/actions/install-openssl
 
       - name: Configure
         run: >
@@ -118,7 +124,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             ninja-build \
-            libgl1-mesa-dev \
+            libgl1-mesa-dev libssl-dev \
             libxkbcommon-x11-0
           python3 -m pip install --upgrade gcovr
 

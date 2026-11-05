@@ -21,6 +21,7 @@ function(omodsim_configure_tests)
             Qt::Widgets
             Qt::Test
         )
+        omodsim_deploy_openssl(${test_name})
         omodsim_apply_coverage(${test_name})
         set_target_properties(${test_name} PROPERTIES FOLDER "Tests")
         add_dependencies(omodsim_tests ${test_name})
@@ -58,6 +59,11 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_connectiondetails     test_connectiondetails.cpp)
     omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp omodsim_ui)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)
+    omodsim_add_test(omodsim_tests_tlscertificatestore   test_tlscertificatestore.cpp)
+    target_link_libraries(omodsim_tests_tlscertificatestore PRIVATE OpenSSL::Crypto)
+    omodsim_add_test(omodsim_tests_tlssettings           test_tlssettings.cpp omodsim_ui)
+    omodsim_add_test(omodsim_tests_modbustls             test_modbustls.cpp)
+    target_link_libraries(omodsim_tests_modbustls PRIVATE OpenSSL::Crypto)
     omodsim_add_test(omodsim_tests_modbustransports      test_modbustransports.cpp)
     omodsim_add_test(omodsim_tests_rtusnifferparser      test_rtusnifferparser.cpp)
 
@@ -66,6 +72,7 @@ function(omodsim_configure_tests)
         "${PROJECT_SOURCE_DIR}/app/resources.qrc"
     )
     target_link_libraries(omodsim_tests_projecttreewidget PRIVATE omodsim_ui Qt::Test)
+    omodsim_deploy_openssl(omodsim_tests_projecttreewidget)
     omodsim_apply_coverage(omodsim_tests_projecttreewidget)
     set_target_properties(omodsim_tests_projecttreewidget PROPERTIES FOLDER "Tests")
     add_dependencies(omodsim_tests omodsim_tests_projecttreewidget)
@@ -77,6 +84,7 @@ function(omodsim_configure_tests)
         "${PROJECT_SOURCE_DIR}/app/resources.qrc"
     )
     target_link_libraries(omodsim_tests_appproject PRIVATE omodsim_ui Qt::Test)
+    omodsim_deploy_openssl(omodsim_tests_appproject)
     omodsim_apply_coverage(omodsim_tests_appproject)
     target_compile_definitions(omodsim_tests_appproject PRIVATE
         OMODSIM_DEMOS_DIR="${PROJECT_SOURCE_DIR}/../demos/projects"

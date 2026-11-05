@@ -107,12 +107,16 @@ jobs:
       - name: Set BUILD_DIR
         run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}-Release" >> $GITHUB_ENV
 
+      - name: Resolve latest OpenSSL 3.5 LTS version
+        uses: ./.github/actions/build-openssl3-runtime
+
       - name: Configure project
         run: |
           cmake src -B ${{ env.BUILD_DIR }} \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
+            -DOPENSSL_ROOT_DIR=/usr/local \
             -DOMODSIM_BUILD_TESTS=OFF \
             -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
@@ -153,6 +157,11 @@ jobs:
         run: |
           cp /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
              /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 \
+             ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/
+
+      - name: Copy OpenSSL 3 libraries
+        run: |
+          cp /usr/local/lib64/libssl.so.3 /usr/local/lib64/libcrypto.so.3 \
              ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/
 
       - name: Copy OpenModsim docs

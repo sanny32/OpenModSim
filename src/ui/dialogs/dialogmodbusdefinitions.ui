@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>313</height>
+    <width>650</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -70,11 +70,38 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabCertificates">
+      <attribute name="title"><string>Certificates</string></attribute>
+      <layout class="QVBoxLayout" name="certificateLayout">
+       <property name="leftMargin"><number>0</number></property>
+       <property name="topMargin"><number>0</number></property>
+       <property name="rightMargin"><number>0</number></property>
+       <property name="bottomMargin"><number>0</number></property>
+
+       <item>
+        <widget class="QScrollArea" name="certificateScrollArea">
+         <property name="widgetResizable"><bool>true</bool></property>
+         <property name="frameShape"><enum>QFrame::NoFrame</enum></property>
+         <property name="horizontalScrollBarPolicy"><enum>Qt::ScrollBarAlwaysOff</enum></property>
+         <widget class="QWidget" name="certificateScrollContents">
+          <layout class="QVBoxLayout" name="certificateScrollLayout">
+           <property name="leftMargin"><number>0</number></property>
+           <property name="topMargin"><number>0</number></property>
+           <property name="rightMargin"><number>0</number></property>
+           <property name="bottomMargin"><number>0</number></property>
+           <item><widget class="TlsCertificatesWidget" name="certificatesWidget"/></item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabErrSimulations">
       <attribute name="title">
        <string>Error Simulations</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing"><number>8</number></property>
        <item>
         <widget class="QCheckBox" name="checkBoxErrIncorrentId">
          <property name="sizePolicy">
@@ -269,6 +296,12 @@
          </property>
         </widget>
        </item>
+       <item>
+        <spacer name="errorOptionsSpacer">
+         <property name="orientation"><enum>Qt::Vertical</enum></property>
+         <property name="sizeHint" stdset="0"><size><width>0</width><height>0</height></size></property>
+        </spacer>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -286,6 +319,7 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget><class>TlsCertificatesWidget</class><extends>QWidget</extends><header>tlscertificateswidget.h</header><container>1</container></customwidget>
   <customwidget>
    <class>AddressSpaceComboBox</class>
    <extends>QComboBox</extends>

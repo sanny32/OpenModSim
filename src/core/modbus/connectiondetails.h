@@ -24,6 +24,7 @@ struct TcpConnectionParams
 {
     quint16 ServicePort = 502;
     QString IPAddress = "0.0.0.0";
+    bool TlsEnabled = false;
 
     void normalize()
     {
@@ -36,12 +37,14 @@ struct TcpConnectionParams
     {
         IPAddress = params.IPAddress;
         ServicePort = params.ServicePort;
+        TlsEnabled = params.TlsEnabled;
         return *this;
     }
 
     friend bool operator==(const TcpConnectionParams& params1, const TcpConnectionParams& params2) noexcept
     {
-        return params1.ServicePort == params2.ServicePort && params1.IPAddress == params2.IPAddress;
+        return params1.ServicePort == params2.ServicePort && params1.IPAddress == params2.IPAddress
+            && params1.TlsEnabled == params2.TlsEnabled;
     }
 };
 Q_DECLARE_METATYPE(TcpConnectionParams)
@@ -56,6 +59,9 @@ inline QDataStream& operator <<(QDataStream& out, const TcpConnectionParams& par
 {
     out << params.ServicePort;
     out << params.IPAddress;
+    // The optional marker preserves legacy streams followed by serial parameters.
+    if (params.TlsEnabled)
+        out << quint32(0x544c5302);
     return out;
 }
 
@@ -69,6 +75,22 @@ inline QDataStream& operator >>(QDataStream& in, TcpConnectionParams& params)
 {
     in >> params.ServicePort;
     in >> params.IPAddress;
+    params.TlsEnabled = false;
+    if (in.device() && in.device()->bytesAvailable() >= 4) {
+        in.startTransaction();
+        quint32 marker;
+        in >> marker;
+        if (marker == 0x544c5301 || marker == 0x544c5302) {
+            if (marker == 0x544c5301) {
+                QString certificate, key, ca;
+                in >> certificate >> key >> ca;
+            }
+            params.TlsEnabled = in.commitTransaction();
+        } else {
+            in.rollbackTransaction();
+            in.resetStatus();
+        }
+    }
     params.normalize();
     return in;
 }
@@ -83,17 +105,16 @@ inline QSettings& operator <<(QSettings& out, const TcpConnectionParams& params)
 {
     out.setValue("TcpParams/IPAddress",     params.IPAddress);
     out.setValue("TcpParams/ServicePort",   params.ServicePort);
+    out.setValue("TcpParams/TlsEnabled", params.TlsEnabled);
     return out;
 }
 
 ///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
+/// \brief Reads TCP settings including the optional TLS selection.
 ///
 inline QSettings& operator >>(QSettings& in, TcpConnectionParams& params)
 {
+    params.TlsEnabled = in.value("TcpParams/TlsEnabled", false).toBool();
     params.IPAddress = in.value("TcpParams/IPAddress", "0.0.0.0").toString();
     params.ServicePort = in.value("TcpParams/ServicePort", 502).toUInt();
     params.normalize();
@@ -111,6 +132,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const TcpConnectionP
     xml.writeStartElement("TcpConnectionParams");
     xml.writeAttribute("IPAddress", params.IPAddress);
     xml.writeAttribute("ServicePort", QString::number(params.ServicePort));
+    if (params.TlsEnabled) {
+        xml.writeAttribute("TlsEnabled", "true");
+    }
     xml.writeEndElement();
 
     return xml;
@@ -126,6 +150,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, TcpConnectionParams&
 {
     if (xml.isStartElement() && xml.name() == QLatin1String("TcpConnectionParams")) {
         const QXmlStreamAttributes attributes = xml.attributes();
+        params.TlsEnabled = attributes.value("TlsEnabled") == QLatin1String("true");
 
         if (attributes.hasAttribute("IPAddress")) {
             params.IPAddress = attributes.value("IPAddress").toString();

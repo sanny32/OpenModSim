@@ -7,6 +7,7 @@
 ///
 
 #include <QPushButton>
+#include <QScreen>
 #include "dialogmodbusdefinitions.h"
 #include "ui_dialogmodbusdefinitions.h"
 
@@ -93,6 +94,16 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
 DialogModbusDefinitions::~DialogModbusDefinitions()
 {
     delete ui;
+}
+
+///
+/// \brief Keeps the settings dialog inside the available screen area.
+///
+QSize DialogModbusDefinitions::sizeHint() const
+{
+    const QSize natural = QFixedSizeDialog::sizeHint();
+    const QScreen* target = parentWidget() ? parentWidget()->screen() : screen();
+    return target ? natural.boundedTo(target->availableGeometry().size() - QSize(32, 64)) : natural;
 }
 
 ///

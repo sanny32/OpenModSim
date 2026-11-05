@@ -21,15 +21,28 @@ class DialogSelectServicePort : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogSelectServicePort(TcpConnectionParams& params, QWidget *parent = nullptr);
+    ///
+    /// \brief Edits TCP endpoint settings and the TLS selection.
+    /// \param params Connection parameters updated on acceptance.
+    /// \param parent Parent widget.
+    /// \param allowTls Whether the transport supports TLS.
+    ///
+    explicit DialogSelectServicePort(TcpConnectionParams& params, QWidget *parent = nullptr, bool allowTls = true);
+    ///
+    /// \brief DialogSelectServicePort::~DialogSelectServicePort
+    ///
     ~DialogSelectServicePort();
 
+    ///
+    /// \brief Applies the endpoint settings and the TLS selection.
+    ///
     void accept() override;
 
 protected:
     void changeEvent(QEvent* event) override;
 
 private:
+    void updateTlsPort(bool enabled);
     Ui::DialogSelectServicePort *ui;
     TcpConnectionParams& _params;
 };

@@ -13,6 +13,8 @@ Open ModSim is a free implimentation of modbus slave (server) utility for modbus
 
 # Features
 
+Modbus TCP over TLS supports encrypted connections and built-in server certificate generation. See [TLS setup](docs/modbus-tls.md).
+
 The following Modbus functions are available:
 
 - Discrete Coils/Flags
@@ -180,6 +182,8 @@ src/
 The core library does not depend on Qt Widgets. Each layer has its own `CMakeLists.txt`.
 
 # Building
+
+Certificate generation requires OpenSSL 3 development libraries (`libcrypto`). The build scripts install this dependency; for manual builds, set `OPENSSL_ROOT_DIR` when CMake cannot locate it.
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
 > [!NOTE]

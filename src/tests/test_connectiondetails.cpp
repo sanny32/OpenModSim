@@ -99,6 +99,8 @@ class TestConnectionDetails : public QObject
     Q_OBJECT
 
 private slots:
+    void persistsTlsParameters();
+    void readsLegacyTcpStream();
     void normalizesTcpParameters();
     void normalizesSerialParameters();
     void streamsTcpParameters();
@@ -115,6 +117,43 @@ private slots:
     void comparesConnectionsByType();
     void validatesClientInfo();
 };
+
+///
+/// \brief Preserves TLS credentials across project and preferences serialization.
+///
+void TestConnectionDetails::persistsTlsParameters()
+{
+    ConnectionDetails expected;
+    expected.TcpParams.TlsEnabled = true;
+    expected.SerialParams = serialParams();
+    const auto streamed = fromDataStream<ConnectionDetails>(toDataStream(expected));
+    QCOMPARE(streamed, expected);
+    QCOMPARE(streamed.SerialParams, expected.SerialParams);
+    QCOMPARE(fromXml<ConnectionDetails>(toXml(expected)), expected);
+    QTemporaryDir directory;
+    QSettings settings(directory.filePath("tls.ini"), QSettings::IniFormat);
+    settings << expected;
+    ConnectionDetails actual;
+    settings >> actual;
+    QCOMPARE(actual, expected);
+    actual.TcpParams.TlsEnabled = false;
+    QVERIFY(!(actual == expected));
+}
+
+///
+/// \brief Leaves subsequent serial parameters intact when reading older streams.
+///
+void TestConnectionDetails::readsLegacyTcpStream()
+{
+    QByteArray bytes;
+    QDataStream output(&bytes, QIODevice::WriteOnly);
+    output << ConnectionType::Tcp << quint16(1502) << QString("127.0.0.1") << serialParams();
+    const auto actual = fromDataStream<ConnectionDetails>(bytes);
+    QCOMPARE(actual.TcpParams.ServicePort, quint16(1502));
+    QVERIFY(!actual.TcpParams.TlsEnabled);
+    QCOMPARE(actual.SerialParams, serialParams());
+    QCOMPARE(fromXml<TcpConnectionParams>("<TcpConnectionParams IPAddress=\"127.0.0.1\" ServicePort=\"502\"/> ").TlsEnabled, false);
+}
 
 void TestConnectionDetails::normalizesTcpParameters()
 {

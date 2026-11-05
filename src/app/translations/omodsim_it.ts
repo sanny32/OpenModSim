@@ -183,6 +183,17 @@
     </message>
 </context>
 <context>
+    <name>CertificateGenerator</name>
+    <message>
+        <source>Enter a server name, valid DNS names or IP addresses, and a validity period from 1 to 3650 days.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot generate the server certificate or private key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CmdLineParser</name>
     <message>
         <source>Displays this help.</source>
@@ -891,6 +902,10 @@ Vuoi aprire la pagina di download?</translation>
         <source>No response</source>
         <translation>Nessuna risposta</translation>
     </message>
+    <message>
+        <source>Certificates</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DialogMsgParser</name>
@@ -1232,6 +1247,14 @@ Vuoi aprire la pagina di download?</translation>
     <message>
         <source>502</source>
         <translation>502</translation>
+    </message>
+    <message>
+        <source>Modbus TCP Security (TLS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uses the server certificate configured in Modbus Definitions → Certificates. Client certificates are not required.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2979,6 +3002,13 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
     </message>
 </context>
 <context>
+    <name>ModbusTlsListener</name>
+    <message>
+        <source>TLS is unavailable in this Qt installation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OutputDataWidget</name>
     <message>
         <source>Set Value of %1</source>
@@ -3393,6 +3423,91 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
     <message>
         <source>Responses: %1</source>
         <translation>Risposte: %1</translation>
+    </message>
+</context>
+<context>
+    <name>TlsCertificateStore</name>
+    <message>
+        <source>Generate a server certificate first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the certificate outside the certificate store.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generate a server certificate in Modbus Definitions → Certificates before enabling TLS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The stored TLS server identity is invalid. Generate a new server certificate.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot create the certificate store directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot restrict access to the server private key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TlsCertificatesWidget</name>
+    <message>
+        <source>Server name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host names / IP addresses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DNS names and IP addresses clients use to reach this server, separated by commas.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Valid for (days)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generate…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export certificate…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No server certificate. Generate one to enable TLS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subject: %1
+Host names / IP addresses: %2
+Valid until: %3
+SHA-256: %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace server certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clients will need to trust the new certificate. Replace the existing server certificate?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export server certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PEM certificate (*.pem)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Certificates</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

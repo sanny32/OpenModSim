@@ -1,3 +1,7 @@
+get_filename_component(omodsim_openssl_bin "${OPENSSL_INCLUDE_DIR}/../bin" ABSOLUTE)
+file(GLOB omodsim_openssl_runtime "${omodsim_openssl_bin}/libcrypto-*.dll" "${omodsim_openssl_bin}/libssl-*.dll")
+install(FILES ${omodsim_openssl_runtime} DESTINATION .)
+
 # Windows installation rules
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "C:/Program Files/Open ModSim ${VERSION_MAJOR}" CACHE PATH "Install path prefix" FORCE)
@@ -42,7 +46,7 @@ install(CODE "
         if(\"${Qt6_FOUND}\")
             list(APPEND _windeploy_args
                  --no-system-dxc-compiler
-                 --skip-plugin-types help,generic,networkinformation,qmltooling,tls
+                 --skip-plugin-types help,generic,networkinformation,qmltooling
                  --exclude-plugins qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql)
         elseif(\"${Qt5_FOUND}\")
             list(APPEND _windeploy_args

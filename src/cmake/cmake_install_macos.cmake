@@ -1,3 +1,5 @@
+get_filename_component(omodsim_openssl_lib "${OPENSSL_CRYPTO_LIBRARY}" DIRECTORY)
+
 # macOS installation rules
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "/Applications" CACHE PATH "Install path prefix" FORCE)
@@ -74,9 +76,9 @@ install(CODE "
         execute_process(
             COMMAND \"\${_macdeployqt_executable}\"
                     \"\${_installed_app}\"
+                    \"-libpath=${omodsim_openssl_lib}\"
                     -always-overwrite
                     -verbose=2
-                    \"-libpath=\${_qt_lib_dir}\"
                     \"-codesign=-\"
             RESULT_VARIABLE _macdeployqt_result
         )

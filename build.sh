@@ -332,19 +332,19 @@ get_packages() {
 
     case "$DISTRO" in
         debian-based)
-            general_packages="build-essential cmake ninja-build curl tar gzip libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
+            general_packages="build-essential cmake ninja-build curl tar gzip libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev libssl-dev perl"
             ;;
         rhel-based)
-            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build tar gzip pkgconf-pkg-config xcb-util-cursor-devel"
+            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build tar gzip pkgconf-pkg-config xcb-util-cursor-devel openssl-devel perl"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl tar gzip pkg-config libxcbutil-cursor libcups-devel"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl tar gzip pkg-config libxcbutil-cursor libcups-devel libopenssl-devel perl"
             ;;
         suse-based)
-            general_packages="gcc gcc-c++ cmake ninja curl tar gzip pkg-config libxcb-cursor0"
+            general_packages="gcc gcc-c++ cmake ninja curl tar gzip pkg-config libxcb-cursor0 libopenssl-devel perl"
             ;;
         arch-based)
-            general_packages="base-devel cmake ninja curl tar gzip pkgconf libxcb libcups"
+            general_packages="base-devel cmake ninja curl tar gzip pkgconf libxcb libcups openssl perl"
             ;;
     esac
 
@@ -580,6 +580,18 @@ if verlt "$QT_VERSION" "$MIN_QT_VERSION"; then
     exit 1
 else
     echo "Using Qt $QT_VERSION from: $CMAKE_PREFIX"
+fi
+
+if [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! pkg-config --atleast-version=3 openssl 2>/dev/null; then
+    OPENSSL_TOOLS_ROOT="$TOOLS_DIR/openssl-src"
+    OPENSSL_SOURCE_ROOT="$OPENSSL_TOOLS_ROOT/Tools/OpenSSLv3/src"
+    if [ ! -f "$OPENSSL_SOURCE_ROOT/Configure" ]; then
+        python3 -m venv "$TOOLS_DIR/openssl-aqt"
+        "$TOOLS_DIR/openssl-aqt/bin/python3" -m pip install aqtinstall
+        "$TOOLS_DIR/openssl-aqt/bin/python3" -m aqt install-tool linux desktop tools_opensslv3_src -O "$OPENSSL_TOOLS_ROOT"
+    fi
+    export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl"
+    bash "$PROJECT_DIR/tools/build_openssl.sh" "$OPENSSL_SOURCE_ROOT" "$OPENSSL_ROOT_DIR"
 fi
 
 # ==========================

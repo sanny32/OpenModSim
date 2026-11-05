@@ -1,4 +1,5 @@
 set(UI_FILES
+    widgets/tlscertificateswidget.ui
     widgets/applogoutput.ui
     widgets/bitpatterncontrol.ui
     widgets/consoleoutput.ui
@@ -32,6 +33,10 @@ set(UI_FILES
 )
 
 add_library(omodsim_ui STATIC
+    widgets/elidinglineedit.cpp
+    widgets/elidinglineedit.h
+    widgets/tlscertificateswidget.cpp
+    widgets/tlscertificateswidget.h
     projectformmetadata.cpp
     projectformmetadata.h
     ansimenu.cpp

@@ -19,6 +19,7 @@ endif()
 set(PRODUCT_NAME "Open ModSim")
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/qt.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/openssl.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/project_version.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/ui_normalization.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/help_generator.cmake")

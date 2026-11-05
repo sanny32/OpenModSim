@@ -1,0 +1,16 @@
+name: Install OpenSSL 3
+description: Install the Qt OpenSSL 3 development package and runtime for Windows.
+inputs:
+  architecture:
+    description: Target architecture, x64 or x86.
+    default: x64
+runs:
+  using: composite
+  steps:
+    - name: Install OpenSSL
+      shell: pwsh
+      run: |
+        python -m pip install aqtinstall
+        $root = & ./tools/install_openssl.ps1 -Architecture '${{ inputs.architecture }}'
+        "OPENSSL_ROOT_DIR=$root" >> $env:GITHUB_ENV
+        "$root\bin" >> $env:GITHUB_PATH
