@@ -13,7 +13,7 @@
 #include <QTest>
 #include <QUuid>
 
-#include "jsobjects/server.h"
+#include "scripting/server.h"
 
 class TestServerApi : public QObject
 {

@@ -1,0 +1,125 @@
+add_library(omodsim_core STATIC
+    modbus/datasimulator.cpp
+    modbus/datasimulator.h
+    models/datamapdatamodel.cpp
+    project/legacyprojectparser.cpp
+    scripting/script.cpp
+    scripting/server.cpp
+    scripting/storage.cpp
+    modbus/modbusdataunitmap.cpp
+    modbus/modbuserrorsimulations.cpp
+    modbus/messages/modbusmessage.cpp
+    modbus/modbusmultiserver.cpp
+    modbus/modbusrtuserialserver.cpp
+    modbus/modbusrtutcpserver.cpp
+    modbus/modbusserver.cpp
+    modbus/modbustcpserver.cpp
+    project/projectaddressspacefilter.cpp
+    project/projectaddressspacexml.cpp
+    project/projectcomments.cpp
+    project/projectuserstate.cpp
+    project/projectxmlanchor.cpp
+    validators/qdoublevalidatorex.cpp
+    validators/qhexvalidator.cpp
+    validators/qint64validator.cpp
+    validators/qintvalidatorex.cpp
+    validators/quintvalidator.cpp
+    modbus/rtusnifferparser.cpp
+    scripting/scriptdocument.cpp
+    modbus/enronmodbus.h
+    utils/ansiutils.h
+    models/bufferinglistmodel.h
+    utils/byteorderutils.h
+    modbus/connectiondetails.h
+    models/outputtypes.h
+    models/datamapdatamodel.h
+    project/displaydefinition.h
+    utils/enums.h
+    utils/forcerangeparams.h
+    utils/formatutils.h
+    project/legacyprojectparser.h
+    scripting/script.h
+    scripting/server.h
+    scripting/storage.h
+    modbus/modbusdataunitmap.h
+    modbus/modbusdefinitions.h
+    modbus/modbusexception.h
+    modbus/modbuserrorsimulations.h
+    modbus/modbusfunction.h
+    modbus/modbuslimits.h
+    modbus/messages/diagnostics.h
+    modbus/messages/getcommeventcounter.h
+    modbus/messages/getcommeventlog.h
+    modbus/messages/maskwriteregister.h
+    modbus/messages/modbusmessage.h
+    modbus/messages/modbusmessages.h
+    modbus/messages/readcoils.h
+    modbus/messages/readdiscreteinputs.h
+    modbus/messages/readexceptionstatus.h
+    modbus/messages/readfifoqueue.h
+    modbus/messages/readfilerecord.h
+    modbus/messages/readholdingregisters.h
+    modbus/messages/readinputregisters.h
+    modbus/messages/readwritemultipleregisters.h
+    modbus/messages/reportserverid.h
+    modbus/messages/writefilerecord.h
+    modbus/messages/writemultiplecoils.h
+    modbus/messages/writemultipleregisters.h
+    modbus/messages/writesinglecoil.h
+    modbus/messages/writesingleregister.h
+    modbus/modbusmultiserver.h
+    modbus/modbusrtuserialserver.h
+    modbus/modbusrtutcpserver.h
+    modbus/modbusserver.h
+    modbus/modbustcpserver.h
+    modbus/modbussimulationparams.h
+    modbus/modbuswriteparams.h
+    utils/numericutils.h
+    project/projectaddressspacefilter.h
+    project/projectaddressspacexml.h
+    project/projectcomments.h
+    project/projectuserstate.h
+    project/projectxmlanchor.h
+    project/projectformkind.h
+    project/projectloadresult.h
+    utils/qcountedset.h
+    validators/qdoublevalidatorex.h
+    validators/qhexvalidator.h
+    validators/qint64validator.h
+    validators/qintvalidatorex.h
+    modbus/qmodbusadu.h
+    modbus/qmodbusadurtu.h
+    modbus/qmodbusadutcp.h
+    modbus/qmodbuscommevent.h
+    utils/qrange.h
+    validators/quintvalidator.h
+    modbus/rtusnifferparser.h
+    scripting/scriptdocument.h
+    scripting/scriptsettings.h
+    utils/serialportutils.h
+)
+
+target_include_directories(omodsim_core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/modbus
+    ${CMAKE_CURRENT_SOURCE_DIR}/models
+    ${CMAKE_CURRENT_SOURCE_DIR}/project
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripting
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils
+    ${CMAKE_CURRENT_SOURCE_DIR}/validators
+    ${CMAKE_CURRENT_SOURCE_DIR}/modbus/messages
+)
+
+target_link_libraries(omodsim_core PUBLIC
+    Qt::Core Qt::Gui Qt::Network Qt::Xml Qt::SerialBus Qt::SerialPort Qt::Qml
+)
+
+if(Qt6_FOUND)
+    target_link_libraries(omodsim_core PUBLIC Qt::Core5Compat)
+endif()
+
+omodsim_apply_coverage(omodsim_core)
+
+if(MSVC)
+    target_compile_options(omodsim_core PUBLIC /utf-8)
+endif()

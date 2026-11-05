@@ -1,13 +1,13 @@
 function(omodsim_configure_help_generator target_name)
-    set(JSHELP_INPUT "${PROJECT_SOURCE_DIR}/docs/jshelp.qhcp")
+    set(JSHELP_INPUT "${PROJECT_SOURCE_DIR}/app/docs/jshelp.qhcp")
     set(JSHELP_QHCP "${PROJECT_BINARY_DIR}/docs/jshelp.qhcp")
-    set(JSHELP_QHP "${PROJECT_SOURCE_DIR}/docs/jshelp.qhp")
+    set(JSHELP_QHP "${PROJECT_SOURCE_DIR}/app/docs/jshelp.qhp")
     set(JSHELP_QCH "${PROJECT_BINARY_DIR}/docs/jshelp.qch")
     set(JSHELP_QHC "${PROJECT_BINARY_DIR}/docs/jshelp.qhc")
 
     file(GLOB JSHELP_CONTENT
-        "${PROJECT_SOURCE_DIR}/docs/*.html"
-        "${PROJECT_SOURCE_DIR}/docs/assets/css/*.css"
+        "${PROJECT_SOURCE_DIR}/app/docs/*.html"
+        "${PROJECT_SOURCE_DIR}/app/docs/assets/css/*.css"
     )
 
     file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/docs)

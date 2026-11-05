@@ -7,89 +7,25 @@ function(omodsim_configure_tests)
         find_package(Qt5 REQUIRED COMPONENTS Test)
     endif()
 
-    add_library(omodsim_testable STATIC
-        modbuserrorsimulations.cpp
-        modbusdataunitmap.cpp
-        datamapdatamodel.cpp
-        projectaddressspacexml.cpp
-        projectcomments.cpp
-        projectuserstate.cpp
-        projectxmlanchor.cpp
-        modbusmultiserver.cpp
-        modbusrtuserialserver.cpp
-        modbusrtutcpserver.cpp
-        modbusserver.cpp
-        modbustcpserver.cpp
-        rtusnifferparser.cpp
-        datasimulator.cpp
-        legacyprojectparser.cpp
-        projectaddressspacefilter.cpp
-        recentprojectsprompt.cpp
-        qhexvalidator.cpp
-        qintvalidatorex.cpp
-        qint64validator.cpp
-        quintvalidator.cpp
-        qdoublevalidatorex.cpp
-        modbusmessages/modbusmessage.cpp
-        jsobjects/storage.cpp
-        helpdockpolicy.cpp
-        jsobjects/script.cpp
-        jsobjects/server.cpp
-        controls/consoleoutput.cpp
-        controls/consoleoutput.ui
-        controls/toolbar.cpp
-        styles/themedicons.cpp
-        styles/apptheme.cpp
-        application.cpp
-        apppreferences.cpp
-        modbusmultiserver.cpp
-        modbusserver.cpp
-        modbusrtutcpserver.cpp
-        modbustcpserver.cpp
-        modbusrtuserialserver.cpp
-    )
-
-    target_include_directories(omodsim_testable PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/controls
-        ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
-        ${CMAKE_CURRENT_SOURCE_DIR}/styles
-    )
-
-    target_link_libraries(omodsim_testable PUBLIC
-        Qt::Core
-        Qt::Gui
-        Qt::Widgets
-        Qt::Network
-        Qt::SerialBus
-        Qt::SerialPort
-        Qt::Qml
-    )
-
-    if(Qt6_FOUND)
-        target_link_libraries(omodsim_testable PUBLIC Qt::Core5Compat)
-    endif()
-
-    if(MSVC)
-        target_compile_options(omodsim_testable PUBLIC /utf-8)
-    endif()
-
-    omodsim_apply_coverage(omodsim_testable)
-    set_target_properties(omodsim_testable PROPERTIES FOLDER "Tests")
-
     add_custom_target(omodsim_tests)
     set_target_properties(omodsim_tests PROPERTIES FOLDER "Tests")
 
     function(omodsim_add_test test_name source_file)
-        add_executable(${test_name} tests/${source_file})
+        set(test_library omodsim_core)
+        if(ARGN)
+            set(test_library ${ARGN})
+        endif()
+        add_executable(${test_name} ${source_file})
         target_link_libraries(${test_name} PRIVATE
-            omodsim_testable
+            ${test_library}
+            Qt::Widgets
             Qt::Test
         )
         omodsim_apply_coverage(${test_name})
         set_target_properties(${test_name} PROPERTIES FOLDER "Tests")
         add_dependencies(omodsim_tests ${test_name})
         add_test(NAME ${test_name} COMMAND ${test_name})
+        set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
     endfunction()
 
     omodsim_add_test(omodsim_tests_numericutils         test_numericutils.cpp)
@@ -111,63 +47,28 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_simulationparams     test_simulationparams.cpp)
     omodsim_add_test(omodsim_tests_storage              test_storage.cpp)
     omodsim_add_test(omodsim_tests_script               test_script.cpp)
-    omodsim_add_test(omodsim_tests_consoleoutput        test_consoleoutput.cpp)
+    omodsim_add_test(omodsim_tests_consoleoutput        test_consoleoutput.cpp omodsim_ui)
     omodsim_add_test(omodsim_tests_serverapi            test_server_api.cpp)
-    omodsim_add_test(omodsim_tests_helpdockpolicy       test_helpdockpolicy.cpp)
+    omodsim_add_test(omodsim_tests_helpdockpolicy       test_helpdockpolicy.cpp omodsim_ui)
     omodsim_add_test(omodsim_tests_legacyprojectparser  test_legacyprojectparser.cpp)
     omodsim_add_test(omodsim_tests_projectaddressspacefilter test_projectaddressspacefilter.cpp)
     omodsim_add_test(omodsim_tests_projectaddressspacexml test_projectaddressspacexml.cpp)
     omodsim_add_test(omodsim_tests_projectcomments      test_projectcomments.cpp)
     omodsim_add_test(omodsim_tests_projectuserstate     test_projectuserstate.cpp)
     omodsim_add_test(omodsim_tests_connectiondetails     test_connectiondetails.cpp)
-    omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp)
+    omodsim_add_test(omodsim_tests_recentprojectsprompt  test_recentprojectsprompt.cpp omodsim_ui)
     omodsim_add_test(omodsim_tests_modbusserver          test_modbusserver.cpp)
     omodsim_add_test(omodsim_tests_modbustransports      test_modbustransports.cpp)
     omodsim_add_test(omodsim_tests_rtusnifferparser      test_rtusnifferparser.cpp)
 
-    set(omodsim_app_test_sources ${SOURCES})
-    list(REMOVE_ITEM omodsim_app_test_sources main.cpp)
     add_executable(omodsim_tests_appproject
-        tests/test_appproject.cpp
-        resources.qrc
-        ${omodsim_app_test_sources}
-        ${HEADERS}
-        ${UI_FILES}
+        test_appproject.cpp
+        "${PROJECT_SOURCE_DIR}/app/resources.qrc"
     )
-    target_include_directories(omodsim_tests_appproject PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/controls
-        ${CMAKE_CURRENT_SOURCE_DIR}/styles
-        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-        ${CMAKE_CURRENT_SOURCE_DIR}/jsobjects
-        ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
-    )
-    target_precompile_headers(omodsim_tests_appproject PRIVATE pch.h)
-    target_link_libraries(omodsim_tests_appproject PRIVATE
-        Qt::Test
-        Qt::Widgets
-        Qt::Network
-        Qt::Xml
-        Qt::PrintSupport
-        Qt::SerialBus
-        Qt::SerialPort
-        Qt::Qml
-        Qt::Help
-        Qt::Svg
-    )
-    if(Qt6_FOUND)
-        target_link_libraries(omodsim_tests_appproject PRIVATE Qt::Core5Compat)
-    endif()
+    target_link_libraries(omodsim_tests_appproject PRIVATE omodsim_ui Qt::Test)
+    omodsim_apply_coverage(omodsim_tests_appproject)
     target_compile_definitions(omodsim_tests_appproject PRIVATE
-        APP_NAME="Open ModSim Test"
-        APP_PRODUCT_NAME="Open ModSim"
-        APP_DESCRIPTION="Open ModSim tests"
-        APP_VERSION_MAJOR="2"
-        APP_VERSION_MINOR="0"
-        APP_VERSION_PATCH="0"
-        APP_VERSION="2.0.0-test"
-        BUILD_YEAR="2026"
-        OMODSIM_DEMOS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../demos/projects"
+        OMODSIM_DEMOS_DIR="${PROJECT_SOURCE_DIR}/../demos/projects"
     )
     if(MSVC)
         target_compile_options(omodsim_tests_appproject PRIVATE /utf-8)
@@ -175,4 +76,5 @@ function(omodsim_configure_tests)
     set_target_properties(omodsim_tests_appproject PROPERTIES FOLDER "Tests")
     add_dependencies(omodsim_tests omodsim_tests_appproject)
     add_test(NAME omodsim_tests_appproject COMMAND omodsim_tests_appproject)
+    set_tests_properties(omodsim_tests_appproject PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endfunction()

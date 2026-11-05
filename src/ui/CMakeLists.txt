@@ -1,0 +1,258 @@
+set(UI_FILES
+    widgets/applogoutput.ui
+    widgets/bitpatterncontrol.ui
+    widgets/consoleoutput.ui
+    widgets/findreplacebar.ui
+    widgets/jscriptcontrol.ui
+    widgets/mdiareaex.ui
+    widgets/outputdatawidget.ui
+    widgets/outputpanel.ui
+    widgets/outputtrafficwidget.ui
+    widgets/statisticwidget.ui
+    dialogs/dialogabout.ui
+    dialogs/dialogautosimulation.ui
+    dialogs/dialogcoilsimulation.ui
+    dialogs/dialogforcemultipleregisters.ui
+    dialogs/dialogforcestatusregisters.ui
+    dialogs/dialogmodbusdefinitions.ui
+    dialogs/dialogmsgparser.ui
+    dialogs/dialogpreferences.ui
+    dialogs/dialogprintsettings.ui
+    dialogs/dialogselectserviceport.ui
+    dialogs/dialogsetupserialport.ui
+    dialogs/dialogwelcome.ui
+    dialogs/dialogwindowsmanager.ui
+    dialogs/dialogwriteregister.ui
+    dialogs/dialogwritestatusregister.ui
+    formdatamapview.ui
+    formdataview.ui
+    formscriptview.ui
+    formtrafficview.ui
+    mainwindow.ui
+)
+
+add_library(omodsim_ui STATIC
+    projectformmetadata.cpp
+    projectformmetadata.h
+    ansimenu.cpp
+    application.cpp
+    applogger.cpp
+    apppreferences.cpp
+    appproject.cpp
+    cmdlineparser.cpp
+    widgets/aboutdatawidget.cpp
+    widgets/addressbasecombobox.cpp
+    widgets/addressspacecombobox.cpp
+    widgets/applogoutput.cpp
+    widgets/bitnumberlabel.cpp
+    widgets/bitpatterncontrol.cpp
+    widgets/booleancombobox.cpp
+    widgets/bytelisttextedit.cpp
+    widgets/checkablegroupbox.cpp
+    widgets/clickablelabel.cpp
+    widgets/coloredpushbutton.cpp
+    widgets/coloredtoolbutton.cpp
+    widgets/consoleoutput.cpp
+    widgets/customframe.cpp
+    widgets/customlineedit.cpp
+    widgets/findreplacebar.cpp
+    widgets/flowcontroltypecombobox.cpp
+    widgets/funccodefiltercombobox.cpp
+    widgets/helpbrowser.cpp
+    widgets/helpwidget.cpp
+    widgets/jscodeeditor.cpp
+    widgets/jscriptcontrol.cpp
+    widgets/macsplittoolbutton.cpp
+    widgets/mainstatusbar.cpp
+    widgets/mdiarea.cpp
+    widgets/mdiareaex.cpp
+    widgets/mditabbar.cpp
+    widgets/modbuslogwidget.cpp
+    widgets/modbusmessagewidget.cpp
+    widgets/numericcombobox.cpp
+    widgets/numericlineedit.cpp
+    widgets/outputdatawidget.cpp
+    widgets/outputpanel.cpp
+    widgets/outputtrafficwidget.cpp
+    widgets/paritytypecombobox.cpp
+    widgets/pointtypecombobox.cpp
+    widgets/projecttreewidget.cpp
+    widgets/runmodecombobox.cpp
+    widgets/scripteditorwindow.cpp
+    widgets/searchlineedit.cpp
+    widgets/simulationmodecombobox.cpp
+    widgets/statisticwidget.cpp
+    widgets/toolbar.cpp
+    widgets/trafficlogwindow.cpp
+    widgets/transpscrollarea.cpp
+    datadelegate.cpp
+    dialogs/dialogabout.cpp
+    dialogs/dialogautosimulation.cpp
+    dialogs/dialogcoilsimulation.cpp
+    dialogs/dialogforcemultipleregisters.cpp
+    dialogs/dialogforcestatusregisters.cpp
+    dialogs/dialogmodbusdefinitions.cpp
+    dialogs/dialogmsgparser.cpp
+    dialogs/dialogpreferences.cpp
+    dialogs/dialogprintsettings.cpp
+    dialogs/dialogselectserviceport.cpp
+    dialogs/dialogsetupserialport.cpp
+    dialogs/dialogwelcome.cpp
+    dialogs/dialogwindowsmanager.cpp
+    dialogs/dialogwriteregister.cpp
+    dialogs/dialogwritestatusregister.cpp
+    formdatamapview.cpp
+    formdataview.cpp
+    formscriptview.cpp
+    formtrafficview.cpp
+    htmldelegate.cpp
+    jscompleter.cpp
+    jshighlighter.cpp
+    legacyprojectloader.cpp
+    helpdockpolicy.cpp
+    mainwindow.cpp
+    menuconnect.cpp
+    scripting/console.cpp
+    projectformmanager.cpp
+    projectformxml.cpp
+    projectserializer.cpp
+    projectsplitcontroller.cpp
+    registerwritecontroller.cpp
+    qadjustedsizedialog.cpp
+    qfixedsizedialog.cpp
+    recentprojectsprompt.cpp
+    style/appstyle.cpp
+    style/apptheme.cpp
+    style/macappstyle.cpp
+    style/qlementineappstyle.cpp
+    style/themedicons.cpp
+    updatechecker.cpp
+    ansimenu.h
+    application.h
+    applogger.h
+    apppreferences.h
+    appproject.h
+    apptrace.h
+    cmdlineparser.h
+    widgets/aboutdatawidget.h
+    widgets/addressbasecombobox.h
+    widgets/addressspacecombobox.h
+    widgets/applogoutput.h
+    widgets/bitnumberlabel.h
+    widgets/bitpatterncontrol.h
+    widgets/booleancombobox.h
+    widgets/bytelisttextedit.h
+    widgets/checkablegroupbox.h
+    widgets/clickablelabel.h
+    widgets/coloredpushbutton.h
+    widgets/coloredtoolbutton.h
+    widgets/consoleoutput.h
+    widgets/customframe.h
+    widgets/customlineedit.h
+    widgets/findreplacebar.h
+    widgets/flowcontroltypecombobox.h
+    widgets/funccodefiltercombobox.h
+    widgets/helpbrowser.h
+    widgets/helpwidget.h
+    widgets/jscodeeditor.h
+    widgets/jscriptcontrol.h
+    widgets/macsplittoolbutton.h
+    widgets/mainstatusbar.h
+    widgets/mdiarea.h
+    widgets/mdiareaex.h
+    widgets/mditabbar.h
+    widgets/modbuslogwidget.h
+    widgets/modbusmessagewidget.h
+    widgets/numericcombobox.h
+    widgets/numericlineedit.h
+    widgets/outputdatawidget.h
+    widgets/outputpanel.h
+    widgets/outputtrafficwidget.h
+    widgets/paritytypecombobox.h
+    widgets/pointtypecombobox.h
+    widgets/projecttreewidget.h
+    widgets/runmodecombobox.h
+    widgets/scripteditorwindow.h
+    widgets/searchlineedit.h
+    widgets/simulationmodecombobox.h
+    widgets/statisticwidget.h
+    widgets/toolbar.h
+    widgets/trafficlogwindow.h
+    widgets/transpscrollarea.h
+    datadelegate.h
+    dialogs/dialogabout.h
+    dialogs/dialogautosimulation.h
+    dialogs/dialogcoilsimulation.h
+    dialogs/colorswatch.h
+    dialogs/dialogforcemultipleregisters.h
+    dialogs/dialogforcestatusregisters.h
+    dialogs/dialogmodbusdefinitions.h
+    dialogs/dialogmsgparser.h
+    dialogs/dialogpreferences.h
+    dialogs/dialogprintsettings.h
+    dialogs/dialogselectserviceport.h
+    dialogs/dialogsetupserialport.h
+    dialogs/dialogwelcome.h
+    dialogs/dialogwindowsmanager.h
+    dialogs/dialogwriteregister.h
+    dialogs/dialogwritestatusregister.h
+    fontutils.h
+    formdatamapview.h
+    formdataview.h
+    formscriptview.h
+    formtrafficview.h
+    htmldelegate.h
+    jscompleter.h
+    jshighlighter.h
+    legacyprojectloader.h
+    scripting/console.h
+    helpdockpolicy.h
+    mainwindow.h
+    menuconnect.h
+    projectformmanager.h
+    projectformxml.h
+    projectserializer.h
+    projectsplitcontroller.h
+    registerwritecontroller.h
+    qadjustedsizedialog.h
+    qfixedsizedialog.h
+    recentprojectsprompt.h
+    translationutils.h
+    uiutils.h
+    style/appcolors.h
+    style/appstyle.h
+    style/apptheme.h
+    style/macappstyle.h
+    style/qlementineappstyle.h
+    style/themedicons.h
+    updatechecker.h
+    ${UI_FILES}
+)
+
+target_include_directories(omodsim_ui PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
+    ${CMAKE_CURRENT_SOURCE_DIR}/style
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripting
+)
+
+target_link_libraries(omodsim_ui PUBLIC
+    omodsim_core Qt::Widgets Qt::PrintSupport Qt::Help Qt::Svg
+)
+
+omodsim_configure_qt_target(omodsim_ui)
+
+omodsim_apply_coverage(omodsim_ui)
+
+if(MSVC)
+    target_compile_options(omodsim_ui PUBLIC /utf-8)
+endif()
+
+target_compile_definitions(omodsim_ui PUBLIC ${OMODSIM_APP_DEFINITIONS})
+
+target_precompile_headers(omodsim_ui PRIVATE "${PROJECT_SOURCE_DIR}/cmake/pch.h")
+
+omodsim_configure_qlementine_app_style(omodsim_ui)
+
+omodsim_configure_ui_enum_normalization(omodsim_ui)

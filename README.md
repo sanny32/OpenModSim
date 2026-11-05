@@ -163,6 +163,22 @@ The following minimum operating system versions are supported for OpenModSim:
 - <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
 - <img src="docs/icons/logo_arch.svg" width="16" height="16" /> **Arch** (manual building only)
 
+# Project structure
+
+The CMake project lives in `src/` and is split into reusable libraries and the application entry point:
+
+```text
+src/
+├── app/        # Executable, resources, translations, help and platform metadata
+├── core/       # Modbus, simulation, models, project data, scripting and utilities
+├── ui/         # Main window, project workflows, widgets, dialogs and styles
+├── tests/      # Qt Test suites linked to the production libraries
+└── cmake/      # Build, packaging and test configuration
+```
+
+`omodsim_ui` links to `omodsim_core`; the `omodsim` executable links to `omodsim_ui`.
+The core library does not depend on Qt Widgets. Each layer has its own `CMakeLists.txt`.
+
 # Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 

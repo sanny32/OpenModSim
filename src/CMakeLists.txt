@@ -13,7 +13,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+if(NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+endif()
 set(PRODUCT_NAME "Open ModSim")
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/qt.cmake")
@@ -31,14 +33,9 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/tests.cmake")
 
 option(OMODSIM_BUILD_TESTS "Build the unit tests" ON)
 
-# Define target
-add_executable(${PROJECT_NAME})
-
 omodsim_apply_project_version_suffix()
-omodsim_generate_files()
 
-# Target compile definitions
-target_compile_definitions(${PROJECT_NAME} PRIVATE
+set(OMODSIM_APP_DEFINITIONS
     APP_NAME="${PRODUCT_NAME} ${VERSION_MAJOR}"
     APP_PRODUCT_NAME="${PRODUCT_NAME}"
     APP_DESCRIPTION="${PROJECT_DESCRIPTION}"
@@ -49,49 +46,15 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     BUILD_YEAR="${CURRENT_YEAR}"
 )
 
-# Include directories
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/controls
-    ${CMAKE_CURRENT_SOURCE_DIR}/styles
-    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-    ${CMAKE_CURRENT_SOURCE_DIR}/jsobjects
-    ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
-)
-
-include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
-omodsim_configure_ui_enum_normalization(${PROJECT_NAME})
-
-target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
-target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help Qt::Svg)
-
-omodsim_configure_qt_target(${PROJECT_NAME})
-omodsim_configure_qlementine_app_style(${PROJECT_NAME})
-
-include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/translations.cmake")
-
-if(WIN32)
-    omodsim_configure_target_windows(${PROJECT_NAME})
-elseif(APPLE)
-    omodsim_configure_target_macos(${PROJECT_NAME})
-elseif(LINUX)
-    omodsim_configure_target_linux(${PROJECT_NAME})
-endif()
-
-omodsim_configure_help_generator(${PROJECT_NAME})
-omodsim_configure_uninstall_target()
-
-# Installation rules
-if(WIN32)
-    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_install_windows.cmake")
-elseif(APPLE)
-    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_install_macos.cmake")
-elseif(LINUX)
-    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_install_linux.cmake")
-endif()
-
 if(OMODSIM_BUILD_TESTS)
     enable_testing()
-    omodsim_configure_tests()
 endif()
+
+add_subdirectory(core)
+add_subdirectory(ui)
+add_subdirectory(app)
+if(OMODSIM_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
+
+omodsim_configure_uninstall_target()

@@ -16,7 +16,7 @@ install(CODE "
     set(_installed_app \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.app\")
     set(_resources_dir \"\${_installed_app}/Contents/Resources\")
     set(_docs_source \"${PROJECT_BINARY_DIR}/docs\")
-    set(_demos_source \"${CMAKE_CURRENT_SOURCE_DIR}/../demos\")
+    set(_demos_source \"${PROJECT_SOURCE_DIR}/../demos\")
 
     if(NOT EXISTS \"\${_installed_app}\")
         message(FATAL_ERROR \"Installed app bundle not found: \${_installed_app}\")
