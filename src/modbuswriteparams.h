@@ -11,6 +11,7 @@
 
 #include <QVariant>
 #include "enums.h"
+#include "enronmodbus.h"
 
 class ModbusMultiServer;
 
@@ -30,6 +31,7 @@ struct ModbusWriteParams
     bool ZeroBasedAddress;
     bool LeadingZeros = false;
     ModbusMultiServer* Server = nullptr;
+    EnronModbus::RegisterType EnronType = EnronModbus::RegisterType::None;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)
 

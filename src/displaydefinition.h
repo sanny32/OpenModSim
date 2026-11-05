@@ -14,6 +14,7 @@
 #include <QXmlStreamWriter>
 #include <QSet>
 #include "modbuslimits.h"
+#include "enronmodbus.h"
 #include "modbusserver.h"
 #include "scriptsettings.h"
 
@@ -27,6 +28,7 @@ struct DataViewDefinitions
     quint16 PointAddress = 1;
     QModbusDataUnit::RegisterType PointType = QModbusDataUnit::HoldingRegisters;
     quint16 Length = 100;
+    EnronModbus::RegisterType EnronType = EnronModbus::RegisterType::None;
     quint16 DataViewColumnsDistance = 16;
     bool LeadingZeros = true;
 
@@ -38,6 +40,9 @@ struct DataViewDefinitions
         // address base, which this struct does not know. FormDataView clamps it
         // against the current base when the definition is applied.
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
+        if (PointType != QModbusDataUnit::HoldingRegisters
+            || EnronType < EnronModbus::RegisterType::None || EnronType > EnronModbus::RegisterType::Group7x)
+            EnronType = EnronModbus::RegisterType::None;
         Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length,
                                  static_cast<quint16>(ModbusLimits::lengthRange().to()));
 
@@ -51,6 +56,7 @@ struct DataViewDefinitions
             && PointAddress == o.PointAddress
             && PointType == o.PointType
             && Length == o.Length
+            && EnronType == o.EnronType
             && DataViewColumnsDistance == o.DataViewColumnsDistance
             && LeadingZeros == o.LeadingZeros;
     }
@@ -146,6 +152,7 @@ inline QSettings& operator <<(QSettings& out, const DataViewDefinitions& dd)
     out.setValue("DataViewDefinitions/DeviceId",              dd.DeviceId);
     out.setValue("DataViewDefinitions/PointAddress",          dd.PointAddress);
     out.setValue("DataViewDefinitions/PointType",             dd.PointType);
+    out.setValue("DataViewDefinitions/EnronType", static_cast<int>(dd.EnronType));
     out.setValue("DataViewDefinitions/Length",                dd.Length);
     out.setValue("DataViewDefinitions/DataViewColumnSpace",   dd.DataViewColumnsDistance);
     out.setValue("DataViewDefinitions/LeadingZeros",          dd.LeadingZeros);
@@ -194,6 +201,7 @@ inline QSettings& operator >>(QSettings& in, DataViewDefinitions& dd)
     dd.DeviceId = in.value("DataViewDefinitions/DeviceId", 1).toUInt();
     dd.PointAddress = in.value("DataViewDefinitions/PointAddress", 1).toUInt();
     dd.PointType = (QModbusDataUnit::RegisterType)in.value("DataViewDefinitions/PointType", 4).toUInt();
+    dd.EnronType = static_cast<EnronModbus::RegisterType>(in.value("DataViewDefinitions/EnronType", 0).toInt());
     dd.Length = in.value("DataViewDefinitions/Length", 100).toUInt();
     dd.DataViewColumnsDistance = in.value("DataViewDefinitions/DataViewColumnSpace", 16).toUInt();
     dd.LeadingZeros = in.value("DataViewDefinitions/LeadingZeros", true).toBool();
@@ -247,6 +255,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DataViewDefini
     xml.writeAttribute("DeviceId", QString::number(dd.DeviceId));
     xml.writeAttribute("PointType", enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
     xml.writeAttribute("PointAddress", QString::number(dd.PointAddress));
+    if (dd.EnronType != EnronModbus::RegisterType::None)
+        xml.writeAttribute("EnronType", QString::number(static_cast<int>(dd.EnronType)));
     xml.writeAttribute("Length", QString::number(dd.Length));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
@@ -313,6 +323,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DataViewDefinitions&
             bool ok; const quint16 pointAddress = attributes.value("PointAddress").toUShort(&ok);
             if (ok) dd.PointAddress = pointAddress;
         }
+
+        dd.EnronType = static_cast<EnronModbus::RegisterType>(attributes.value("EnronType").toInt());
 
         if (attributes.hasAttribute("Length")) {
             bool ok; const quint16 length = attributes.value("Length").toUShort(&ok);

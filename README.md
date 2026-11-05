@@ -50,27 +50,13 @@ The following simulations are available:
 # Enron Modbus
 
 Enable **Enron Modbus (32-bit registers)** in **Modbus Definitions → General**.
-The setting applies to all server transports and is saved with the project.
-Standard Modbus remains the default for existing projects.
+The setting is saved with the project.
 
-Enron protocol addresses are used directly: 5001–5999 contain 32-bit integers,
-and 7001–7999 contain IEEE 754 floats. Other register addresses retain 16-bit
-values within the selected 5/6-digit address space. Requests exceeding that
-capacity or crossing a 16/32-bit range boundary are rejected. The address-space
-setting does not shift or scale the Enron ranges.
-Coils and discrete inputs retain their usual addressing.
+Select **Enron Registers 5x** or **7x** and enter the full protocol address
+and a count. For example, address **7001**, count **2** exposes **7001–7002**.
 
-The existing tables and script API store 16-bit words. For either 32-bit range,
-Enron address `A` uses table words `B + 2 * (A - B)` and the next word, where
-`B` is 5001 or 7001. Select zero-based table addresses. For example, Enron float
-7002 uses table words 7003–7004; set them to `0x3F80` and `0x0000` for 1.0.
-Use a 32-bit table display format with the high word and high byte first.
-
-Functions 03, 04, 06, 16 and 23 support these register widths. A single read can
-return up to 62 32-bit values; function 16 can write up to 61, and function 23
-can write up to 60. Mask writes and FIFO reads are unavailable for 32-bit
-addresses. Enron event logs, historical records and device-specific extensions
-are outside this implementation.
+Supported 32-bit ranges are **5001–5999** and **7001–7999**. Choose the display
+format separately in the toolbar. Event and history logs are not supported.
 
 # Modbus Logging
 

@@ -150,6 +150,9 @@ private slots:
     void on_dataViewFlushTimeout();
 
 private:
+    void updateRegisterControls(const DataViewDefinitions& dd);
+    QRange<int> registerAddressRange() const;
+    QRange<int> registerLengthRange(int address) const;
     void updateStatus();
     void refreshDisplayedData();
     void reapplyFind();
@@ -170,6 +173,8 @@ private:
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
     bool _initialMapSynced = false;
+    bool _zeroBasedAddress = false;
+    EnronModbus::RegisterType _enronType = EnronModbus::RegisterType::None;
     FindReplaceBar* _findReplaceBar = nullptr;
     QTimer* _dataViewFlushTimer = nullptr;
 
@@ -246,10 +251,10 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
+    frm->setDisplayDefinition(displayDefinition);
     frm->setDataType(dataType);
     frm->setRegisterOrder(regOrder);
     frm->setByteOrder(byteOrder);
-    frm->setDisplayDefinition(displayDefinition);
     frm->setCodepage(in.value("Codepage").toString());
 
     for(auto it = descriptionMap.cbegin(); it != descriptionMap.cend(); ++it)

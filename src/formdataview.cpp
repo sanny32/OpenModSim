@@ -82,6 +82,7 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
+    ui->comboBoxModbusPointType->setEnronEnabled(mbDefs.EnronModbus);
 
     ui->lineEditAddress->setLeadingZeroes(false);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, false));
@@ -239,6 +240,7 @@ void FormDataView::changeEvent(QEvent* e)
     {
         ui->retranslateUi(this);
         updateStatus();
+        updateSettingsControls();
     }
 
     QWidget::changeEvent(e);
@@ -275,6 +277,11 @@ DataViewDefinitions FormDataView::displayDefinition() const
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
+    dd.EnronType = _enronType;
+    if (_enronType != EnronModbus::RegisterType::None) {
+        dd.PointAddress = EnronModbus::wordAddress(_enronType, dd.PointAddress) + (zeroBasedAddress() ? 0 : 1);
+        dd.Length *= 2;
+    }
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
     dd.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
 
@@ -290,37 +297,68 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     if(!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
 
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    const auto addressRange = ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress());
-    const auto pointAddress = static_cast<quint16>(qBound(addressRange.from(), static_cast<int>(dd.PointAddress), addressRange.to()));
-
     ui->lineEditDeviceId->setLeadingZeroes(false);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 
     {
-        QSignalBlocker b(ui->lineEditAddress);
-        ui->lineEditAddress->setLeadingZeroes(false);
-        ui->lineEditAddress->setInputRange(addressRange);
-        ui->lineEditAddress->setValue(pointAddress);
-    }
-    {
-        QSignalBlocker b(ui->lineEditLength);
-        ui->lineEditLength->setLeadingZeroes(false);
-        ui->lineEditLength->setInputRange(lengthRangeForPointType(pointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
-        ui->lineEditLength->setValue(dd.Length);
-    }
-    {
         QSignalBlocker b(ui->checkBoxLeadingZeros);
         ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
     }
-    {
-        QSignalBlocker b(ui->comboBoxModbusPointType);
-        ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
-    }
+    updateRegisterControls(dd);
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
 
     updateSettingsControls();
     emit definitionChanged();
+}
+
+///
+/// \brief Limits logical Enron input to the selected register group.
+///
+QRange<int> FormDataView::registerAddressRange() const
+{
+    if (_enronType == EnronModbus::RegisterType::None)
+        return ModbusLimits::addressRange(_mbMultiServer.getModbusDefinitions().AddrSpace, zeroBasedAddress());
+    const int base = EnronModbus::baseAddress(_enronType);
+    return {base, base + EnronModbus::RangeLength - 1};
+}
+
+///
+/// \brief Bounds the visible count before converting Enron registers to backing words.
+///
+QRange<int> FormDataView::registerLengthRange(int address) const
+{
+    if (_enronType == EnronModbus::RegisterType::None)
+        return lengthRangeForPointType(address, zeroBasedAddress(), _mbMultiServer.getModbusDefinitions().AddrSpace,
+                                       ui->comboBoxModbusPointType->currentPointType());
+    return {1, qMin(100, registerAddressRange().to() - address + 1)};
+}
+
+///
+/// \brief Presents logical Enron addresses and counts while retaining word-based storage definitions.
+///
+void FormDataView::updateRegisterControls(const DataViewDefinitions& dd)
+{
+    QSignalBlocker addressBlocker(ui->lineEditAddress);
+    QSignalBlocker lengthBlocker(ui->lineEditLength);
+    QSignalBlocker typeBlocker(ui->comboBoxModbusPointType);
+    _enronType = dd.PointType == QModbusDataUnit::HoldingRegisters ? dd.EnronType : EnronModbus::RegisterType::None;
+    ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
+    ui->comboBoxModbusPointType->setCurrentEnronType(_enronType);
+    int address = dd.PointAddress;
+    int count = dd.Length;
+    if (_enronType != EnronModbus::RegisterType::None) {
+        // Both address bases identify the same aligned word pair.
+        address = EnronModbus::registerAddress(_enronType, address);
+        count = qMax(1, count / 2);
+    }
+    const auto range = registerAddressRange();
+    address = qBound(range.from(), address, range.to());
+    ui->lineEditAddress->setLeadingZeroes(false);
+    ui->lineEditAddress->setInputRange(range);
+    ui->lineEditAddress->setValue(address);
+    ui->lineEditLength->setLeadingZeroes(false);
+    ui->lineEditLength->setInputRange(registerLengthRange(address));
+    ui->lineEditLength->setValue(qBound(1, count, registerLengthRange(address).to()));
 }
 
 ///
@@ -347,7 +385,7 @@ RegisterOrder FormDataView::registerOrder() const
 ///
 bool FormDataView::zeroBasedAddress() const
 {
-    return ui->lineEditAddress->range<int>().from() == 0;
+    return _zeroBasedAddress;
 }
 
 ///
@@ -362,6 +400,8 @@ void FormDataView::setAddressBase(AddressBase base)
 
     auto dd = displayDefinition();
     dd.PointAddress = zeroBased ? qMax(0, dd.PointAddress - 1) : qMax(1, dd.PointAddress + 1);
+
+    _zeroBasedAddress = zeroBased;
 
     // Switch address base first so setDisplayDefinitionSilent() uses the new base
     // when recalculating input ranges.
@@ -798,10 +838,6 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
     if(!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
 
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    const auto addressRange = ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress());
-    const auto pointAddress = static_cast<quint16>(qBound(addressRange.from(), static_cast<int>(dd.PointAddress), addressRange.to()));
-
     // Handle device ID change (reference counting in server).
     {
         QSignalBlocker b(ui->lineEditDeviceId);
@@ -817,26 +853,11 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
     }
 
     {
-        QSignalBlocker b(ui->lineEditAddress);
-        ui->lineEditAddress->setLeadingZeroes(false);
-        ui->lineEditAddress->setInputRange(addressRange);
-        ui->lineEditAddress->setValue(pointAddress);
-    }
-    {
-        QSignalBlocker b(ui->lineEditLength);
-        ui->lineEditLength->setLeadingZeroes(false);
-        ui->lineEditLength->setInputRange(lengthRangeForPointType(pointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
-        ui->lineEditLength->setValue(dd.Length);
-    }
-    {
-        QSignalBlocker b(ui->comboBoxModbusPointType);
-        ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
-    }
-    {
         QSignalBlocker b(ui->checkBoxLeadingZeros);
         ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
     }
 
+    updateRegisterControls(dd);
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     updateSettingsControls();
 
@@ -961,18 +982,10 @@ void FormDataView::showFind()
 ///
 void FormDataView::on_lineEditAddress_valueChanged(const QVariant&)
 {
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    const bool zeroBased = zeroBasedAddress();
-    const int address = ui->lineEditAddress->value<int>();
-    const auto lenRange = lengthRangeForPointType(address, zeroBased, defs.AddrSpace, ui->comboBoxModbusPointType->currentPointType());
-
-    ui->lineEditLength->setInputRange(lenRange);
-    if(ui->lineEditLength->value<int>() > lenRange.to()) {
-        ui->lineEditLength->setValue(lenRange.to());
-        ui->lineEditLength->update();
-    }
-
-   emit definitionChanged();
+    const auto range = registerLengthRange(ui->lineEditAddress->value<int>());
+    ui->lineEditLength->setInputRange(range);
+    ui->lineEditLength->setValue(qBound(range.from(), ui->lineEditLength->value<int>(), range.to()));
+    emit definitionChanged();
 }
 
 ///
@@ -1000,20 +1013,20 @@ void FormDataView::on_lineEditDeviceId_valueChanged(const QVariant& oldValue, co
 ///
 void FormDataView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    const bool zeroBased = zeroBasedAddress();
-    const int address = ui->lineEditAddress->value<int>();
-    const auto lenRange = lengthRangeForPointType(address, zeroBased, defs.AddrSpace, type);
-
-    ui->lineEditLength->setInputRange(lenRange);
-    if(ui->lineEditLength->value<int>() > lenRange.to()) {
-        ui->lineEditLength->setValue(lenRange.to());
-        ui->lineEditLength->update();
+    auto dd = displayDefinition();
+    const auto selected = ui->comboBoxModbusPointType->currentEnronType();
+    const bool groupChanged = selected != _enronType;
+    if (selected != EnronModbus::RegisterType::None && selected != _enronType) {
+        dd.PointAddress = EnronModbus::baseAddress(selected) + (zeroBasedAddress() ? 0 : 1);
+        if (_enronType == EnronModbus::RegisterType::None)
+            dd.Length = qMin<int>(dd.Length, 100) * 2;
     }
-
-    emit definitionChanged();
+    dd.EnronType = selected;
+    dd.PointType = type;
+    setDisplayDefinition(dd);
+    if (groupChanged && selected != EnronModbus::RegisterType::None)
+        setDataType(selected == EnronModbus::RegisterType::Group5x ? DataType::Int32 : DataType::Float32);
     emit pointTypeChanged(type);
-    updateDisplayBar();
 }
 
 ///
@@ -1084,6 +1097,7 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
     params.ZeroBasedAddress = zeroBasedAddress();
     params.LeadingZeros = dd.LeadingZeros;
     params.Server = &_mbMultiServer;
+    params.EnronType = _enronType;
 
     switch(pointType)
     {
@@ -1149,14 +1163,14 @@ void FormDataView::refreshDisplayedData()
 ///
 void FormDataView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 {
-    const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress()));
-    ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
-    ui->outputWidget->setup(dd, zeroBasedAddress(), defs.AddrSpace,
-                           _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
-    syncDescriptionsFromServer();
-    reapplyFind();
+    auto dd = displayDefinition();
+    {
+        QSignalBlocker blocker(ui->comboBoxModbusPointType);
+        ui->comboBoxModbusPointType->setEnronEnabled(defs.EnronModbus);
+    }
+    if (!defs.EnronModbus)
+        dd.EnronType = EnronModbus::RegisterType::None;
+    setDisplayDefinition(dd);
 }
 
 ///
@@ -1308,6 +1322,9 @@ void FormDataView::setupDisplayBar()
 ///
 void FormDataView::updateSettingsControls()
 {
+    const bool enron = _enronType != EnronModbus::RegisterType::None;
+    ui->labelAddress->setText(enron ? tr("Enron Address:") : tr("Starting Address:"));
+    ui->labelLength->setText(enron ? tr("Register Count:") : tr("Length:"));
     {
         QSignalBlocker blocker(ui->checkBoxLeadingZeros);
         ui->checkBoxLeadingZeros->setChecked(displayDefinition().LeadingZeros);
@@ -1393,6 +1410,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
     xml.writeAttribute("DeviceId", QString::number(dd.DeviceId));
     xml.writeAttribute("PointType", enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
     xml.writeAttribute("PointAddress", QString::number(dd.PointAddress));
+    if (dd.EnronType != EnronModbus::RegisterType::None)
+        xml.writeAttribute("EnronType", QString::number(static_cast<int>(dd.EnronType)));
     xml.writeAttribute("Length", QString::number(dd.Length));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));

@@ -46,6 +46,7 @@ private slots:
 
 private:
     void updateSimulationButton();
+    int registerAddress() const;
     void updateValue();
 
 private:
@@ -54,6 +55,7 @@ private:
 private:
     ModbusWriteParams& _writeParams;
     QModbusDataUnit::RegisterType _type;
+    int _enronWordOffset = 0;
     ModbusSimulationParams _simParams;
     DataSimulator* _dataSimulator;
 };

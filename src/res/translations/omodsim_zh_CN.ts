@@ -217,14 +217,14 @@
 <context>
     <name>ByteOrder</name>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="139"/>
-        <location filename="../../datamapdatamodel.cpp" line="151"/>
+        <location filename="../../datamapdatamodel.cpp" line="138"/>
+        <location filename="../../datamapdatamodel.cpp" line="150"/>
         <source>Direct</source>
         <translation>直接</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="141"/>
-        <location filename="../../datamapdatamodel.cpp" line="153"/>
+        <location filename="../../datamapdatamodel.cpp" line="140"/>
+        <location filename="../../datamapdatamodel.cpp" line="152"/>
         <source>Swapped</source>
         <translation>交换</translation>
     </message>
@@ -232,12 +232,12 @@
 <context>
     <name>ByteOrderItemDelegate</name>
     <message>
-        <location filename="../../formdatamapview.cpp" line="343"/>
+        <location filename="../../formdatamapview.cpp" line="359"/>
         <source>Use bytes in register order</source>
         <translation>按寄存器顺序使用字节</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="344"/>
+        <location filename="../../formdatamapview.cpp" line="360"/>
         <source>Swap bytes inside each 16-bit register</source>
         <translation>交换每个 16 位寄存器内的字节</translation>
     </message>
@@ -367,47 +367,59 @@
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="560"/>
+        <location filename="../../datamapdatamodel.cpp" line="242"/>
+        <location filename="../../datamapdatamodel.cpp" line="335"/>
+        <source>Enron Registers 5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="244"/>
+        <location filename="../../datamapdatamodel.cpp" line="335"/>
+        <source>Enron Registers 7x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../datamapdatamodel.cpp" line="637"/>
         <source>Unit</source>
         <translation>单元</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="561"/>
+        <location filename="../../datamapdatamodel.cpp" line="638"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="562"/>
+        <location filename="../../datamapdatamodel.cpp" line="639"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="563"/>
+        <location filename="../../datamapdatamodel.cpp" line="640"/>
         <source>Data Type</source>
         <translation>数据类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="564"/>
+        <location filename="../../datamapdatamodel.cpp" line="641"/>
         <source>Register Order</source>
         <translation>寄存器顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="565"/>
+        <location filename="../../datamapdatamodel.cpp" line="642"/>
         <source>Byte Order</source>
         <translation>字节顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="566"/>
+        <location filename="../../datamapdatamodel.cpp" line="643"/>
         <source>Comment</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="567"/>
+        <location filename="../../datamapdatamodel.cpp" line="644"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="568"/>
+        <location filename="../../datamapdatamodel.cpp" line="645"/>
         <source>Timestamp</source>
         <translation>时间戳</translation>
     </message>
@@ -415,62 +427,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../../formdatamapview.cpp" line="199"/>
+        <location filename="../../formdatamapview.cpp" line="215"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation>1位值（线圈/离散输入）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="200"/>
+        <location filename="../../formdatamapview.cpp" line="216"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation>16位寄存器值，显示为16位二进制数字</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="201"/>
+        <location filename="../../formdatamapview.cpp" line="217"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation>无符号16位整数（0 … 65535）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="202"/>
+        <location filename="../../formdatamapview.cpp" line="218"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation>有符号16位整数（-32768 … 32767）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="203"/>
+        <location filename="../../formdatamapview.cpp" line="219"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation>16位值，以十六进制显示</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="204"/>
+        <location filename="../../formdatamapview.cpp" line="220"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation>16位值，以ANSI字符显示</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="205"/>
+        <location filename="../../formdatamapview.cpp" line="221"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation>IEEE 754单精度浮点数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="206"/>
+        <location filename="../../formdatamapview.cpp" line="222"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation>IEEE 754双精度浮点数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="207"/>
+        <location filename="../../formdatamapview.cpp" line="223"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation>有符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="208"/>
+        <location filename="../../formdatamapview.cpp" line="224"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation>无符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="209"/>
+        <location filename="../../formdatamapview.cpp" line="225"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation>有符号64位整数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="210"/>
+        <location filename="../../formdatamapview.cpp" line="226"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation>无符号64位整数（4个寄存器）</translation>
     </message>
@@ -1071,7 +1083,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogmodbusdefinitions.ui" line="64"/>
-        <source>Enron addresses 5001–5999 and 7001–7999 are 32-bit; other addresses are 16-bit. The selected 5/6-digit address space limits the available addresses. Each 32-bit value uses two table words: base + 2 × (address − base), high word first. Use zero-based table addresses.</source>
+        <source>Select Enron registers 5x or 7x and enter the full protocol address, starting at 5001 or 7001. Select the display format separately in the toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1734,6 +1746,16 @@ Open the download page?</source>
 <context>
     <name>DialogWriteRegister</name>
     <message>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="83"/>
+        <source>Address (low word):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="83"/>
+        <source>Address (high word):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../dialogs/dialogwriteregister.ui" line="14"/>
         <source>Write Register</source>
         <translation>写寄存器</translation>
@@ -1755,7 +1777,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="229"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="239"/>
         <source>Auto Simulation: OFF</source>
         <translation>自动模拟：关闭</translation>
     </message>
@@ -1765,18 +1787,18 @@ Open the download page?</source>
         <translation>位模式： </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="101"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="111"/>
         <source>Value, (HEX): </source>
         <translation>值（十六进制）： </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="108"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="118"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="223"/>
-        <location filename="../../dialogs/dialogwriteregister.cpp" line="235"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="233"/>
+        <location filename="../../dialogs/dialogwriteregister.cpp" line="245"/>
         <source>Auto Simulation: ON</source>
         <translation>自动模拟：开启</translation>
     </message>
@@ -1926,74 +1948,73 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../formdatamapview.ui" line="88"/>
-        <location filename="../../formdatamapview.cpp" line="1491"/>
+        <location filename="../../formdatamapview.cpp" line="1509"/>
         <source>Clear Table</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1492"/>
+        <location filename="../../formdatamapview.cpp" line="1510"/>
         <source>Clear all visible rows from the table?</source>
         <translation>是否清除表格中所有可见行？</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1016"/>
+        <location filename="../../formdatamapview.cpp" line="1034"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1016"/>
+        <location filename="../../formdatamapview.cpp" line="1034"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="945"/>
+        <location filename="../../formdatamapview.cpp" line="963"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="956"/>
+        <location filename="../../formdatamapview.cpp" line="974"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="957"/>
+        <location filename="../../formdatamapview.cpp" line="975"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="958"/>
+        <location filename="../../formdatamapview.cpp" line="976"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="959"/>
+        <location filename="../../formdatamapview.cpp" line="977"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="960"/>
+        <location filename="../../formdatamapview.cpp" line="978"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="961"/>
+        <location filename="../../formdatamapview.cpp" line="979"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="962"/>
+        <location filename="../../formdatamapview.cpp" line="980"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1029"/>
-        <location filename="../../formdatamapview.cpp" line="1253"/>
-        <location filename="../../formdatamapview.cpp" line="1594"/>
+        <location filename="../../formdatamapview.cpp" line="1047"/>
+        <location filename="../../formdatamapview.cpp" line="1655"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1031"/>
+        <location filename="../../formdatamapview.cpp" line="1049"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -2002,45 +2023,51 @@ Type Filter: %3</source>
 类型过滤器：%3</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1254"/>
-        <location filename="../../formdatamapview.cpp" line="1595"/>
+        <location filename="../../formdatamapview.cpp" line="1656"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1255"/>
-        <location filename="../../formdatamapview.cpp" line="1596"/>
+        <location filename="../../formdatamapview.cpp" line="1657"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1256"/>
-        <location filename="../../formdatamapview.cpp" line="1597"/>
+        <location filename="../../formdatamapview.cpp" line="1658"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1257"/>
-        <location filename="../../formdatamapview.cpp" line="1598"/>
+        <location filename="../../formdatamapview.cpp" line="1659"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1245"/>
-        <location filename="../../formdatamapview.cpp" line="1605"/>
+        <location filename="../../formdatamapview.cpp" line="1661"/>
+        <source>Enron Registers 5x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1662"/>
+        <source>Enron Registers 7x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1263"/>
+        <location filename="../../formdatamapview.cpp" line="1631"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1246"/>
-        <location filename="../../formdatamapview.cpp" line="1606"/>
+        <location filename="../../formdatamapview.cpp" line="1264"/>
+        <location filename="../../formdatamapview.cpp" line="1632"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1018"/>
-        <location filename="../../formdatamapview.cpp" line="1247"/>
-        <location filename="../../formdatamapview.cpp" line="1590"/>
+        <location filename="../../formdatamapview.cpp" line="1036"/>
+        <location filename="../../formdatamapview.cpp" line="1265"/>
+        <location filename="../../formdatamapview.cpp" line="1619"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -2048,12 +2075,29 @@ Type Filter: %3</source>
 <context>
     <name>FormDataView</name>
     <message>
+        <location filename="../../formdataview.ui" line="258"/>
+        <source>Register Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="1326"/>
+        <source>Enron Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../formdataview.cpp" line="1327"/>
+        <source>Register Count:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../formdataview.ui" line="128"/>
+        <location filename="../../formdataview.cpp" line="1326"/>
         <source>Starting Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
         <location filename="../../formdataview.ui" line="135"/>
+        <location filename="../../formdataview.cpp" line="1327"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
@@ -2066,11 +2110,6 @@ Type Filter: %3</source>
         <location filename="../../formdataview.ui" line="318"/>
         <source>Column Distance:</source>
         <translation>列距：</translation>
-    </message>
-    <message>
-        <location filename="../../formdataview.ui" line="258"/>
-        <source>Data Type:</source>
-        <translation>数据类型：</translation>
     </message>
     <message>
         <location filename="../../formdataview.ui" line="350"/>
@@ -2202,17 +2241,17 @@ Type Filter: %3</source>
         <translation>交换字节（0xAB → 0xBA）</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="616"/>
+        <location filename="../../formdataview.cpp" line="656"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="616"/>
+        <location filename="../../formdataview.cpp" line="656"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="617"/>
+        <location filename="../../formdataview.cpp" line="657"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2221,7 +2260,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../../formdataview.cpp" line="619"/>
+        <location filename="../../formdataview.cpp" line="659"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -3802,67 +3841,67 @@ Please verify the merge result carefully.</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1332"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1365"/>
         <source>Set Value of %1</source>
         <translation>将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1374"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1341"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1374"/>
         <source>Edit Description</source>
         <translation>编辑描述</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1344"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1377"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1353"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1386"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1365"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1398"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1366"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1399"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1367"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1400"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1368"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1401"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1369"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1402"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1370"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1403"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1371"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1404"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../../controls/outputdatawidget.cpp" line="1447"/>
+        <location filename="../../controls/outputdatawidget.cpp" line="1481"/>
         <source>Zoom: %1%</source>
         <translation>缩放：%1%</translation>
     </message>
@@ -3901,26 +3940,38 @@ Please verify the merge result carefully.</source>
 <context>
     <name>PointTypeComboBox</name>
     <message>
-        <location filename="../../controls/pointtypecombobox.cpp" line="21"/>
         <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="133"/>
+        <source>Enron Registers 5x (Read-Write)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="42"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="135"/>
+        <source>Enron Registers 7x (Read-Write)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controls/pointtypecombobox.cpp" line="21"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="48"/>
         <source>Coils (Read-Write)</source>
         <translation>线圈（读写）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="22"/>
-        <location filename="../../controls/pointtypecombobox.cpp" line="46"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="52"/>
         <source>Discrete Inputs (Read Only)</source>
         <translation>离散输入（只读）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="23"/>
-        <location filename="../../controls/pointtypecombobox.cpp" line="50"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="56"/>
         <source>Holding Registers (Read-Write)</source>
         <translation>保持寄存器（读写）</translation>
     </message>
     <message>
         <location filename="../../controls/pointtypecombobox.cpp" line="24"/>
-        <location filename="../../controls/pointtypecombobox.cpp" line="54"/>
+        <location filename="../../controls/pointtypecombobox.cpp" line="60"/>
         <source>Input Registers (Read Only)</source>
         <translation>输入寄存器（只读）</translation>
     </message>
@@ -4168,12 +4219,12 @@ Please verify the merge result carefully.</source>
 <context>
     <name>RegistryOrderItemDelegate</name>
     <message>
-        <location filename="../../formdatamapview.cpp" line="278"/>
+        <location filename="../../formdatamapview.cpp" line="294"/>
         <source>Most Significant Register First - big-endian word order</source>
         <translation>高位寄存器优先 - 大端字节序</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="279"/>
+        <location filename="../../formdatamapview.cpp" line="295"/>
         <source>Least Significant Register First - little-endian word order</source>
         <translation>低位寄存器优先 - 小端字节序</translation>
     </message>
@@ -4381,29 +4432,6 @@ Please verify the merge result carefully.</source>
         <location filename="../../controls/trafficlogwindow.cpp" line="207"/>
         <source>Clear all messages from the traffic log?</source>
         <translation>确定要清除通信记录中的所有消息吗？</translation>
-    </message>
-</context>
-<context>
-    <name>TypeItemDelegate</name>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="150"/>
-        <source>Coils</source>
-        <translation>线圈</translation>
-    </message>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="151"/>
-        <source>Discrete Inputs</source>
-        <translation>离散输入</translation>
-    </message>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="152"/>
-        <source>Input Registers</source>
-        <translation>输入寄存器</translation>
-    </message>
-    <message>
-        <location filename="../../formdatamapview.cpp" line="153"/>
-        <source>Holding Registers</source>
-        <translation>保持寄存器</translation>
     </message>
 </context>
 <context>

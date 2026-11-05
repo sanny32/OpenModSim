@@ -39,6 +39,8 @@ DataViewDefinitions readDataViewDefinitions(QXmlStreamReader& xml, const QString
         dd.PointType = enumFromString<QModbusDataUnit::RegisterType>(attributes.value("PointType").toString());
     }
 
+    dd.EnronType = static_cast<EnronModbus::RegisterType>(attributes.value("EnronType").toInt());
+
     if (attributes.hasAttribute("PointAddress")) {
         bool ok;
         const quint16 pointAddress = attributes.value("PointAddress").toUShort(&ok);

@@ -14,6 +14,7 @@
 #include "formdatamapview.h"
 #include "modbusmessages/modbusmessages.h"
 #include "controls/numericlineedit.h"
+#include "controls/pointtypecombobox.h"
 #include "formatutils.h"
 #include "themedicons.h"
 #include "ui_formdatamapview.h"
@@ -37,6 +38,16 @@ constexpr int RoleDeviceId  = DataMapRole::DeviceId;
 constexpr int RoleType      = DataMapRole::Type;
 constexpr int RoleAddress   = DataMapRole::Address;
 constexpr int RoleTypeValue = DataMapRole::TypeValue;
+
+///
+/// \brief Resolves the backing map model for editors reached through a filter proxy.
+///
+DataMapDataModel* dataMapSourceModel(const QModelIndex& index)
+{
+    const auto* proxy = qobject_cast<const QSortFilterProxyModel*>(index.model());
+    return proxy ? qobject_cast<DataMapDataModel*>(proxy->sourceModel())
+                 : const_cast<DataMapDataModel*>(qobject_cast<const DataMapDataModel*>(index.model()));
+}
 
 constexpr auto NumericEditorInitializedProperty = "_omodsim_numericEditorInitialized";
 
@@ -144,30 +155,35 @@ class TypeItemDelegate : public QStyledItemDelegate
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
-    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    ///
+    /// \brief Shares protocol-dependent register choices with the data view.
+    ///
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const override
     {
-        auto* cb = new QComboBox(parent);
-        cb->addItem(tr("Coils"),            static_cast<int>(QModbusDataUnit::Coils));
-        cb->addItem(tr("Discrete Inputs"),  static_cast<int>(QModbusDataUnit::DiscreteInputs));
-        cb->addItem(tr("Input Registers"),  static_cast<int>(QModbusDataUnit::InputRegisters));
-        cb->addItem(tr("Holding Registers"),static_cast<int>(QModbusDataUnit::HoldingRegisters));
+        auto* cb = new PointTypeComboBox(parent);
+        cb->setEnronEnabled(index.data(DataMapRole::EnronEnabled).toBool());
+        if (auto* source = dataMapSourceModel(index))
+            connect(source, &DataMapDataModel::enronEnabledChanged, cb, &PointTypeComboBox::setEnronEnabled);
         return cb;
     }
 
     void setEditorData(QWidget* editor, const QModelIndex& index) const override
     {
-        auto* cb = qobject_cast<QComboBox*>(editor);
+        auto* cb = qobject_cast<PointTypeComboBox*>(editor);
         if (!cb) return;
-        const int value = index.data(RoleTypeValue).toInt();
-        const int idx = cb->findData(value);
-        if (idx >= 0) cb->setCurrentIndex(idx);
+        cb->setCurrentPointType(static_cast<QModbusDataUnit::RegisterType>(index.data(RoleTypeValue).toInt()));
+        cb->setCurrentEnronType(static_cast<EnronModbus::RegisterType>(index.data(DataMapRole::EnronType).toInt()));
     }
 
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
     {
-        auto* cb = qobject_cast<QComboBox*>(editor);
+        auto* cb = qobject_cast<PointTypeComboBox*>(editor);
         if (!cb) return;
-        model->setData(index, cb->currentData(), RoleTypeValue);
+        const auto enron = cb->currentEnronType();
+        if (enron != EnronModbus::RegisterType::None)
+            model->setData(index, int(enron), DataMapRole::EnronType);
+        else
+            model->setData(index, int(cb->currentPointType()), RoleTypeValue);
     }
 
     void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
@@ -461,8 +477,7 @@ public:
 
     static DataMapDataModel* sourceModel(const QModelIndex& index)
     {
-        auto* proxy = qobject_cast<const QSortFilterProxyModel*>(index.model());
-        return proxy ? qobject_cast<DataMapDataModel*>(proxy->sourceModel()) : nullptr;
+        return dataMapSourceModel(index);
     }
 
     static bool zeroBasedFromIndex(const QModelIndex& index)
@@ -492,7 +507,13 @@ public:
         const bool zeroBased = zeroBasedFromIndex(index);
         auto* editor = new NumericLineEdit(parent);
         editor->setInputMode(NumericLineEdit::UInt32Mode);
-        editor->setInputRange<quint32>(zeroBased ? 0 : 1, zeroBased ? 65535 : 65536);
+        const auto enron = static_cast<EnronModbus::RegisterType>(index.data(DataMapRole::EnronType).toInt());
+        if (enron == EnronModbus::RegisterType::None) {
+            editor->setInputRange<quint32>(zeroBased ? 0 : 1, zeroBased ? 65535 : 65536);
+        } else {
+            const quint32 base = EnronModbus::baseAddress(enron);
+            editor->setInputRange<quint32>(base, base + EnronModbus::RangeLength - 1);
+        }
         editor->setHexView(hexViewFromIndex(index));
         return editor;
     }
@@ -504,10 +525,7 @@ public:
 
         auto* le = qobject_cast<NumericLineEdit*>(editor);
         if (!le) return;
-        const quint16 rawAddr = static_cast<quint16>(
-            index.siblingAtColumn(ColUnit).data(RoleAddress).toUInt());
-        const bool zeroBased = zeroBasedFromIndex(index);
-        le->setValue<quint32>(zeroBased ? rawAddr : static_cast<quint32>(rawAddr) + 1);
+        le->setValue<quint32>(index.data(Qt::EditRole).toUInt());
         markNumericEditorInitialized(editor);
     }
 
@@ -862,7 +880,7 @@ ProjectAddressSpaceRanges FormDataMapView::addressSpaceRanges() const
             key.DeviceId,
             key.Type,
             key.Address,
-            static_cast<quint16>(registersCount(entry.type))
+            static_cast<quint16>(entry.registerCount())
         });
     }
 
@@ -1245,18 +1263,8 @@ void FormDataMapView::changeEvent(QEvent* event)
         if (_filterUnitLabel)  _filterUnitLabel->setText(tr("Unit:"));
         if (_filterTypeLabel)  _filterTypeLabel->setText(tr("Data Type:"));
         if (_filterUnitSpin)   _filterUnitSpin->setSpecialValueText(tr("All"));
-        if (_filterTypeCombo) {
-            const int idx = _filterTypeCombo->currentIndex();
-            // Block signals to avoid spurious filter updates while repopulating
-            const QSignalBlocker blocker(_filterTypeCombo);
-            _filterTypeCombo->clear();
-            _filterTypeCombo->addItem(tr("All Types"));
-            _filterTypeCombo->addItem(tr("Coils"));
-            _filterTypeCombo->addItem(tr("Discrete Inputs"));
-            _filterTypeCombo->addItem(tr("Input Registers"));
-            _filterTypeCombo->addItem(tr("Holding Registers"));
-            _filterTypeCombo->setCurrentIndex(idx);
-        }
+        if (_filterTypeCombo)
+            updateTypeFilters(_mbMultiServer.getModbusDefinitions().EnronModbus);
 
         if (_model) {
             // Force column headers to repaint with the new language
@@ -1386,6 +1394,9 @@ int FormDataMapView::addRowAndReturnSourceRow(int referenceSourceRow)
         entry.type      = referenceEntry.type;
         entry.order     = referenceEntry.order;
         entry.byteOrder = referenceEntry.byteOrder;
+        entry.EnronType = referenceEntry.EnronType;
+        if (entry.EnronType != EnronModbus::RegisterType::None)
+            key.Address = qMin<int>(referenceKey.Address + 2, EnronModbus::baseAddress(entry.EnronType) + 2 * (EnronModbus::RangeLength - 1));
     } else if (!_model->isEmpty()) {
         const ItemMapKey last = _model->lastKey();
         const auto& lastEntry = _model->entries()[last];
@@ -1395,12 +1406,19 @@ int FormDataMapView::addRowAndReturnSourceRow(int referenceSourceRow)
         entry.type      = lastEntry.type;
         entry.order     = lastEntry.order;
         entry.byteOrder = lastEntry.byteOrder;
+        entry.EnronType = lastEntry.EnronType;
+        if (entry.EnronType != EnronModbus::RegisterType::None)
+            key.Address = qMin<int>(last.Address + 2, EnronModbus::baseAddress(entry.EnronType) + 2 * (EnronModbus::RangeLength - 1));
     }
 
     // Skip duplicate keys
     while (_model->contains(key)) {
-        if (key.Address < 0xFFFF) ++key.Address;
-        else break;
+        const int stride = entry.EnronType == EnronModbus::RegisterType::None ? 1 : 2;
+        const int limit = entry.EnronType == EnronModbus::RegisterType::None ? 0xffff
+            : EnronModbus::baseAddress(entry.EnronType) + 2 * (EnronModbus::RangeLength - 1);
+        if (int(key.Address) + stride > limit)
+            break;
+        key.Address += stride;
     }
 
     entry.timestamp = _mbMultiServer.timestamp(key.DeviceId, key.Type, key.Address);
@@ -1524,25 +1542,36 @@ void FormDataMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterT
 {
     if (count == 0 || count > 2000) return;
 
-    const QModbusDataUnit unit = _mbMultiServer.data(deviceId, type, startAddress, count);
+    const bool enronEnabled = _mbMultiServer.getModbusDefinitions().EnronModbus;
     bool addedEntries = false;
 
     for (quint16 i = 0; i < count; ++i) {
-        const ItemMapKey key{ deviceId, type, static_cast<quint16>(startAddress + i) };
-        const quint16 value = unit.isValid() ? static_cast<quint16>(unit.value(i)) : 0;
+        const quint32 address = quint32(startAddress) + i;
+        if (address > 0xffff)
+            break;
+        auto enron = EnronModbus::RegisterType::None;
+        if (enronEnabled && type == QModbusDataUnit::HoldingRegisters && EnronModbus::is32BitAddress(address))
+            enron = address < EnronModbus::FloatBase ? EnronModbus::RegisterType::Group5x : EnronModbus::RegisterType::Group7x;
+        const quint16 word = enron == EnronModbus::RegisterType::None ? quint16(address)
+            : quint16(EnronModbus::wordAddress(enron, address));
+        const ItemMapKey key{deviceId, type, word};
+        const auto unit = _mbMultiServer.data(deviceId, type, word, enron == EnronModbus::RegisterType::None ? 1 : 2);
+        const quint16 value = unit.isValid() ? quint16(unit.value(0)) : 0;
 
         if (_model->contains(key)) {
-            const QModbusDataUnit singleUnit(type, startAddress + i, QVector<quint16>{value});
-            _model->applyMbDataChange(deviceId, singleUnit);
+            _model->applyMbDataChange(deviceId, unit);
         } else if (_autoAddOnRequest) {
             DataMapEntry entry;
             entry.value = value;
             entry.type  = (type == QModbusDataUnit::Coils ||
                            type == QModbusDataUnit::DiscreteInputs)
                           ? DataType::Binary : DataType::Int16;
+            entry.EnronType = enron;
+            if (enron != EnronModbus::RegisterType::None)
+                entry.type = enron == EnronModbus::RegisterType::Group5x ? DataType::Int32 : DataType::Float32;
             entry.order     = RegisterOrder::MSRF;
             entry.byteOrder = ByteOrder::Direct;
-            entry.timestamp = _mbMultiServer.timestamp(deviceId, type, static_cast<quint16>(startAddress + i));
+            entry.timestamp = _mbMultiServer.timestamp(deviceId, type, word);
             _model->addEntry(key, entry);
             addedEntries = true;
         }
@@ -1591,11 +1620,8 @@ void FormDataMapView::setupToolBar()
     _filterUnitSpin->setFixedWidth(60);
 
     _filterTypeCombo = new QComboBox;
-    _filterTypeCombo->addItem(tr("All Types"));
-    _filterTypeCombo->addItem(tr("Coils"));
-    _filterTypeCombo->addItem(tr("Discrete Inputs"));
-    _filterTypeCombo->addItem(tr("Input Registers"));
-    _filterTypeCombo->addItem(tr("Holding Registers"));
+    _filterTypeCombo->setObjectName("filterTypeCombo");
+    updateTypeFilters(_mbMultiServer.getModbusDefinitions().EnronModbus);
     _filterTypeCombo->setFixedWidth(130);
 
     auto* filterWidget = new QWidget(ui->toolBar);
@@ -1619,10 +1645,33 @@ void FormDataMapView::setupToolBar()
 }
 
 ///
+/// \brief Keeps filter groups consistent with the active server protocol.
+///
+void FormDataMapView::updateTypeFilters(bool enronEnabled)
+{
+    const int previous = _filterTypeCombo->currentIndex();
+    const QSignalBlocker blocker(_filterTypeCombo);
+    _filterTypeCombo->clear();
+    _filterTypeCombo->addItem(tr("All Types"));
+    _filterTypeCombo->addItem(tr("Coils"));
+    _filterTypeCombo->addItem(tr("Discrete Inputs"));
+    _filterTypeCombo->addItem(tr("Input Registers"));
+    _filterTypeCombo->addItem(tr("Holding Registers"));
+    if (enronEnabled) {
+        _filterTypeCombo->addItem(tr("Enron Registers 5x"));
+        _filterTypeCombo->addItem(tr("Enron Registers 7x"));
+    }
+    const int selected = previous >= 0 && previous < _filterTypeCombo->count() ? previous : 0;
+    _filterTypeCombo->setCurrentIndex(selected);
+    _proxy->setFilterTypeIndex(selected);
+}
+
+///
 /// \brief FormDataMapView::setupServerConnections
 ///
 void FormDataMapView::setupServerConnections()
 {
+    connect(_model, &DataMapDataModel::enronEnabledChanged, this, &FormDataMapView::updateTypeFilters);
     connect(&_mbMultiServer, &ModbusMultiServer::requestOnConnection,
             this, &FormDataMapView::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged,

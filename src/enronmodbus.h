@@ -17,6 +17,34 @@ constexpr quint16 LongBase = 5001;
 constexpr quint16 FloatBase = 7001;
 constexpr quint16 RangeLength = 999;
 
+enum class RegisterType { None, Group5x, Group7x };
+
+///
+/// \brief Returns the first protocol address of the selected Enron register group.
+///
+inline quint16 baseAddress(RegisterType type)
+{
+    return type == RegisterType::Group7x ? FloatBase : LongBase;
+}
+
+///
+/// \brief Resolves a logical Enron register to its first backing word.
+///
+inline int wordAddress(RegisterType type, int address)
+{
+    const int base = baseAddress(type);
+    return base + 2 * (address - base);
+}
+
+///
+/// \brief Resolves a backing word to its logical Enron register.
+///
+inline int registerAddress(RegisterType type, int address)
+{
+    const int base = baseAddress(type);
+    return base + (address - base) / 2;
+}
+
 ///
 /// \brief Identifies addresses with four-byte register values on the wire.
 ///

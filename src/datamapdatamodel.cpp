@@ -93,10 +93,9 @@ bool rangesOverlap(quint16 firstStart, int firstLength, quint16 secondStart, int
 ///
 /// \brief timestampForKey
 ///
-QDateTime timestampForKey(ModbusMultiServer& server, const ItemMapKey& key, DataType type)
+QDateTime timestampForKey(ModbusMultiServer& server, const ItemMapKey& key, int count)
 {
     QDateTime result;
-    const int count = registersCount(type);
     for (int i = 0; i < count; ++i) {
         const auto timestamp = server.timestamp(key.DeviceId, key.Type, static_cast<quint16>(key.Address + i));
         if (timestamp.isValid() && (!result.isValid() || timestamp > result))
@@ -206,7 +205,61 @@ QString formatValue(QModbusDataUnit::RegisterType regType,
 DataMapDataModel::DataMapDataModel(ModbusMultiServer& server, QObject* parent)
     : QAbstractTableModel(parent)
     , _server(server)
+    , _enronEnabled(server.getModbusDefinitions().EnronModbus)
 {
+    connect(&_server, &ModbusMultiServer::definitionsChanged, this, &DataMapDataModel::onDefinitionsChanged);
+}
+
+///
+/// \brief Refreshes Enron choices and labels when the server protocol changes.
+///
+void DataMapDataModel::onDefinitionsChanged(const ModbusDefinitions& definitions)
+{
+    if (_enronEnabled == definitions.EnronModbus)
+        return;
+    _enronEnabled = definitions.EnronModbus;
+    if (!_keys.isEmpty())
+        emit dataChanged(index(0, 0), index(_keys.size() - 1, ColCount - 1));
+    emit enronEnabledChanged(_enronEnabled);
+}
+
+///
+/// \brief Retains saved Enron metadata while ordinary Modbus is active.
+///
+EnronModbus::RegisterType DataMapDataModel::effectiveEnronType(const DataMapEntry& entry) const
+{
+    return _enronEnabled ? entry.EnronType : EnronModbus::RegisterType::None;
+}
+
+///
+/// \brief Maps register choices to native tables and Enron backing-word ranges.
+///
+bool DataMapDataModel::changeRegisterType(ItemMapKey& key, DataMapEntry& entry, const QVariant& value, int role) const
+{
+    auto enron = EnronModbus::RegisterType::None;
+    if (role == DataMapRole::EnronType)
+        enron = static_cast<EnronModbus::RegisterType>(value.toInt());
+    else if (value.toString() == tr("Enron Registers 5x"))
+        enron = EnronModbus::RegisterType::Group5x;
+    else if (value.toString() == tr("Enron Registers 7x"))
+        enron = EnronModbus::RegisterType::Group7x;
+    if (role == DataMapRole::EnronType || enron != EnronModbus::RegisterType::None) {
+        if (!_enronEnabled || (enron != EnronModbus::RegisterType::Group5x && enron != EnronModbus::RegisterType::Group7x))
+            return false;
+        key.Type = QModbusDataUnit::HoldingRegisters;
+        if (entry.EnronType != enron) {
+            key.Address = EnronModbus::baseAddress(enron);
+            entry.type = enron == EnronModbus::RegisterType::Group5x ? DataType::Int32 : DataType::Float32;
+            entry.order = RegisterOrder::MSRF;
+            entry.byteOrder = ByteOrder::Direct;
+        }
+        entry.EnronType = enron;
+    } else {
+        entry.EnronType = EnronModbus::RegisterType::None;
+        key.Type = role == DataMapRole::TypeValue ? static_cast<QModbusDataUnit::RegisterType>(value.toInt())
+                                                 : stringToRegisterType(value.toString());
+    }
+    return true;
 }
 
 ///
@@ -261,6 +314,11 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
         return {};
     }
 
+    if (role == DataMapRole::EnronEnabled)
+        return _enronEnabled;
+    if (role == DataMapRole::EnronType)
+        return int(effectiveEnronType(e));
+
     switch (col) {
         case ColUnit:
             if (role == Qt::DisplayRole || role == Qt::EditRole)
@@ -271,14 +329,21 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
             break;
 
         case ColType:
-            if (role == Qt::DisplayRole || role == Qt::EditRole)
+            if (role == Qt::DisplayRole || role == Qt::EditRole) {
+                const auto enron = effectiveEnronType(e);
+                if (enron != EnronModbus::RegisterType::None)
+                    return enron == EnronModbus::RegisterType::Group5x ? tr("Enron Registers 5x") : tr("Enron Registers 7x");
                 return registerTypeToString(key.Type);
+            }
             if (role == DataMapRole::TypeValue) return static_cast<int>(key.Type);
             break;
 
         case ColAddress:
-            if (role == Qt::DisplayRole || role == Qt::EditRole)
-                return addressToDisplay(key.Address, _zeroBased);
+            if (role == Qt::DisplayRole || role == Qt::EditRole) {
+                const auto enron = effectiveEnronType(e);
+                return enron == EnronModbus::RegisterType::None ? addressToDisplay(key.Address, _zeroBased)
+                    : QString::number(EnronModbus::registerAddress(enron, key.Address));
+            }
             break;
 
         case ColDataType:
@@ -434,7 +499,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
             _server.setData(oldKey.DeviceId, unit, WriteSource::User);
 
             entry.value     = regs[0];
-            entry.timestamp = timestampForKey(_server, oldKey, entry.type);
+            entry.timestamp = timestampForKey(_server, oldKey, entry.registerCount());
             _data[oldKey]   = entry;
         }
         // Always refresh the cell (restores previous value if parse failed)
@@ -481,24 +546,36 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
     }
 
     // ── Key columns: Unit / Type / Address ────────────────────────────────────
-    else if ((col == ColUnit || col == ColType || col == ColAddress) && (role == Qt::EditRole || role == Qt::DisplayRole || role == DataMapRole::TypeValue)) {
+    else if ((col == ColUnit || col == ColType || col == ColAddress) && (role == Qt::EditRole || role == Qt::DisplayRole || role == DataMapRole::TypeValue || role == DataMapRole::EnronType)) {
         ItemMapKey newKey = oldKey;
 
         if (col == ColUnit) {
             newKey.DeviceId = static_cast<quint8>(value.toString().toUShort());
         } else if (col == ColType) {
-            if (role == DataMapRole::TypeValue)
-                newKey.Type = static_cast<QModbusDataUnit::RegisterType>(value.toInt());
-            else
-                newKey.Type = stringToRegisterType(value.toString());
+            if (!changeRegisterType(newKey, entry, value, role)) {
+                _inSetData = false;
+                return false;
+            }
+        } else if (effectiveEnronType(entry) != EnronModbus::RegisterType::None) {
+            bool ok;
+            const int address = value.toString().toInt(&ok);
+            const int base = EnronModbus::baseAddress(entry.EnronType);
+            if (!ok || address < base || address >= base + EnronModbus::RangeLength) {
+                _inSetData = false;
+                return false;
+            }
+            newKey.Address = EnronModbus::wordAddress(entry.EnronType, address);
         } else {
             newKey.Address = addressFromDisplay(value.toString(), _zeroBased);
+            if (newKey.Address != oldKey.Address)
+                entry.EnronType = EnronModbus::RegisterType::None;
         }
 
         if (newKey.DeviceId == oldKey.DeviceId &&
             newKey.Type    == oldKey.Type    &&
             newKey.Address == oldKey.Address) {
-            // No actual change - still refresh display (in case role was redundant write)
+            _data[oldKey] = entry;
+            registerEntry(oldKey, entry);
             emit dataChanged(createIndex(row, ColUnit), createIndex(row, ColTimestamp));
             handled = true;
         } else {
@@ -517,7 +594,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
 
             const auto unit   = _server.data(newKey.DeviceId, newKey.Type, newKey.Address, 1);
             entry.value       = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
-            entry.timestamp   = timestampForKey(_server, newKey, entry.type);
+            entry.timestamp   = timestampForKey(_server, newKey, entry.registerCount());
             entry.comment     = _server.description(newKey.DeviceId, newKey.Type, newKey.Address);
 
             _keys[row] = newKey;
@@ -527,7 +604,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
             // Timestamp for a new key/type can become available only after
             // registerEntry() has updated backend unit maps.
             if (!_data[newKey].timestamp.isValid()) {
-                const auto backendTsAfterRegister = timestampForKey(_server, newKey, _data[newKey].type);
+                const auto backendTsAfterRegister = timestampForKey(_server, newKey, _data[newKey].registerCount());
                 if (backendTsAfterRegister.isValid())
                     _data[newKey].timestamp = backendTsAfterRegister;
             }
@@ -744,7 +821,16 @@ ItemMapKey DataMapDataModel::lastKey() const
 void DataMapDataModel::addEntry(const ItemMapKey& key, const DataMapEntry& entry)
 {
     DataMapEntry normalizedEntry = entry;
-    const auto backendTs = timestampForKey(_server, key, normalizedEntry.type);
+    if (key.Type != QModbusDataUnit::HoldingRegisters
+        || normalizedEntry.EnronType < EnronModbus::RegisterType::None
+        || normalizedEntry.EnronType > EnronModbus::RegisterType::Group7x)
+        normalizedEntry.EnronType = EnronModbus::RegisterType::None;
+    if (normalizedEntry.EnronType != EnronModbus::RegisterType::None) {
+        const int base = EnronModbus::baseAddress(normalizedEntry.EnronType);
+        if (key.Address < base || key.Address >= base + 2 * EnronModbus::RangeLength || (key.Address - base) % 2)
+            normalizedEntry.EnronType = EnronModbus::RegisterType::None;
+    }
+    const auto backendTs = timestampForKey(_server, key, normalizedEntry.registerCount());
     if (backendTs.isValid()) {
         normalizedEntry.timestamp = backendTs;
     } else if (normalizedEntry.timestamp.isValid()) {
@@ -778,7 +864,7 @@ void DataMapDataModel::addEntry(const ItemMapKey& key, const DataMapEntry& entry
     // For freshly added keys, backend timestamp can become available only after
     // the unit map is registered in registerEntry().
     if (!normalizedEntry.timestamp.isValid()) {
-        const auto backendTsAfterRegister = timestampForKey(_server, key, normalizedEntry.type);
+        const auto backendTsAfterRegister = timestampForKey(_server, key, normalizedEntry.registerCount());
         if (backendTsAfterRegister.isValid()) {
             _data[key].timestamp = backendTsAfterRegister;
             const int insertedRow = rowForKey(key);
@@ -803,7 +889,7 @@ void DataMapDataModel::removeEntries(QList<int> sourceRows)
         endRemoveRows();
 
         if (!hasAnyRowWithKey(key)) {
-            const auto count = static_cast<quint16>(registersCount(_data.value(key).type));
+            const auto count = static_cast<quint16>(_data.value(key).registerCount());
             unregisterEntry(key);
             _data.remove(key);
             _server.clearUnmappedData(key.DeviceId, key.Type, key.Address, count);
@@ -833,7 +919,7 @@ void DataMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataUnit&
         if (it == _data.end())
             continue;
 
-        if (!rangesOverlap(key.Address, registersCount(it->type), dataStart, dataCount))
+        if (!rangesOverlap(key.Address, it->registerCount(), dataStart, dataCount))
             continue;
 
         const int offset = static_cast<int>(key.Address) - static_cast<int>(dataStart);
@@ -872,10 +958,10 @@ void DataMapDataModel::applyTimestampChange(quint8 deviceId, QModbusDataUnit::Re
         if (it == _data.end())
             continue;
 
-        if (!rangesOverlap(key.Address, registersCount(it->type), address, 1))
+        if (!rangesOverlap(key.Address, it->registerCount(), address, 1))
             continue;
 
-        const auto rowTimestamp = timestampForKey(_server, key, it->type);
+        const auto rowTimestamp = timestampForKey(_server, key, it->registerCount());
         if (it->timestamp == rowTimestamp)
             continue;
 
@@ -900,7 +986,7 @@ void DataMapDataModel::refreshTimestamps()
         if (it == _data.end())
             continue;
 
-        const auto rowTimestamp = timestampForKey(_server, key, it->type);
+        const auto rowTimestamp = timestampForKey(_server, key, it->registerCount());
         if (it->timestamp == rowTimestamp)
             continue;
 
@@ -1005,7 +1091,7 @@ void DataMapDataModel::registerEntry(const ItemMapKey& key, const DataMapEntry& 
         _server.addDeviceId(key.DeviceId);
     }
     _server.addUnitMap(_uuids[key], key.DeviceId, key.Type,
-                       key.Address, registersCount(entry.type));
+                       key.Address, entry.registerCount());
 }
 
 ///
@@ -1042,10 +1128,11 @@ void DataMapFilterProxy::setFilterUnit(int unit)
 }
 
 ///
-/// \brief DataMapFilterProxy::setFilterTypeIndex
+/// \brief Selects all rows (0), ordinary tables (1–4), or Enron groups (5–6).
 ///
 void DataMapFilterProxy::setFilterTypeIndex(int index)
 {
+    index = qBound(0, index, 6);
     if (_filterTypeIndex == index) return;
     _filterTypeIndex = index;
     invalidateFilter();
@@ -1065,6 +1152,11 @@ bool DataMapFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex& /*so
         return false;
 
     if (_filterTypeIndex != 0) {
+        const int enron = src->data(src->index(sourceRow, ColType), DataMapRole::EnronType).toInt();
+        if (_filterTypeIndex >= 5)
+            return enron == _filterTypeIndex - 4;
+        if (enron != 0)
+            return false;
         static const QModbusDataUnit::RegisterType types[] = {
             QModbusDataUnit::Coils,
             QModbusDataUnit::DiscreteInputs,
