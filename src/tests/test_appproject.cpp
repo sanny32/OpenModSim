@@ -17,6 +17,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QPointer>
+#include <QScopeGuard>
 #include <QSignalSpy>
 #include <QTemporaryDir>
 #include <QTest>
