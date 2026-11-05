@@ -524,36 +524,33 @@ inline QString formatUInt64Value(QModbusDataUnit::RegisterType pointType, quint1
 ///
 inline QString formatAddress(QModbusDataUnit::RegisterType pointType, int address, AddressSpace space, bool hexFormat, AddressBase base)
 {
-    char str[8];
     Q_UNUSED(base);
     if(hexFormat)
     {
-        snprintf(str, sizeof(str), "0x%04X", address);
+        return QString::asprintf("0x%04X", static_cast<unsigned int>(address));
     }
-    else
+
+    char prefix;
+    switch(pointType)
     {
-	    switch(pointType)
-	    {
-	        case QModbusDataUnit::Coils:
-	            *str = '0';
-	            break;
-	        case QModbusDataUnit::DiscreteInputs:
-	            *str = '1';
-	            break;
-	        case QModbusDataUnit::HoldingRegisters:
-	            *str = '4';
-	            break;
-	        case QModbusDataUnit::InputRegisters:
-	            *str = '3';
-	            break;
-	        default:
-	            *str = ' ';
-	            break;
-        }
-        const int width = space == AddressSpace::Addr6Digits ? 5 : 4;
-        snprintf(str + 1, sizeof(str) - 1, "%0*u", width, address);
+        case QModbusDataUnit::Coils:
+            prefix = '0';
+            break;
+        case QModbusDataUnit::DiscreteInputs:
+            prefix = '1';
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+            prefix = '4';
+            break;
+        case QModbusDataUnit::InputRegisters:
+            prefix = '3';
+            break;
+        default:
+            prefix = ' ';
+            break;
     }
-    return str;
+    const int width = space == AddressSpace::Addr6Digits ? 5 : 4;
+    return QString::asprintf("%c%0*u", prefix, width, static_cast<unsigned int>(address));
 }
 
 inline QString formatAddress(QModbusDataUnit::RegisterType pointType, int address, AddressSpace space, bool hexFormat)
