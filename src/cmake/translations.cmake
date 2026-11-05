@@ -19,14 +19,14 @@ if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
         SOURCES ${OMODSIM_TRANSLATION_SOURCES}
-        OPTIONS -no-obsolete
+        OPTIONS -no-obsolete -locations none
     )
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}
         COMMAND ${Qt5_LUPDATE_EXECUTABLE}
                 ${OMODSIM_TRANSLATION_SOURCES}
-                -no-obsolete
+                -no-obsolete -locations none
                 -ts ${TS_FILES}
         DEPENDS ${OMODSIM_TRANSLATION_SOURCES}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
