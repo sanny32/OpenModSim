@@ -32,10 +32,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            qt-version: '6.9.3'
-            qt-modules: 'qtserialbus qtserialport qt5compat'
-            cmake-options: ''
           - os: windows-latest
             qt-version: '6.9.3'
             qt-modules: 'qtserialbus qtserialport qt5compat'

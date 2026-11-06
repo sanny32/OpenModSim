@@ -101,6 +101,7 @@ def report_gcov(build_dir: Path, out_dir: Path, compiler: str) -> Path:
         "--exclude", r".*/tests/.*",
         "--exclude", r".*/build.*",
         "--print-summary",
+        "--fail-under-line", "80",
         "--cobertura", xml,
         "--cobertura-pretty",
         "--html-details", out_dir / "index.html",
