@@ -11,17 +11,21 @@
 #include "ui_dialogselectserviceport.h"
 
 ///
-/// \brief DialogSelectServicePort::DialogSelectServicePort
-/// \param port
-/// \param parent
+/// \brief Edits TCP endpoint settings and the TLS selection.
+/// \param params Connection parameters updated on acceptance.
+/// \param parent Parent widget.
+/// \param allowTls Whether the transport supports TLS.
 ///
-DialogSelectServicePort::DialogSelectServicePort(TcpConnectionParams& params, QWidget *parent)
+DialogSelectServicePort::DialogSelectServicePort(TcpConnectionParams& params, QWidget *parent, bool allowTls)
     : QFixedSizeDialog(parent)
     , ui(new Ui::DialogSelectServicePort)
     ,_params(params)
 {
     ui->setupUi(this);
-    ui->lineEditPort->setInputRange(0, 65535);
+    ui->tlsGroup->setVisible(allowTls);
+    ui->tlsGroup->setChecked(allowTls && params.TlsEnabled);
+    connect(ui->tlsGroup, &QCheckBox::toggled, this, &DialogSelectServicePort::updateTlsPort);
+    ui->lineEditPort->setInputRange(1, 65535);
     ui->lineEditPort->setValue(params.ServicePort);
 
     ui->comboBoxIp->addItem("0.0.0.0");
@@ -68,12 +72,22 @@ void DialogSelectServicePort::changeEvent(QEvent* event)
 }
 
 ///
-/// \brief DialogSelectServicePort::accept
+/// \brief Applies the endpoint settings and the TLS selection.
 ///
 void DialogSelectServicePort::accept()
 {
+    _params.TlsEnabled = ui->tlsGroup->isChecked();
     _params.ServicePort = ui->lineEditPort->value<int>();
     _params.IPAddress = ui->comboBoxIp->currentText();
     QFixedSizeDialog::accept();
+}
+
+///
+/// \brief Uses the standard port when switching between plain TCP and TLS.
+///
+void DialogSelectServicePort::updateTlsPort(bool enabled)
+{
+    if (ui->lineEditPort->value<int>() == (enabled ? 502 : 802))
+        ui->lineEditPort->setValue(enabled ? 802 : 502);
 }
 

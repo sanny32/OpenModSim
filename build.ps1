@@ -477,6 +477,12 @@ if (-not (Test-Path $QtDir)) {
 }
 Write-Host "Found Qt: $QtDir"
 
+$OpenSslVersion = if ($QtMajorVersion -eq '5') { '1.1' } else { '3' }
+Write-Host "Checking for OpenSSL $OpenSslVersion..."
+$OpenSslArchitecture = if ($Arch -eq 'win32') { 'x86' } else { 'x64' }
+$OpenSslRoot = & (Join-Path $PSScriptRoot 'tools\install_openssl.ps1') -Architecture $OpenSslArchitecture -Version $OpenSslVersion
+$env:PATH = "$(Join-Path $OpenSslRoot 'bin');$env:PATH"
+
 # Create Build dir
 $BuildDir = "build-omodsim-Qt_${QtVersion}_$($Compiler.ToUpper())bit-$BuildType"
 if (-not (Test-Path $BuildDir)) { 
@@ -497,6 +503,7 @@ $cmakeArgs = @(
     "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
     "-DCMAKE_INSTALL_PREFIX=`"$InstallPrefix`"",
     "-DOMODSIM_BUILD_TESTS=OFF",
+    "-DOPENSSL_ROOT_DIR=$($OpenSslRoot -replace '\\', '/')",
     "-DUSE_QLEMENTINE_APP_STYLE=$(if ($qlementine) { 'ON' } else { 'OFF' })"
 )
 
@@ -565,7 +572,7 @@ if (Test-Path $exePath) {
             # Qt 6 installer workflow options
             $windeployArgs += @(
                 "--no-system-dxc-compiler"
-                "--skip-plugin-types", "help,generic,networkinformation,qmltooling,tls"
+                "--skip-plugin-types", "help,generic,networkinformation,qmltooling"
                 "--exclude-plugins", "qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql"
             )
         }

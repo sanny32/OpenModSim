@@ -28,6 +28,11 @@ public:
     explicit DialogModbusDefinitions(ModbusMultiServer& srv, QWidget *parent = nullptr);
     ~DialogModbusDefinitions();
 
+    ///
+    /// \brief Keeps the settings dialog inside the available screen area.
+    ///
+    QSize sizeHint() const override;
+
     void accept() override;
 
 protected:

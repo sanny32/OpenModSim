@@ -104,12 +104,16 @@ jobs:
       - name: Set BUILD_DIR
         run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}-Release" >> $GITHUB_ENV
 
+      - name: Resolve latest OpenSSL 3.5 LTS version
+        uses: ./.github/actions/build-openssl3-runtime
+
       - name: Configure project
         run: |
           cmake src -B ${{ env.BUILD_DIR }} \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
+            -DOPENSSL_ROOT_DIR=/usr/local \
             -DOMODSIM_BUILD_TESTS=OFF \
             -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
@@ -126,9 +130,6 @@ jobs:
         uses: ./.github/actions/install-cqtdeployer
         with:
           qt-prefix-path: ${{ steps.qt.outputs.qt-root-dir }}
-
-      - name: Resolve latest OpenSSL 3.5 LTS version
-        uses: ./.github/actions/build-openssl3-runtime
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |

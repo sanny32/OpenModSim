@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
+        <file>res/icons/fallback/certificate.svg</file>
+        <file>res/icons/fallback/person.svg</file>
+        <file>res/icons/fallback/hosts.svg</file>
+        <file>res/icons/fallback/calendar.svg</file>
         <file>res/license.txt</file>
         <file>res/about.json</file>
         <file>res/omodsim-mac.png</file>

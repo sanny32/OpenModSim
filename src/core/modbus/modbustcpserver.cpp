@@ -13,15 +13,20 @@
 #include <QTcpSocket>
 #include <QRandomGenerator>
 #include "modbustcpserver.h"
+#include "connectiondetails.h"
+#include "modbustlslistener.h"
 
 ///
-/// \brief ModbusTcpServer::ModbusTcpServer
-/// \param parent
+/// \brief Creates a TCP transport using the shared TLS certificate store.
+/// \param parent Object owning the transport.
+/// \param certificateStoreRoot PKI directory; empty uses the application store.
 ///
-ModbusTcpServer::ModbusTcpServer(QObject *parent)
+ModbusTcpServer::ModbusTcpServer(QObject *parent, const QString& certificateStoreRoot)
     : ModbusServer(parent)
 {
-    _server = new QTcpServer(this);
+    _server = new ModbusTlsListener(this, certificateStoreRoot);
+    connect(_server, &ModbusTlsListener::handshakeError, this,
+            [this](const QString& error) { setError(error, QModbusDevice::UnknownError); });
     _delayedResponseTimer = new QTimer(this);
     _delayedResponseTimer->setSingleShot(true);
 
@@ -359,6 +364,13 @@ bool ModbusTcpServer::open()
     if (_server->isListening())
         return false;
 
+    const auto params = property("ConnectionDetails").value<ConnectionDetails>().TcpParams;
+    const QString tlsError = _server->configure(params.TlsEnabled);
+    if (!tlsError.isEmpty()) {
+        setError(tlsError, QModbusDevice::ConnectionError);
+        return false;
+    }
+
     const QUrl url = QUrl::fromUserInput(_networkAddress + QStringLiteral(":") + QString::number(_networkPort));
 
     if (!url.isValid()) {
@@ -385,7 +397,7 @@ void ModbusTcpServer::close()
         return;
 
     if (_server->isListening())
-        _server->close();
+        _server->stop();
 
     _delayedResponses.clear();
     _delayedResponseCount = 0;
@@ -393,7 +405,8 @@ void ModbusTcpServer::close()
     if (_delayedResponseTimer->isActive())
         _delayedResponseTimer->stop();
 
-    for (auto socket : std::as_const(_connections))
+    const auto connections = _connections;
+    for (auto socket : connections)
         socket->disconnectFromHost();
 
     setState(QModbusDevice::UnconnectedState);

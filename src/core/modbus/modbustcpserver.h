@@ -17,6 +17,7 @@
 #include "modbusserver.h"
 
 class QTimer;
+class ModbusTlsListener;
 
 ///
 /// \brief The ModbusTcpServer class
@@ -26,7 +27,12 @@ class ModbusTcpServer : public ModbusServer
     Q_OBJECT // GCOVR_EXCL_LINE
 
 public:
-    explicit ModbusTcpServer(QObject *parent = nullptr);
+    ///
+    /// \brief Creates a TCP transport using the shared TLS certificate store.
+    /// \param parent Object owning the transport.
+    /// \param certificateStoreRoot PKI directory; empty uses the application store.
+    ///
+    explicit ModbusTcpServer(QObject *parent = nullptr, const QString& certificateStoreRoot = {});
     ~ModbusTcpServer();
 
     QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const override;
@@ -68,7 +74,7 @@ private:
     int _networkPort = 502;
     QString _networkAddress = QStringLiteral("127.0.0.1");
 
-    QTcpServer* _server = nullptr;
+    ModbusTlsListener* _server = nullptr;
     QVector<QTcpSocket*> _connections;
     QModbusTcpConnectionObserver* _observer = nullptr;
 

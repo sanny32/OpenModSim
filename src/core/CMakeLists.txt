@@ -1,4 +1,8 @@
 add_library(omodsim_core STATIC
+    pki/certificategenerator.cpp
+    pki/certificategenerator.h
+    pki/tlscertificatestore.cpp
+    pki/tlscertificatestore.h
     modbus/datasimulator.cpp
     modbus/datasimulator.h
     models/datamapdatamodel.cpp
@@ -13,6 +17,8 @@ add_library(omodsim_core STATIC
     modbus/modbusrtuserialserver.cpp
     modbus/modbusrtutcpserver.cpp
     modbus/modbusserver.cpp
+    modbus/modbustlslistener.cpp
+    modbus/modbustlslistener.h
     modbus/modbustcpserver.cpp
     project/projectaddressspacefilter.cpp
     project/projectaddressspacexml.cpp
@@ -123,3 +129,5 @@ omodsim_apply_coverage(omodsim_core)
 if(MSVC)
     target_compile_options(omodsim_core PUBLIC /utf-8)
 endif()
+
+target_link_libraries(omodsim_core PRIVATE OpenSSL::Crypto)

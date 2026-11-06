@@ -1,0 +1,19 @@
+name: Install OpenSSL
+description: Install the selected OpenSSL development package and runtime for Windows.
+inputs:
+  version:
+    description: OpenSSL version family, 1.1 or 3.
+    default: '3'
+  architecture:
+    description: Target architecture, x64 or x86.
+    default: x64
+runs:
+  using: composite
+  steps:
+    - name: Install OpenSSL
+      shell: pwsh
+      run: |
+        python -m pip install aqtinstall
+        $root = & ./tools/install_openssl.ps1 -Architecture '${{ inputs.architecture }}' -Version '${{ inputs.version }}'
+        "OPENSSL_ROOT_DIR=$root" >> $env:GITHUB_ENV
+        "$root\bin" >> $env:GITHUB_PATH

@@ -183,6 +183,17 @@
     </message>
 </context>
 <context>
+    <name>CertificateGenerator</name>
+    <message>
+        <source>Enter a server name, valid DNS names or IP addresses, and a validity period from 1 to 3650 days.</source>
+        <translation>Укажите имя сервера, допустимые DNS-имена или IP-адреса и срок действия от 1 до 3650 дней.</translation>
+    </message>
+    <message>
+        <source>Cannot generate the server certificate or private key.</source>
+        <translation>Не удалось создать сертификат сервера или закрытый ключ.</translation>
+    </message>
+</context>
+<context>
     <name>CmdLineParser</name>
     <message>
         <source>Displays this help.</source>
@@ -891,6 +902,10 @@ Open the download page?</source>
         <source>No response</source>
         <translation>Не отвечать на запросы</translation>
     </message>
+    <message>
+        <source>Certificates</source>
+        <translation>Сертификаты</translation>
+    </message>
 </context>
 <context>
     <name>DialogMsgParser</name>
@@ -1232,6 +1247,10 @@ Open the download page?</source>
     <message>
         <source>502</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Modbus TCP Security (TLS)</source>
+        <translation>Modbus TCP Security (TLS)</translation>
     </message>
 </context>
 <context>
@@ -2979,6 +2998,13 @@ Please verify the merge result carefully.</source>
     </message>
 </context>
 <context>
+    <name>ModbusTlsListener</name>
+    <message>
+        <source>TLS is unavailable in this Qt installation.</source>
+        <translation>В этой установке Qt отсутствует поддержка TLS.</translation>
+    </message>
+</context>
+<context>
     <name>OutputDataWidget</name>
     <message>
         <source>Set Value of %1</source>
@@ -3393,6 +3419,84 @@ Please verify the merge result carefully.</source>
     <message>
         <source>Responses: %1</source>
         <translation>Ответов: %1</translation>
+    </message>
+</context>
+<context>
+    <name>TlsCertificateStore</name>
+    <message>
+        <source>Generate a server certificate first.</source>
+        <translation>Сначала создайте сертификат сервера.</translation>
+    </message>
+    <message>
+        <source>Export the certificate outside the certificate store.</source>
+        <translation>Выберите место экспорта вне хранилища сертификатов.</translation>
+    </message>
+    <message>
+        <source>Generate a server certificate in Modbus Definitions → Certificates before enabling TLS.</source>
+        <translation>Перед включением TLS создайте сертификат сервера на вкладке «Сертификаты» настроек Modbus.</translation>
+    </message>
+    <message>
+        <source>The stored TLS server identity is invalid. Generate a new server certificate.</source>
+        <translation>Сохранённый сертификат или ключ сервера TLS повреждён. Создайте новый сертификат сервера.</translation>
+    </message>
+    <message>
+        <source>Cannot create the certificate store directory.</source>
+        <translation>Не удалось создать каталог хранилища сертификатов.</translation>
+    </message>
+    <message>
+        <source>Cannot restrict access to the server private key.</source>
+        <translation>Не удалось ограничить доступ к закрытому ключу сервера.</translation>
+    </message>
+</context>
+<context>
+    <name>TlsCertificatesWidget</name>
+    <message>
+        <source>Server name</source>
+        <translation>Имя сервера</translation>
+    </message>
+    <message>
+        <source>Host names / IP addresses</source>
+        <translation>DNS-имена / IP-адреса</translation>
+    </message>
+    <message>
+        <source>DNS names and IP addresses clients use to reach this server, separated by commas.</source>
+        <translation>DNS-имена и IP-адреса для подключения клиентов к серверу, через запятую.</translation>
+    </message>
+    <message>
+        <source>Valid for (days)</source>
+        <translation>Срок действия (дней)</translation>
+    </message>
+    <message>
+        <source>Generate…</source>
+        <translation>Создать…</translation>
+    </message>
+    <message>
+        <source>Export certificate…</source>
+        <translation>Экспорт сертификата…</translation>
+    </message>
+    <message>
+        <source>Replace server certificate</source>
+        <translation>Замена сертификата сервера</translation>
+    </message>
+    <message>
+        <source>Clients will need to trust the new certificate. Replace the existing server certificate?</source>
+        <translation>Клиентам потребуется добавить новый сертификат в доверенные. Заменить текущий сертификат сервера?</translation>
+    </message>
+    <message>
+        <source>Export server certificate</source>
+        <translation>Экспорт сертификата сервера</translation>
+    </message>
+    <message>
+        <source>PEM certificate (*.pem)</source>
+        <translation>Сертификат PEM (*.pem)</translation>
+    </message>
+    <message>
+        <source>Certificates</source>
+        <translation>Сертификаты</translation>
+    </message>
+    <message>
+        <source>Certificate parameters</source>
+        <translation>Параметры сертификата</translation>
     </message>
 </context>
 <context>

@@ -1,0 +1,436 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file test_tlssettings.cpp
+/// \brief Tests the TCP security settings dialog.
+///
+
+#include <QCheckBox>
+#include <QPushButton>
+#include <QTemporaryDir>
+#include <QTabWidget>
+#include <QTabBar>
+#include <QDialogButtonBox>
+#include <QScreen>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QTableWidget>
+#include "elidinglineedit.h"
+#include "tlscertificateswidget.h"
+#include "dialogmodbusdefinitions.h"
+#include <QLineEdit>
+#include <QLabel>
+#include <QSpinBox>
+#include <QMessageBox>
+#include <QTimer>
+#include <QTest>
+#include <QTranslator>
+#include "application.h"
+#include "macappstyle.h"
+#include "qlementineappstyle.h"
+#include <QSslSocket>
+#include "dialogselectserviceport.h"
+#include "numericlineedit.h"
+
+class TestTlsSettings : public QObject
+{
+    Q_OBJECT
+private slots:
+    void initTestCase();
+    void savesTlsSettings();
+    void preservesCustomPorts();
+    void excludesTlsFromRtuTcp();
+    void cancelPreservesSettings();
+    void generatesServerCertificateInSettings();
+    void offersCertificatesTab();
+    void loadsCurrentCertificateParameters();
+    void keepsCertificateControlsAccessible_data();
+    void keepsCertificateControlsAccessible();
+    void keepsSettingsSpacingCompact_data();
+    void keepsSettingsSpacingCompact();
+    void usesCompactDefaultHeight();
+    void elidesHostNamesWithoutChangingValue();
+    void highlightsSelectedSettingsTab();
+    void paintsMacSettingsPane_data();
+    void paintsMacSettingsPane();
+private:
+    QTranslator _translator;
+};
+
+///
+/// \brief Exercises the translated interface with the production style when available.
+///
+void TestTlsSettings::initTestCase()
+{
+    QVERIFY(_translator.load(QStringLiteral(":/res/translations/omodsim_ru.qm")));
+    qApp->installTranslator(&_translator);
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#ifdef Q_OS_MACOS
+    qApp->setStyle(new MacAppStyle());
+#else
+    qApp->setStyle(new QlementineAppStyle());
+#endif
+#endif
+}
+
+///
+/// \brief Saves TLS paths and selects the standard secure port.
+///
+void TestTlsSettings::savesTlsSettings()
+{
+    TcpConnectionParams params;
+    DialogSelectServicePort dialog(params);
+    QVERIFY(dialog.findChild<QCheckBox*>("tlsGroup")->toolTip().isEmpty());
+    dialog.findChild<QCheckBox*>("tlsGroup")->setChecked(true);
+    QCOMPARE(dialog.findChild<NumericLineEdit*>("lineEditPort")->value<int>(), 802);
+    dialog.accept();
+    QVERIFY(params.TlsEnabled);
+    QCOMPARE(params.ServicePort, quint16(802));
+
+    DialogSelectServicePort reopened(params);
+    QVERIFY(reopened.findChild<QCheckBox*>("tlsGroup")->isChecked());
+    QVERIFY(!dialog.findChild<QLineEdit*>("certificatePath"));
+    reopened.findChild<QCheckBox*>("tlsGroup")->setChecked(false);
+    QCOMPARE(reopened.findChild<NumericLineEdit*>("lineEditPort")->value<int>(), 502);
+}
+
+///
+/// \brief Keeps a user supplied port when TLS is toggled.
+///
+void TestTlsSettings::preservesCustomPorts()
+{
+    TcpConnectionParams params;
+    params.ServicePort = 1502;
+    DialogSelectServicePort dialog(params);
+    dialog.findChild<QCheckBox*>("tlsGroup")->setChecked(true);
+    QCOMPARE(dialog.findChild<NumericLineEdit*>("lineEditPort")->value<int>(), 1502);
+    dialog.findChild<QCheckBox*>("tlsGroup")->setChecked(false);
+    QCOMPARE(dialog.findChild<NumericLineEdit*>("lineEditPort")->value<int>(), 1502);
+}
+
+///
+/// \brief Hides TLS options for the RTU over TCP transport.
+///
+void TestTlsSettings::excludesTlsFromRtuTcp()
+{
+    TcpConnectionParams params;
+    params.TlsEnabled = true;
+    DialogSelectServicePort dialog(params, nullptr, false);
+    QVERIFY(dialog.findChild<QCheckBox*>("tlsGroup")->isHidden());
+    dialog.accept();
+    QVERIFY(!params.TlsEnabled);
+}
+
+///
+/// \brief Leaves connection settings unchanged when editing is cancelled.
+///
+void TestTlsSettings::cancelPreservesSettings()
+{
+    TcpConnectionParams params;
+    const auto original = params;
+    DialogSelectServicePort dialog(params);
+    dialog.findChild<QCheckBox*>("tlsGroup")->setChecked(true);
+    dialog.reject();
+    QCOMPARE(params, original);
+}
+
+///
+/// \brief Generates the shared identity from the certificate settings page.
+///
+void TestTlsSettings::generatesServerCertificateInSettings()
+{
+    if (!QSslSocket::supportsSsl())
+        QSKIP("Qt TLS backend is unavailable");
+    QTemporaryDir directory;
+    QVERIFY(directory.isValid());
+    TlsCertificatesWidget widget(nullptr, directory.path());
+    auto* exportButton = widget.findChild<QPushButton*>("exportButton");
+    QVERIFY(!exportButton->isEnabled());
+    QVERIFY(!widget.findChild<QWidget*>("serverGroup"));
+    QVERIFY(!widget.findChild<QWidget*>("emptyMessage"));
+    widget.findChild<QLineEdit*>("commonName")->setText("Modbus test server");
+    widget.findChild<QLineEdit*>("hostNames")->setText("localhost, 127.0.0.1, ::1, server-with-a-long-name.example.test");
+    widget.findChild<QPushButton*>("generateButton")->click();
+    const auto certificate = TlsCertificateStore(directory.path()).serverCertificate();
+    QVERIFY(!certificate.isNull());
+    QCOMPARE(certificate.subjectInfo(QSslCertificate::CommonName), QStringList{"Modbus test server"});
+    QVERIFY(certificate.subjectAlternativeNames().values(QSsl::DnsEntry).contains("server-with-a-long-name.example.test"));
+    QVERIFY(exportButton->isEnabled());
+}
+
+///
+/// \brief Shows the installed certificate parameters without a separate summary header.
+///
+void TestTlsSettings::loadsCurrentCertificateParameters()
+{
+    if (!QSslSocket::supportsSsl())
+        QSKIP("Qt TLS backend is unavailable");
+    QTemporaryDir directory;
+    TlsCertificateStore store(directory.path());
+    QVERIFY(store.generateServerCertificate("Installed server", {"installed.example.test", "127.0.0.1"}, 2).isEmpty());
+    TlsCertificatesWidget widget(nullptr, directory.path());
+    QCOMPARE(widget.findChild<QLineEdit*>("commonName")->text(), QString("Installed server"));
+    QVERIFY(widget.findChild<QLineEdit*>("hostNames")->text().contains("installed.example.test"));
+    QCOMPARE(widget.findChild<QSpinBox*>("validDays")->value(), 2);
+    QVERIFY(widget.findChild<QPushButton*>("exportButton")->isEnabled());
+    QVERIFY(!widget.findChild<QWidget*>("serverGroup"));
+}
+
+///
+/// \brief Exposes the shared certificate page through Modbus Definitions.
+///
+void TestTlsSettings::offersCertificatesTab()
+{
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    auto* page = dialog.findChild<TlsCertificatesWidget*>();
+    QVERIFY(page);
+    auto* tab = dialog.findChild<QWidget*>("tabCertificates");
+    QVERIFY(tabs->indexOf(tab) >= 0);
+    QVERIFY(tab->isAncestorOf(page));
+    QVERIFY(!page->findChild<QWidget*>("serverGroup"));
+    QVERIFY(!page->findChild<QWidget*>("certificateIcon"));
+    QVERIFY(page->findChild<QLabel*>("parametersTitle"));
+    for (int index = 0; index < tabs->count(); ++index)
+        QVERIFY(!tabs->tabIcon(index).isNull());
+    QVERIFY(!page->findChild<QWidget*>("changesHint"));
+    QVERIFY(!page->findChild<QTableWidget*>("trustedCertificates"));
+    QVERIFY(!page->findChild<QPushButton*>("importButton"));
+    QVERIFY(!page->findChild<QPushButton*>("removeButton"));
+}
+
+///
+/// \brief Covers normal and enlarged text on a height constrained display.
+///
+void TestTlsSettings::keepsCertificateControlsAccessible_data()
+{
+    QTest::addColumn<int>("fontSize");
+    QTest::newRow("normal-text") << 12;
+    QTest::newRow("large-text") << 18;
+}
+
+///
+/// \brief Keeps dialog actions visible while every certificate control can be scrolled into view.
+///
+void TestTlsSettings::keepsCertificateControlsAccessible()
+{
+    QFETCH(int, fontSize);
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    QFont font = dialog.font();
+    font.setPointSize(fontSize);
+    dialog.setFont(font);
+    dialog.setMaximumHeight(420);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    tabs->setCurrentWidget(dialog.findChild<QWidget*>("tabCertificates"));
+    dialog.show();
+    QCoreApplication::processEvents();
+    QVERIFY(dialog.height() <= 420);
+    QVERIFY(dialog.height() <= dialog.screen()->availableGeometry().height() - 64);
+    auto* buttons = dialog.findChild<QDialogButtonBox*>("buttonBox");
+    for (auto standard : {QDialogButtonBox::Ok, QDialogButtonBox::Cancel, QDialogButtonBox::Apply}) {
+        auto* button = buttons->button(standard);
+        QVERIFY(dialog.rect().contains(QRect(button->mapTo(&dialog, QPoint()), button->size())));
+    }
+    auto* scroll = dialog.findChild<QScrollArea*>("certificateScrollArea");
+    QVERIFY(scroll);
+    for (auto name : {"generateButton", "exportButton"}) {
+        auto* button = dialog.findChild<QPushButton*>(name);
+        scroll->ensureWidgetVisible(button);
+        QCoreApplication::processEvents();
+        const QRect visible(button->mapTo(scroll->viewport(), QPoint()), button->size());
+        QVERIFY2(scroll->viewport()->rect().contains(visible), name);
+    }
+}
+
+///
+/// \brief Checks spacing with normal and enlarged translated text.
+///
+void TestTlsSettings::keepsSettingsSpacingCompact_data()
+{
+    QTest::addColumn<int>("fontSize");
+    QTest::newRow("normal-text") << 12;
+    QTest::newRow("large-text") << 18;
+}
+
+///
+/// \brief Prevents nested page margins and spare dialog height from separating related controls.
+///
+void TestTlsSettings::keepsSettingsSpacingCompact()
+{
+    QFETCH(int, fontSize);
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    QFont font = dialog.font();
+    font.setPointSize(fontSize);
+    dialog.setFont(font);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    auto* certificateTab = dialog.findChild<QWidget*>("tabCertificates");
+    tabs->setCurrentWidget(certificateTab);
+    dialog.show();
+    QCoreApplication::processEvents();
+    auto* page = dialog.findChild<TlsCertificatesWidget*>();
+    const QRect pageRect(page->mapTo(certificateTab, QPoint()), page->size());
+    QVERIFY(pageRect.left() <= 12);
+    QVERIFY(certificateTab->width() - pageRect.right() - 1 <= 12);
+    auto* validity = dialog.findChild<QWidget*>("validDays");
+    auto* generate = dialog.findChild<QPushButton*>("generateButton");
+    const int actionGap = generate->mapTo(certificateTab, QPoint()).y()
+        - validity->mapTo(certificateTab, QPoint(0, validity->height())).y();
+    QVERIFY(actionGap <= 24);
+
+    tabs->setCurrentWidget(dialog.findChild<QWidget*>("tabErrSimulations"));
+    QCoreApplication::processEvents();
+    QCheckBox* previous = nullptr;
+    for (auto name : {"checkBoxErrIncorrentId", "checkBoxIllegalFunc", "checkBoxBusy", "checkBoxCrcErr",
+                      "checkBoxDelay", "checkBoxRandomDelay", "checkBoxNoResponse"}) {
+        auto* checkbox = dialog.findChild<QCheckBox*>(name);
+        if (previous) {
+            const int gap = checkbox->y() - previous->y() - previous->height();
+            QVERIFY2(gap >= 0 && gap <= 16, name);
+        }
+        previous = checkbox;
+    }
+}
+
+///
+/// \brief Avoids reserved blank space while keeping the tab controls and dialog actions visible.
+///
+void TestTlsSettings::usesCompactDefaultHeight()
+{
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    dialog.show();
+    QCoreApplication::processEvents();
+    QVERIFY2(dialog.height() < 480, qPrintable(QString::number(dialog.height())));
+    auto* certificateTab = dialog.findChild<QWidget*>("tabCertificates");
+    dialog.findChild<QTabWidget*>("tabWidget")->setCurrentWidget(certificateTab);
+    QCoreApplication::processEvents();
+    auto* scroll = dialog.findChild<QScrollArea*>("certificateScrollArea");
+    QCOMPARE(scroll->verticalScrollBar()->maximum(), 0);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    auto* errorTab = dialog.findChild<QWidget*>("tabErrSimulations");
+    tabs->setCurrentWidget(errorTab);
+    QCoreApplication::processEvents();
+    auto* lastOption = dialog.findChild<QCheckBox*>("checkBoxNoResponse");
+    QVERIFY(errorTab->rect().contains(lastOption->geometry()));
+    auto* buttons = dialog.findChild<QDialogButtonBox*>("buttonBox");
+    QVERIFY(dialog.rect().contains(QRect(buttons->mapTo(&dialog, QPoint()), buttons->size())));
+}
+
+///
+/// \brief Abbreviates long host lists while preserving their full value and normal editing history.
+///
+void TestTlsSettings::elidesHostNamesWithoutChangingValue()
+{
+    QTemporaryDir directory;
+    TlsCertificatesWidget widget(nullptr, directory.path());
+    widget.resize(460, 340);
+    auto* hosts = widget.findChild<ElidingLineEdit*>("hostNames");
+    QVERIFY(hosts);
+    hosts->setMinimumWidth(hosts->sizeHint().width());
+    const QString full = "controller-with-a-long-hostname.example.test, localhost, 127.0.0.1, ::1";
+    hosts->setText(full);
+    widget.show();
+    auto* name = widget.findChild<QLineEdit*>("commonName");
+    name->setFocus();
+    QCoreApplication::processEvents();
+    QVERIFY(!hosts->hasFocus());
+    const QString preview = hosts->visibleText();
+    QVERIFY(preview.endsWith(QChar(0x2026)));
+    QVERIFY(preview.size() > 1);
+    QVERIFY(full.startsWith(preview.chopped(1)));
+    QCOMPARE(hosts->text(), full);
+    hosts->setFocus();
+    QTRY_VERIFY(hosts->hasFocus());
+    QCOMPARE(hosts->visibleText(), full);
+    hosts->setCursorPosition(full.size());
+    QTest::keyClick(hosts, Qt::Key_X);
+    QCOMPARE(hosts->text(), full + "x");
+    name->setFocus();
+    QCoreApplication::processEvents();
+    hosts->undo();
+    QCOMPARE(hosts->text(), full);
+    hosts->setText("localhost");
+    QCOMPARE(hosts->visibleText(), QString("localhost"));
+}
+
+///
+/// \brief Keeps accent navigation selectable by keyboard and honors palette changes.
+///
+void TestTlsSettings::highlightsSelectedSettingsTab()
+{
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    auto* bar = tabs->tabBar();
+    QPalette colors = bar->palette();
+    colors.setColor(QPalette::Highlight, QColor("#2859a0"));
+    colors.setColor(QPalette::HighlightedText, Qt::white);
+    bar->setPalette(colors);
+    dialog.show();
+    bar->setFocus();
+    tabs->setCurrentIndex(0);
+    QTest::keyClick(bar, Qt::Key_Right);
+    QCOMPARE(tabs->currentIndex(), 1);
+    const QRect selected = bar->tabRect(1);
+    const QPoint background(selected.left() + 5, selected.center().y());
+    const QImage image = bar->grab().toImage();
+    const qreal scale = image.devicePixelRatio();
+    QCOMPARE(image.pixelColor(qRound(background.x() * scale), qRound(background.y() * scale)),
+             colors.color(QPalette::Highlight));
+}
+
+///
+/// \brief Covers distinct macOS content surfaces in light and dark palettes.
+///
+void TestTlsSettings::paintsMacSettingsPane_data()
+{
+    QTest::addColumn<QColor>("windowColor");
+    QTest::addColumn<QColor>("paneColor");
+    QTest::newRow("light") << QColor("#efefef") << QColor("#ffffff");
+    QTest::newRow("dark") << QColor("#2c2c2e") << QColor("#1c1c1e");
+}
+
+///
+/// \brief Keeps the content background visible through each macOS settings page.
+///
+void TestTlsSettings::paintsMacSettingsPane()
+{
+#ifndef Q_OS_MAC
+    QSKIP("The settings pane background is specific to macOS");
+#else
+    QFETCH(QColor, windowColor);
+    QFETCH(QColor, paneColor);
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    QPalette colors = dialog.palette();
+    colors.setColor(QPalette::Window, windowColor);
+    colors.setColor(QPalette::Base, paneColor);
+    dialog.setPalette(colors);
+    dialog.show();
+    for (int index = 0; index < tabs->count(); ++index) {
+        tabs->setCurrentIndex(index);
+        QCoreApplication::processEvents();
+        auto* page = tabs->currentWidget();
+        const QPoint sample = page->mapTo(tabs, QPoint(page->width() - 6, page->height() - 6));
+        const QImage image = tabs->grab().toImage();
+        const qreal scale = image.devicePixelRatio();
+        QCOMPARE(image.pixelColor(qRound(sample.x() * scale), qRound(sample.y() * scale)), paneColor);
+    }
+#endif
+}
+
+///
+/// \brief Runs the layout tests with the application theme service.
+///
+int main(int argc, char** argv)
+{
+    Application app(argc, argv);
+    TestTlsSettings test;
+    return QTest::qExec(&test, argc, argv);
+}
+#include "test_tlssettings.moc"

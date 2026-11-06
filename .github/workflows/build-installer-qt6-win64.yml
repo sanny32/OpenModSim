@@ -113,9 +113,14 @@ jobs:
           echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
         shell: cmd
 
+      - name: Install OpenSSL 3
+        uses: ./.github/actions/install-openssl
+        with:
+          architecture: x64
+
       - name: Configure CMake
         run: |
-          cmake src -B ${{ env.BUILD_DIR }} -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="%QT_ROOT_DIR%" -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }} -DOMODSIM_BUILD_TESTS=OFF
+          cmake src -B ${{ env.BUILD_DIR }} -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="%QT_ROOT_DIR%" -DOPENSSL_ROOT_DIR="%OPENSSL_ROOT_DIR%" -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }} -DOMODSIM_BUILD_TESTS=OFF
         shell: cmd
 
       - name: Build

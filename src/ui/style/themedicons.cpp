@@ -30,6 +30,11 @@ struct IconDescriptor {
 const QHash<QString, IconDescriptor>& iconRegistry()
 {
     static const QHash<QString, IconDescriptor> registry {
+        { QStringLiteral("omodsim/certificate"), { QStringLiteral(""), QStringLiteral("certificate") } },
+        { QStringLiteral("omodsim/person"), { QStringLiteral(""), QStringLiteral("person") } },
+        { QStringLiteral("omodsim/hosts"), { QStringLiteral(""), QStringLiteral("hosts") } },
+        { QStringLiteral("omodsim/calendar"), { QStringLiteral(""), QStringLiteral("calendar") } },
+
         { QStringLiteral("omodsim/about"),                     { QStringLiteral("misc/question"),                       QStringLiteral("about") } },
         { QStringLiteral("omodsim/add"),                       { QStringLiteral("action/plus-circle"),                  QStringLiteral("add") } },
         { QStringLiteral("omodsim/bell"),                      { QStringLiteral("misc/bell"),                           QStringLiteral("bell") } },

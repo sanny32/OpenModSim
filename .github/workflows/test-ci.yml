@@ -5,12 +5,16 @@ on:
     branches: [dev]
     paths:
       - '.github/workflows/test-ci.yml'
+      - '.github/actions/*openssl*/**'
+      - 'tools/*openssl*'
       - 'src/**'
       - 'tools/coverage.py'
   pull_request:
     branches: [main, dev]
     paths:
       - '.github/workflows/test-ci.yml'
+      - '.github/actions/*openssl*/**'
+      - 'tools/*openssl*'
       - 'src/**'
       - 'tools/coverage.py'
   workflow_dispatch:
@@ -52,6 +56,7 @@ jobs:
     env:
       # Run Qt GUI/Test binaries without a real display.
       QT_QPA_PLATFORM: offscreen
+      OMODSIM_REQUIRE_TLS: '1'
 
     steps:
       - name: Checkout
@@ -63,12 +68,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             ninja-build \
-            libgl1-mesa-dev \
+            libgl1-mesa-dev libssl-dev \
             libxkbcommon-x11-0
 
       - name: Install Ninja (macOS)
         if: runner.os == 'macOS'
-        run: brew install ninja
+        run: |
+          brew install ninja openssl@3
+          echo "OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)" >> "$GITHUB_ENV"
 
       - name: Set up MSVC environment (Windows)
         if: runner.os == 'Windows'
@@ -80,6 +87,14 @@ jobs:
           version: ${{ matrix.qt-version }}
           modules: ${{ matrix.qt-modules }}
           cache: true
+
+      - name: Install OpenSSL 3 (Windows)
+        if: runner.os == 'Windows' && matrix.qt-version != '5.15.2'
+        uses: ./.github/actions/install-openssl
+
+      - name: Install OpenSSL 1.1 (Qt 5)
+        if: matrix.qt-version == '5.15.2'
+        uses: ./.github/actions/install-openssl11
 
       - name: Configure
         run: >
@@ -93,6 +108,28 @@ jobs:
 
       - name: Run tests
         run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
+
+      - name: Print Windows test failures
+        if: failure() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $failedTests = 'build/Testing/Temporary/LastTestsFailed.log'
+          if (Test-Path $failedTests) {
+            foreach ($entry in Get-Content $failedTests) {
+              $testName = ($entry -split ':', 2)[1]
+              $testLog = "build/tests/$testName.testlog.txt"
+              if (Test-Path $testLog) { Get-Content $testLog }
+            }
+          }
+
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-logs-${{ matrix.os }}-qt${{ matrix.qt-version }}
+          path: |
+            build/Testing/Temporary/
+            build/tests/*.testlog.txt
 
   coverage:
     name: Coverage (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
@@ -108,6 +145,7 @@ jobs:
 
     env:
       QT_QPA_PLATFORM: offscreen
+      OMODSIM_REQUIRE_TLS: '1'
 
     steps:
       - name: Checkout
@@ -118,7 +156,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             ninja-build \
-            libgl1-mesa-dev \
+            libgl1-mesa-dev libssl-dev \
             libxkbcommon-x11-0
           python3 -m pip install --upgrade gcovr
 
