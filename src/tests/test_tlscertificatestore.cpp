@@ -224,6 +224,9 @@ void TestTlsCertificateStore::persistsAndExportsIdentity()
     QCOMPARE(bytes, store.serverCertificate().toPem());
     QVERIFY(!bytes.contains("PRIVATE KEY"));
     QVERIFY(!store.exportServerCertificate(identity).isEmpty());
+    QVERIFY(!store.exportServerCertificate(store.root() + "/own/export.pem").isEmpty());
+    QVERIFY(!store.exportServerCertificate(store.root() + "/own/../own/export.pem").isEmpty());
+    QCOMPARE(store.serverCertificate(), configuration.localCertificate());
 #ifndef Q_OS_WIN
     const auto permissions = QFile::permissions(identity);
     QVERIFY(!(permissions & (QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ReadOther | QFileDevice::WriteOther)));

@@ -63,7 +63,7 @@ private:
 ///
 void TestTlsSettings::initTestCase()
 {
-    QVERIFY(_translator.load(QFINDTESTDATA("../app/translations/omodsim_ru.qm")));
+    QVERIFY(_translator.load(QStringLiteral(":/res/translations/omodsim_ru.qm")));
     qApp->installTranslator(&_translator);
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
 #ifdef Q_OS_MACOS
@@ -337,8 +337,10 @@ void TestTlsSettings::elidesHostNamesWithoutChangingValue()
     name->setFocus();
     QCoreApplication::processEvents();
     QVERIFY(!hosts->hasFocus());
-    QVERIFY(hosts->visibleText().endsWith(QChar(0x2026)));
-    QVERIFY(hosts->visibleText().startsWith("controller"));
+    const QString preview = hosts->visibleText();
+    QVERIFY(preview.endsWith(QChar(0x2026)));
+    QVERIFY(preview.size() > 1);
+    QVERIFY(full.startsWith(preview.chopped(1)));
     QCOMPARE(hosts->text(), full);
     hosts->setFocus();
     QTRY_VERIFY(hosts->hasFocus());

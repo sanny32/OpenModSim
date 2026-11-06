@@ -32,7 +32,8 @@ runs:
 
     - name: Cache Windows OpenSSL
       if: runner.os == 'Windows'
-      uses: actions/cache@v4
+      id: windows-cache
+      uses: actions/cache/restore@v4
       with:
         path: C:/Qt/Tools/OpenSSL11/Win_${{ inputs.architecture }}
         key: openssl-1.1.1w-Windows-${{ inputs.architecture }}-v1
@@ -43,3 +44,10 @@ runs:
       with:
         version: '1.1'
         architecture: ${{ inputs.architecture }}
+
+    - name: Save Windows OpenSSL
+      if: runner.os == 'Windows' && steps.windows-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: C:/Qt/Tools/OpenSSL11/Win_${{ inputs.architecture }}
+        key: openssl-1.1.1w-Windows-${{ inputs.architecture }}-v1

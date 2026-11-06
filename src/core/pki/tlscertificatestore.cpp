@@ -169,9 +169,9 @@ QString TlsCertificateStore::exportServerCertificate(const QString& fileName) co
     const auto certificate = serverCertificate();
     if (certificate.isNull())
         return tr("Generate a server certificate first.");
-    const QString target = QFileInfo(fileName).absoluteFilePath();
-    const QString storeRoot = QFileInfo(_root).absoluteFilePath();
-    if (target == storeRoot || target.startsWith(storeRoot + QDir::separator()))
+    const QString target = QDir::cleanPath(QFileInfo(fileName).absoluteFilePath());
+    const QString storeRoot = QDir::cleanPath(QFileInfo(_root).absoluteFilePath());
+    if (target == storeRoot || target.startsWith(storeRoot + QLatin1Char('/')))
         return tr("Export the certificate outside the certificate store.");
     return saveFile(fileName, certificate.toPem());
 }
