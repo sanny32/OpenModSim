@@ -1735,6 +1735,7 @@ void TestForms::dataViewWritesAndSimulatesValues()
 
 int main(int argc, char** argv)
 {
+    QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
     Application app(argc, argv);
     TestForms test;
     return QTest::qExec(&test, argc, argv);
