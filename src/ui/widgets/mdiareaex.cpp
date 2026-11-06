@@ -114,6 +114,9 @@ MdiAreaEx::MdiAreaEx(QWidget* parent)
                   QStringLiteral("constructed %1").arg(mdiExState(this)));
 
     connect(qApp, &QApplication::focusChanged, this, [this](QWidget* old, QWidget* now) {
+        if (_destroying)
+            return;
+
         AppTrace::log("MdiAreaEx::focusChanged",
                       QStringLiteral("%1 old=%2 now=%3")
                           .arg(mdiExState(this))
