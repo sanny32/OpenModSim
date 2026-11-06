@@ -159,7 +159,7 @@ void MdiTabBar::addSubWindow(QMdiSubWindow* wnd)
     }
 
     const int index = addTab(wnd->windowIcon(), tabTextForWindow(wnd));
-    setTabData(index, QVariant::fromValue(wnd));
+    setTabData(index, QVariant::fromValue<QObject*>(wnd));
 
     connect(wnd, &QWidget::windowTitleChanged, this, [this, wnd](const QString&) {
         updateSubWindowState(wnd);
@@ -197,7 +197,7 @@ int MdiTabBar::indexOfSubWindow(QMdiSubWindow* wnd) const
     if(!wnd) return -1;
 
     for(int i = 0; i < count(); i++) {
-        if(tabData(i).value<QMdiSubWindow*>() == wnd)
+        if(tabData(i).value<QObject*>() == wnd)
             return i;
     }
 
@@ -214,7 +214,7 @@ QMdiSubWindow* MdiTabBar::subWindowAt(int tabIndex) const
     if(tabIndex < 0 || tabIndex >= count())
         return nullptr;
 
-    return tabData(tabIndex).value<QMdiSubWindow*>();
+    return qobject_cast<QMdiSubWindow*>(tabData(tabIndex).value<QObject*>());
 }
 
 ///
