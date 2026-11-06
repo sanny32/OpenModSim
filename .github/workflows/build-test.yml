@@ -128,7 +128,7 @@ jobs:
             build/tests/*.testlog.txt
 
   coverage:
-    name: Coverage (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
+    name: Coverage Tests (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
