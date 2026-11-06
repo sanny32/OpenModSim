@@ -37,6 +37,7 @@ private slots:
     void loadsNamedIdentitiesOnly();
     void preservesIdentityOnFailure();
     void rejectsMissingAndCorruptIdentity();
+    void rejectsMismatchedIdentity();
 };
 
 ///
@@ -322,6 +323,30 @@ void TestTlsCertificateStore::rejectsMissingAndCorruptIdentity()
     QVERIFY(file.open(QIODevice::WriteOnly));
     file.write("invalid identity");
     file.close();
+    QVERIFY(!store.configuration(configuration).isEmpty());
+}
+
+///
+/// \brief Rejects a readable certificate paired with a different private key.
+///
+void TestTlsCertificateStore::rejectsMismatchedIdentity()
+{
+    QTemporaryDir directory;
+    TlsCertificateStore store(directory.path());
+    QString error;
+    const auto first = CertificateGenerator::generate("first", {"localhost"}, 2, &error);
+    QVERIFY2(error.isEmpty(), qPrintable(error));
+    const auto second = CertificateGenerator::generate("second", {"localhost"}, 2, &error);
+    QVERIFY2(error.isEmpty(), qPrintable(error));
+    const QByteArray bytes = first.Certificate + second.PrivateKey;
+    QVERIFY(!QSslCertificate::fromData(bytes).isEmpty());
+    QVERIFY(!QSslKey(bytes, QSsl::Rsa).isNull());
+    QVERIFY(QDir().mkpath(directory.filePath("own")));
+    QFile file(directory.filePath("own/" + TlsCertificateStore::generatedFileName()));
+    QVERIFY(file.open(QIODevice::WriteOnly));
+    QCOMPARE(file.write(bytes), qint64(bytes.size()));
+    file.close();
+    QSslConfiguration configuration;
     QVERIFY(!store.configuration(configuration).isEmpty());
 }
 

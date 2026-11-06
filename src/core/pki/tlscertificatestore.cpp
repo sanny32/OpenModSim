@@ -18,8 +18,29 @@
 #include <QSslKey>
 #include <QSslSocket>
 #include <QStandardPaths>
+#include <memory>
+#include <openssl/pem.h>
+#include <openssl/x509.h>
 
 namespace {
+
+///
+/// \brief Checks that the first PEM certificate matches the contained private key.
+///
+bool hasMatchingPrivateKey(const QByteArray& bytes)
+{
+    const std::unique_ptr<BIO, decltype(&BIO_free)> certificateBio(
+        BIO_new_mem_buf(bytes.constData(), bytes.size()), BIO_free);
+    const std::unique_ptr<BIO, decltype(&BIO_free)> keyBio(
+        BIO_new_mem_buf(bytes.constData(), bytes.size()), BIO_free);
+    if (!certificateBio || !keyBio)
+        return false;
+    const std::unique_ptr<X509, decltype(&X509_free)> certificate(
+        PEM_read_bio_X509(certificateBio.get(), nullptr, nullptr, nullptr), X509_free);
+    const std::unique_ptr<EVP_PKEY, decltype(&EVP_PKEY_free)> key(
+        PEM_read_bio_PrivateKey(keyBio.get(), nullptr, nullptr, nullptr), EVP_PKEY_free);
+    return certificate && key && X509_check_private_key(certificate.get(), key.get()) == 1;
+}
 
 ///
 /// \brief Translates store failures without a QObject dependency.
@@ -189,7 +210,7 @@ QString TlsCertificateStore::configuration(QSslConfiguration& configuration) con
     const auto bytes = identity.readAll();
     const auto certificates = QSslCertificate::fromData(bytes);
     const QSslKey key(bytes, QSsl::Rsa);
-    if (certificates.isEmpty() || key.isNull())
+    if (certificates.isEmpty() || key.isNull() || !hasMatchingPrivateKey(bytes))
         return tr("The stored TLS server identity is invalid. Generate a new server certificate.");
     configuration = QSslConfiguration::defaultConfiguration();
     configuration.setProtocol(QSsl::TlsV1_2OrLater);
