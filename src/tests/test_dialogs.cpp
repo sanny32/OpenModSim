@@ -6,6 +6,7 @@
 /// \brief Unit tests for dialog controls and value propagation.
 ///
 
+#include <QAction>
 #include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
