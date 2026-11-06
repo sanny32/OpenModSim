@@ -1,10 +1,10 @@
-name: Test CI
+name: Build and Test
 
 on:
   push:
     branches: [dev]
     paths:
-      - '.github/workflows/test-ci.yml'
+      - '.github/workflows/build-test.yml'
       - '.github/actions/*openssl*/**'
       - 'tools/*openssl*'
       - 'src/**'
@@ -12,7 +12,7 @@ on:
   pull_request:
     branches: [main, dev]
     paths:
-      - '.github/workflows/test-ci.yml'
+      - '.github/workflows/build-test.yml'
       - '.github/actions/*openssl*/**'
       - 'tools/*openssl*'
       - 'src/**'
@@ -21,7 +21,7 @@ on:
 
 # Cancel superseded runs on the same ref to save CI minutes.
 concurrency:
-  group: test-${{ github.ref }}
+  group: build-test-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
             qt-version: '6.9.3'
             qt-modules: 'qtserialbus qtserialport qt5compat'
             cmake-options: ''
-          - os: macos-26
+          - os: macos-latest
             qt-version: '6.9.3'
             qt-modules: 'qtserialbus qtserialport qt5compat'
             cmake-options: ''

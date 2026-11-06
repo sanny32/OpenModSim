@@ -32,8 +32,6 @@ ui_*.h
 *.qhc
 Makefile*
 *build-*
-!/.github/actions/build-openssl3-runtime/
-!/.github/actions/build-openssl3-runtime/action.yml
 debug
 release
 
@@ -87,3 +85,5 @@ src/app/res/license.txt
 
 # Local project user state (window layout, view mode, tab order)
 *.omsim.user
+
+!/.github/**
