@@ -42,6 +42,8 @@ private slots:
 ///
 void TestTlsCertificateStore::initTestCase()
 {
+    if (qEnvironmentVariableIsSet("OMODSIM_REQUIRE_TLS"))
+        QVERIFY2(QSslSocket::supportsSsl(), "The configured TLS runtime could not be loaded");
     if (!QSslSocket::supportsSsl())
         QSKIP("Qt TLS backend is unavailable");
 }
@@ -108,7 +110,6 @@ void TestTlsCertificateStore::generatesServerIdentity()
     QVERIFY2(error.isEmpty(), qPrintable(error));
     const QSslCertificate certificate(generated.Certificate);
     QVERIFY(!certificate.isNull());
-    QVERIFY(certificate.isSelfSigned());
     QCOMPARE(certificate.subjectInfo(QSslCertificate::CommonName), QStringList{"Modbus simulator"});
     QCOMPARE(certificate.subjectAlternativeNames().values(QSsl::DnsEntry), QStringList{"localhost"});
     QVERIFY(certificate.subjectAlternativeNames().values(QSsl::IpAddressEntry).contains("127.0.0.1"));
@@ -125,6 +126,7 @@ void TestTlsCertificateStore::generatesServerIdentity()
     QVERIFY(parsed && key);
     QCOMPARE(EVP_PKEY_bits(key.get()), 2048);
     QCOMPARE(X509_check_private_key(parsed.get(), key.get()), 1);
+    QCOMPARE(X509_NAME_cmp(X509_get_subject_name(parsed.get()), X509_get_issuer_name(parsed.get())), 0);
     QCOMPARE(X509_verify(parsed.get(), key.get()), 1);
     QCOMPARE(X509_check_ca(parsed.get()), 0);
     QCOMPARE(X509_check_purpose(parsed.get(), X509_PURPOSE_SSL_SERVER, 0), 1);

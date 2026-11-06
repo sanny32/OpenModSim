@@ -52,6 +52,7 @@ jobs:
     env:
       # Run Qt GUI/Test binaries without a real display.
       QT_QPA_PLATFORM: offscreen
+      OMODSIM_REQUIRE_TLS: '1'
 
     steps:
       - name: Checkout
@@ -87,6 +88,10 @@ jobs:
         if: runner.os == 'Windows'
         uses: ./.github/actions/install-openssl
 
+      - name: Install Qt 5 TLS runtime
+        if: matrix.qt-version == '5.15.2'
+        uses: ./.github/actions/install-qt5-tls-runtime
+
       - name: Configure
         run: >
           cmake -S src -B build -G Ninja
@@ -99,6 +104,13 @@ jobs:
 
       - name: Run tests
         run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
+
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-logs-${{ matrix.os }}-qt${{ matrix.qt-version }}
+          path: build/Testing/Temporary/
 
   coverage:
     name: Coverage (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
@@ -114,6 +126,7 @@ jobs:
 
     env:
       QT_QPA_PLATFORM: offscreen
+      OMODSIM_REQUIRE_TLS: '1'
 
     steps:
       - name: Checkout

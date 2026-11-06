@@ -107,6 +107,9 @@ bool TestModbusTls::expireCertificate(const QString& name)
 ///
 void TestModbusTls::initTestCase()
 {
+    qRegisterMetaType<QModbusDevice::Error>("QModbusDevice::Error");
+    if (qEnvironmentVariableIsSet("OMODSIM_REQUIRE_TLS"))
+        QVERIFY2(QSslSocket::supportsSsl(), "The configured TLS runtime could not be loaded");
     if (!QSslSocket::supportsSsl())
         QSKIP("Qt TLS backend is unavailable");
     _openssl = QStandardPaths::findExecutable("openssl");
