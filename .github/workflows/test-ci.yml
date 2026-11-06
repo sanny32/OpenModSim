@@ -5,12 +5,16 @@ on:
     branches: [dev]
     paths:
       - '.github/workflows/test-ci.yml'
+      - '.github/actions/*openssl*/**'
+      - 'tools/*openssl*'
       - 'src/**'
       - 'tools/coverage.py'
   pull_request:
     branches: [main, dev]
     paths:
       - '.github/workflows/test-ci.yml'
+      - '.github/actions/*openssl*/**'
+      - 'tools/*openssl*'
       - 'src/**'
       - 'tools/coverage.py'
   workflow_dispatch:
@@ -85,12 +89,12 @@ jobs:
           cache: true
 
       - name: Install OpenSSL 3 (Windows)
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && matrix.qt-version != '5.15.2'
         uses: ./.github/actions/install-openssl
 
-      - name: Install Qt 5 TLS runtime
+      - name: Install OpenSSL 1.1 (Qt 5)
         if: matrix.qt-version == '5.15.2'
-        uses: ./.github/actions/install-qt5-tls-runtime
+        uses: ./.github/actions/install-openssl11
 
       - name: Configure
         run: >
@@ -105,12 +109,27 @@ jobs:
       - name: Run tests
         run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
 
+      - name: Print Windows test failures
+        if: failure() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $failedTests = 'build/Testing/Temporary/LastTestsFailed.log'
+          if (Test-Path $failedTests) {
+            foreach ($entry in Get-Content $failedTests) {
+              $testName = ($entry -split ':', 2)[1]
+              $testLog = "build/tests/$testName.testlog.txt"
+              if (Test-Path $testLog) { Get-Content $testLog }
+            }
+          }
+
       - name: Upload test diagnostics
         if: failure()
         uses: actions/upload-artifact@v7
         with:
           name: test-logs-${{ matrix.os }}-qt${{ matrix.qt-version }}
-          path: build/Testing/Temporary/
+          path: |
+            build/Testing/Temporary/
+            build/tests/*.testlog.txt
 
   coverage:
     name: Coverage (${{ matrix.os }}, Qt ${{ matrix.qt-version }})

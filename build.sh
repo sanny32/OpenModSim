@@ -582,7 +582,13 @@ else
     echo "Using Qt $QT_VERSION from: $CMAKE_PREFIX"
 fi
 
-if [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! pkg-config --atleast-version=3 openssl 2>/dev/null; then
+if [ "${QT_VERSION%%.*}" = "5" ]; then
+    if [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! pkg-config --atleast-version=1.1.1 --max-version=1.1.999 openssl 2>/dev/null; then
+        OPENSSL_SOURCE_ROOT=$(python3 "$PROJECT_DIR/tools/fetch_openssl11.py" "$TOOLS_DIR/openssl11-src")
+        export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl11"
+        bash "$PROJECT_DIR/tools/build_openssl.sh" "$OPENSSL_SOURCE_ROOT" "$OPENSSL_ROOT_DIR" 1.1
+    fi
+elif [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! pkg-config --atleast-version=3 openssl 2>/dev/null; then
     OPENSSL_TOOLS_ROOT="$TOOLS_DIR/openssl-src"
     OPENSSL_SOURCE_ROOT="$OPENSSL_TOOLS_ROOT/Tools/OpenSSLv3/src"
     if [ ! -f "$OPENSSL_SOURCE_ROOT/Configure" ]; then

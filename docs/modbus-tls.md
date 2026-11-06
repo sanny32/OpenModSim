@@ -45,9 +45,10 @@ At application startup, a missing identity is generated with the local hostname,
 local DNS/IP addresses, and a validity period of 3650 days. Existing identities are
 preserved; invalid files require explicit replacement in the certificate settings.
 
-OpenSSL 3 `libcrypto` is a build and runtime dependency for certificate generation.
-The build scripts install it through Homebrew on macOS, Qt's OpenSSL package on
-Windows, or distribution packages/source builds on Linux. Runtime libraries and the
+Certificate generation and Qt TLS use the same OpenSSL version: 1.1.1 with Qt 5,
+and 3 with Qt 6. CMake rejects a mismatched OpenSSL major version. The build scripts
+install development and runtime libraries through system packages, Qt's OpenSSL 3
+package, or a checksum-verified OpenSSL 1.1.1w source build. Runtime libraries and the
 OpenSSL license are included in packaged distributions. The application does not
 invoke the `openssl` command-line tool. Integration tests use that utility to create
 client test fixtures and skip when it or a Qt TLS backend is unavailable.

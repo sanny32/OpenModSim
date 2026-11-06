@@ -16,6 +16,7 @@
 #include <QTest>
 #include <memory>
 #include <openssl/pem.h>
+#include <openssl/crypto.h>
 #include <openssl/x509v3.h>
 #include "pki/certificategenerator.h"
 #include "pki/tlscertificatestore.h"
@@ -26,6 +27,7 @@ class TestTlsCertificateStore : public QObject
 private slots:
     void initTestCase();
     void generatesServerIdentity();
+    void usesSingleOpenSslVersion();
     void createsDefaultIdentityOnce();
     void reportsStartupGenerationFailures();
     void rejectsInvalidGeneration_data();
@@ -46,6 +48,30 @@ void TestTlsCertificateStore::initTestCase()
         QVERIFY2(QSslSocket::supportsSsl(), "The configured TLS runtime could not be loaded");
     if (!QSslSocket::supportsSsl())
         QSKIP("Qt TLS backend is unavailable");
+}
+
+///
+/// \brief Keeps certificate generation and the OpenSSL Qt backend on the same ABI family.
+///
+void TestTlsCertificateStore::usesSingleOpenSslVersion()
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    constexpr unsigned long minimum = 0x10101000UL;
+    constexpr unsigned long maximum = 0x30000000UL;
+#else
+    constexpr unsigned long minimum = 0x30000000UL;
+    constexpr unsigned long maximum = 0x40000000UL;
+#endif
+    QVERIFY(OpenSSL_version_num() >= minimum && OpenSSL_version_num() < maximum);
+#ifndef Q_OS_MAC
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    if (QSslSocket::activeBackend() != "openssl")
+        return;
+#endif
+    const auto tlsVersion = QSslSocket::sslLibraryVersionNumber();
+    QVERIFY2(tlsVersion >= minimum && tlsVersion < maximum,
+             qPrintable(QSslSocket::sslLibraryVersionString()));
+#endif
 }
 
 ///

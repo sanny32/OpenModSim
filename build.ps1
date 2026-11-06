@@ -477,9 +477,10 @@ if (-not (Test-Path $QtDir)) {
 }
 Write-Host "Found Qt: $QtDir"
 
-Write-Host "Checking for OpenSSL 3..."
+$OpenSslVersion = if ($QtMajorVersion -eq '5') { '1.1' } else { '3' }
+Write-Host "Checking for OpenSSL $OpenSslVersion..."
 $OpenSslArchitecture = if ($Arch -eq 'win32') { 'x86' } else { 'x64' }
-$OpenSslRoot = & (Join-Path $PSScriptRoot 'tools\install_openssl.ps1') -Architecture $OpenSslArchitecture
+$OpenSslRoot = & (Join-Path $PSScriptRoot 'tools\install_openssl.ps1') -Architecture $OpenSslArchitecture -Version $OpenSslVersion
 $env:PATH = "$(Join-Path $OpenSslRoot 'bin');$env:PATH"
 
 # Create Build dir

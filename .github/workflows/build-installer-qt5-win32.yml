@@ -117,8 +117,8 @@ jobs:
           echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
         shell: cmd
 
-      - name: Install OpenSSL 3
-        uses: ./.github/actions/install-openssl
+      - name: Install OpenSSL 1.1
+        uses: ./.github/actions/install-openssl11
         with:
           architecture: x86
 

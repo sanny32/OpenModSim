@@ -1,4 +1,10 @@
-find_package(OpenSSL 3 REQUIRED COMPONENTS Crypto)
+if(Qt6_FOUND)
+    find_package(OpenSSL 3...<4 REQUIRED COMPONENTS Crypto)
+    set(omodsim_openssl_license "OpenSSL.txt")
+else()
+    find_package(OpenSSL 1.1.1...<3 REQUIRED COMPONENTS Crypto)
+    set(omodsim_openssl_license "OpenSSL-1.1.txt")
+endif()
 
 function(omodsim_deploy_openssl target_name)
     if(WIN32)
@@ -14,5 +20,5 @@ function(omodsim_deploy_openssl target_name)
     endif()
 endfunction()
 
-configure_file("${PROJECT_SOURCE_DIR}/../third_party/licenses/OpenSSL.txt"
+configure_file("${PROJECT_SOURCE_DIR}/../third_party/licenses/${omodsim_openssl_license}"
                "${PROJECT_BINARY_DIR}/docs/licenses/OpenSSL.txt" COPYONLY)

@@ -75,7 +75,7 @@ jobs:
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
             libfontconfig1 libfreetype6 libx11-6 libxext6 libxrender1 \
             zlib1g-dev libpng-dev libjpeg-dev libdbus-1-3 \
-            libssl1.1 \
+            libssl1.1 libssl-dev \
             libwayland-cursor0 libwayland-egl1-mesa \
             libgtk-3-0 libgdk-pixbuf2.0-0 libpangocairo-1.0-0 libpango-1.0-0 libatk1.0-0 libcairo2 libcairo-gobject2 \
             libcups2 \
@@ -107,16 +107,12 @@ jobs:
       - name: Set BUILD_DIR
         run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}-Release" >> $GITHUB_ENV
 
-      - name: Resolve latest OpenSSL 3.5 LTS version
-        uses: ./.github/actions/build-openssl3-runtime
-
       - name: Configure project
         run: |
           cmake src -B ${{ env.BUILD_DIR }} \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
-            -DOPENSSL_ROOT_DIR=/usr/local \
             -DOMODSIM_BUILD_TESTS=OFF \
             -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
@@ -150,18 +146,13 @@ jobs:
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
             -libDir "$QT_ROOT_DIR/lib" \
-            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
+            -ignore libmysqlclient.so.21,libpq.so.5,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
             -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor
 
       - name: Copy OpenSSL 1 libraries
         run: |
           cp /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
              /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 \
-             ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/
-
-      - name: Copy OpenSSL 3 libraries
-        run: |
-          cp /usr/local/lib64/libssl.so.3 /usr/local/lib64/libcrypto.so.3 \
              ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/
 
       - name: Copy OpenModsim docs
