@@ -18,7 +18,7 @@ if [ ! -f "$source_root/Configure" ]; then
 fi
 (
     cd "$source_root"
-    ./Configure --prefix="$install_prefix" --libdir=lib --openssldir=/etc/ssl shared no-tests
+    ./config --prefix="$install_prefix" --libdir=lib --openssldir=/etc/ssl shared no-tests
     make -j"$(nproc)"
     make install_sw
 )
