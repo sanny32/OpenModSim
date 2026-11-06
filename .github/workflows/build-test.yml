@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/build-test.yml'
       - '.github/actions/*openssl*/**'
+      - '.github/actions/drop-stale-caches/**'
       - 'tools/*openssl*'
       - 'src/**'
       - 'tools/coverage.py'
@@ -14,6 +15,7 @@ on:
     paths:
       - '.github/workflows/build-test.yml'
       - '.github/actions/*openssl*/**'
+      - '.github/actions/drop-stale-caches/**'
       - 'tools/*openssl*'
       - 'src/**'
       - 'tools/coverage.py'
@@ -23,6 +25,10 @@ on:
 concurrency:
   group: build-test-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   tests:
@@ -39,11 +45,11 @@ jobs:
           - os: macos-latest
             qt-version: '6.9.3'
             qt-modules: 'qtserialbus qtserialport qt5compat'
-            cmake-options: ''
+            cmake-options: '-DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_FLAGS="-Xclang -fno-pch-timestamp"'
           - os: ubuntu-latest
             qt-version: '5.15.2'
             qt-modules: ''
-            cmake-options: '-DUSE_QT5=ON'
+            cmake-options: '-DUSE_QT5=ON -DCMAKE_CXX_COMPILER_LAUNCHER=ccache'
           - os: windows-2022
             qt-version: '5.15.2'
             qt-modules: ''
@@ -53,10 +59,19 @@ jobs:
       # Run Qt GUI/Test binaries without a real display.
       QT_QPA_PLATFORM: offscreen
       OMODSIM_REQUIRE_TLS: '1'
+      CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Set up ccache
+        if: runner.os != 'Windows'
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: tests-${{ matrix.os }}-qt${{ matrix.qt-version }}
+          max-size: 1G
+          save: ${{ github.event_name == 'push' }}
 
       - name: Install Linux build dependencies
         if: runner.os == 'Linux'
@@ -64,6 +79,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             ninja-build \
+            gdb \
             libgl1-mesa-dev libssl-dev \
             libxkbcommon-x11-0
 
@@ -105,6 +121,13 @@ jobs:
       - name: Run tests
         run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
 
+      - name: Diagnose Qt 5 forms crash (Linux)
+        if: failure() && runner.os == 'Linux' && matrix.qt-version == '5.15.2'
+        run: |
+          if grep -q ':omodsim_tests_forms$' build/Testing/Temporary/LastTestsFailed.log; then
+            gdb -batch -ex run -ex 'thread apply all bt' --args build/tests/omodsim_tests_forms
+          fi
+
       - name: Print Windows test failures
         if: failure() && runner.os == 'Windows'
         shell: pwsh
@@ -117,6 +140,12 @@ jobs:
               if (Test-Path $testLog) { Get-Content $testLog }
             }
           }
+
+      - name: Drop superseded ccache entries
+        if: runner.os != 'Windows' && github.event_name == 'push'
+        uses: ./.github/actions/drop-stale-caches
+        with:
+          prefix: ccache-tests-${{ matrix.os }}-qt${{ matrix.qt-version }}-
 
       - name: Upload test diagnostics
         if: failure()
@@ -142,10 +171,18 @@ jobs:
     env:
       QT_QPA_PLATFORM: offscreen
       OMODSIM_REQUIRE_TLS: '1'
+      CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: coverage-${{ matrix.os }}-qt${{ matrix.qt-version }}
+          max-size: 1G
+          save: ${{ github.event_name == 'push' }}
 
       - name: Install build dependencies
         run: |
@@ -164,7 +201,13 @@ jobs:
           cache: true
 
       - name: Run coverage
-        run: python3 tools/coverage.py --strict -- -G Ninja ${{ matrix.cmake-options }}
+        run: python3 tools/coverage.py --strict -- -G Ninja -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ${{ matrix.cmake-options }}
+
+      - name: Drop superseded ccache entries
+        if: github.event_name == 'push'
+        uses: ./.github/actions/drop-stale-caches
+        with:
+          prefix: ccache-coverage-${{ matrix.os }}-qt${{ matrix.qt-version }}-
 
       - name: Upload coverage report
         if: always()

@@ -17,7 +17,12 @@ function(omodsim_configure_tests)
             set(test_log "-,txt")
         endif()
         add_test(NAME ${test_name} COMMAND ${test_name} -o "${test_log}")
-        set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+        if(WIN32 AND NOT Qt6_FOUND)
+            set(test_platform windows)
+        else()
+            set(test_platform offscreen)
+        endif()
+        set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=${test_platform}")
     endfunction()
 
     function(omodsim_add_test test_name source_file)
@@ -37,6 +42,11 @@ function(omodsim_configure_tests)
         add_dependencies(omodsim_tests ${test_name})
         omodsim_register_test(${test_name})
     endfunction()
+
+    omodsim_add_test(omodsim_tests_cacheprune           test_cacheprune.cpp)
+    target_compile_definitions(omodsim_tests_cacheprune PRIVATE
+        OMODSIM_CACHE_PRUNE_SCRIPT="${PROJECT_SOURCE_DIR}/../.github/actions/drop-stale-caches/prune.sh"
+    )
 
     omodsim_add_test(omodsim_tests_numericutils         test_numericutils.cpp)
     omodsim_add_test(omodsim_tests_byteorderutils       test_byteorderutils.cpp)

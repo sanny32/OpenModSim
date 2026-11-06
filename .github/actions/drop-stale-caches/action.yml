@@ -1,0 +1,23 @@
+name: Drop stale caches
+description: Delete superseded cache entries for the current ref.
+
+inputs:
+  prefix:
+    description: Cache key prefix to delete
+    required: true
+  keep:
+    description: Exact cache key to retain
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Delete superseded entries
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+        PREFIX: ${{ inputs.prefix }}
+        KEEP: ${{ inputs.keep }}
+      run: bash "${{ github.action_path }}/prune.sh"

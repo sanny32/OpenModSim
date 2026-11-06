@@ -278,14 +278,14 @@ Below are the methods for installing the OpenModSim for different OS
 ## <img src="docs/icons/logo_windows.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim2-2.2-dev.g3dceb5d7_x86.exe`
-- For 64-bit Windows: `qt5-omodsim2-2.2-dev.g3dceb5d7_x64.exe` or `qt6-omodsim2-2.2-dev.g3dceb5d7_x64.exe`
+- For 32-bit Windows: `qt5-omodsim2-2.2-dev.gf1993150_x86.exe`
+- For 64-bit Windows: `qt5-omodsim2-2.2-dev.gf1993150_x64.exe` or `qt6-omodsim2-2.2-dev.gf1993150_x64.exe`
 
 ## <img src="docs/icons/logo_apple.svg" width="16" height="16"> macOS
 ### Install
 Open the DMG package:
 ```bash
-open qt6-omodsim2-2.2-dev.g3dceb5d7_arm64.dmg
+open qt6-omodsim2-2.2-dev.gf1993150_arm64.dmg
 ```
 Then drag `Open ModSim 2.app` to the `Applications` folder.
 
@@ -309,11 +309,11 @@ rm -rf "/Applications/Open ModSim 2.app"
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim2_2.2-dev.g3dceb5d7-1_amd64.deb
+sudo apt install ./qt6-omodsim2_2.2-dev.gf1993150-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim2_2.2-dev.g3dceb5d7-1_amd64.deb
+sudo apt install ./qt5-omodsim2_2.2-dev.gf1993150-1_amd64.deb
 ```
 
 ### Remove
@@ -330,7 +330,7 @@ sudo apt remove qt5-omodsim2
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim2-2.2-dev.g3dceb5d7-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim2-2.2-dev.gf1993150-1.x86_64.rpm
 ```
 
 ### Remove
@@ -343,7 +343,7 @@ sudo dnf remove qt6-omodsim2
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim2-2.2-dev.g3dceb5d7-1.x86_64.rpm
+apt-get install ./qt6-omodsim2-2.2-dev.gf1993150-1.x86_64.rpm
 ```
 
 ### Remove
@@ -360,7 +360,7 @@ sudo rpm --import qt6-omodsim2.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim2-2.2-dev.g3dceb5d7-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim2-2.2-dev.gf1993150-1.x86_64.rpm
 ```
 
 ### Remove
