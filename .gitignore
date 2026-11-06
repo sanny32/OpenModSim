@@ -69,6 +69,7 @@ AGENTS.md
 
 .directory
 .DS_Store
+.coverage-*
 *.cmd
 *.bat
 *.qmake.stash

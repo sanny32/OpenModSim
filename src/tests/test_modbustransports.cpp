@@ -10,10 +10,13 @@
 #include <QTcpSocket>
 #include <QTest>
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#ifdef Q_OS_MACOS
+#include <util.h>
+#endif
 #endif
 
 #include "modbusrtuserialserver.h"
@@ -85,14 +88,25 @@ QByteArray receive(QTcpSocket& socket)
     return result;
 }
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 QString openPseudoTerminal(int& masterFd)
 {
+#ifdef Q_OS_MACOS
+    int slaveFd = -1;
+    if (::openpty(&masterFd, &slaveFd, nullptr, nullptr, nullptr) != 0)
+        return {};
+    const char* name = ::ttyname(slaveFd);
+    const QString path = name ? QString::fromLocal8Bit(name) : QString();
+    ::close(slaveFd);
+    ::fcntl(masterFd, F_SETFL, O_NONBLOCK);
+    return path;
+#else
     masterFd = ::posix_openpt(O_RDWR | O_NOCTTY | O_NONBLOCK);
     if (masterFd < 0 || ::grantpt(masterFd) != 0 || ::unlockpt(masterFd) != 0)
         return {};
     const char* name = ::ptsname(masterFd);
     return name ? QString::fromLocal8Bit(name) : QString();
+#endif
 }
 
 QByteArray receive(int fd, int timeoutMs = 1000)
@@ -586,12 +600,13 @@ void TestModbusTransports::mapsSerialPortErrors()
 
 void TestModbusTransports::servesRtuSerialOnPseudoTerminal()
 {
-#ifndef Q_OS_LINUX
+#if !defined(Q_OS_LINUX) && !defined(Q_OS_MACOS)
     QSKIP("A POSIX pseudo-terminal is required.");
 #else
     int masterFd = -1;
     const QString portName = openPseudoTerminal(masterFd);
-    QVERIFY2(masterFd >= 0 && !portName.isEmpty(), "Could not create a pseudo-terminal.");
+    if (masterFd < 0 || portName.isEmpty())
+        QSKIP("Could not create a pseudo-terminal.");
 
     ModbusRtuSerialServer server;
     server.setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
@@ -600,7 +615,10 @@ void TestModbusTransports::servesRtuSerialOnPseudoTerminal()
     server.addServerAddress(1);
     server.setMap(holdingMap(), 1);
     server.setMap(holdingMap(), 0);
-    QVERIFY(server.connectDevice());
+    if (!server.connectDevice()) {
+        ::close(masterFd);
+        QSKIP("Could not open the pseudo-terminal as a serial port.");
+    }
     QCOMPARE(server.state(), QModbusDevice::ConnectedState);
 
     QSignalSpy requestSpy(&server, &ModbusServer::modbusRequest);
@@ -734,12 +752,13 @@ void TestModbusTransports::togglesSerialSnifferMode()
 
 void TestModbusTransports::sniffsRtuSerialOnPseudoTerminal()
 {
-#ifndef Q_OS_LINUX
+#if !defined(Q_OS_LINUX) && !defined(Q_OS_MACOS)
     QSKIP("A POSIX pseudo-terminal is required.");
 #else
     int masterFd = -1;
     const QString portName = openPseudoTerminal(masterFd);
-    QVERIFY2(masterFd >= 0 && !portName.isEmpty(), "Could not create a pseudo-terminal.");
+    if (masterFd < 0 || portName.isEmpty())
+        QSKIP("Could not create a pseudo-terminal.");
 
     ModbusRtuSerialServer server;
     server.setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
@@ -748,7 +767,10 @@ void TestModbusTransports::sniffsRtuSerialOnPseudoTerminal()
     server.addServerAddress(1);
     server.setMap(holdingMap(), 1);
     server.setSnifferMode(true);
-    QVERIFY(server.connectDevice());
+    if (!server.connectDevice()) {
+        ::close(masterFd);
+        QSKIP("Could not open the pseudo-terminal as a serial port.");
+    }
 
     QSignalSpy sniffedSpy(&server, &ModbusRtuSerialServer::sniffedFrame);
     QSignalSpy requestSpy(&server, &ModbusServer::modbusRequest);
