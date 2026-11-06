@@ -1,7 +1,8 @@
 # Modbus TCP over TLS
 
-Open **Modbus Definitions → Certificates** before starting a TLS server.
-This page manages the application-wide certificate store, as in OpenUaSim.
+A self-signed server certificate is created automatically on first startup.
+Open **Modbus Definitions → Certificates** to review its parameters, regenerate it,
+or export the public certificate for clients.
 
 ## Generate a server certificate
 
@@ -35,10 +36,14 @@ changes. Existing connections retain the configuration they were started with.
 ## Storage and build requirements
 
 The store is in `pki` under Qt's application data directory. The server certificate
-and key are saved together in `own/identity.pem` using atomic replacement. On Unix,
+and key are saved together in `own/OpenModSim@<hostname>.pem` using atomic replacement. On Unix,
 the identity file is readable and writable only by its owner. Projects store the TLS
 selection, while the server identity belongs to the local application installation.
 Any existing files in the old `trusted` directory are left untouched and are not used.
+Only `own/OpenModSim@*.pem` identities are loaded, including identities copied from another host.
+At application startup, a missing identity is generated with the local hostname,
+local DNS/IP addresses, and a validity period of 3650 days. Existing identities are
+preserved; invalid files require explicit replacement in the certificate settings.
 
 OpenSSL 3 `libcrypto` is a build and runtime dependency for certificate generation.
 The build scripts install it through Homebrew on macOS, Qt's OpenSSL package on

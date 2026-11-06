@@ -8,6 +8,8 @@
 
 #include <QPushButton>
 #include <QScreen>
+#include <QTabBar>
+#include "themedicons.h"
 #include "dialogmodbusdefinitions.h"
 #include "ui_dialogmodbusdefinitions.h"
 
@@ -22,6 +24,14 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
     ,_mbMultiServer(srv)
 {
     ui->setupUi(this);
+#ifdef Q_OS_MAC
+    ui->certificateLayout->setContentsMargins(12, 0, 12, 12);
+    ui->certificateScrollArea->viewport()->setAutoFillBackground(false);
+    ui->certificateScrollContents->setAutoFillBackground(false);
+#endif
+    ui->tabWidget->setTabIcon(0, themedIcon("omodsim/modbus-definitions"));
+    ui->tabWidget->setTabIcon(1, themedIcon("omodsim/certificate"));
+    ui->tabWidget->setTabIcon(2, themedIcon("omodsim/warning"));
 
     const QList<QCheckBox*> allCheckBoxes = findChildren<QCheckBox*>();
     for (QCheckBox* checkBox : allCheckBoxes) {
@@ -101,7 +111,14 @@ DialogModbusDefinitions::~DialogModbusDefinitions()
 ///
 QSize DialogModbusDefinitions::sizeHint() const
 {
-    const QSize natural = QFixedSizeDialog::sizeHint();
+    QSize natural = QFixedSizeDialog::sizeHint();
+    const QMargins margins = ui->verticalLayout->contentsMargins();
+    const int chromeHeight = ui->tabWidget->tabBar()->sizeHint().height()
+        + ui->buttonBox->sizeHint().height() + margins.top() + margins.bottom()
+        + ui->verticalLayout->spacing() + 12
+        + ui->certificateLayout->contentsMargins().top() + ui->certificateLayout->contentsMargins().bottom();
+    natural.setHeight(qMax(natural.height(), ui->certificatesWidget->sizeHint().height() + chromeHeight));
+    natural = natural.boundedTo(maximumSize());
     const QScreen* target = parentWidget() ? parentWidget()->screen() : screen();
     return target ? natural.boundedTo(target->availableGeometry().size() - QSize(32, 64)) : natural;
 }

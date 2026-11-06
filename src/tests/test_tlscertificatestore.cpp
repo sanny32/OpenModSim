@@ -9,6 +9,7 @@
 #include <QCryptographicHash>
 #include <QDir>
 #include <QFile>
+#include <QHostInfo>
 #include <QSslKey>
 #include <QSslSocket>
 #include <QTemporaryDir>
@@ -25,10 +26,13 @@ class TestTlsCertificateStore : public QObject
 private slots:
     void initTestCase();
     void generatesServerIdentity();
+    void createsDefaultIdentityOnce();
+    void reportsStartupGenerationFailures();
     void rejectsInvalidGeneration_data();
     void rejectsInvalidGeneration();
     void persistsAndExportsIdentity();
     void ignoresLegacyTrustFiles();
+    void loadsNamedIdentitiesOnly();
     void preservesIdentityOnFailure();
     void rejectsMissingAndCorruptIdentity();
 };
@@ -40,6 +44,58 @@ void TestTlsCertificateStore::initTestCase()
 {
     if (!QSslSocket::supportsSsl())
         QSKIP("Qt TLS backend is unavailable");
+}
+
+///
+/// \brief Creates the first-run identity and preserves its bytes on later launches.
+///
+void TestTlsCertificateStore::createsDefaultIdentityOnce()
+{
+    QTemporaryDir directory;
+    TlsCertificateStore store(directory.filePath("pki"));
+    QVERIFY2(store.ensureServerCertificate().isEmpty(), "First-run generation failed");
+    const auto certificate = store.serverCertificate();
+    QVERIFY(!certificate.isNull());
+    QCOMPARE(certificate.subjectInfo(QSslCertificate::CommonName), QStringList{TlsCertificateStore::defaultServerName()});
+    QVERIFY(certificate.subjectAlternativeNames().values(QSsl::DnsEntry).contains("localhost"));
+    QVERIFY(certificate.expiryDate() > QDateTime::currentDateTimeUtc().addDays(3649));
+    const QString path = store.root() + "/own/" + TlsCertificateStore::generatedFileName();
+    QFile identity(path);
+    QVERIFY(identity.open(QIODevice::ReadOnly));
+    const QByteArray original = identity.readAll();
+    identity.close();
+    QVERIFY(TlsCertificateStore(store.root()).ensureServerCertificate().isEmpty());
+    QVERIFY(identity.open(QIODevice::ReadOnly));
+    QCOMPARE(identity.readAll(), original);
+    identity.close();
+    QVERIFY(QFile::rename(path, store.root() + "/own/OpenModSim@previous-host.pem"));
+    QVERIFY(store.ensureServerCertificate().isEmpty());
+    QCOMPARE(store.serverCertificate(), certificate);
+    QVERIFY(!QFileInfo::exists(path));
+}
+
+///
+/// \brief Reports unwritable stores and preserves corrupt named files for explicit replacement.
+///
+void TestTlsCertificateStore::reportsStartupGenerationFailures()
+{
+    QTemporaryDir directory;
+    const QString root = directory.filePath("pki");
+    TlsCertificateStore store(root);
+    QVERIFY(QDir().mkpath(root + "/own"));
+    const QString path = root + "/own/" + TlsCertificateStore::generatedFileName();
+    QFile identity(path);
+    QVERIFY(identity.open(QIODevice::WriteOnly));
+    identity.write("corrupt identity");
+    identity.close();
+    QVERIFY(!store.ensureServerCertificate().isEmpty());
+    QVERIFY(identity.open(QIODevice::ReadOnly));
+    QCOMPARE(identity.readAll(), QByteArray("corrupt identity"));
+    identity.close();
+    QFile blocked(directory.filePath("blocked"));
+    QVERIFY(blocked.open(QIODevice::WriteOnly));
+    blocked.close();
+    QVERIFY(!TlsCertificateStore(blocked.fileName()).ensureServerCertificate().isEmpty());
 }
 
 ///
@@ -119,6 +175,10 @@ void TestTlsCertificateStore::persistsAndExportsIdentity()
     QTemporaryDir directory;
     TlsCertificateStore store(directory.filePath("pki"));
     QVERIFY(store.generateServerCertificate("server", {"localhost"}, 2).isEmpty());
+    const QString identity = store.root() + "/own/" + TlsCertificateStore::generatedFileName();
+    QCOMPARE(QFileInfo(identity).fileName(), QString("OpenModSim@%1.pem").arg(QHostInfo::localHostName()));
+    QVERIFY(QFileInfo::exists(identity));
+    QVERIFY(!QFileInfo::exists(store.root() + "/own/identity.pem"));
     TlsCertificateStore reopened(store.root());
     QCOMPARE(reopened.serverCertificate(), store.serverCertificate());
     QSslConfiguration configuration;
@@ -135,11 +195,45 @@ void TestTlsCertificateStore::persistsAndExportsIdentity()
     const QByteArray bytes = file.readAll();
     QCOMPARE(bytes, store.serverCertificate().toPem());
     QVERIFY(!bytes.contains("PRIVATE KEY"));
-    QVERIFY(!store.exportServerCertificate(store.root() + "/own/identity.pem").isEmpty());
+    QVERIFY(!store.exportServerCertificate(identity).isEmpty());
 #ifndef Q_OS_WIN
-    const auto permissions = QFile::permissions(store.root() + "/own/identity.pem");
+    const auto permissions = QFile::permissions(identity);
     QVERIFY(!(permissions & (QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ReadOther | QFileDevice::WriteOther)));
 #endif
+}
+
+///
+/// \brief Ignores the old generic filename and loads application identities after host renaming.
+///
+void TestTlsCertificateStore::loadsNamedIdentitiesOnly()
+{
+    QTemporaryDir directory;
+    TlsCertificateStore store(directory.path());
+    QVERIFY(store.generateServerCertificate("original", {"localhost"}, 2).isEmpty());
+    const auto original = store.serverCertificate();
+    const QString current = directory.filePath("own/" + TlsCertificateStore::generatedFileName());
+    const QString legacy = directory.filePath("own/identity.pem");
+    QVERIFY(QFile::rename(current, legacy));
+    QSslConfiguration configuration;
+    QVERIFY(!store.configuration(configuration).isEmpty());
+    QVERIFY(store.serverCertificate().isNull());
+    const QString renamed = directory.filePath("own/OpenModSim@previous-host.pem");
+    QVERIFY(QFile::rename(legacy, renamed));
+    QVERIFY(store.configuration(configuration).isEmpty());
+    QCOMPARE(configuration.localCertificate(), original);
+    QFile invalid(directory.filePath("own/OpenModSim@000-invalid.pem"));
+    QVERIFY(invalid.open(QIODevice::WriteOnly));
+    invalid.write("invalid identity");
+    invalid.close();
+    QCOMPARE(store.serverCertificate(), original);
+    QVERIFY(store.generateServerCertificate("replacement", {"localhost"}, 2).isEmpty());
+    QCOMPARE(store.serverCertificate().subjectInfo(QSslCertificate::CommonName), QStringList{"replacement"});
+    QVERIFY(QFileInfo::exists(renamed));
+    QFile corrupt(current);
+    QVERIFY(corrupt.open(QIODevice::WriteOnly | QIODevice::Truncate));
+    corrupt.write("invalid current identity");
+    corrupt.close();
+    QVERIFY(!store.configuration(configuration).isEmpty());
 }
 
 ///
@@ -193,7 +287,7 @@ void TestTlsCertificateStore::rejectsMissingAndCorruptIdentity()
     QVERIFY(!store.configuration(configuration).isEmpty());
     QVERIFY(!store.exportServerCertificate(directory.filePath("export.pem")).isEmpty());
     QVERIFY(QDir().mkpath(directory.filePath("own")));
-    QFile file(directory.filePath("own/identity.pem"));
+    QFile file(directory.filePath("own/" + TlsCertificateStore::generatedFileName()));
     QVERIFY(file.open(QIODevice::WriteOnly));
     file.write("invalid identity");
     file.close();

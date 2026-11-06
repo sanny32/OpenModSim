@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="SettingsTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -319,6 +319,7 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget><class>SettingsTabWidget</class><extends>QTabWidget</extends><header>settingstabwidget.h</header><container>1</container></customwidget>
   <customwidget><class>TlsCertificatesWidget</class><extends>QWidget</extends><header>tlscertificateswidget.h</header><container>1</container></customwidget>
   <customwidget>
    <class>AddressSpaceComboBox</class>

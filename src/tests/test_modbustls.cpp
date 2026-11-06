@@ -285,7 +285,7 @@ void TestModbusTls::rejectsMissingCredentials()
     QVERIFY(!missing.connectDevice());
     QVERIFY(!missing.errorString(0).isEmpty());
     QVERIFY(QDir().mkpath(root + "/own"));
-    QFile malformed(root + "/own/identity.pem");
+    QFile malformed(root + "/own/" + TlsCertificateStore::generatedFileName());
     QVERIFY(malformed.open(QIODevice::WriteOnly));
     malformed.write("not a PEM credential");
     malformed.close();

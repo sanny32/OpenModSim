@@ -7,6 +7,7 @@
 ///
 
 #include <QFontDatabase>
+#include "pki/tlscertificatestore.h"
 #include <QIcon>
 #include <QMessageBox>
 #include "application.h"
@@ -139,8 +140,12 @@ int main(int argc, char *argv[])
     const QString cfg = parser.projectFile();
     const bool noSession = parser.isSet(CmdLineParser::_no_session);
 
+    const QString certificateError = TlsCertificateStore().ensureServerCertificate();
+
     MainWindow w(profile, !noSession, cfg);
     w.show();
+    if (!certificateError.isEmpty())
+        QMessageBox::warning(&w, APP_PRODUCT_NAME, certificateError);
 
     return a.exec();
 }

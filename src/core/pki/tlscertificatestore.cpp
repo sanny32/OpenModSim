@@ -12,6 +12,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHostInfo>
+#include <QNetworkInterface>
 #include <QSaveFile>
 #include <QSslKey>
 #include <QSslSocket>
@@ -72,11 +74,64 @@ QString TlsCertificateStore::root() const
 }
 
 ///
-/// \brief Keeps the certificate and key in one file so identity replacement is atomic.
+/// \brief Returns the generated identity filename using the local hostname.
+///
+QString TlsCertificateStore::generatedFileName()
+{
+    return QStringLiteral("OpenModSim@%1.pem").arg(QHostInfo::localHostName());
+}
+
+///
+/// \brief Returns the default certificate subject for this computer.
+///
+QString TlsCertificateStore::defaultServerName()
+{
+    return (QStringLiteral("OpenModSim@") + QHostInfo::localHostName()).left(64);
+}
+
+///
+/// \brief Returns local DNS names and IP addresses for the default certificate.
+///
+QStringList TlsCertificateStore::defaultHostNames()
+{
+    QStringList hosts = {QHostInfo::localHostName(), "localhost", "127.0.0.1", "::1"};
+    for (const auto& address : QNetworkInterface::allAddresses()) {
+        if (!address.isNull() && !address.isMulticast() && address.scopeId().isEmpty())
+            hosts.append(address.toString());
+    }
+    hosts.removeDuplicates();
+    return hosts;
+}
+
+///
+/// \brief Generates the default identity only when no named identity file exists.
+/// \return A generation or validation error, or an empty string on success.
+///
+QString TlsCertificateStore::ensureServerCertificate()
+{
+    const auto files = QDir(_root + "/own").entryList({QStringLiteral("OpenModSim@*.pem")}, QDir::Files, QDir::Name);
+    if (!files.isEmpty()) {
+        QSslConfiguration configuration;
+        return this->configuration(configuration);
+    }
+    return generateServerCertificate(defaultServerName(), defaultHostNames(), 3650);
+}
+
+///
+/// \brief Locates the identity by application name, including identities from another host.
 ///
 QString TlsCertificateStore::identityPath() const
 {
-    return _root + "/own/identity.pem";
+    const QDir own(_root + "/own");
+    const QString target = own.filePath(generatedFileName());
+    if (QFileInfo::exists(target))
+        return target;
+    const auto files = own.entryInfoList({QStringLiteral("OpenModSim@*.pem")}, QDir::Files, QDir::Name);
+    for (const auto& file : files) {
+        if (!QSslCertificate::fromPath(file.absoluteFilePath()).isEmpty())
+            return file.absoluteFilePath();
+    }
+    return target;
 }
 
 ///
@@ -101,7 +156,7 @@ QString TlsCertificateStore::generateServerCertificate(const QString& commonName
     const auto generated = CertificateGenerator::generate(commonName, hosts, validDays, &error);
     if (generated.Certificate.isEmpty() || generated.PrivateKey.isEmpty())
         return error;
-    return saveFile(identityPath(), generated.Certificate + generated.PrivateKey, true);
+    return saveFile(_root + "/own/" + generatedFileName(), generated.Certificate + generated.PrivateKey, true);
 }
 
 ///

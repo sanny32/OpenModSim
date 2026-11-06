@@ -8,19 +8,20 @@
 
 #include <QCheckBox>
 #include <QPushButton>
-#include <QPlainTextEdit>
 #include <QTemporaryDir>
 #include <QTabWidget>
+#include <QTabBar>
 #include <QDialogButtonBox>
 #include <QScreen>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QTableWidget>
-#include <QGroupBox>
 #include "elidinglineedit.h"
 #include "tlscertificateswidget.h"
 #include "dialogmodbusdefinitions.h"
 #include <QLineEdit>
+#include <QLabel>
+#include <QSpinBox>
 #include <QMessageBox>
 #include <QTimer>
 #include <QTest>
@@ -43,12 +44,16 @@ private slots:
     void cancelPreservesSettings();
     void generatesServerCertificateInSettings();
     void offersCertificatesTab();
+    void loadsCurrentCertificateParameters();
     void keepsCertificateControlsAccessible_data();
     void keepsCertificateControlsAccessible();
     void keepsSettingsSpacingCompact_data();
     void keepsSettingsSpacingCompact();
     void usesCompactDefaultHeight();
     void elidesHostNamesWithoutChangingValue();
+    void highlightsSelectedSettingsTab();
+    void paintsMacSettingsPane_data();
+    void paintsMacSettingsPane();
 private:
     QTranslator _translator;
 };
@@ -76,6 +81,7 @@ void TestTlsSettings::savesTlsSettings()
 {
     TcpConnectionParams params;
     DialogSelectServicePort dialog(params);
+    QVERIFY(dialog.findChild<QCheckBox*>("tlsGroup")->toolTip().isEmpty());
     dialog.findChild<QCheckBox*>("tlsGroup")->setChecked(true);
     QCOMPARE(dialog.findChild<NumericLineEdit*>("lineEditPort")->value<int>(), 802);
     dialog.accept();
@@ -141,6 +147,8 @@ void TestTlsSettings::generatesServerCertificateInSettings()
     TlsCertificatesWidget widget(nullptr, directory.path());
     auto* exportButton = widget.findChild<QPushButton*>("exportButton");
     QVERIFY(!exportButton->isEnabled());
+    QVERIFY(!widget.findChild<QWidget*>("serverGroup"));
+    QVERIFY(!widget.findChild<QWidget*>("emptyMessage"));
     widget.findChild<QLineEdit*>("commonName")->setText("Modbus test server");
     widget.findChild<QLineEdit*>("hostNames")->setText("localhost, 127.0.0.1, ::1, server-with-a-long-name.example.test");
     widget.findChild<QPushButton*>("generateButton")->click();
@@ -149,8 +157,24 @@ void TestTlsSettings::generatesServerCertificateInSettings()
     QCOMPARE(certificate.subjectInfo(QSslCertificate::CommonName), QStringList{"Modbus test server"});
     QVERIFY(certificate.subjectAlternativeNames().values(QSsl::DnsEntry).contains("server-with-a-long-name.example.test"));
     QVERIFY(exportButton->isEnabled());
-    QVERIFY(widget.findChild<QPlainTextEdit*>("serverDetails")->toPlainText().contains("Modbus test server"));
-    QVERIFY(!widget.findChild<QPlainTextEdit*>("serverDetails")->toPlainText().contains("PRIVATE KEY"));
+}
+
+///
+/// \brief Shows the installed certificate parameters without a separate summary header.
+///
+void TestTlsSettings::loadsCurrentCertificateParameters()
+{
+    if (!QSslSocket::supportsSsl())
+        QSKIP("Qt TLS backend is unavailable");
+    QTemporaryDir directory;
+    TlsCertificateStore store(directory.path());
+    QVERIFY(store.generateServerCertificate("Installed server", {"installed.example.test", "127.0.0.1"}, 2).isEmpty());
+    TlsCertificatesWidget widget(nullptr, directory.path());
+    QCOMPARE(widget.findChild<QLineEdit*>("commonName")->text(), QString("Installed server"));
+    QVERIFY(widget.findChild<QLineEdit*>("hostNames")->text().contains("installed.example.test"));
+    QCOMPARE(widget.findChild<QSpinBox*>("validDays")->value(), 2);
+    QVERIFY(widget.findChild<QPushButton*>("exportButton")->isEnabled());
+    QVERIFY(!widget.findChild<QWidget*>("serverGroup"));
 }
 
 ///
@@ -166,7 +190,11 @@ void TestTlsSettings::offersCertificatesTab()
     auto* tab = dialog.findChild<QWidget*>("tabCertificates");
     QVERIFY(tabs->indexOf(tab) >= 0);
     QVERIFY(tab->isAncestorOf(page));
-    QVERIFY(page->findChild<QGroupBox*>("serverGroup")->title().isEmpty());
+    QVERIFY(!page->findChild<QWidget*>("serverGroup"));
+    QVERIFY(!page->findChild<QWidget*>("certificateIcon"));
+    QVERIFY(page->findChild<QLabel*>("parametersTitle"));
+    for (int index = 0; index < tabs->count(); ++index)
+        QVERIFY(!tabs->tabIcon(index).isNull());
     QVERIFY(!page->findChild<QWidget*>("changesHint"));
     QVERIFY(!page->findChild<QTableWidget*>("trustedCertificates"));
     QVERIFY(!page->findChild<QPushButton*>("importButton"));
@@ -243,18 +271,14 @@ void TestTlsSettings::keepsSettingsSpacingCompact()
     tabs->setCurrentWidget(certificateTab);
     dialog.show();
     QCoreApplication::processEvents();
-    auto* group = dialog.findChild<QWidget*>("serverGroup");
-    const QRect groupRect(group->mapTo(certificateTab, QPoint()), group->size());
-    QVERIFY(groupRect.left() <= 12);
-    QVERIFY(certificateTab->width() - groupRect.right() - 1 <= 12);
-    auto* details = dialog.findChild<QPlainTextEdit*>("serverDetails");
-    const QRect detailsRect(details->mapTo(group, QPoint()), details->size());
-    QVERIFY(detailsRect.left() <= 20);
-    QVERIFY(group->width() - detailsRect.right() - 1 <= 20);
+    auto* page = dialog.findChild<TlsCertificatesWidget*>();
+    const QRect pageRect(page->mapTo(certificateTab, QPoint()), page->size());
+    QVERIFY(pageRect.left() <= 12);
+    QVERIFY(certificateTab->width() - pageRect.right() - 1 <= 12);
     auto* validity = dialog.findChild<QWidget*>("validDays");
     auto* generate = dialog.findChild<QPushButton*>("generateButton");
-    const int actionGap = generate->mapTo(group, QPoint()).y()
-        - validity->mapTo(group, QPoint(0, validity->height())).y();
+    const int actionGap = generate->mapTo(certificateTab, QPoint()).y()
+        - validity->mapTo(certificateTab, QPoint(0, validity->height())).y();
     QVERIFY(actionGap <= 24);
 
     tabs->setCurrentWidget(dialog.findChild<QWidget*>("tabErrSimulations"));
@@ -280,7 +304,7 @@ void TestTlsSettings::usesCompactDefaultHeight()
     DialogModbusDefinitions dialog(server);
     dialog.show();
     QCoreApplication::processEvents();
-    QVERIFY(dialog.height() < 480);
+    QVERIFY2(dialog.height() < 480, qPrintable(QString::number(dialog.height())));
     auto* certificateTab = dialog.findChild<QWidget*>("tabCertificates");
     dialog.findChild<QTabWidget*>("tabWidget")->setCurrentWidget(certificateTab);
     QCoreApplication::processEvents();
@@ -328,6 +352,73 @@ void TestTlsSettings::elidesHostNamesWithoutChangingValue()
     QCOMPARE(hosts->text(), full);
     hosts->setText("localhost");
     QCOMPARE(hosts->visibleText(), QString("localhost"));
+}
+
+///
+/// \brief Keeps accent navigation selectable by keyboard and honors palette changes.
+///
+void TestTlsSettings::highlightsSelectedSettingsTab()
+{
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    auto* bar = tabs->tabBar();
+    QPalette colors = bar->palette();
+    colors.setColor(QPalette::Highlight, QColor("#2859a0"));
+    colors.setColor(QPalette::HighlightedText, Qt::white);
+    bar->setPalette(colors);
+    dialog.show();
+    bar->setFocus();
+    tabs->setCurrentIndex(0);
+    QTest::keyClick(bar, Qt::Key_Right);
+    QCOMPARE(tabs->currentIndex(), 1);
+    const QRect selected = bar->tabRect(1);
+    const QPoint background(selected.left() + 5, selected.center().y());
+    const QImage image = bar->grab().toImage();
+    const qreal scale = image.devicePixelRatio();
+    QCOMPARE(image.pixelColor(qRound(background.x() * scale), qRound(background.y() * scale)),
+             colors.color(QPalette::Highlight));
+}
+
+///
+/// \brief Covers distinct macOS content surfaces in light and dark palettes.
+///
+void TestTlsSettings::paintsMacSettingsPane_data()
+{
+    QTest::addColumn<QColor>("windowColor");
+    QTest::addColumn<QColor>("paneColor");
+    QTest::newRow("light") << QColor("#efefef") << QColor("#ffffff");
+    QTest::newRow("dark") << QColor("#2c2c2e") << QColor("#1c1c1e");
+}
+
+///
+/// \brief Keeps the content background visible through each macOS settings page.
+///
+void TestTlsSettings::paintsMacSettingsPane()
+{
+#ifndef Q_OS_MAC
+    QSKIP("The settings pane background is specific to macOS");
+#else
+    QFETCH(QColor, windowColor);
+    QFETCH(QColor, paneColor);
+    ModbusMultiServer server;
+    DialogModbusDefinitions dialog(server);
+    auto* tabs = dialog.findChild<QTabWidget*>("tabWidget");
+    QPalette colors = dialog.palette();
+    colors.setColor(QPalette::Window, windowColor);
+    colors.setColor(QPalette::Base, paneColor);
+    dialog.setPalette(colors);
+    dialog.show();
+    for (int index = 0; index < tabs->count(); ++index) {
+        tabs->setCurrentIndex(index);
+        QCoreApplication::processEvents();
+        auto* page = tabs->currentWidget();
+        const QPoint sample = page->mapTo(tabs, QPoint(page->width() - 6, page->height() - 6));
+        const QImage image = tabs->grab().toImage();
+        const qreal scale = image.devicePixelRatio();
+        QCOMPARE(image.pixelColor(qRound(sample.x() * scale), qRound(sample.y() * scale)), paneColor);
+    }
+#endif
 }
 
 ///

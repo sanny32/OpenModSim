@@ -33,6 +33,8 @@ set(UI_FILES
 )
 
 add_library(omodsim_ui STATIC
+    widgets/settingstabwidget.cpp
+    widgets/settingstabwidget.h
     widgets/elidinglineedit.cpp
     widgets/elidinglineedit.h
     widgets/tlscertificateswidget.cpp

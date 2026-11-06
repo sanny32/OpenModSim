@@ -32,6 +32,27 @@ public:
     QString root() const;
 
     ///
+    /// \brief Returns the generated identity filename using the local hostname.
+    ///
+    static QString generatedFileName();
+
+    ///
+    /// \brief Returns the default certificate subject for this computer.
+    ///
+    static QString defaultServerName();
+
+    ///
+    /// \brief Returns local DNS names and IP addresses for the default certificate.
+    ///
+    static QStringList defaultHostNames();
+
+    ///
+    /// \brief Generates the default identity only when no named identity file exists.
+    /// \return A generation or validation error, or an empty string on success.
+    ///
+    QString ensureServerCertificate();
+
+    ///
     /// \brief Reads the public certificate of the installed server identity.
     ///
     QSslCertificate serverCertificate() const;

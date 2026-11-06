@@ -8,12 +8,26 @@
 
 #include "tlscertificateswidget.h"
 #include "ui_tlscertificateswidget.h"
-#include <QCryptographicHash>
+#include "themedicons.h"
 #include <QFileDialog>
-#include <QHostInfo>
 #include <QMessageBox>
-#include <QNetworkInterface>
 #include <QRegularExpression>
+#include <QPainter>
+
+namespace {
+///
+/// \brief Tints metadata glyphs with the current text or accent color.
+///
+void setLabelIcon(QLabel* label, const QString& name, int size, const QColor& color)
+{
+    QPixmap pixmap = themedIcon(name).pixmap(size, size);
+    QPainter painter(&pixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter.fillRect(pixmap.rect(), color);
+    painter.end();
+    label->setPixmap(pixmap);
+}
+}
 
 ///
 /// \brief Opens the shared certificate store in the Modbus settings page.
@@ -24,13 +38,17 @@ TlsCertificatesWidget::TlsCertificatesWidget(QWidget* parent, const QString& cer
     : QWidget(parent), ui(new Ui::TlsCertificatesWidget), _store(certificateStoreRoot)
 {
     ui->setupUi(this);
-    ui->commonName->setText("OpenModSim@" + QHostInfo::localHostName());
-    QStringList hosts = {QHostInfo::localHostName(), "localhost", "127.0.0.1", "::1"};
-    for (const auto& address : QNetworkInterface::allAddresses()) {
-        if (!address.isNull() && !address.isMulticast() && address.scopeId().isEmpty())
-            hosts.append(address.toString());
+    const auto certificate = _store.serverCertificate();
+    QStringList hosts = TlsCertificateStore::defaultHostNames();
+    QString name = TlsCertificateStore::defaultServerName();
+    if (!certificate.isNull()) {
+        name = certificate.subjectInfo(QSslCertificate::CommonName).join(", ");
+        const auto alternatives = certificate.subjectAlternativeNames();
+        hosts = alternatives.values(QSsl::DnsEntry);
+        hosts.append(alternatives.values(QSsl::IpAddressEntry));
+        ui->validDays->setValue(qBound(1, int(certificate.effectiveDate().secsTo(certificate.expiryDate()) / (24 * 60 * 60)), 3650));
     }
-    hosts.removeDuplicates();
+    ui->commonName->setText(name);
     ui->hostNames->setText(hosts.join(", "));
     connect(ui->generateButton, &QPushButton::clicked, this, &TlsCertificatesWidget::generateCertificate);
     connect(ui->exportButton, &QPushButton::clicked, this, &TlsCertificatesWidget::exportCertificate);
@@ -53,29 +71,23 @@ void TlsCertificatesWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
         refresh();
+    } else if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange) {
+        refresh();
     }
     QWidget::changeEvent(event);
 }
 
 ///
-/// \brief Reloads certificate metadata without displaying the private key.
+/// \brief Updates certificate actions and icons for the current palette.
 ///
 void TlsCertificatesWidget::refresh()
 {
-    const auto certificate = _store.serverCertificate();
-    if (certificate.isNull()) {
-        ui->serverDetails->setPlainText(tr("No server certificate. Generate one to enable TLS."));
-    } else {
-        const auto alternatives = certificate.subjectAlternativeNames();
-        QStringList hosts = alternatives.values(QSsl::DnsEntry);
-        hosts.append(alternatives.values(QSsl::IpAddressEntry));
-        ui->serverDetails->setPlainText(tr("Subject: %1\nHost names / IP addresses: %2\nValid until: %3\nSHA-256: %4")
-            .arg(certificate.subjectInfo(QSslCertificate::CommonName).join(", "), hosts.join(", "),
-                 certificate.expiryDate().toLocalTime().toString(Qt::ISODate),
-                 QString::fromLatin1(certificate.digest(QCryptographicHash::Sha256).toHex(':'))));
-    }
-    ui->exportButton->setEnabled(!certificate.isNull());
-
+    setLabelIcon(ui->nameIcon, "omodsim/person", 18, palette().color(QPalette::WindowText));
+    setLabelIcon(ui->hostsIcon, "omodsim/hosts", 18, palette().color(QPalette::WindowText));
+    setLabelIcon(ui->validIcon, "omodsim/calendar", 18, palette().color(QPalette::WindowText));
+    ui->generateButton->setIcon(themedIcon("omodsim/add"));
+    ui->exportButton->setIcon(themedIcon("omodsim/export"));
+    ui->exportButton->setEnabled(!_store.serverCertificate().isNull());
 }
 
 ///
@@ -99,7 +111,7 @@ void TlsCertificatesWidget::generateCertificate()
 ///
 void TlsCertificatesWidget::exportCertificate()
 {
-    const QString path = QFileDialog::getSaveFileName(this, tr("Export server certificate"), "server.pem", tr("PEM certificate (*.pem)"));
+    const QString path = QFileDialog::getSaveFileName(this, tr("Export server certificate"), TlsCertificateStore::generatedFileName(), tr("PEM certificate (*.pem)"));
     if (!path.isEmpty())
         reportError(_store.exportServerCertificate(path));
 }

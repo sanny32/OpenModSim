@@ -1252,10 +1252,6 @@ Open the download page?</source>
         <source>Modbus TCP Security (TLS)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Uses the server certificate configured in Modbus Definitions → Certificates. Client certificates are not required.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DialogSetupSerialPort</name>
@@ -3480,17 +3476,6 @@ Please verify the merge result carefully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No server certificate. Generate one to enable TLS.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Subject: %1
-Host names / IP addresses: %2
-Valid until: %3
-SHA-256: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Replace server certificate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3508,6 +3493,10 @@ SHA-256: %4</source>
     </message>
     <message>
         <source>Certificates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Certificate parameters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

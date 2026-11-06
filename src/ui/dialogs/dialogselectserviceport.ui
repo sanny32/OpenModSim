@@ -61,7 +61,6 @@
      <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="tlsGroup">
        <property name="text"><string>Modbus TCP Security (TLS)</string></property>
-       <property name="toolTip"><string>Uses the server certificate configured in Modbus Definitions → Certificates. Client certificates are not required.</string></property>
       </widget>
      </item>
     </layout>

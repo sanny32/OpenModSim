@@ -1252,10 +1252,6 @@ Open the download page?</source>
         <source>Modbus TCP Security (TLS)</source>
         <translation>Modbus TCP Security (TLS)</translation>
     </message>
-    <message>
-        <source>Uses the server certificate configured in Modbus Definitions → Certificates. Client certificates are not required.</source>
-        <translation>Использует сертификат сервера из вкладки «Сертификаты» настроек Modbus. Сертификаты клиентов не требуются.</translation>
-    </message>
 </context>
 <context>
     <name>DialogSetupSerialPort</name>
@@ -3479,20 +3475,6 @@ Please verify the merge result carefully.</source>
         <translation>Экспорт сертификата…</translation>
     </message>
     <message>
-        <source>No server certificate. Generate one to enable TLS.</source>
-        <translation>Сертификат сервера отсутствует. Создайте его для включения TLS.</translation>
-    </message>
-    <message>
-        <source>Subject: %1
-Host names / IP addresses: %2
-Valid until: %3
-SHA-256: %4</source>
-        <translation>Владелец: %1
-DNS-имена / IP-адреса: %2
-Действителен до: %3
-SHA-256: %4</translation>
-    </message>
-    <message>
         <source>Replace server certificate</source>
         <translation>Замена сертификата сервера</translation>
     </message>
@@ -3511,6 +3493,10 @@ SHA-256: %4</translation>
     <message>
         <source>Certificates</source>
         <translation>Сертификаты</translation>
+    </message>
+    <message>
+        <source>Certificate parameters</source>
+        <translation>Параметры сертификата</translation>
     </message>
 </context>
 <context>
