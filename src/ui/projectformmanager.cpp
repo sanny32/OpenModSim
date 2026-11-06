@@ -389,6 +389,7 @@ void ProjectFormManager::remove(QWidget* form)
 /// \brief Destroys every project form and resets display counters.
 void ProjectFormManager::clear()
 {
+    _mdiArea->setSplitViewEnabled(false);
     _mdiArea->closeAllSubWindows();
     QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
 
