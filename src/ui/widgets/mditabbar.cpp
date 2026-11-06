@@ -124,6 +124,8 @@ static inline QString tabTextForWindow(QMdiSubWindow *subWindow)
 MdiTabBar::MdiTabBar(QWidget* parent)
     : QTabBar(parent)
 {
+    qRegisterMetaType<QMdiSubWindow*>();
+
     setUsesScrollButtons(true);
     setAutoFillBackground(true);
     setProperty("mdiIndicatorActive", true);
