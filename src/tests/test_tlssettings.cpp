@@ -330,6 +330,7 @@ void TestTlsSettings::elidesHostNamesWithoutChangingValue()
     widget.resize(460, 340);
     auto* hosts = widget.findChild<ElidingLineEdit*>("hostNames");
     QVERIFY(hosts);
+    hosts->setMinimumWidth(hosts->sizeHint().width());
     const QString full = "controller-with-a-long-hostname.example.test, localhost, 127.0.0.1, ::1";
     hosts->setText(full);
     widget.show();
