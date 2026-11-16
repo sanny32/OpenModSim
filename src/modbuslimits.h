@@ -27,7 +27,7 @@ public:
         }
         return zeroBased ? QRange<int>(0, 65535) : QRange<int>(1, 65536);
     }
-    static QRange<int> lengthRange()   { return { 1, 200 }; }
+    static QRange<int> lengthRange()   { return { 1, 65535 }; }
     static QRange<int> lengthRange(int address, bool zeroBased, AddressSpace space) {
         const int offset = address - (zeroBased ? 0 : 1);
         const int maxLen = qMin(lengthRange().to(), addressSpaceSize(space) - offset);
