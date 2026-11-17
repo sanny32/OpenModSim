@@ -1,6 +1,9 @@
 function(omodsim_configure_tests)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+    add_test(NAME omodsim_tests_openssl_qt_hint
+        COMMAND ${CMAKE_COMMAND} -P "${PROJECT_SOURCE_DIR}/tests/test_openssl_qt_hint.cmake")
+
     if(Qt6_FOUND)
         find_package(Qt6 REQUIRED COMPONENTS Test)
     else()
