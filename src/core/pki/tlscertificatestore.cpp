@@ -43,14 +43,6 @@ bool hasMatchingPrivateKey(const QByteArray& bytes)
 }
 
 ///
-/// \brief Translates store failures without a QObject dependency.
-///
-QString tr(const char* message)
-{
-    return QCoreApplication::translate("TlsCertificateStore", message);
-}
-
-///
 /// \brief Writes a complete file while preserving the previous version on failure.
 ///
 QString saveFile(const QString& path, const QByteArray& bytes, bool privateFile = false)
@@ -189,11 +181,11 @@ QString TlsCertificateStore::exportServerCertificate(const QString& fileName) co
 {
     const auto certificate = serverCertificate();
     if (certificate.isNull())
-        return tr("Generate a server certificate first.");
+        return QCoreApplication::translate("TlsCertificateStore", "Generate a server certificate first.");
     const QString target = QDir::cleanPath(QFileInfo(fileName).absoluteFilePath());
     const QString storeRoot = QDir::cleanPath(QFileInfo(_root).absoluteFilePath());
     if (target == storeRoot || target.startsWith(storeRoot + QLatin1Char('/')))
-        return tr("Export the certificate outside the certificate store.");
+        return QCoreApplication::translate("TlsCertificateStore", "Export the certificate outside the certificate store.");
     return saveFile(fileName, certificate.toPem());
 }
 
@@ -206,12 +198,12 @@ QString TlsCertificateStore::configuration(QSslConfiguration& configuration) con
 {
     QFile identity(identityPath());
     if (!identity.open(QIODevice::ReadOnly))
-        return tr("Generate a server certificate in Modbus Definitions → Certificates before enabling TLS.");
+        return QCoreApplication::translate("TlsCertificateStore", "Generate a server certificate in Modbus Definitions → Certificates before enabling TLS.");
     const auto bytes = identity.readAll();
     const auto certificates = QSslCertificate::fromData(bytes);
     const QSslKey key(bytes, QSsl::Rsa);
     if (certificates.isEmpty() || key.isNull() || !hasMatchingPrivateKey(bytes))
-        return tr("The stored TLS server identity is invalid. Generate a new server certificate.");
+        return QCoreApplication::translate("TlsCertificateStore", "The stored TLS server identity is invalid. Generate a new server certificate.");
     configuration = QSslConfiguration::defaultConfiguration();
     configuration.setProtocol(QSsl::TlsV1_2OrLater);
     configuration.setLocalCertificateChain(certificates);

@@ -30,10 +30,18 @@ struct IconDescriptor {
 const QHash<QString, IconDescriptor>& iconRegistry()
 {
     static const QHash<QString, IconDescriptor> registry {
+#ifdef Q_OS_MAC
         { QStringLiteral("omodsim/certificate"), { QStringLiteral(""), QStringLiteral("certificate") } },
         { QStringLiteral("omodsim/person"), { QStringLiteral(""), QStringLiteral("person") } },
         { QStringLiteral("omodsim/hosts"), { QStringLiteral(""), QStringLiteral("hosts") } },
         { QStringLiteral("omodsim/calendar"), { QStringLiteral(""), QStringLiteral("calendar") } },
+        { QStringLiteral("omodsim/settings-general"), { QStringLiteral("navigation/settings"), QStringLiteral("mb-definitions") } },
+        { QStringLiteral("omodsim/settings-warning"), { QStringLiteral("misc/warning"), QStringLiteral("log-warning") } },
+#else
+        { QStringLiteral("omodsim/certificate"), { QStringLiteral(""), QStringLiteral("certificate.png") } },
+        { QStringLiteral("omodsim/settings-general"), { QStringLiteral("navigation/settings"), QStringLiteral("settings-general.png") } },
+        { QStringLiteral("omodsim/settings-warning"), { QStringLiteral("misc/warning"), QStringLiteral("settings-warning.png") } },
+#endif
 
         { QStringLiteral("omodsim/about"),                     { QStringLiteral("misc/question"),                       QStringLiteral("about") } },
         { QStringLiteral("omodsim/add"),                       { QStringLiteral("action/plus-circle"),                  QStringLiteral("add") } },

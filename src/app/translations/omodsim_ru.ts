@@ -3494,10 +3494,6 @@ Please verify the merge result carefully.</source>
         <source>Certificates</source>
         <translation>Сертификаты</translation>
     </message>
-    <message>
-        <source>Certificate parameters</source>
-        <translation>Параметры сертификата</translation>
-    </message>
 </context>
 <context>
     <name>TrafficLogWindow</name>

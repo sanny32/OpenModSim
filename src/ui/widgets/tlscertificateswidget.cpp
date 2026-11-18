@@ -14,9 +14,10 @@
 #include <QRegularExpression>
 #include <QPainter>
 
+#ifdef Q_OS_MAC
 namespace {
 ///
-/// \brief Tints metadata glyphs with the current text or accent color.
+/// \brief Adapts macOS glyphs to the current text color.
 ///
 void setLabelIcon(QLabel* label, const QString& name, int size, const QColor& color)
 {
@@ -28,6 +29,7 @@ void setLabelIcon(QLabel* label, const QString& name, int size, const QColor& co
     label->setPixmap(pixmap);
 }
 }
+#endif
 
 ///
 /// \brief Opens the shared certificate store in the Modbus settings page.
@@ -38,6 +40,11 @@ TlsCertificatesWidget::TlsCertificatesWidget(QWidget* parent, const QString& cer
     : QWidget(parent), ui(new Ui::TlsCertificatesWidget), _store(certificateStoreRoot)
 {
     ui->setupUi(this);
+#ifndef Q_OS_MAC
+    ui->nameIcon->hide();
+    ui->hostsIcon->hide();
+    ui->validIcon->hide();
+#endif
     const auto certificate = _store.serverCertificate();
     QStringList hosts = TlsCertificateStore::defaultHostNames();
     QString name = TlsCertificateStore::defaultServerName();
@@ -82,9 +89,11 @@ void TlsCertificatesWidget::changeEvent(QEvent* event)
 ///
 void TlsCertificatesWidget::refresh()
 {
+#ifdef Q_OS_MAC
     setLabelIcon(ui->nameIcon, "omodsim/person", 18, palette().color(QPalette::WindowText));
     setLabelIcon(ui->hostsIcon, "omodsim/hosts", 18, palette().color(QPalette::WindowText));
     setLabelIcon(ui->validIcon, "omodsim/calendar", 18, palette().color(QPalette::WindowText));
+#endif
     ui->generateButton->setIcon(themedIcon("omodsim/add"));
     ui->exportButton->setIcon(themedIcon("omodsim/export"));
     ui->exportButton->setEnabled(!_store.serverCertificate().isNull());

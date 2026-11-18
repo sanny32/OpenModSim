@@ -11,6 +11,7 @@
 #include <QStylePainter>
 #include <QTabBar>
 
+#ifdef Q_OS_MAC
 namespace {
 class SettingsTabBar : public QTabBar
 {
@@ -64,6 +65,7 @@ protected:
     }
 };
 }
+#endif
 
 ///
 /// \brief Creates settings navigation with a palette-aware selected tab.
@@ -71,7 +73,9 @@ protected:
 ///
 SettingsTabWidget::SettingsTabWidget(QWidget* parent) : QTabWidget(parent)
 {
+#ifdef Q_OS_MAC
     setTabBar(new SettingsTabBar());
+#endif
 }
 
 #ifdef Q_OS_MAC

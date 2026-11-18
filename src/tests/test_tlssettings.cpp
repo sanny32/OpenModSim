@@ -44,6 +44,7 @@ private slots:
     void cancelPreservesSettings();
     void generatesServerCertificateInSettings();
     void offersCertificatesTab();
+    void showsMetadataIconsOnlyOnMac();
     void loadsCurrentCertificateParameters();
     void keepsCertificateControlsAccessible_data();
     void keepsCertificateControlsAccessible();
@@ -190,15 +191,37 @@ void TestTlsSettings::offersCertificatesTab()
     auto* tab = dialog.findChild<QWidget*>("tabCertificates");
     QVERIFY(tabs->indexOf(tab) >= 0);
     QVERIFY(tab->isAncestorOf(page));
+    auto* scroll = dialog.findChild<QScrollArea*>("certificateScrollArea");
+    QVERIFY(!scroll->viewport()->autoFillBackground());
+    QVERIFY(!scroll->widget()->autoFillBackground());
     QVERIFY(!page->findChild<QWidget*>("serverGroup"));
     QVERIFY(!page->findChild<QWidget*>("certificateIcon"));
-    QVERIFY(page->findChild<QLabel*>("parametersTitle"));
+    QVERIFY(!page->findChild<QLabel*>("parametersTitle"));
     for (int index = 0; index < tabs->count(); ++index)
         QVERIFY(!tabs->tabIcon(index).isNull());
     QVERIFY(!page->findChild<QWidget*>("changesHint"));
     QVERIFY(!page->findChild<QTableWidget*>("trustedCertificates"));
     QVERIFY(!page->findChild<QPushButton*>("importButton"));
     QVERIFY(!page->findChild<QPushButton*>("removeButton"));
+}
+
+///
+/// \brief Checks whether certificate fields reserve space for icons on this platform.
+///
+void TestTlsSettings::showsMetadataIconsOnlyOnMac()
+{
+    QTemporaryDir directory;
+    TlsCertificatesWidget widget(nullptr, directory.path());
+    widget.show();
+    for (const auto* name : {"nameIcon", "hostsIcon", "validIcon"}) {
+        auto* label = widget.findChild<QLabel*>(name);
+        QVERIFY(label);
+#ifdef Q_OS_MAC
+        QVERIFY2(label->isVisible(), name);
+#else
+        QVERIFY2(label->isHidden(), name);
+#endif
+    }
 }
 
 ///
@@ -273,7 +296,8 @@ void TestTlsSettings::keepsSettingsSpacingCompact()
     QCoreApplication::processEvents();
     auto* page = dialog.findChild<TlsCertificatesWidget*>();
     const QRect pageRect(page->mapTo(certificateTab, QPoint()), page->size());
-    QVERIFY(pageRect.left() <= 12);
+    QCOMPARE(pageRect.left(), 12);
+    QVERIFY(page->findChild<QLineEdit*>("commonName")->mapTo(certificateTab, QPoint()).y() >= 12);
     QVERIFY(certificateTab->width() - pageRect.right() - 1 <= 12);
     auto* validity = dialog.findChild<QWidget*>("validDays");
     auto* generate = dialog.findChild<QPushButton*>("generateButton");
@@ -358,7 +382,7 @@ void TestTlsSettings::elidesHostNamesWithoutChangingValue()
 }
 
 ///
-/// \brief Keeps accent navigation selectable by keyboard and honors palette changes.
+/// \brief Keeps keyboard navigation and platform-specific settings tab painting.
 ///
 void TestTlsSettings::highlightsSelectedSettingsTab()
 {
@@ -379,8 +403,13 @@ void TestTlsSettings::highlightsSelectedSettingsTab()
     const QPoint background(selected.left() + 5, selected.center().y());
     const QImage image = bar->grab().toImage();
     const qreal scale = image.devicePixelRatio();
+#ifdef Q_OS_MAC
     QCOMPARE(image.pixelColor(qRound(background.x() * scale), qRound(background.y() * scale)),
              colors.color(QPalette::Highlight));
+#else
+    QVERIFY(image.pixelColor(qRound(background.x() * scale), qRound(background.y() * scale))
+            != colors.color(QPalette::Highlight));
+#endif
 }
 
 ///

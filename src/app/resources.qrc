@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
+        <file>res/icons/fallback/certificate.png</file>
+        <file>res/icons/fallback/settings-general.png</file>
+        <file>res/icons/fallback/settings-warning.png</file>
         <file>res/icons/fallback/certificate.svg</file>
         <file>res/icons/fallback/person.svg</file>
         <file>res/icons/fallback/hosts.svg</file>

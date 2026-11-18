@@ -24,14 +24,11 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
     ,_mbMultiServer(srv)
 {
     ui->setupUi(this);
-#ifdef Q_OS_MAC
-    ui->certificateLayout->setContentsMargins(12, 0, 12, 12);
     ui->certificateScrollArea->viewport()->setAutoFillBackground(false);
     ui->certificateScrollContents->setAutoFillBackground(false);
-#endif
-    ui->tabWidget->setTabIcon(0, themedIcon("omodsim/modbus-definitions"));
+    ui->tabWidget->setTabIcon(0, themedIcon("omodsim/settings-general"));
     ui->tabWidget->setTabIcon(1, themedIcon("omodsim/certificate"));
-    ui->tabWidget->setTabIcon(2, themedIcon("omodsim/warning"));
+    ui->tabWidget->setTabIcon(2, themedIcon("omodsim/settings-warning"));
 
     const QList<QCheckBox*> allCheckBoxes = findChildren<QCheckBox*>();
     for (QCheckBox* checkBox : allCheckBoxes) {

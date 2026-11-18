@@ -52,8 +52,19 @@ bool TestModbusTls::openssl(const QStringList& arguments)
 {
     QProcess process;
     process.setWorkingDirectory(_directory.path());
+    auto environment = QProcessEnvironment::systemEnvironment();
+    environment.insert("OPENSSL_CONF", _directory.filePath("openssl.cnf"));
+    process.setProcessEnvironment(environment);
     process.start(_openssl, arguments);
-    return process.waitForFinished(10000) && process.exitCode() == 0;
+    if (!process.waitForFinished(10000)) {
+        qWarning().noquote() << process.errorString();
+        return false;
+    }
+    if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        qWarning().noquote() << process.readAllStandardError();
+        return false;
+    }
+    return true;
 }
 
 ///
@@ -116,6 +127,12 @@ void TestModbusTls::initTestCase()
     if (_openssl.isEmpty())
         QSKIP("openssl is unavailable for test certificate provisioning");
     QVERIFY(_directory.isValid());
+    QFile config(_directory.filePath("openssl.cnf"));
+    QVERIFY(config.open(QIODevice::WriteOnly));
+    const QByteArray configData = "[req]\ndistinguished_name=dn\n[dn]\n";
+    QCOMPARE(config.write(configData), qint64(configData.size()));
+    QVERIFY(config.flush());
+    config.close();
     QVERIFY(openssl({"req", "-x509", "-newkey", "rsa:2048", "-nodes", "-keyout", "ca.key",
                      "-out", "ca.pem", "-days", "2", "-subj", "/CN=Modbus Test CA",
                      "-addext", "basicConstraints=critical,CA:TRUE"}));

@@ -3494,10 +3494,6 @@ Verifica attentamente il risultato dell&apos;unione.</translation>
         <source>Certificates</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Certificate parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>TrafficLogWindow</name>
