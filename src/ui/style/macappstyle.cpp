@@ -499,8 +499,6 @@ void MacAppStyle::drawControl(ControlElement element, const QStyleOption* option
 ///
 QColor const& MacAppStyle::buttonBackgroundColor(MouseState mouse, ColorRole role, const QWidget* widget) const
 {
-    Q_UNUSED(widget)
-
     if (role == ColorRole::Primary)
         return QlementineAppStyle::buttonBackgroundColor(mouse, role, widget);
 
@@ -532,7 +530,8 @@ QColor const& MacAppStyle::buttonBackgroundColor(MouseState mouse, ColorRole rol
                 return transparentRef(kChromeStrong);
             case MouseState::Normal:
             default:
-                return colorRef(kCanvasWarm);
+                return colorRef(widget && widget->property("contrastingBackground").toBool()
+                    ? kChromeStrong : kCanvasWarm);
         }
     }
 }
