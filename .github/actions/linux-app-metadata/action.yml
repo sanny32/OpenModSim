@@ -23,38 +23,74 @@ inputs:
   ref-type:
     description: Git ref type for metainfo release URL.
     required: true
+  appimage:
+    description: Use the AppStream component ID as the AppImage desktop file basename.
+    default: "false"
+
+outputs:
+  desktop-file:
+    description: Rendered desktop file name.
+    value: ${{ steps.render.outputs.desktop-file }}
 
 runs:
   using: composite
   steps:
-    - name: Rename app icon files
+    - name: Render Linux app metadata
+      id: render
       shell: bash
+      env:
+        ROOT_DIR: ${{ inputs.root-dir }}
+        VERSION_MAJOR: ${{ inputs.version-major }}
+        PRODUCT_NAME: ${{ inputs.product-name }}
+        APP_VERSION: ${{ inputs.app-version }}
+        REF_NAME: ${{ inputs.ref-name }}
+        REF_TYPE: ${{ inputs.ref-type }}
+        APPIMAGE: ${{ inputs.appimage }}
       run: |
+        set -euo pipefail
+
+        share_dir="$ROOT_DIR/usr/share"
+        app_name="$PRODUCT_NAME $VERSION_MAJOR"
+
+        component_id="io.github.sanny32.OpenModSim$VERSION_MAJOR"
+        icon_name="omodsim$VERSION_MAJOR"
+        app_exec="$icon_name"
+        desktop_file="$app_exec.desktop"
+        metainfo_file="$component_id.metainfo.xml"
+
+        # appimagetool looks up <desktop basename>.appdata.xml before validating the AppDir.
+        if [[ "$APPIMAGE" == true ]]; then
+          app_exec=omodsim
+          desktop_file="$component_id.desktop"
+          metainfo_file="$component_id.appdata.xml"
+        fi
+
         for size in 16x16 32x32 64x64 128x128; do
-          mv "${{ inputs.root-dir }}/usr/share/icons/hicolor/${size}/apps/omodsim.png" \
-             "${{ inputs.root-dir }}/usr/share/icons/hicolor/${size}/apps/omodsim${{ inputs.version-major }}.png"
+          icon_dir="$share_dir/icons/hicolor/$size/apps"
+          mv "$icon_dir/omodsim.png" "$icon_dir/$icon_name.png"
         done
 
-    - name: Create metainfo file
-      shell: bash
-      run: |
-        sed -e "s|@REF_NAME@|${{ inputs.ref-name }}|g" \
-            -e "s|@REF_TYPE@|${{ inputs.ref-type }}|g" \
-            -e "s|@COMPONENT_ID@|io.github.sanny32.OpenModSim${{ inputs.version-major }}|g" \
-            -e "s|@APP_NAME@|${{ inputs.product-name }} ${{ inputs.version-major }}|g" \
-            -e "s|@APP_EXEC@|omodsim${{ inputs.version-major }}|g" \
-            -e "s|@APP_VERSION@|${{ inputs.app-version }}|g" \
+        metainfo_template="$share_dir/metainfo/omodsim.metainfo.xml.in"
+        metainfo_path="$share_dir/metainfo/$metainfo_file"
+        sed -e "s|@REF_NAME@|$REF_NAME|g" \
+            -e "s|@REF_TYPE@|$REF_TYPE|g" \
+            -e "s|@COMPONENT_ID@|$component_id|g" \
+            -e "s|@DESKTOP_FILE@|$desktop_file|g" \
+            -e "s|@APP_NAME@|$app_name|g" \
+            -e "s|@APP_EXEC@|$app_exec|g" \
+            -e "s|@APP_VERSION@|$APP_VERSION|g" \
             -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
-            "${{ inputs.root-dir }}/usr/share/metainfo/omodsim.metainfo.xml.in" > "${{ inputs.root-dir }}/usr/share/metainfo/omodsim${{ inputs.version-major }}.metainfo.xml"
-        rm "${{ inputs.root-dir }}/usr/share/metainfo/omodsim.metainfo.xml.in"
-        cat -n "${{ inputs.root-dir }}/usr/share/metainfo/omodsim${{ inputs.version-major }}.metainfo.xml"
+            "$metainfo_template" > "$metainfo_path"
+        rm "$metainfo_template"
+        cat -n "$metainfo_path"
 
-    - name: Create desktop file
-      shell: bash
-      run: |
-        sed -e "s|@APP_NAME@|${{ inputs.product-name }} ${{ inputs.version-major }}|g" \
-            -e "s|@APP_EXEC@|omodsim${{ inputs.version-major }}|g" \
-            -e "s|@APP_ICON@|omodsim${{ inputs.version-major }}|g" \
-            "${{ inputs.root-dir }}/usr/share/applications/omodsim.desktop.in" > "${{ inputs.root-dir }}/usr/share/applications/omodsim${{ inputs.version-major }}.desktop"
-        rm "${{ inputs.root-dir }}/usr/share/applications/omodsim.desktop.in"
-        cat -n "${{ inputs.root-dir }}/usr/share/applications/omodsim${{ inputs.version-major }}.desktop"
+        desktop_template="$share_dir/applications/omodsim.desktop.in"
+        desktop_path="$share_dir/applications/$desktop_file"
+        sed -e "s|@APP_NAME@|$app_name|g" \
+            -e "s|@APP_EXEC@|$app_exec|g" \
+            -e "s|@APP_ICON@|$icon_name|g" \
+            "$desktop_template" > "$desktop_path"
+        rm "$desktop_template"
+        cat -n "$desktop_path"
+
+        printf 'desktop-file=%s\n' "$desktop_file" >> "$GITHUB_OUTPUT"
