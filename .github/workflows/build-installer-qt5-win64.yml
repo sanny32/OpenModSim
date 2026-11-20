@@ -209,9 +209,9 @@ jobs:
            /DFILEVERSION=${{ steps.version.outputs.file-version }} ^
            /DMIN_WINDOWS_VERSION=7 ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\Release" ^
-           /DICON_FILE="%CD%\src\res\omodsim.ico" ^
+           /DICON_FILE="%CD%\src\app\res\omodsim.ico" ^
            /DWELCOMEFINISHPAGE_BITMAP="%CD%\.github\win32\nsis3-omodsim.bmp" ^
-           /DLICENSE_FILE="%CD%\src\res\license.txt" ^
+           /DLICENSE_FILE="%CD%\src\app\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_x64.exe" ^
            %CD%\.github\win32\installer-win64.nsi
         shell: cmd
