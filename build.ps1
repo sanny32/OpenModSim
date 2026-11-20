@@ -477,12 +477,6 @@ if (-not (Test-Path $QtDir)) {
 }
 Write-Host "Found Qt: $QtDir"
 
-$OpenSslVersion = if ($QtMajorVersion -eq '5') { '1.1' } else { '3' }
-Write-Host "Checking for OpenSSL $OpenSslVersion..."
-$OpenSslArchitecture = if ($Arch -eq 'win32') { 'x86' } else { 'x64' }
-$OpenSslRoot = & (Join-Path $PSScriptRoot 'tools\install_openssl.ps1') -Architecture $OpenSslArchitecture -Version $OpenSslVersion
-$env:PATH = "$(Join-Path $OpenSslRoot 'bin');$env:PATH"
-
 # Create Build dir
 $BuildDir = "build-omodsim-Qt_${QtVersion}_$($Compiler.ToUpper())bit-$BuildType"
 if (-not (Test-Path $BuildDir)) { 
@@ -503,7 +497,10 @@ $cmakeArgs = @(
     "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
     "-DCMAKE_INSTALL_PREFIX=`"$InstallPrefix`"",
     "-DOMODSIM_BUILD_TESTS=OFF",
-    "-DOPENSSL_ROOT_DIR=$($OpenSslRoot -replace '\\', '/')",
+    '-UOPENSSL_ROOT_DIR',
+    '-UOPENSSL_INCLUDE_DIR',
+    '-UOPENSSL_CRYPTO_LIBRARY',
+    '-UOPENSSL_SSL_LIBRARY',
     "-DUSE_QLEMENTINE_APP_STYLE=$(if ($qlementine) { 'ON' } else { 'OFF' })"
 )
 
@@ -519,6 +516,31 @@ if (Test-Path $vswhere) {
 
 if ($QtMajorVersion -eq "5") {
     $cmakeArgs += "-DCMAKE_DISABLE_FIND_PACKAGE_Qt6=TRUE"
+}
+
+$OpenSslRoot = $env:OPENSSL_ROOT_DIR
+if (-not $OpenSslRoot) {
+    $OpenSslProbeDir = Join-Path (Get-Location) '.openssl-probe'
+    $OpenSslProbeResult = Join-Path $OpenSslProbeDir 'result'
+    & $cmakePath @cmakeArgs -B $OpenSslProbeDir "-DOMODSIM_OPENSSL_PROBE=$OpenSslProbeResult"
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
+    $OpenSslVersion = [IO.File]::ReadAllText($OpenSslProbeResult)
+    if ($OpenSslVersion -ne 'found') {
+        if (-not $OpenSslVersion) {
+            $OpenSslVersion = '3'
+        }
+        if ($OpenSslVersion -notin '1.1', '3') {
+            throw "Install OpenSSL $OpenSslVersion development libraries or set OPENSSL_ROOT_DIR."
+        }
+        $OpenSslArchitecture = if ($Arch -eq 'win32') { 'x86' } else { 'x64' }
+        $OpenSslRoot = & (Join-Path $PSScriptRoot 'tools\install_openssl.ps1') -Architecture $OpenSslArchitecture -Version $OpenSslVersion
+    }
+}
+if ($OpenSslRoot) {
+    $env:PATH = "$(Join-Path $OpenSslRoot 'bin');$env:PATH"
+    $cmakeArgs += "-DOPENSSL_ROOT_DIR=$($OpenSslRoot -replace '\\', '/')"
 }
 
 & $cmakePath @cmakeArgs

@@ -4,12 +4,19 @@ function(omodsim_configure_tests)
     add_test(NAME omodsim_tests_openssl_qt_hint
         COMMAND ${CMAKE_COMMAND} -P "${PROJECT_SOURCE_DIR}/tests/test_openssl_qt_hint.cmake")
 
-    if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    add_test(NAME omodsim_tests_openssl_qt_abi
+        COMMAND "${CMAKE_COMMAND}" -P "${PROJECT_SOURCE_DIR}/tests/test_openssl_qt_abi.cmake")
+    add_test(NAME omodsim_tests_openssl_unsupported_abi
+        COMMAND "${CMAKE_COMMAND}" -DUNSUPPORTED_ABI=1.0
+                -P "${PROJECT_SOURCE_DIR}/tests/test_openssl_qt_abi.cmake")
+    set_tests_properties(omodsim_tests_openssl_unsupported_abi PROPERTIES WILL_FAIL TRUE)
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_READELF)
         find_program(omodsim_bash bash)
         if(omodsim_bash)
-            add_test(NAME omodsim_tests_build_openssl_version
-                COMMAND "${omodsim_bash}" "${PROJECT_SOURCE_DIR}/tests/test_build_openssl_version.sh" "${PROJECT_SOURCE_DIR}/..")
-            set_tests_properties(omodsim_tests_build_openssl_version PROPERTIES SKIP_RETURN_CODE 77)
+            add_test(NAME omodsim_tests_openssl_qt_binary
+                COMMAND "${omodsim_bash}" "${PROJECT_SOURCE_DIR}/tests/test_openssl_qt_abi.sh"
+                        "${CMAKE_COMMAND}" "${PROJECT_SOURCE_DIR}/tests/test_openssl_qt_abi.cmake"
+                        "${CMAKE_CXX_COMPILER}" "${CMAKE_READELF}")
         endif()
     endif()
 

@@ -1,0 +1,31 @@
+include("${CMAKE_CURRENT_LIST_DIR}/../cmake/openssl_qt_abi.cmake")
+
+if(DEFINED QT_BINARY)
+    omodsim_openssl_binary_abi(abi "${QT_BINARY}")
+    if(NOT abi STREQUAL EXPECTED_ABI)
+        message(FATAL_ERROR "Expected ABI '${EXPECTED_ABI}' in '${QT_BINARY}', got '${abi}'")
+    endif()
+    return()
+endif()
+
+if(DEFINED UNSUPPORTED_ABI)
+    omodsim_openssl_version_range(range "${UNSUPPORTED_ABI}")
+    return()
+endif()
+
+function(expect_range abi expected)
+    omodsim_openssl_version_range(actual "${abi}")
+    if(NOT actual STREQUAL expected)
+        message(FATAL_ERROR "OpenSSL ABI '${abi}': expected '${expected}', got '${actual}'")
+    endif()
+endfunction()
+
+expect_range("1.1" "1.1.1...<1.2")
+expect_range("3" "3...<4")
+expect_range("4" "4...<5")
+expect_range("" "1.1.1")
+
+omodsim_openssl_binary_abi(abi "${CMAKE_CURRENT_LIST_FILE}.missing" "${CMAKE_CURRENT_LIST_FILE}")
+if(NOT abi STREQUAL "")
+    message(FATAL_ERROR "Unexpected OpenSSL ABI without a Qt binary: '${abi}'")
+endif()

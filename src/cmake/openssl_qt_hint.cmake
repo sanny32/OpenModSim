@@ -1,5 +1,5 @@
-function(omodsim_openssl_qt_hint result qt_binary_dir qt_major pointer_size)
-    if(qt_major EQUAL 6)
+function(omodsim_openssl_qt_hint result qt_binary_dir openssl_abi pointer_size)
+    if(openssl_abi STREQUAL "3")
         set(package OpenSSLv3)
     else()
         set(package OpenSSL11)

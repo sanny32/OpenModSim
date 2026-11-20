@@ -56,22 +56,14 @@ void TestTlsCertificateStore::initTestCase()
 ///
 void TestTlsCertificateStore::usesSingleOpenSslVersion()
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    constexpr unsigned long minimum = 0x10101000UL;
-    constexpr unsigned long maximum = 0x30000000UL;
-#else
-    constexpr unsigned long minimum = 0x30000000UL;
-    constexpr unsigned long maximum = 0x40000000UL;
-#endif
-    QVERIFY(OpenSSL_version_num() >= minimum && OpenSSL_version_num() < maximum);
+    QCOMPARE(OpenSSL_version_num() >> 28, OPENSSL_VERSION_NUMBER >> 28);
 #ifndef Q_OS_MAC
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     if (QSslSocket::activeBackend() != "openssl")
         return;
 #endif
-    const auto tlsVersion = QSslSocket::sslLibraryVersionNumber();
-    QVERIFY2(tlsVersion >= minimum && tlsVersion < maximum,
-             qPrintable(QSslSocket::sslLibraryVersionString()));
+    const auto tlsVersion = static_cast<unsigned long>(QSslSocket::sslLibraryVersionNumber());
+    QCOMPARE(tlsVersion >> 28, OpenSSL_version_num() >> 28);
 #endif
 }
 

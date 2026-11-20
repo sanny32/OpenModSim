@@ -582,34 +582,6 @@ else
     echo "Using Qt $QT_VERSION from: $CMAKE_PREFIX"
 fi
 
-. "$PROJECT_DIR/tools/check_openssl_version.sh"
-
-if [ "${QT_VERSION%%.*}" = "5" ]; then
-    if [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! check_openssl_version 5; then
-        install_pkg python3 make
-        if [ "$DISTRO" = "altlinux" ]; then
-            install_pkg perl-Pod-Usage
-        fi
-        OPENSSL_SOURCE_ROOT=$(python3 "$PROJECT_DIR/tools/fetch_openssl11.py" "$TOOLS_DIR/openssl11-src")
-        export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl11"
-        bash "$PROJECT_DIR/tools/build_openssl.sh" "$OPENSSL_SOURCE_ROOT" "$OPENSSL_ROOT_DIR" 1.1
-    fi
-elif [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! check_openssl_version 6; then
-    install_pkg python3 make
-    if [ "$DISTRO" = "debian-based" ]; then
-        install_pkg python3-venv
-    fi
-    OPENSSL_TOOLS_ROOT="$TOOLS_DIR/openssl-src"
-    OPENSSL_SOURCE_ROOT="$OPENSSL_TOOLS_ROOT/Tools/OpenSSLv3/src"
-    if [ ! -f "$OPENSSL_SOURCE_ROOT/Configure" ]; then
-        python3 -m venv "$TOOLS_DIR/openssl-aqt"
-        "$TOOLS_DIR/openssl-aqt/bin/python3" -m pip install aqtinstall
-        "$TOOLS_DIR/openssl-aqt/bin/python3" -m aqt install-tool linux desktop tools_opensslv3_src -O "$OPENSSL_TOOLS_ROOT"
-    fi
-    export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl"
-    bash "$PROJECT_DIR/tools/build_openssl.sh" "$OPENSSL_SOURCE_ROOT" "$OPENSSL_ROOT_DIR"
-fi
-
 # ==========================
 # Detect architecture
 # ==========================
@@ -651,11 +623,58 @@ BUILD_TYPE=Release
 # ==========================
 # Setup cmake options
 # ==========================
-CMAKE_QT_OPTION="-DUSE_QT5=OFF -DUSE_QT6=OFF"
+CMAKE_QT_OPTIONS=(-DUSE_QT5=OFF -DUSE_QT6=OFF)
 if [ "$QT_CHOICE" = "qt5" ]; then
-    CMAKE_QT_OPTION="-DUSE_QT5=ON"
+    CMAKE_QT_OPTIONS[0]=-DUSE_QT5=ON
 elif [ "$QT_CHOICE" = "qt6" ]; then
-    CMAKE_QT_OPTION="-DUSE_QT6=ON"
+    CMAKE_QT_OPTIONS[1]=-DUSE_QT6=ON
+fi
+
+CMAKE_OPTIONS=(
+    -GNinja
+    "-DCMAKE_PREFIX_PATH=$CMAKE_PREFIX"
+    "-DCMAKE_CXX_COMPILER=$CXX_COMPILER"
+    "-DCMAKE_BUILD_TYPE=$BUILD_TYPE"
+    -UOPENSSL_ROOT_DIR -UOPENSSL_INCLUDE_DIR -UOPENSSL_CRYPTO_LIBRARY -UOPENSSL_SSL_LIBRARY
+    "${CMAKE_QT_OPTIONS[@]}"
+)
+
+if [ -z "${OPENSSL_ROOT_DIR:-}" ]; then
+    probe_dir="$TOOLS_DIR/qt-openssl"
+    "$CMAKE_BIN" -S "$SOURCE_DIR" -B "$probe_dir" "${CMAKE_OPTIONS[@]}" \
+        "-DOMODSIM_OPENSSL_PROBE=$probe_dir/result"
+    OPENSSL_ABI=$(cat "$probe_dir/result")
+    if [ "$OPENSSL_ABI" != found ]; then
+        install_pkg python3 make
+        if [ "$DISTRO" = "altlinux" ]; then
+            install_pkg perl-Pod-Usage
+        fi
+        case "$OPENSSL_ABI" in
+            1.1)
+                OPENSSL_SOURCE_ROOT=$(python3 "$PROJECT_DIR/tools/fetch_openssl11.py" "$TOOLS_DIR/openssl11-src")
+                export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl11"
+                ;;
+            ''|3)
+                if [ "$DISTRO" = "debian-based" ]; then
+                    install_pkg python3-venv
+                fi
+                OPENSSL_TOOLS_ROOT="$TOOLS_DIR/openssl-src"
+                OPENSSL_SOURCE_ROOT="$OPENSSL_TOOLS_ROOT/Tools/OpenSSLv3/src"
+                if [ ! -f "$OPENSSL_SOURCE_ROOT/Configure" ]; then
+                    python3 -m venv "$TOOLS_DIR/openssl-aqt"
+                    "$TOOLS_DIR/openssl-aqt/bin/python3" -m pip install aqtinstall
+                    "$TOOLS_DIR/openssl-aqt/bin/python3" -m aqt install-tool linux desktop tools_opensslv3_src -O "$OPENSSL_TOOLS_ROOT"
+                fi
+                export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl"
+                OPENSSL_ABI=3
+                ;;
+            *)
+                echo "Install OpenSSL $OPENSSL_ABI development libraries or set OPENSSL_ROOT_DIR." >&2
+                exit 1
+                ;;
+        esac
+        bash "$PROJECT_DIR/tools/build_openssl.sh" "$OPENSSL_SOURCE_ROOT" "$OPENSSL_ROOT_DIR" "$OPENSSL_ABI"
+    fi
 fi
 
 # ==========================
@@ -666,22 +685,11 @@ BUILD_DIR="build-omodsim-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-OPENSSL_CMAKE_OPTIONS=()
 if [ -n "${OPENSSL_ROOT_DIR:-}" ]; then
-    # FindOpenSSL can retain system paths after a failed configure.
-    OPENSSL_CMAKE_OPTIONS+=(
-        -UOPENSSL_INCLUDE_DIR
-        -UOPENSSL_CRYPTO_LIBRARY
-        -UOPENSSL_SSL_LIBRARY
-        "-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR"
-    )
+    CMAKE_OPTIONS+=("-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR")
 fi
-"$CMAKE_BIN" "$SOURCE_DIR" -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
-      -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
-      -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-      -DUSE_QLEMENTINE_APP_STYLE=${USE_QLEMENTINE_APP_STYLE} \
-      "${OPENSSL_CMAKE_OPTIONS[@]}" \
-      ${CMAKE_QT_OPTION}
+"$CMAKE_BIN" "$SOURCE_DIR" "${CMAKE_OPTIONS[@]}" \
+      -DUSE_QLEMENTINE_APP_STYLE="$USE_QLEMENTINE_APP_STYLE"
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 echo ""

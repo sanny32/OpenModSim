@@ -9,7 +9,6 @@ on:
       - '.github/actions/**'
       - 'build.sh'
       - 'tools/build_openssl.sh'
-      - 'tools/check_openssl_version.sh'
       - 'tools/fetch_openssl11.py'
       - 'src/**'
 
