@@ -138,6 +138,7 @@ void TestTlsCertificateStore::generatesServerIdentity()
     const QSslCertificate certificate(generated.Certificate);
     QVERIFY(!certificate.isNull());
     QCOMPARE(certificate.subjectInfo(QSslCertificate::CommonName), QStringList{"Modbus simulator"});
+    QCOMPARE(certificate.issuerInfo(QSslCertificate::CommonName), QStringList{"Modbus simulator"});
     QCOMPARE(certificate.subjectAlternativeNames().values(QSsl::DnsEntry), QStringList{"localhost"});
     QVERIFY(certificate.subjectAlternativeNames().values(QSsl::IpAddressEntry).contains("127.0.0.1"));
     QVERIFY(certificate.subjectAlternativeNames().values(QSsl::IpAddressEntry).contains("0:0:0:0:0:0:0:1")
