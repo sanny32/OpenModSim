@@ -582,13 +582,20 @@ else
     echo "Using Qt $QT_VERSION from: $CMAKE_PREFIX"
 fi
 
+. "$PROJECT_DIR/tools/check_openssl_version.sh"
+
 if [ "${QT_VERSION%%.*}" = "5" ]; then
-    if [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! pkg-config --atleast-version=1.1.1 --max-version=1.1.999 openssl 2>/dev/null; then
+    if [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! check_openssl_version 5; then
+        install_pkg python3 make
         OPENSSL_SOURCE_ROOT=$(python3 "$PROJECT_DIR/tools/fetch_openssl11.py" "$TOOLS_DIR/openssl11-src")
         export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl11"
         bash "$PROJECT_DIR/tools/build_openssl.sh" "$OPENSSL_SOURCE_ROOT" "$OPENSSL_ROOT_DIR" 1.1
     fi
-elif [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! pkg-config --atleast-version=3 openssl 2>/dev/null; then
+elif [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! check_openssl_version 6; then
+    install_pkg python3 make
+    if [ "$DISTRO" = "debian-based" ]; then
+        install_pkg python3-venv
+    fi
     OPENSSL_TOOLS_ROOT="$TOOLS_DIR/openssl-src"
     OPENSSL_SOURCE_ROOT="$OPENSSL_TOOLS_ROOT/Tools/OpenSSLv3/src"
     if [ ! -f "$OPENSSL_SOURCE_ROOT/Configure" ]; then
@@ -656,10 +663,21 @@ BUILD_DIR="build-omodsim-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
+OPENSSL_CMAKE_OPTIONS=()
+if [ -n "${OPENSSL_ROOT_DIR:-}" ]; then
+    # FindOpenSSL can retain system paths after a failed configure.
+    OPENSSL_CMAKE_OPTIONS+=(
+        -UOPENSSL_INCLUDE_DIR
+        -UOPENSSL_CRYPTO_LIBRARY
+        -UOPENSSL_SSL_LIBRARY
+        "-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR"
+    )
+fi
 "$CMAKE_BIN" "$SOURCE_DIR" -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
       -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
       -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
       -DUSE_QLEMENTINE_APP_STYLE=${USE_QLEMENTINE_APP_STYLE} \
+      "${OPENSSL_CMAKE_OPTIONS[@]}" \
       ${CMAKE_QT_OPTION}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
