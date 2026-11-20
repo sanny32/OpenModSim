@@ -8,6 +8,9 @@ on:
       - '.github/workflows/test-linux-build-script.yml'
       - '.github/actions/**'
       - 'build.sh'
+      - 'tools/build_openssl.sh'
+      - 'tools/check_openssl_version.sh'
+      - 'tools/fetch_openssl11.py'
       - 'src/**'
 
   workflow_dispatch:
@@ -177,7 +180,7 @@ jobs:
               apt-get install -y ca-certificates git sudo
               ;;
             pacman)
-              pacman -Sy --noconfirm ca-certificates git sudo
+              pacman -Syu --noconfirm archlinux-keyring ca-certificates git sudo
               ;;
             *)
               echo "Unsupported package family: ${{ matrix.family }}"

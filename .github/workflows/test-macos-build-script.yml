@@ -31,8 +31,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "macOS 14"
-            runner: macos-14
           - name: "macOS 15"
             runner: macos-15
           - name: "macOS 26"
