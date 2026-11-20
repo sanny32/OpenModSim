@@ -10,7 +10,7 @@
 #include <QScrollBar>
 #include <QTest>
 
-#include "controls/consoleoutput.h"
+#include "widgets/consoleoutput.h"
 
 class TestConsoleOutput : public QObject
 {

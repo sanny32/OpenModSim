@@ -67,7 +67,7 @@ def detect_compiler(build_dir: Path) -> str:
     base = Path(compiler).name
     if base in ("cl.exe", "cl") or "clang-cl" in base:
         return "msvc"
-    if "clang" in base:
+    if "clang" in base or (sys.platform == "darwin" and base in ("c++", "g++")):
         return "clang"
     return "gcc"
 
@@ -101,6 +101,7 @@ def report_gcov(build_dir: Path, out_dir: Path, compiler: str) -> Path:
         "--exclude", r".*/tests/.*",
         "--exclude", r".*/build.*",
         "--print-summary",
+        "--fail-under-line", "80",
         "--cobertura", xml,
         "--cobertura-pretty",
         "--html-details", out_dir / "index.html",
@@ -108,7 +109,8 @@ def report_gcov(build_dir: Path, out_dir: Path, compiler: str) -> Path:
     if compiler == "clang":
         # Apple's clang ships llvm-cov only behind xcrun, not on PATH.
         llvm_cov = "llvm-cov gcov" if tool_path("llvm-cov") else "xcrun llvm-cov gcov"
-        cmd += ["--gcov-executable", llvm_cov]
+        cmd += ["--gcov-executable", llvm_cov,
+                "--merge-mode-functions", "merge-use-line-min"]
     run(cmd)
     return xml
 

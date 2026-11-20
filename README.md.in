@@ -13,6 +13,8 @@ Open ModSim is a free implimentation of modbus slave (server) utility for modbus
 
 # Features
 
+Modbus TCP over TLS supports encrypted connections and built-in server certificate generation. See [TLS setup](docs/modbus-tls.md).
+
 The following Modbus functions are available:
 
 - Discrete Coils/Flags
@@ -46,6 +48,17 @@ The following simulations are available:
     Increment - simulate register from Low Limit to High Limit with a given Step
     Decrement - simulate register from High Limit to Low Limit with a given Step
 ```
+
+# Enron Modbus
+
+Enable **Enron Modbus (32-bit registers)** in **Modbus Definitions → General**.
+The setting is saved with the project.
+
+Select **Enron Registers Int32** or **Enron Registers Float32** and enter the full protocol address
+and a count. For example, address **7001**, count **2** exposes **7001–7002**.
+
+Supported 32-bit ranges are **5001–5999** and **7001–7999**. Choose the display
+format separately in the toolbar. Event and history logs are not supported.
 
 # Modbus Logging
 
@@ -153,6 +166,8 @@ The following minimum operating system versions are supported for OpenModSim:
 - <img src="docs/icons/logo_arch.svg" width="16" height="16" /> **Arch** (manual building only)
 
 # Building
+
+Certificate generation requires OpenSSL development libraries (`libcrypto`): version 1.1.1 with Qt 5, or version 3 with Qt 6. The build scripts install this dependency; for manual builds, set `OPENSSL_ROOT_DIR` when CMake cannot locate it.
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
 > [!NOTE]

@@ -11,6 +11,7 @@
 #include <QModbusDeviceIdentification>
 #include <QSignalSpy>
 #include <QTest>
+#include <QTemporaryDir>
 
 #include "modbusserver.h"
 
@@ -88,6 +89,12 @@ class TestModbusServer : public QObject
     Q_OBJECT
 
 private slots:
+    void enronAddressSpace_data();
+    void enronAddressSpace();
+    void enronRequests_data();
+    void enronRequests();
+    void enronLimitsAndMapping();
+    void persistsEnronMode();
     void managesAddressesStateAndErrors();
     void validatesOptions();
     void readsAndWritesMapData();
@@ -100,6 +107,233 @@ private slots:
     void invokesCustomHandler();
     void exercisesHeaderUtilities();
 };
+
+/// \brief Covers both address capacities outside the fixed 32-bit Enron ranges.
+void TestModbusServer::enronAddressSpace_data()
+{
+    QTest::addColumn<AddressSpace>("space");
+    QTest::addColumn<int>("address");
+    QTest::addColumn<int>("count");
+    QTest::addColumn<bool>("allowed");
+    for (auto space : {AddressSpace::Addr5Digits, AddressSpace::Addr6Digits}) {
+        const int capacity = space == AddressSpace::Addr5Digits ? 9999 : 65536;
+        for (int address : {0, 4000, 6000, 8000, 9998, 9999, 10000, 65534, 65535}) {
+            for (int count : {1, 2}) {
+                const auto name = QString("%1-%2-%3").arg(capacity).arg(address).arg(count);
+                QTest::newRow(qPrintable(name)) << space << address << count << (address + count <= capacity);
+            }
+        }
+    }
+}
+
+/// \brief Applies the selected address capacity consistently to register reads and writes.
+void TestModbusServer::enronAddressSpace()
+{
+    QFETCH(AddressSpace, space);
+    QFETCH(int, address);
+    QFETCH(int, count);
+    QFETCH(bool, allowed);
+    TestableModbusServer server;
+    server.addServerAddress(1);
+    ModbusDefinitions definitions;
+    definitions.EnronModbus = true;
+    definitions.AddrSpace = space;
+    server.setDefinitions(definitions);
+    ModbusDataUnitMap map;
+    for (auto type : {QModbusDataUnit::HoldingRegisters, QModbusDataUnit::InputRegisters})
+        map.addUnitMap(QUuid::createUuid(), type, address, qMin(count, 65536 - address));
+    server.setMap(map, 1);
+
+    for (auto code : {QModbusPdu::ReadHoldingRegisters, QModbusPdu::ReadInputRegisters}) {
+        const auto response = server.processRequest(QModbusRequest(code, quint16(address), quint16(count)), 1);
+        QCOMPARE(!response.isException(), allowed);
+        if (allowed)
+            QCOMPARE(response.data(), QByteArray(1, char(count * 2)) + QByteArray(count * 2, '\0'));
+        else
+            QCOMPARE(response.exceptionCode(), QModbusPdu::IllegalDataAddress);
+    }
+
+    const QByteArray writePayload = words({quint16(address), quint16(count)})
+        + QByteArray(1, char(count * 2)) + QByteArray(count * 2, '\0');
+    const auto multiple = server.processRequest(QModbusRequest(QModbusPdu::WriteMultipleRegisters, writePayload), 1);
+    QCOMPARE(!multiple.isException(), allowed);
+    if (!allowed)
+        QCOMPARE(multiple.exceptionCode(), QModbusPdu::IllegalDataAddress);
+
+    const auto combinedPayload = words({quint16(address), quint16(count), quint16(address), quint16(count)})
+        + QByteArray(1, char(count * 2)) + QByteArray(count * 2, '\0');
+    const auto combined = server.processRequest(QModbusRequest(QModbusPdu::ReadWriteMultipleRegisters, combinedPayload), 1);
+    QCOMPARE(!combined.isException(), allowed);
+    if (!allowed)
+        QCOMPARE(combined.exceptionCode(), QModbusPdu::IllegalDataAddress);
+
+    if (count == 1) {
+        const auto single = server.processRequest(QModbusRequest(QModbusPdu::WriteSingleRegister, quint16(address), quint16(0x1234)), 1);
+        QCOMPARE(!single.isException(), allowed);
+        if (allowed) {
+            QModbusDataUnit stored(QModbusDataUnit::HoldingRegisters, address, 1);
+            QVERIFY(server.data(&stored, 1));
+            QCOMPARE(stored.value(0), quint16(0x1234));
+        } else {
+            QCOMPARE(single.exceptionCode(), QModbusPdu::IllegalDataAddress);
+        }
+        const auto mask = server.processRequest(QModbusRequest(QModbusPdu::MaskWriteRegister,
+            quint16(address), quint16(0xffff), quint16(0)), 1);
+        QCOMPARE(!mask.isException(), allowed);
+        if (!allowed)
+            QCOMPARE(mask.exceptionCode(), QModbusPdu::IllegalDataAddress);
+    }
+
+    if (count == 2 && address + count <= 65536) {
+        QVERIFY(server.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, address, {1, 0x55}), 1));
+        const auto fifo = server.processRequest(QModbusRequest(QModbusPdu::ReadFifoQueue, quint16(address)), 1);
+        QCOMPARE(!fifo.isException(), allowed);
+        if (allowed)
+            QCOMPARE(fifo.data(), QByteArray::fromHex("000400010055"));
+        else
+            QCOMPARE(fifo.exceptionCode(), QModbusPdu::IllegalDataAddress);
+    }
+
+    if (space == AddressSpace::Addr5Digits && address == 10000 && count == 1) {
+        definitions.AddrSpace = AddressSpace::Addr6Digits;
+        server.setDefinitions(definitions);
+        const QModbusRequest read(QModbusPdu::ReadHoldingRegisters, quint16(address), quint16(1));
+        QVERIFY(!server.processRequest(read, 1).isException());
+        definitions.AddrSpace = AddressSpace::Addr5Digits;
+        server.setDefinitions(definitions);
+        QCOMPARE(server.processRequest(read, 1).exceptionCode(), QModbusPdu::IllegalDataAddress);
+    }
+}
+
+/// \brief Covers Enron wire payloads and validation independently of the transport.
+void TestModbusServer::enronRequests_data()
+{
+    QTest::addColumn<bool>("enabled");
+    QTest::addColumn<QByteArray>("requestHex");
+    QTest::addColumn<QByteArray>("responseHex");
+
+    QTest::newRow("standard-default") << false << QByteArray("0313890002") << QByteArray("030411223344");
+    QTest::newRow("long-pair") << true << QByteArray("0313890002") << QByteArray("03081122334455667788");
+    QTest::newRow("second-long") << true << QByteArray("03138a0001") << QByteArray("030455667788");
+    QTest::newRow("float-pair") << true << QByteArray("031b590002") << QByteArray("03083f80000040000000");
+    QTest::newRow("input-registers") << true << QByteArray("0413890001") << QByteArray("040400000000");
+    QTest::newRow("short-registers") << true << QByteArray("030bb90002") << QByteArray("030412345678");
+    QTest::newRow("single-long") << true << QByteArray("06138a12345678") << QByteArray("06138a12345678");
+    QTest::newRow("multiple-floats") << true << QByteArray("101b590002083f80000040000000") << QByteArray("101b590002");
+    QTest::newRow("combined") << true << QByteArray("1713890002138a000104abcdef01") << QByteArray("170811223344abcdef01");
+    QTest::newRow("single-short") << true << QByteArray("060bb9abcd") << QByteArray("060bb9abcd");
+    QTest::newRow("multiple-short") << true << QByteArray("100bb900020412345678") << QByteArray("100bb90002");
+    QTest::newRow("missing-long-word") << true << QByteArray("0613891234") << QByteArray("8603");
+    QTest::newRow("trailing-single-data") << true << QByteArray("0613891234567800") << QByteArray("8603");
+    QTest::newRow("wrong-byte-count") << true << QByteArray("1013890001021234") << QByteArray("9003");
+    QTest::newRow("truncated-multiple") << true << QByteArray("1013890001041234") << QByteArray("9003");
+    QTest::newRow("crosses-long-start") << true << QByteArray("0313880002") << QByteArray("8302");
+    QTest::newRow("crosses-long-end") << true << QByteArray("03176f0002") << QByteArray("8302");
+    QTest::newRow("crosses-float-end") << true << QByteArray("031f3f0002") << QByteArray("8302");
+    QTest::newRow("crosses-write-end") << true << QByteArray("10176f0002080000000000000000") << QByteArray("9002");
+    QTest::newRow("crosses-combined-read-end") << true << QByteArray("17176f0002138900010400000000") << QByteArray("9702");
+    QTest::newRow("zero-write-quantity") << true << QByteArray("101389000000") << QByteArray("9003");
+    QTest::newRow("zero-quantity") << true << QByteArray("0313890000") << QByteArray("8303");
+    QTest::newRow("read-over-limit") << true << QByteArray("031389003f") << QByteArray("8303");
+    QTest::newRow("mask-long") << true << QByteArray("161389ffff0000") << QByteArray("9601");
+    QTest::newRow("fifo-long") << true << QByteArray("181389") << QByteArray("9801");
+    QTest::newRow("coil-address-unaffected") << true << QByteArray("0113890001") << QByteArray("010100");
+}
+
+/// \brief Checks that Enron quantities preserve independent 32-bit values.
+void TestModbusServer::enronRequests()
+{
+    QFETCH(bool, enabled);
+    QFETCH(QByteArray, requestHex);
+    QFETCH(QByteArray, responseHex);
+    TestableModbusServer server;
+    server.addServerAddress(1);
+    ModbusDataUnitMap map;
+    for (auto type : {QModbusDataUnit::HoldingRegisters, QModbusDataUnit::InputRegisters, QModbusDataUnit::Coils})
+        map.addUnitMap(QUuid::createUuid(), type, 0, 10000);
+    server.setMap(map, 1);
+    ModbusDefinitions definitions;
+    definitions.EnronModbus = enabled;
+    server.setDefinitions(definitions);
+    QVERIFY(server.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 5001, {0x1122, 0x3344, 0x5566, 0x7788}), 1));
+    QVERIFY(server.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 7001, {0x3f80, 0, 0x4000, 0}), 1));
+    QVERIFY(server.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 3001, {0x1234, 0x5678}), 1));
+
+    const QByteArray bytes = QByteArray::fromHex(requestHex);
+    const auto code = QModbusPdu::FunctionCode(quint8(bytes.at(0)));
+    const auto response = server.processRequest(QModbusRequest(code, bytes.mid(1)), 1);
+    QByteArray actual(1, char(response.functionCode() | (response.isException() ? 0x80 : 0)));
+    actual += response.data();
+    QCOMPARE(actual.toHex(), responseHex);
+    if (!response.isException() && code == QModbusPdu::WriteSingleRegister && bytes.size() == 7) {
+        QModbusDataUnit stored(QModbusDataUnit::HoldingRegisters, 5001, 4);
+        QVERIFY(server.data(&stored, 1));
+        QCOMPARE(stored.values(), QVector<quint16>({0x1122, 0x3344, 0x1234, 0x5678}));
+    }
+}
+
+/// \brief Checks PDU limits, range endpoints, missing maps and runtime mode changes.
+void TestModbusServer::enronLimitsAndMapping()
+{
+    TestableModbusServer server;
+    server.addServerAddress(1);
+    ModbusDataUnitMap map;
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 5001, 1998);
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 7001, 1998);
+    server.setMap(map, 1);
+    ModbusDefinitions definitions;
+    definitions.EnronModbus = true;
+    server.setDefinitions(definitions);
+    for (quint16 address : {5001, 5999, 7001, 7999}) {
+        const auto response = server.processRequest(QModbusRequest(QModbusPdu::WriteSingleRegister, address, quint16(0x1234), quint16(0x5678)), 1);
+        QVERIFY(!response.isException());
+        QCOMPARE(server.processRequest(QModbusRequest(QModbusPdu::ReadHoldingRegisters, address, quint16(1)), 1).data(), QByteArray::fromHex("0412345678"));
+    }
+    const QModbusRequest read(QModbusPdu::ReadHoldingRegisters, quint16(5001), quint16(62));
+    QCOMPARE(server.processRequest(read, 1).dataSize(), 249);
+    const QModbusRequest write(QModbusPdu::WriteMultipleRegisters, QByteArray::fromHex("1389003df4") + QByteArray(244, '\0'));
+    QVERIFY(!server.processRequest(write, 1).isException());
+    const QModbusRequest tooLarge(QModbusPdu::WriteMultipleRegisters, QByteArray::fromHex("1389003ef8") + QByteArray(248, '\0'));
+    QCOMPARE(server.processRequest(tooLarge, 1).exceptionCode(), QModbusPdu::IllegalDataValue);
+    const QModbusRequest missing(QModbusPdu::ReadHoldingRegisters, quint16(9000), quint16(1));
+    QCOMPARE(server.processRequest(missing, 1).exceptionCode(), QModbusPdu::IllegalDataAddress);
+    definitions.EnronModbus = false;
+    server.setDefinitions(definitions);
+    QCOMPARE(server.processRequest(read, 1).dataSize(), 125);
+}
+
+/// \brief Keeps Enron mode across settings and XML round trips while defaulting legacy projects to standard Modbus.
+void TestModbusServer::persistsEnronMode()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    QSettings settings(dir.filePath("settings.ini"), QSettings::IniFormat);
+    ModbusDefinitions original;
+    QVERIFY(!original.EnronModbus);
+    original.EnronModbus = true;
+    settings << original;
+    ModbusDefinitions loaded;
+    settings >> loaded;
+    QVERIFY(loaded.EnronModbus);
+
+    QByteArray bytes;
+    QXmlStreamWriter writer(&bytes);
+    writer << original;
+    QXmlStreamReader reader(bytes);
+    QVERIFY(reader.readNextStartElement());
+    loaded.EnronModbus = false;
+    reader >> loaded;
+    QVERIFY(!reader.hasError());
+    QVERIFY(loaded.EnronModbus);
+    QXmlStreamReader legacy("<ModbusDefinitions/>");
+    QVERIFY(legacy.readNextStartElement());
+    legacy >> loaded;
+    QVERIFY(!loaded.EnronModbus);
+    settings.clear();
+    loaded.EnronModbus = true;
+    settings >> loaded;
+    QVERIFY(!loaded.EnronModbus);
+}
 
 void TestModbusServer::managesAddressesStateAndErrors()
 {

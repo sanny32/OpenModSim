@@ -50,7 +50,7 @@ runs:
         ./config \
           shared zlib no-apps no-docs no-tests
         make -j$(nproc) build_libs
-        make install_runtime_libs
+        make install_dev install_runtime_libs
 
     - name: Verify OpenSSL runtime libraries
       shell: bash

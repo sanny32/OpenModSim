@@ -1,3 +1,5 @@
+get_filename_component(omodsim_openssl_lib "${OPENSSL_CRYPTO_LIBRARY}" DIRECTORY)
+
 # macOS installation rules
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "/Applications" CACHE PATH "Install path prefix" FORCE)
@@ -16,7 +18,7 @@ install(CODE "
     set(_installed_app \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.app\")
     set(_resources_dir \"\${_installed_app}/Contents/Resources\")
     set(_docs_source \"${PROJECT_BINARY_DIR}/docs\")
-    set(_demos_source \"${CMAKE_CURRENT_SOURCE_DIR}/../demos\")
+    set(_demos_source \"${PROJECT_SOURCE_DIR}/../demos\")
 
     if(NOT EXISTS \"\${_installed_app}\")
         message(FATAL_ERROR \"Installed app bundle not found: \${_installed_app}\")
@@ -74,9 +76,9 @@ install(CODE "
         execute_process(
             COMMAND \"\${_macdeployqt_executable}\"
                     \"\${_installed_app}\"
+                    \"-libpath=${omodsim_openssl_lib}\"
                     -always-overwrite
                     -verbose=2
-                    \"-libpath=\${_qt_lib_dir}\"
                     \"-codesign=-\"
             RESULT_VARIABLE _macdeployqt_result
         )

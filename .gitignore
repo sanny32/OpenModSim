@@ -32,8 +32,6 @@ ui_*.h
 *.qhc
 Makefile*
 *build-*
-!/.github/actions/build-openssl3-runtime/
-!/.github/actions/build-openssl3-runtime/action.yml
 debug
 release
 
@@ -71,6 +69,7 @@ AGENTS.md
 
 .directory
 .DS_Store
+.coverage-*
 *.cmd
 *.bat
 *.qmake.stash
@@ -79,7 +78,7 @@ AGENTS.md
 *.qtds
 *.log
 *.ts text eol=lf
-src/res/license.txt
+src/app/res/license.txt
 /docs/PROJECT_SUMMARY.md
 /docs/README.md
 /docs/SITE_STRUCTURE.md
@@ -87,3 +86,5 @@ src/res/license.txt
 
 # Local project user state (window layout, view mode, tab order)
 *.omsim.user
+
+!/.github/**

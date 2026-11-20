@@ -32,11 +32,11 @@ endif()
 
 function(omodsim_configure_qlementine_app_style target_name)
     if(USE_QLEMENTINE_APP_STYLE)
-        target_compile_definitions(${target_name} PRIVATE
+        target_compile_definitions(${target_name} PUBLIC
             HAVE_QLEMENTINE_APP_STYLE
             QLEMENTINE_VERSION="${QLEMENTINE_VERSION}"
             QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}"
         )
-        target_link_libraries(${target_name} PRIVATE qlementine qlementine-icons)
+        target_link_libraries(${target_name} PUBLIC qlementine qlementine-icons)
     endif()
 endfunction()

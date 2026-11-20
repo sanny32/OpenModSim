@@ -19,6 +19,11 @@ if(NOT Qt6_FOUND AND NOT Qt5_FOUND)
     message(FATAL_ERROR "One or more Qt development packages not found. Please install Qt5 or Qt6 development packages.")
 endif()
 
+# Qt 5.15 QVector uses checked iterators deprecated by recent MSVC STL versions.
+if(MSVC AND Qt5_FOUND)
+    add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING)
+endif()
+
 if(Qt6_FOUND)
     get_target_property(QT_BINARY_DIR Qt6::qmake IMPORTED_LOCATION)
     get_filename_component(QT_BINARY_DIR "${QT_BINARY_DIR}" DIRECTORY)

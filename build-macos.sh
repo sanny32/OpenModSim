@@ -85,6 +85,10 @@ echo "  Found: ninja $(ninja --version)"
 # ==========================
 # Check Qt
 # ==========================
+brew list --versions openssl@3 >/dev/null || brew install openssl@3
+OPENSSL_ROOT_DIR="$(brew --prefix openssl@3)"
+export OPENSSL_ROOT_DIR
+
 echo "Checking for Qt..."
 
 QT_PREFIX=""
@@ -194,6 +198,7 @@ cd "$BUILD_DIR"
 
 cmake ../src -GNinja \
     -DCMAKE_PREFIX_PATH="${QT_PREFIX}" \
+    -DOPENSSL_ROOT_DIR="${OPENSSL_ROOT_DIR}" \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
     ${CMAKE_QT_OPTION}
 

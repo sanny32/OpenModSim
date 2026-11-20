@@ -1,0 +1,54 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmodbusdefinitions.h
+/// \brief Declares the dialogmodbusdefinitions interfaces.
+///
+
+#ifndef DIALOGMODBUSDEFINITIONS_H
+#define DIALOGMODBUSDEFINITIONS_H
+
+#include <QDialog>
+#include <QListWidgetItem>
+#include <QAbstractButton>
+#include "qfixedsizedialog.h"
+#include "modbusdefinitions.h"
+#include "modbusmultiserver.h"
+
+namespace Ui {
+class DialogModbusDefinitions;
+}
+
+class DialogModbusDefinitions : public QFixedSizeDialog
+{
+    Q_OBJECT
+
+public:
+    explicit DialogModbusDefinitions(ModbusMultiServer& srv, QWidget *parent = nullptr);
+    ~DialogModbusDefinitions();
+
+    ///
+    /// \brief Keeps the settings dialog inside the available screen area.
+    ///
+    QSize sizeHint() const override;
+
+    void accept() override;
+
+protected:
+    void changeEvent(QEvent* event) override;
+
+private slots:
+    void on_buttonBox_clicked(QAbstractButton* btn);
+
+private:
+    void apply();
+    void updateModbusDefinitions(const ModbusDefinitions& defs);
+
+private:
+    Ui::DialogModbusDefinitions *ui;
+    ModbusMultiServer& _mbMultiServer;
+};
+
+#endif // DIALOGMODBUSDEFINITIONS_H
+

@@ -1,0 +1,785 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>Open ModSim</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/res/omodsim.png</normaloff>:/res/omodsim.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="MdiAreaEx" name="mdiArea" native="true">
+      <property name="documentMode" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="tabsClosable" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="tabsMovable" stdset="0">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QDockWidget" name="projectDockWidget">
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Project</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="projectDockWidgetContents">
+    <layout class="QVBoxLayout" name="projectDockWidgetLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="ProjectTreeWidget" name="projectTree">
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="helpDockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>512</width>
+     <height>38</height>
+    </size>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea|Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Script Help</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="helpDockWidgetContents">
+    <layout class="QVBoxLayout" name="helpDockWidgetLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="HelpWidget" name="helpWidget" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="consoleDockWidget">
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Output</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="consoleDockWidgetContents">
+    <layout class="QVBoxLayout" name="consoleDockWidgetLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="OutputPanel" name="outputPanel" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuNew">
+     <property name="title">
+      <string>New</string>
+     </property>
+     <addaction name="actionNewDataView"/>
+     <addaction name="actionNewDataMapView"/>
+     <addaction name="actionNewTrafficView"/>
+     <addaction name="actionNewScript"/>
+    </widget>
+    <addaction name="menuNew"/>
+    <addaction name="separator"/>
+    <addaction name="actionImportScript"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+    <addaction name="actionCloseAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpenProject"/>
+    <addaction name="actionSaveProject"/>
+    <addaction name="actionSaveProjectAs"/>
+    <addaction name="actionCloseProject"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint"/>
+    <addaction name="actionPrintSetup"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelectAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionReplace"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
+   </widget>
+   <widget class="QMenu" name="menuConnection">
+    <property name="title">
+     <string>Connection</string>
+    </property>
+    <addaction name="actionConnect"/>
+    <addaction name="actionDisconnect"/>
+    <addaction name="separator"/>
+    <addaction name="actionSnifferMode"/>
+   </widget>
+   <widget class="QMenu" name="menuSetup">
+    <property name="title">
+     <string>Setup</string>
+    </property>
+    <addaction name="actionMbDefinitions"/>
+    <addaction name="separator"/>
+    <addaction name="actionForceCoils"/>
+    <addaction name="actionForceDiscretes"/>
+    <addaction name="actionPresetInputRegs"/>
+    <addaction name="actionPresetHoldingRegs"/>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionCascade"/>
+    <addaction name="actionTile"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionTabbedView"/>
+    <addaction name="actionSplitView"/>
+    <addaction name="separator"/>
+    <addaction name="actionToolbar"/>
+    <addaction name="actionStatusBar"/>
+    <addaction name="separator"/>
+    <addaction name="actionProjectTree"/>
+    <addaction name="actionScriptHelp"/>
+    <addaction name="actionOutputWindow"/>
+    <addaction name="separator"/>
+    <addaction name="actionMsgParser"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuConnection"/>
+   <addaction name="menuSetup"/>
+   <addaction name="menuView"/>
+   <addaction name="menuWindow"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="ToolBar" name="toolBarMain">
+   <property name="windowTitle">
+    <string>Toolbar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpenProject"/>
+   <addaction name="actionSaveProject"/>
+   <addaction name="actionPrint"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionConnect"/>
+   <addaction name="actionDisconnect"/>
+   <addaction name="actionHexView"/>
+   <addaction name="separator"/>
+   <addaction name="actionMbDefinitions"/>
+   <addaction name="separator"/>
+   <addaction name="actionSnifferMode"/>
+   <addaction name="separator"/>
+   <addaction name="actionForceCoils"/>
+   <addaction name="actionForceDiscretes"/>
+   <addaction name="actionPresetInputRegs"/>
+   <addaction name="actionPresetHoldingRegs"/>
+   <addaction name="separator"/>
+   <addaction name="actionMsgParser"/>
+   <addaction name="separator"/>
+   <addaction name="actionAbout"/>
+  </widget>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/open.png</normaloff>:/res/icons/fallback/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Project...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSaveProject">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/save.png</normaloff>:/res/icons/fallback/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save Project</string>
+   </property>
+  </action>
+  <action name="actionSaveProjectAs">
+   <property name="text">
+    <string>Save Project As...</string>
+   </property>
+  </action>
+  <action name="actionCloseProject">
+   <property name="text">
+    <string>Close Project</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/print.png</normaloff>:/res/icons/fallback/print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionPrintSetup">
+   <property name="text">
+    <string>Print Setup...</string>
+   </property>
+  </action>
+  <action name="actionRecentFile">
+   <property name="text">
+    <string>Recent File</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/connect.png</normaloff>:/res/icons/fallback/connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/disconnect.png</normaloff>:/res/icons/fallback/disconnect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionHexView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/hex-view.png</normaloff>:/res/icons/fallback/hex-view.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hex View</string>
+   </property>
+   <property name="toolTip">
+    <string>Hex View</string>
+   </property>
+  </action>
+  <action name="actionSnifferMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/sniffer.png</normaloff>:/res/icons/fallback/sniffer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sniffer Mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Sniffer mode: show all Modbus RTU traffic on serial ports without responding</string>
+   </property>
+  </action>
+  <action name="actionCascade">
+   <property name="text">
+    <string>Cascade</string>
+   </property>
+  </action>
+  <action name="actionTile">
+   <property name="text">
+    <string>Tile</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/about.png</normaloff>:/res/icons/fallback/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Open ModSim...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionToolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Toolbar</string>
+   </property>
+  </action>
+  <action name="actionStatusBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="actionForceCoils">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/force-coils.png</normaloff>:/res/icons/fallback/force-coils.png</iconset>
+   </property>
+   <property name="text">
+    <string>Force Coils</string>
+   </property>
+  </action>
+  <action name="actionPresetHoldingRegs">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/preset-holding-regs.png</normaloff>:/res/icons/fallback/preset-holding-regs.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preset Holding Regs</string>
+   </property>
+  </action>
+  <action name="actionPresetInputRegs">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/preset-input-regs.png</normaloff>:/res/icons/fallback/preset-input-regs.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preset Input Regs</string>
+   </property>
+  </action>
+  <action name="actionForceDiscretes">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/force-discretes.png</normaloff>:/res/icons/fallback/force-discretes.png</iconset>
+   </property>
+   <property name="text">
+    <string>Force Discretes</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/undo.png</normaloff>:/res/icons/fallback/undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/redo.png</normaloff>:/res/icons/fallback/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/cut.png</normaloff>:/res/icons/fallback/cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/copy.png</normaloff>:/res/icons/fallback/copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/paste.png</normaloff>:/res/icons/fallback/paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionSelectAll">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionReplace">
+   <property name="text">
+    <string>Replace...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionMsgParser">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/msg-parser.png</normaloff>:/res/icons/fallback/msg-parser.png</iconset>
+   </property>
+   <property name="text">
+    <string>Msg Parser</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">F9</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionMbDefinitions">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/mb-definitions.png</normaloff>:/res/icons/fallback/mb-definitions.png</iconset>
+   </property>
+   <property name="text">
+    <string>Modbus Definitions</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionTabbedView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tabbed View</string>
+   </property>
+  </action>
+  <action name="actionCloseAll">
+   <property name="text">
+    <string>Close All</string>
+   </property>
+   <property name="toolTip">
+    <string>Close All Windows</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Shift+W</string>
+   </property>
+  </action>
+  <action name="actionScriptHelp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Script Help</string>
+   </property>
+   <property name="toolTip">
+    <string>Script Help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionOutputWindow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Output Window</string>
+   </property>
+   <property name="toolTip">
+    <string>Output Window</string>
+   </property>
+  </action>
+  <action name="actionProjectTree">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Project Tree</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+,</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionNewDataView">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/new-data.png</normaloff>:/res/icons/fallback/new-data.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Data View</string>
+   </property>
+  </action>
+  <action name="actionNewTrafficView">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/new-traffic.png</normaloff>:/res/icons/fallback/new-traffic.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Traffic View</string>
+   </property>
+  </action>
+  <action name="actionNewScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/new-script.png</normaloff>:/res/icons/fallback/new-script.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Script</string>
+   </property>
+  </action>
+  <action name="actionNewDataMapView">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/new-data.png</normaloff>:/res/icons/fallback/new-data.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Map View</string>
+   </property>
+   <property name="toolTip">
+    <string>New Map View</string>
+   </property>
+  </action>
+  <action name="actionImportScript">
+   <property name="text">
+    <string>Import Script...</string>
+   </property>
+  </action>
+  <action name="actionSplitView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/split-view.png</normaloff>:/res/icons/fallback/split-view.png</iconset>
+   </property>
+   <property name="text">
+    <string>Split View</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MdiAreaEx</class>
+   <extends>QWidget</extends>
+   <header>mdiareaex.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ProjectTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>projecttreewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HelpWidget</class>
+   <extends>QWidget</extends>
+   <header>helpwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>OutputPanel</class>
+   <extends>QWidget</extends>
+   <header>outputpanel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>toolbar.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../app/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

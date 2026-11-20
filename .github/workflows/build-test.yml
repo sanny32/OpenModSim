@@ -1,0 +1,217 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - '.github/workflows/build-test.yml'
+      - '.github/actions/*openssl*/**'
+      - '.github/actions/drop-stale-caches/**'
+      - 'tools/*openssl*'
+      - 'src/**'
+      - 'tools/coverage.py'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - '.github/workflows/build-test.yml'
+      - '.github/actions/*openssl*/**'
+      - '.github/actions/drop-stale-caches/**'
+      - 'tools/*openssl*'
+      - 'src/**'
+      - 'tools/coverage.py'
+  workflow_dispatch:
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: build-test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  tests:
+    name: Tests (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+          - os: macos-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: '-DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_FLAGS="-Xclang -fno-pch-timestamp"'
+          - os: ubuntu-latest
+            qt-version: '5.15.2'
+            qt-modules: ''
+            cmake-options: '-DUSE_QT5=ON -DCMAKE_CXX_COMPILER_LAUNCHER=ccache'
+          - os: windows-2022
+            qt-version: '5.15.2'
+            qt-modules: ''
+            cmake-options: '-DUSE_QT5=ON'
+
+    env:
+      # Run Qt GUI/Test binaries without a real display.
+      QT_QPA_PLATFORM: offscreen
+      OMODSIM_REQUIRE_TLS: '1'
+      CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up ccache
+        if: runner.os != 'Windows'
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: tests-${{ matrix.os }}-qt${{ matrix.qt-version }}
+          max-size: 1G
+          save: ${{ github.event_name == 'push' }}
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            gdb \
+            libgl1-mesa-dev libssl-dev \
+            libxkbcommon-x11-0
+
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install ninja openssl@3
+          echo "OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)" >> "$GITHUB_ENV"
+
+      - name: Set up MSVC environment (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qt-version }}
+          modules: ${{ matrix.qt-modules }}
+          cache: true
+
+      - name: Install OpenSSL 3 (Windows)
+        if: runner.os == 'Windows' && matrix.qt-version != '5.15.2'
+        uses: ./.github/actions/install-openssl
+
+      - name: Install OpenSSL 1.1 (Qt 5)
+        if: matrix.qt-version == '5.15.2'
+        uses: ./.github/actions/install-openssl11
+
+      - name: Configure
+        run: >
+          cmake -S src -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
+          ${{ matrix.cmake-options }}
+
+      - name: Build tests
+        run: cmake --build build --config Release --parallel --target omodsim_tests
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
+
+      - name: Diagnose Qt 5 forms crash (Linux)
+        if: failure() && runner.os == 'Linux' && matrix.qt-version == '5.15.2'
+        run: |
+          if grep -q ':omodsim_tests_forms$' build/Testing/Temporary/LastTestsFailed.log; then
+            gdb -batch -ex run -ex 'thread apply all bt' --args build/tests/omodsim_tests_forms
+          fi
+
+      - name: Print Windows test failures
+        if: failure() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $failedTests = 'build/Testing/Temporary/LastTestsFailed.log'
+          if (Test-Path $failedTests) {
+            foreach ($entry in Get-Content $failedTests) {
+              $testName = ($entry -split ':', 2)[1]
+              $testLog = "build/tests/$testName.testlog.txt"
+              if (Test-Path $testLog) { Get-Content $testLog }
+            }
+          }
+
+      - name: Drop superseded ccache entries
+        if: runner.os != 'Windows' && github.event_name == 'push'
+        uses: ./.github/actions/drop-stale-caches
+        with:
+          prefix: ccache-tests-${{ matrix.os }}-qt${{ matrix.qt-version }}-
+
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-logs-${{ matrix.os }}-qt${{ matrix.qt-version }}
+          path: |
+            build/Testing/Temporary/
+            build/tests/*.testlog.txt
+
+  coverage:
+    name: Coverage Tests (${{ matrix.os }}, Qt ${{ matrix.qt-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            qt-version: '6.9.3'
+            qt-modules: 'qtserialbus qtserialport qt5compat'
+            cmake-options: ''
+
+    env:
+      QT_QPA_PLATFORM: offscreen
+      OMODSIM_REQUIRE_TLS: '1'
+      CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: coverage-${{ matrix.os }}-qt${{ matrix.qt-version }}
+          max-size: 1G
+          save: ${{ github.event_name == 'push' }}
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            libgl1-mesa-dev libssl-dev \
+            libxkbcommon-x11-0
+          python3 -m pip install --upgrade gcovr
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ matrix.qt-version }}
+          modules: ${{ matrix.qt-modules }}
+          cache: true
+
+      - name: Run coverage
+        run: python3 tools/coverage.py --strict -- -G Ninja -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ${{ matrix.cmake-options }}
+
+      - name: Drop superseded ccache entries
+        if: github.event_name == 'push'
+        uses: ./.github/actions/drop-stale-caches
+        with:
+          prefix: ccache-coverage-${{ matrix.os }}-qt${{ matrix.qt-version }}-
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: build-coverage/coverage

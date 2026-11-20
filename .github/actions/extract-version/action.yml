@@ -23,6 +23,8 @@ inputs:
     default: "true"
 
 outputs:
+  file-version:
+    value: ${{ steps.extract.outputs.file-version }}
   app-version:
     value: ${{ steps.extract.outputs.app-version }}
   app-major-version:
@@ -149,6 +151,7 @@ runs:
         } >> "$GITHUB_ENV"
 
         {
+          echo "file-version=${full_version}.0"
           echo "app-version=$app_version"
           echo "app-major-version=$major_version"
           echo "cmake-version=$cmake_version"

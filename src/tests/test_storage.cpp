@@ -9,7 +9,7 @@
 #include <QJSEngine>
 #include <QTest>
 
-#include "jsobjects/storage.h"
+#include "scripting/storage.h"
 
 class TestStorage : public QObject
 {

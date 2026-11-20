@@ -23,6 +23,10 @@
     !undef VERSIONPATCH
     !define VERSIONPATCH "${VERSIONPATCH_NUMERIC}"
   !endif
+  # PE version resources require numeric X.X.X.X even for development builds.
+  !ifndef FILEVERSION
+    !define FILEVERSION "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  !endif
   !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
 
   !define MUI_ICON ${ICON_FILE}
@@ -69,8 +73,8 @@ FunctionEnd
   #ManifestDPIAwareness "PerMonitorV2,System"
   SetCompressor /SOLID lzma
   SetCompressorDictSize 64
-  VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
-  VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIProductVersion "${FILEVERSION}"
+  VIFileVersion    "${FILEVERSION}"
   VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
   VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
   VIAddVersionKey /LANG=0 "ProductName"      "${PROJECTNAME}"

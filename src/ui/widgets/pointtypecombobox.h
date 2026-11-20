@@ -1,0 +1,52 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file pointtypecombobox.h
+/// \brief Declares the pointtypecombobox interfaces.
+///
+
+#ifndef POINTTYPECOMBOBOX_H
+#define POINTTYPECOMBOBOX_H
+
+#include <QComboBox>
+#include <QModbusDataUnit>
+#include "enronmodbus.h"
+
+///
+/// \brief The PointTypeComboBox class
+///
+class PointTypeComboBox : public QComboBox
+{
+    Q_OBJECT
+public:
+    PointTypeComboBox(QWidget *parent = nullptr);
+
+    QModbusDataUnit::RegisterType currentPointType() const;
+    void setCurrentPointType(QModbusDataUnit::RegisterType pointType);
+
+    ///
+    /// \brief Returns the Enron group selected for the holding-register table.
+    ///
+    EnronModbus::RegisterType currentEnronType() const;
+    ///
+    /// \brief Selects an Enron group without introducing a separate Modbus table.
+    ///
+    void setCurrentEnronType(EnronModbus::RegisterType type);
+    ///
+    /// \brief Adds or removes Enron choices to match the server protocol.
+    ///
+    void setEnronEnabled(bool enabled);
+
+signals:
+    void pointTypeChanged(QModbusDataUnit::RegisterType value);
+
+protected:
+    void changeEvent(QEvent* event) override;
+
+private slots:
+    void on_currentIndexChanged(int);
+};
+
+#endif // POINTTYPECOMBOBOX_H
+

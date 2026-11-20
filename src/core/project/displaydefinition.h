@@ -1,0 +1,421 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file displaydefinition.h
+/// \brief Declares the displaydefinition interfaces.
+///
+
+#ifndef DISPLAYDEFINITION_H
+#define DISPLAYDEFINITION_H
+
+#include <QSettings>
+#include <QModbusDataUnit>
+#include <QXmlStreamWriter>
+#include <QSet>
+#include "modbuslimits.h"
+#include "enronmodbus.h"
+#include "modbusserver.h"
+#include "scriptsettings.h"
+
+///
+/// \brief The DataViewDefinitions struct
+///
+struct DataViewDefinitions
+{
+    QString FormName;
+    quint8 DeviceId = 1;
+    quint16 PointAddress = 1;
+    QModbusDataUnit::RegisterType PointType = QModbusDataUnit::HoldingRegisters;
+    quint16 Length = 100;
+    EnronModbus::RegisterType EnronType = EnronModbus::RegisterType::None;
+    quint16 DataViewColumnsDistance = 16;
+    bool LeadingZeros = true;
+
+    void normalize()
+    {
+        DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
+        // PointAddress is deliberately not clamped here: 0 is a valid address for
+        // 0-based projects, and the lower bound for 1-based ones depends on the
+        // address base, which this struct does not know. FormDataView clamps it
+        // against the current base when the definition is applied.
+        PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
+        if (PointType != QModbusDataUnit::HoldingRegisters
+            || EnronType < EnronModbus::RegisterType::None || EnronType > EnronModbus::RegisterType::Group7x)
+            EnronType = EnronModbus::RegisterType::None;
+        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length,
+                                 static_cast<quint16>(ModbusLimits::lengthRange().to()));
+
+        DataViewColumnsDistance = qBound<quint16>(1, DataViewColumnsDistance, 32);
+    }
+
+    bool operator==(const DataViewDefinitions& o) const
+    {
+        return FormName == o.FormName
+            && DeviceId == o.DeviceId
+            && PointAddress == o.PointAddress
+            && PointType == o.PointType
+            && Length == o.Length
+            && EnronType == o.EnronType
+            && DataViewColumnsDistance == o.DataViewColumnsDistance
+            && LeadingZeros == o.LeadingZeros;
+    }
+
+    bool operator!=(const DataViewDefinitions& o) const { return !(*this == o); }
+};
+
+///
+/// \brief The TrafficViewDefinitions struct
+///
+struct TrafficViewDefinitions
+{
+    QString FormName;
+    qint16 UnitFilter = -1;
+    qint16 FunctionCodeFilter = -1;
+    quint16 LogViewLimit = 30;
+    bool ExceptionsOnly = false;
+    bool Autoscroll = false;
+    bool HexView = true;
+
+    void normalize()
+    {
+        UnitFilter = qBound(qint16(-1), UnitFilter, qint16(255));
+        static const QSet<qint16> kAllowedFunctionCodes = {
+            1, 2, 3, 4, 5, 6, 15, 16, 22, 23
+        };
+        if (FunctionCodeFilter != -1 && !kAllowedFunctionCodes.contains(FunctionCodeFilter))
+            FunctionCodeFilter = -1;
+        LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
+    }
+
+    bool operator==(const TrafficViewDefinitions& o) const
+    {
+        return FormName == o.FormName
+            && UnitFilter == o.UnitFilter
+            && FunctionCodeFilter == o.FunctionCodeFilter
+            && LogViewLimit == o.LogViewLimit
+            && ExceptionsOnly == o.ExceptionsOnly
+            && Autoscroll == o.Autoscroll
+            && HexView == o.HexView;
+    }
+
+    bool operator!=(const TrafficViewDefinitions& o) const { return !(*this == o); }
+};
+
+///
+/// \brief The ScriptViewDefinitions struct
+///
+struct ScriptViewDefinitions
+{
+    QString FormName;
+    ScriptSettings ScriptCfg;
+
+    void normalize()
+    {
+        ScriptCfg.normalize();
+    }
+
+    bool operator==(const ScriptViewDefinitions& o) const
+    {
+        return FormName == o.FormName
+            && ScriptCfg == o.ScriptCfg;
+    }
+
+    bool operator!=(const ScriptViewDefinitions& o) const { return !(*this == o); }
+};
+
+///
+/// \brief The DataMapViewDefinitions class
+///
+struct DataMapViewDefinitions
+{
+    QString FormName;
+    bool    ZeroBasedAddress = false;
+    bool    HexView          = false;
+    void normalize() {}
+};
+
+Q_DECLARE_METATYPE(DataViewDefinitions)
+Q_DECLARE_METATYPE(TrafficViewDefinitions)
+Q_DECLARE_METATYPE(ScriptViewDefinitions)
+Q_DECLARE_METATYPE(DataMapViewDefinitions)
+
+///
+/// \brief QSettings writer for DataViewDefinitions
+/// \param out
+/// \param dd
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const DataViewDefinitions& dd)
+{
+    out.setValue("DataViewDefinitions/FormName",              dd.FormName);
+    out.setValue("DataViewDefinitions/DeviceId",              dd.DeviceId);
+    out.setValue("DataViewDefinitions/PointAddress",          dd.PointAddress);
+    out.setValue("DataViewDefinitions/PointType",             dd.PointType);
+    out.setValue("DataViewDefinitions/EnronType", static_cast<int>(dd.EnronType));
+    out.setValue("DataViewDefinitions/Length",                dd.Length);
+    out.setValue("DataViewDefinitions/DataViewColumnSpace",   dd.DataViewColumnsDistance);
+    out.setValue("DataViewDefinitions/LeadingZeros",          dd.LeadingZeros);
+
+    return out;
+}
+
+///
+/// \brief QSettings writer for TrafficViewDefinitions
+///
+inline QSettings& operator <<(QSettings& out, const TrafficViewDefinitions& dd)
+{
+    out.setValue("TrafficViewDefinitions/FormName",              dd.FormName);
+    out.setValue("TrafficViewDefinitions/UnitFilter",            dd.UnitFilter);
+    out.setValue("TrafficViewDefinitions/FunctionCodeFilter",    dd.FunctionCodeFilter);
+    out.setValue("TrafficViewDefinitions/LogViewLimit",          dd.LogViewLimit);
+    out.setValue("TrafficViewDefinitions/ExceptionsOnly",        dd.ExceptionsOnly);
+    out.setValue("TrafficViewDefinitions/Autoscroll",            dd.Autoscroll);
+
+    return out;
+}
+
+///
+/// \brief QSettings writer for ScriptViewDefinitions
+///
+inline QSettings& operator <<(QSettings& out, const ScriptViewDefinitions& dd)
+{
+    out.setValue("ScriptViewDefinitions/FormName",              dd.FormName);
+
+    out.beginGroup("ScriptViewDefinitions");
+    out << dd.ScriptCfg;
+    out.endGroup();
+
+    return out;
+}
+
+///
+/// \brief QSettings reader for DataViewDefinitions
+/// \param in
+/// \param dd
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, DataViewDefinitions& dd)
+{
+    dd.FormName = in.value("DataViewDefinitions/FormName").toString();
+    dd.DeviceId = in.value("DataViewDefinitions/DeviceId", 1).toUInt();
+    dd.PointAddress = in.value("DataViewDefinitions/PointAddress", 1).toUInt();
+    dd.PointType = (QModbusDataUnit::RegisterType)in.value("DataViewDefinitions/PointType", 4).toUInt();
+    dd.EnronType = static_cast<EnronModbus::RegisterType>(in.value("DataViewDefinitions/EnronType", 0).toInt());
+    dd.Length = in.value("DataViewDefinitions/Length", 100).toUInt();
+    dd.DataViewColumnsDistance = in.value("DataViewDefinitions/DataViewColumnSpace", 16).toUInt();
+    dd.LeadingZeros = in.value("DataViewDefinitions/LeadingZeros", true).toBool();
+
+    dd.normalize();
+    return in;
+}
+
+///
+/// \brief QSettings reader for TrafficViewDefinitions
+///
+inline QSettings& operator >>(QSettings& in, TrafficViewDefinitions& dd)
+{
+    dd.FormName = in.value("TrafficViewDefinitions/FormName").toString();
+    dd.UnitFilter = in.value("TrafficViewDefinitions/UnitFilter", -1).toInt();
+    dd.FunctionCodeFilter = in.value("TrafficViewDefinitions/FunctionCodeFilter", -1).toInt();
+    dd.LogViewLimit = in.value("TrafficViewDefinitions/LogViewLimit", 30).toUInt();
+    dd.ExceptionsOnly = in.value("TrafficViewDefinitions/ExceptionsOnly", false).toBool();
+    dd.Autoscroll = in.value("TrafficViewDefinitions/Autoscroll", false).toBool();
+    dd.HexView = in.value("TrafficViewDefinitions/HexView", true).toBool();
+
+    dd.normalize();
+    return in;
+}
+
+///
+/// \brief QSettings reader for ScriptViewDefinitions
+///
+inline QSettings& operator >>(QSettings& in, ScriptViewDefinitions& dd)
+{
+    dd.FormName = in.value("ScriptViewDefinitions/FormName").toString();
+
+    in.beginGroup("ScriptViewDefinitions");
+    in >> dd.ScriptCfg;
+    in.endGroup();
+
+    dd.normalize();
+    return in;
+}
+
+///
+/// \brief XML writer for DataViewDefinitions
+/// \param xml
+/// \param dd
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DataViewDefinitions& dd)
+{
+    xml.writeStartElement("DataViewDefinitions");
+    xml.writeAttribute("FormName", dd.FormName);
+    xml.writeAttribute("DeviceId", QString::number(dd.DeviceId));
+    xml.writeAttribute("PointType", enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
+    xml.writeAttribute("PointAddress", QString::number(dd.PointAddress));
+    if (dd.EnronType != EnronModbus::RegisterType::None)
+        xml.writeAttribute("EnronType", QString::number(static_cast<int>(dd.EnronType)));
+    xml.writeAttribute("Length", QString::number(dd.Length));
+    xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
+    xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
+    xml.writeEndElement();
+
+    return xml;
+}
+
+///
+/// \brief XML writer for TrafficViewDefinitions
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const TrafficViewDefinitions& dd)
+{
+    xml.writeStartElement("TrafficViewDefinitions");
+    xml.writeAttribute("FormName", dd.FormName);
+    xml.writeAttribute("UnitFilter", QString::number(dd.UnitFilter));
+    xml.writeAttribute("FunctionCodeFilter", QString::number(dd.FunctionCodeFilter));
+    xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
+    xml.writeAttribute("ExceptionsOnly", boolToString(dd.ExceptionsOnly));
+    xml.writeAttribute("Autoscroll", boolToString(dd.Autoscroll));
+    xml.writeEndElement();
+
+    return xml;
+}
+
+///
+/// \brief XML writer for ScriptViewDefinitions
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptViewDefinitions& dd)
+{
+    xml.writeStartElement("ScriptViewDefinitions");
+    xml.writeAttribute("FormName", dd.FormName);
+    xml << dd.ScriptCfg;
+    xml.writeEndElement();
+
+    return xml;
+}
+
+///
+/// \brief XML reader for DataViewDefinitions
+/// \param xml
+/// \param dd
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DataViewDefinitions& dd)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("DataViewDefinitions")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("FormName")) {
+            dd.FormName = attributes.value("FormName").toString();
+        }
+
+        if (attributes.hasAttribute("DeviceId")) {
+            bool ok; const quint8 deviceId = attributes.value("DeviceId").toUShort(&ok);
+            if (ok) dd.DeviceId = deviceId;
+        }
+
+        if (attributes.hasAttribute("PointType")) {
+            dd.PointType = enumFromString<QModbusDataUnit::RegisterType>(attributes.value("PointType").toString());
+        }
+
+        if (attributes.hasAttribute("PointAddress")) {
+            bool ok; const quint16 pointAddress = attributes.value("PointAddress").toUShort(&ok);
+            if (ok) dd.PointAddress = pointAddress;
+        }
+
+        dd.EnronType = static_cast<EnronModbus::RegisterType>(attributes.value("EnronType").toInt());
+
+        if (attributes.hasAttribute("Length")) {
+            bool ok; const quint16 length = attributes.value("Length").toUShort(&ok);
+            if (ok) dd.Length = length;
+        }
+
+        if (attributes.hasAttribute("DataViewColumnsDistance")) {
+            bool ok; const quint16 distance = attributes.value("DataViewColumnsDistance").toUShort(&ok);
+            if (ok) dd.DataViewColumnsDistance = distance;
+        }
+
+        if (attributes.hasAttribute("LeadingZeros")) {
+            dd.LeadingZeros = stringToBool(attributes.value("LeadingZeros").toString());
+        }
+
+        dd.normalize();
+    }
+
+    return xml;
+}
+
+///
+/// \brief XML reader for TrafficViewDefinitions
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, TrafficViewDefinitions& dd)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("TrafficViewDefinitions")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("FormName")) {
+            dd.FormName = attributes.value("FormName").toString();
+        }
+
+        if (attributes.hasAttribute("UnitFilter")) {
+            bool ok; const qint16 unitFilter = attributes.value("UnitFilter").toShort(&ok);
+            if (ok) dd.UnitFilter = unitFilter;
+        }
+
+        if (attributes.hasAttribute("FunctionCodeFilter")) {
+            bool ok; const qint16 functionCodeFilter = attributes.value("FunctionCodeFilter").toShort(&ok);
+            if (ok) dd.FunctionCodeFilter = functionCodeFilter;
+        }
+
+        if (attributes.hasAttribute("LogViewLimit")) {
+            bool ok; const quint16 logViewLimit = attributes.value("LogViewLimit").toUShort(&ok);
+            if (ok) dd.LogViewLimit = logViewLimit;
+        }
+
+        if (attributes.hasAttribute("ExceptionsOnly")) {
+            dd.ExceptionsOnly = stringToBool(attributes.value("ExceptionsOnly").toString());
+        }
+
+        if (attributes.hasAttribute("Autoscroll")) {
+            dd.Autoscroll = stringToBool(attributes.value("Autoscroll").toString());
+        }
+
+        if (attributes.hasAttribute("HexView")) {
+            dd.HexView = stringToBool(attributes.value("HexView").toString());
+        }
+
+        dd.normalize();
+    }
+
+    return xml;
+}
+
+///
+/// \brief XML reader for ScriptViewDefinitions
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptViewDefinitions& dd)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("ScriptViewDefinitions")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("FormName")) {
+            dd.FormName = attributes.value("FormName").toString();
+        }
+
+        while (xml.readNextStartElement()) {
+            if (xml.name() == QLatin1String("ScriptSettings")) {
+                xml >> dd.ScriptCfg;
+            } else {
+                xml.skipCurrentElement();
+            }
+        }
+
+        dd.normalize();
+    }
+
+    return xml;
+}
+
+#endif // DISPLAYDEFINITION_H
+

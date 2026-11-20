@@ -1,0 +1,137 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusdefinitions.h
+/// \brief Declares the modbusdefinitions interfaces.
+///
+
+#ifndef MODBUSDEFINITIONS_H
+#define MODBUSDEFINITIONS_H
+
+#include "enums.h"
+#include "modbuserrorsimulations.h"
+
+///
+/// \brief The ModbusDefinitions class
+///
+struct ModbusDefinitions
+{
+    AddressSpace AddrSpace = AddressSpace::Addr6Digits;
+    bool EnronModbus = false;
+    bool UseGlobalUnitMap = false;
+    bool AutoAddRegistersOnRequest = false;
+    ModbusErrorSimulations ErrorSimulations;
+
+    void normalize() {
+        AddrSpace = qBound(AddressSpace::Addr6Digits, AddrSpace, AddressSpace::Addr5Digits);
+        if (AutoAddRegistersOnRequest)
+            UseGlobalUnitMap = false;
+    }
+};
+Q_DECLARE_METATYPE(ModbusDefinitions)
+
+///
+/// \brief operator <<
+/// \param out
+/// \param defs
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const ModbusDefinitions& defs)
+{
+    out.beginGroup("ModbusDefinitions");
+
+    out << defs.ErrorSimulations;
+    out << defs.AddrSpace;
+    out.setValue("EnronModbus", defs.EnronModbus);
+    out.setValue("UseGlobalUnitMap", defs.UseGlobalUnitMap);
+    out.setValue("AutoAddRegistersOnRequest", defs.AutoAddRegistersOnRequest);
+
+    out.endGroup();
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param defs
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, ModbusDefinitions& defs)
+{
+    in.beginGroup("ModbusDefinitions");
+
+    in >> defs.ErrorSimulations;
+    in >> defs.AddrSpace;
+    defs.EnronModbus = in.value("EnronModbus", false).toBool();
+    defs.UseGlobalUnitMap = in.value("UseGlobalUnitMap", false).toBool();
+    defs.AutoAddRegistersOnRequest = in.value("AutoAddRegistersOnRequest", false).toBool();
+
+    in.endGroup();
+
+    defs.normalize();
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param definitions
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusDefinitions& definitions)
+{
+    xml.writeStartElement("ModbusDefinitions");
+
+    xml.writeAttribute("AddrSpace", enumToString(definitions.AddrSpace));
+    xml.writeAttribute("EnronModbus", boolToString(definitions.EnronModbus));
+    xml.writeAttribute("UseGlobalUnitMap", boolToString(definitions.UseGlobalUnitMap));
+    xml.writeAttribute("AutoAddRegistersOnRequest", boolToString(definitions.AutoAddRegistersOnRequest));
+
+    xml << definitions.ErrorSimulations;
+
+    xml.writeEndElement();
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param definitions
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusDefinitions& definitions)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("ModbusDefinitions")) {
+        QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("AddrSpace")) {
+            definitions.AddrSpace = enumFromString<AddressSpace>(attributes.value("AddrSpace").toString());
+        }
+
+        definitions.EnronModbus = stringToBool(attributes.value("EnronModbus").toString());
+
+        if (attributes.hasAttribute("UseGlobalUnitMap")) {
+            definitions.UseGlobalUnitMap = stringToBool(attributes.value("UseGlobalUnitMap").toString());
+        }
+
+        if (attributes.hasAttribute("AutoAddRegistersOnRequest")) {
+            definitions.AutoAddRegistersOnRequest = stringToBool(attributes.value("AutoAddRegistersOnRequest").toString());
+        }
+
+        while (xml.readNextStartElement()) {
+            if (xml.name() == QLatin1String("ModbusErrorSimulations"))
+                xml >> definitions.ErrorSimulations;
+            else
+                xml.skipCurrentElement();
+        }
+
+        definitions.normalize();
+    }
+
+    return xml;
+}
+
+#endif // MODBUSDEFINITIONS_H
+

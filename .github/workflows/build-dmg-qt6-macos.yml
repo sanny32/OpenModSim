@@ -50,6 +50,7 @@ jobs:
         run: |
           brew list --versions ninja >/dev/null || brew install ninja
           brew list --versions cmake >/dev/null || brew install cmake
+          brew list --versions openssl@3 >/dev/null || brew install openssl@3
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -70,6 +71,7 @@ jobs:
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_ROOT_DIR }} \
+            -DOPENSSL_ROOT_DIR="$(brew --prefix openssl@3)" \
             -DCMAKE_INSTALL_PREFIX=/Applications \
             -DUSE_QT6=ON \
             -DOMODSIM_BUILD_TESTS=OFF \

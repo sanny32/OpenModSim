@@ -10,7 +10,7 @@
 #include <QSignalSpy>
 #include <QTest>
 
-#include "jsobjects/script.h"
+#include "scripting/script.h"
 
 class TestScript : public QObject
 {

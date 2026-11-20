@@ -84,6 +84,10 @@ void TestFormatUtils::addressFormatting()
     QCOMPARE(formatAddress(QModbusDataUnit::Coils, 5, AddressSpace::Addr6Digits, false), QStringLiteral("000005"));
     QCOMPARE(formatAddress(QModbusDataUnit::HoldingRegisters, 1, AddressSpace::Addr5Digits, false), QStringLiteral("40001"));
     QCOMPARE(formatAddress(QModbusDataUnit::InputRegisters, 0x1F, AddressSpace::Addr6Digits, true), QStringLiteral("0x001F"));
+    QCOMPARE(formatAddress(QModbusDataUnit::HoldingRegisters, 0x7FFFFFFF, AddressSpace::Addr5Digits, false),
+             QStringLiteral("42147483647"));
+    QCOMPARE(formatAddress(QModbusDataUnit::InputRegisters, 0x7FFFFFFF, AddressSpace::Addr6Digits, true),
+             QStringLiteral("0x7FFFFFFF"));
 }
 
 void TestFormatUtils::int16AndBinaryFormatters()
