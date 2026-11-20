@@ -34,5 +34,6 @@ done <<'VERSIONS'
 1.1.0 reject reject
 1.1.1w accept reject
 3.0.22 reject accept
-4.1.0 reject reject
+4.1.0 reject accept
+5.0.0 reject reject
 VERSIONS
