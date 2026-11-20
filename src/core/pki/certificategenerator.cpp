@@ -119,10 +119,11 @@ GeneratedCertificate CertificateGenerator::generate(const QString& commonName, c
         || X509_set_pubkey(certificate.get(), key.get()) != 1)
         return {};
     const QByteArray name = commonName.toUtf8();
-    X509_NAME* subject = X509_get_subject_name(certificate.get());
-    if (X509_NAME_add_entry_by_NID(subject, NID_commonName, MBSTRING_UTF8,
+    const std::unique_ptr<X509_NAME, decltype(&X509_NAME_free)> subject(X509_NAME_new(), X509_NAME_free);
+    if (!subject || X509_NAME_add_entry_by_NID(subject.get(), NID_commonName, MBSTRING_UTF8,
                                   reinterpret_cast<const unsigned char*>(name.constData()), name.size(), -1, 0) != 1
-        || X509_set_issuer_name(certificate.get(), subject) != 1
+        || X509_set_subject_name(certificate.get(), subject.get()) != 1
+        || X509_set_issuer_name(certificate.get(), subject.get()) != 1
         || !addExtension(certificate.get(), NID_basic_constraints, "critical,CA:FALSE")
         || !addExtension(certificate.get(), NID_key_usage, "critical,digitalSignature,keyEncipherment")
         || !addExtension(certificate.get(), NID_ext_key_usage, "serverAuth")

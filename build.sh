@@ -338,7 +338,7 @@ get_packages() {
             general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build tar gzip pkgconf-pkg-config xcb-util-cursor-devel openssl-devel perl"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl tar gzip pkg-config libxcbutil-cursor libcups-devel libopenssl-devel perl"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl tar gzip pkg-config libxcbutil-cursor libcups-devel libssl-devel perl"
             ;;
         suse-based)
             general_packages="gcc gcc-c++ cmake ninja curl tar gzip pkg-config libxcb-cursor0 libopenssl-devel perl"
