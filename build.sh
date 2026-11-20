@@ -587,6 +587,9 @@ fi
 if [ "${QT_VERSION%%.*}" = "5" ]; then
     if [ -z "${OPENSSL_ROOT_DIR:-}" ] && ! check_openssl_version 5; then
         install_pkg python3 make
+        if [ "$DISTRO" = "altlinux" ]; then
+            install_pkg perl-Pod-Usage
+        fi
         OPENSSL_SOURCE_ROOT=$(python3 "$PROJECT_DIR/tools/fetch_openssl11.py" "$TOOLS_DIR/openssl11-src")
         export OPENSSL_ROOT_DIR="$TOOLS_DIR/openssl11"
         bash "$PROJECT_DIR/tools/build_openssl.sh" "$OPENSSL_SOURCE_ROOT" "$OPENSSL_ROOT_DIR" 1.1
