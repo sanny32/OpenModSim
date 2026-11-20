@@ -10,6 +10,14 @@ function(omodsim_configure_tests)
         COMMAND "${CMAKE_COMMAND}" -DUNSUPPORTED_ABI=1.0
                 -P "${PROJECT_SOURCE_DIR}/tests/test_openssl_qt_abi.cmake")
     set_tests_properties(omodsim_tests_openssl_unsupported_abi PROPERTIES WILL_FAIL TRUE)
+    if(UNIX)
+        find_program(omodsim_bash bash)
+        if(omodsim_bash)
+            add_test(NAME omodsim_tests_macos_build_openssl
+                COMMAND "${omodsim_bash}" "${PROJECT_SOURCE_DIR}/tests/test_macos_build_openssl.sh"
+                        "${PROJECT_SOURCE_DIR}/../build-macos.sh")
+        endif()
+    endif()
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_READELF)
         find_program(omodsim_bash bash)
         if(omodsim_bash)
