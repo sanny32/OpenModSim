@@ -85,10 +85,6 @@ echo "  Found: ninja $(ninja --version)"
 # ==========================
 # Check Qt
 # ==========================
-brew list --versions openssl@3 >/dev/null || brew install openssl@3
-OPENSSL_ROOT_DIR="$(brew --prefix openssl@3)"
-export OPENSSL_ROOT_DIR
-
 echo "Checking for Qt..."
 
 QT_PREFIX=""
@@ -198,7 +194,25 @@ cd "$BUILD_DIR"
 
 cmake ../src -GNinja \
     -DCMAKE_PREFIX_PATH="${QT_PREFIX}" \
-    -DOPENSSL_ROOT_DIR="${OPENSSL_ROOT_DIR}" \
+    -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+    -DOMODSIM_OPENSSL_PROBE="${PWD}/openssl-probe.txt" \
+    ${CMAKE_QT_OPTION}
+OPENSSL_ABI=$(cat openssl-probe.txt)
+if [ "$OPENSSL_ABI" != "found" ]; then
+    if [ -z "$OPENSSL_ABI" ]; then
+        OPENSSL_FORMULA=openssl
+    else
+        OPENSSL_FORMULA="openssl@${OPENSSL_ABI}"
+    fi
+    brew list --versions "$OPENSSL_FORMULA" >/dev/null || brew install "$OPENSSL_FORMULA"
+    OPENSSL_ROOT_DIR="$(brew --prefix "$OPENSSL_FORMULA")"
+    export OPENSSL_ROOT_DIR
+fi
+
+cmake ../src -GNinja \
+    -DCMAKE_PREFIX_PATH="${QT_PREFIX}" \
+    -UOMODSIM_OPENSSL_PROBE -UOPENSSL_ROOT_DIR \
+    -UOPENSSL_CRYPTO_LIBRARY -UOPENSSL_INCLUDE_DIR -UOPENSSL_SSL_LIBRARY \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
     ${CMAKE_QT_OPTION}
 
