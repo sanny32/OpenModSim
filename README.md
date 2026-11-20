@@ -167,8 +167,7 @@ The following minimum operating system versions are supported for OpenModSim:
 
 # Building
 
-Certificate generation requires OpenSSL development libraries (`libcrypto`): version 1.1.1 with Qt 5, or version 3 with Qt 6. The build scripts install this dependency; for manual builds, set `OPENSSL_ROOT_DIR` when CMake cannot locate it.
-  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+Certificate generation requires OpenSSL development libraries (`libcrypto`).
 
 > [!NOTE]
 > Building from source requires CMake version 3.28.4 or newer.
