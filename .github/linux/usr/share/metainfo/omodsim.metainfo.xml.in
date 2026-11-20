@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>@COMPONENT_ID@</id>
+  <launchable type="desktop-id">@APP_EXEC@.desktop</launchable>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
@@ -20,9 +21,7 @@
    <p xml:lang="it">Open ModSim è una utility open source Modbus slave (server) per il test e il debug di client Modbus TCP e RTU.</p>
   </description>
 
-  <developer id="sanny32">
-    <name>Alexandr Ananev</name>
-  </developer>
+  <developer_name>Alexandr Ananev</developer_name>
   <update_contact>mail@ananev.org</update_contact>
 
   <screenshots>
