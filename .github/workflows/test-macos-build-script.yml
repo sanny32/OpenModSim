@@ -35,6 +35,8 @@ jobs:
             runner: macos-15
           - name: "macOS 26"
             runner: macos-26
+          - name: "macOS 27"
+            runner: macos-27
 
     steps:
       - name: Checkout repository
