@@ -1,3 +1,5 @@
+get_filename_component(omodsim_openssl_crypto "${OPENSSL_CRYPTO_LIBRARY}" REALPATH)
+get_filename_component(omodsim_openssl_ssl "${OPENSSL_SSL_LIBRARY}" REALPATH)
 get_filename_component(omodsim_openssl_lib "${OPENSSL_CRYPTO_LIBRARY}" DIRECTORY)
 
 # macOS installation rules
@@ -79,11 +81,18 @@ install(CODE "
                     \"-libpath=${omodsim_openssl_lib}\"
                     -always-overwrite
                     -verbose=2
-                    \"-codesign=-\"
             RESULT_VARIABLE _macdeployqt_result
         )
         if(NOT _macdeployqt_result EQUAL 0)
             message(FATAL_ERROR \"macdeployqt failed with exit code \${_macdeployqt_result}\")
+        endif()
+        execute_process(
+            COMMAND /bin/bash \"${PROJECT_SOURCE_DIR}/../tools/deploy_macos_openssl.sh\"
+                    \"\${_installed_app}\" \"${omodsim_openssl_crypto}\" \"${omodsim_openssl_ssl}\"
+            RESULT_VARIABLE _openssl_deploy_result
+        )
+        if(NOT _openssl_deploy_result EQUAL 0)
+            message(FATAL_ERROR \"OpenSSL deployment failed: \${_openssl_deploy_result}\")
         endif()
     else()
         message(FATAL_ERROR \"macdeployqt not found - cannot deploy Qt runtime into app bundle\")

@@ -65,7 +65,7 @@ jobs:
           apt-get update
           apt-get install -y \
             git build-essential ninja-build patchelf rsync wget perl file \
-            desktop-file-utils zsync fakeroot \
+            desktop-file-utils appstream zsync fakeroot \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
@@ -165,6 +165,9 @@ jobs:
           app-version: ${{ env.APP_VERSION }}
           ref-name: ${{ env.REF_NAME }}
           ref-type: ${{ env.REF_TYPE }}
+
+      - name: Prepare AppStream metadata
+        run: bash .github/linux/appimage/prepare-appstream.sh "${{ env.APPDIR }}" "${{ env.VERSION_MAJOR }}"
 
       - name: Patch binary file
         run: patchelf --set-rpath '$ORIGIN/../lib' "${{ env.APPDIR }}/usr/bin/omodsim"
